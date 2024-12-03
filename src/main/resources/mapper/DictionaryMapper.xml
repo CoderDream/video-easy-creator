@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coderdream.mapper.DictionaryMapper">
+
+    <!-- 插入字典 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dictionary (word, english_definition, chinese_definition, source, collins_star,
+        ielts_level, coca_frequency, reserved01, reserved02, reserved03,
+        reserved04, reserved05, reserved06, reserved07, reserved08, reserved09, reserved10,
+        created_at, updated_at)
+        VALUES (#{word}, #{englishDefinition}, #{chineseDefinition}, #{source}, #{collinsStar},
+        #{ieltsLevel}, #{cocaFrequency}, #{reserved01}, #{reserved02}, #{reserved03},
+        #{reserved04}, #{reserved05}, #{reserved06}, #{reserved07}, #{reserved08}, #{reserved09}, #{reserved10},
+        #{createdAt}, #{updatedAt})
+    </insert>
+
+    <!-- 根据单词查询字典 -->
+    <select id="selectByWord" resultType="com.coderdream.entity.Dictionary">
+        SELECT * FROM dictionary WHERE word = #{word}
+    </select>
+
+    <!-- 查询所有字典 -->
+    <select id="selectAll" resultType="com.coderdream.entity.Dictionary">
+        SELECT * FROM dictionary
+    </select>
+
+    <!-- 根据ID删除字典 -->
+    <delete id="deleteById">
+        DELETE FROM dictionary WHERE id = #{id}
+    </delete>
+
+    <!-- 更新字典 -->
+    <update id="updateById">
+        UPDATE dictionary
+        SET word = #{word}, english_definition = #{englishDefinition}, chinese_definition = #{chineseDefinition},
+        source = #{source}, collins_star = #{collinsStar}, ielts_level = #{ieltsLevel},
+        coca_frequency = #{cocaFrequency}, reserved01 = #{reserved01}, reserved02 = #{reserved02},
+        reserved03 = #{reserved03}, reserved04 = #{reserved04}, reserved05 = #{reserved05},
+        reserved06 = #{reserved06}, reserved07 = #{reserved07}, reserved08 = #{reserved08},
+        reserved09 = #{reserved09}, reserved10 = #{reserved10}, updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

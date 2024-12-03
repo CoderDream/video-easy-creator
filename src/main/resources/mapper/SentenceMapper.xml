@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coderdream.mapper.SentenceMapper">
+
+    <!-- 插入句子 -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sentence (word_id, sentence_en, sentence_zh, created_at, updated_at)
+        VALUES (#{wordId}, #{sentenceEn}, #{sentenceZh}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <!-- 根据单词ID查询所有句子 -->
+    <select id="selectByWordId" resultType="com.coderdream.entity.Sentence">
+        SELECT * FROM sentence WHERE word_id = #{wordId}
+    </select>
+
+    <!-- 删除句子 -->
+    <delete id="deleteById">
+        DELETE FROM sentence WHERE id = #{id}
+    </delete>
+
+    <!-- 更新句子 -->
+    <update id="updateById">
+        UPDATE sentence
+        SET word_id = #{wordId}, sentence_en = #{sentenceEn}, sentence_zh = #{sentenceZh}, updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
