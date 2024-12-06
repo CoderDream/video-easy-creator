@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 @Data
-@TableName("dictionary")  // 指定与数据库的映射表为 dictionary
-public class Dictionary {
+@TableName("dictionary_entity")  // 指定与数据库的映射表为 dictionary_entity
+public class DictionaryEntity {
 
     @TableId  // 主键，自增
     private Long id;
@@ -29,7 +29,7 @@ public class Dictionary {
     private Integer collinsStar;  // 柯林斯五星词频，0~5 星级，默认 0
 
     @TableField("ielts_level")
-    private String ieltsLevel;  // 雅思分类，A1、A2、B1、B2、C1、C2
+    private Integer ieltsLevel;  // 雅思分类，1:A1、2:A2、3:B1、4:B2、5:C1、6:C2
 
     @TableField("coca_frequency")
     private Integer cocaFrequency;  // COCA 词频，表示该词在 COCA 数据库中的出现频率

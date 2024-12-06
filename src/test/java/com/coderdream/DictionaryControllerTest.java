@@ -3,9 +3,8 @@ package com.coderdream;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
-import com.coderdream.entity.Dictionary;
-import com.coderdream.service.DictionaryService;
-import java.util.HashMap;
+import com.coderdream.entity.DictionaryEntity;
+import com.coderdream.service.DictionaryEntityService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -30,22 +29,22 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DictionaryControllerTest {
 
     @Autowired
-    private DictionaryService dictionaryService;
+    private DictionaryEntityService dictionaryService;
 
-    private Dictionary dictionary;
+    private DictionaryEntity dictionary;
 
     private final String BASE_URL = "http://localhost:8080/api/dictionary"; // 假设Spring Boot默认端口8080
 
     @BeforeEach
     public void setUp() {
-        // 初始化 Dictionary 对象
-        dictionary = new Dictionary();
+        // 初始化 DictionaryEntity 对象
+        dictionary = new DictionaryEntity();
         dictionary.setWord("hello");
         dictionary.setEnglishDefinition("A greeting or expression of goodwill.");
         dictionary.setChineseDefinition("一个问候或表示友好的表达");
-        dictionary.setSource("Oxford Dictionary");
+        dictionary.setSource("Oxford DictionaryEntity");
         dictionary.setCollinsStar(5);
-        dictionary.setIeltsLevel("B2");
+        dictionary.setIeltsLevel(4);
         dictionary.setCocaFrequency(1000);
         dictionary.setReserved01("reserved text 1");
         dictionary.setReserved02("reserved text 2");
@@ -66,13 +65,13 @@ public class DictionaryControllerTest {
     @Order(11)
     public void testAddDictionary() {
         // 创建新的字典对象
-        Dictionary newDictionary = new Dictionary();
+        DictionaryEntity newDictionary = new DictionaryEntity();
         newDictionary.setWord("world");
         newDictionary.setEnglishDefinition("The earth and all its countries and peoples.");
         newDictionary.setChineseDefinition("地球及其所有国家和人民");
-        newDictionary.setSource("Cambridge Dictionary");
+        newDictionary.setSource("Cambridge DictionaryEntity");
         newDictionary.setCollinsStar(4);
-        newDictionary.setIeltsLevel("B1");
+        newDictionary.setIeltsLevel(3);
         newDictionary.setCocaFrequency(2000);
         newDictionary.setReserved01("reserved text 6");
 
@@ -99,10 +98,10 @@ public class DictionaryControllerTest {
 //        sendPost(BASE_URL + "/add", paramMap);
 
         // 断言返回值是否包含期望的成功信息
-        assertTrue(response.contains("Dictionary entry added successfully!"));
+        assertTrue(response.contains("DictionaryEntity entry added successfully!"));
 
         // 查询字典，验证是否插入成功
-        Dictionary inserted = dictionaryService.getDictionaryByWord("world");
+        DictionaryEntity inserted = dictionaryService.getDictionaryByWord("world");
         assertNotNull(inserted);
         assertEquals("world", inserted.getWord());
     }
@@ -141,10 +140,10 @@ public class DictionaryControllerTest {
         System.out.println(response);  // 输出响应内容
 
         // 断言返回值包含期望的删除成功信息
-        assertTrue(response.contains("Dictionary entry deleted successfully!"));
+        assertTrue(response.contains("DictionaryEntity entry deleted successfully!"));
 
         // 查询字典，验证删除是否成功
-        Dictionary deleted = dictionaryService.getDictionaryByWord("hello");
+        DictionaryEntity deleted = dictionaryService.getDictionaryByWord("hello");
         assertNull(deleted);
     }
 }

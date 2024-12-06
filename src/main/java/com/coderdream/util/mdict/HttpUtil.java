@@ -199,6 +199,56 @@ public class HttpUtil {
         return result;
     }
 
+    /**
+     * 发送 POST 请求
+     *
+     * @param url     请求的 URL
+     * @param jsonStr 请求的 JSON 字符串
+     * @return 响应结果
+     */
+    public static String sendPost(String url, String jsonStr) {
+        // 创建 HttpClient 实例
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost post = new HttpPost(url);
+        post.setHeader("Content-Type", "application/json");
+
+        String result;
+        try {
+            // 设置请求实体
+            StringEntity stringEntity = new StringEntity(jsonStr, "utf-8");
+            post.setEntity(stringEntity);
+
+            // 发送请求并获取响应
+            HttpResponse httpResponse = client.execute(post);
+
+            // 读取响应内容
+            try (InputStream inStream = httpResponse.getEntity().getContent();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inStream, "utf-8"))) {
+
+                StringBuilder responseBuilder = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    responseBuilder.append(line).append("\n");
+                }
+                result = responseBuilder.toString();
+            }
+
+            // 检查响应状态码
+            if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                System.out.println("请求服务器成功，做相应处理");
+            } else {
+                System.out.println("请求服务端失败");
+            }
+        } catch (Exception e) {
+            logger.error("请求异常：" + e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        System.out.println(result);
+        return result;
+    }
+
+
 
     /**
      * 发送post请求

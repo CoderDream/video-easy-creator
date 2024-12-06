@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coderdream.mapper.DictionaryEntryMapper">
+    <resultMap id="exampleResultMap" type="com.coderdream.entity.DictionaryEntry">
+       <result property="exampleSentences" column="example_sentences"
+            typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler"/>
+        <result property="collocations" column="collocations"
+            typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler"/>
+    </resultMap>
+    <!-- 根据单词查询字典条目 -->
+    <select id="selectByWord" resultType="com.coderdream.entity.DictionaryEntry">
+        SELECT *
+        FROM dictionary_entry
+        WHERE word = #{word}
+    </select>
+
+    <!-- 批量插入或更新字典条目 -->
+    <insert id="insertOrUpdateBatch" parameterType="list">
+        INSERT INTO dictionary_entry
+        (
+        `word`,
+        `syllable`,
+        `part_of_speech`,
+        `uk_pronunciation`,
+        `us_pronunciation`,
+        `definition`,
+        `chinese_definition`,
+        `example_sentences`,
+        `collocations`,
+        `collins_star`,
+        `ielts_level`,
+        `coca_rank`,
+        `created_at`)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.word,jdbcType=VARCHAR},
+            #{item.syllable,jdbcType=VARCHAR},
+            #{item.partOfSpeech,jdbcType=VARCHAR},
+            #{item.ukPronunciation,jdbcType=VARCHAR},
+            #{item.usPronunciation,jdbcType=VARCHAR},
+            #{item.definition,jdbcType=LONGVARCHAR},
+            #{item.chineseDefinition,jdbcType=LONGVARCHAR},
+            #{item.exampleSentences, typeHandler=com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler},
+            #{item.collocations, typeHandler=com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler},
+            #{item.collinsStar,jdbcType=INTEGER},
+            #{item.ieltsLevel,jdbcType=INTEGER},
+            #{item.cocaRank,jdbcType=INTEGER},
+            #{item.createdAt,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        `syllable`=VALUES(`syllable`),
+        `part_of_speech`=VALUES(`part_of_speech`),
+        `uk_pronunciation`=VALUES(`uk_pronunciation`),
+        `us_pronunciation`=VALUES(`us_pronunciation`),
+        `definition`=VALUES(`definition`),
+        `chinese_definition`=VALUES(`chinese_definition`),
+        `example_sentences`=VALUES(`example_sentences`),
+        `collocations`=VALUES(`collocations`),
+        `collins_star`=VALUES(`collins_star`),
+        `ielts_level`=VALUES(`ielts_level`),
+        `coca_rank`=VALUES(`coca_rank`),
+        `updated_at`=VALUES(`updated_at`);
+    </insert>
+
+</mapper>

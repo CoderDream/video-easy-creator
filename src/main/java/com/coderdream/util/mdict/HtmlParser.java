@@ -11,12 +11,13 @@ public class HtmlParser {
 
     public static HtmlContentBean parseHtml(String html) {
         HtmlContentBean bean = new HtmlContentBean();
+        bean.setRawHtml(html);
         Document doc = Jsoup.parse(html);
 
         // Extract helloText
         Element helloElement = doc.select("font[size=+1][color=purple]").first();
         if (helloElement != null) {
-            bean.setHelloText(helloElement.text());
+            bean.setWord(helloElement.text());
         }
 
         // Extract ratingText
@@ -53,6 +54,8 @@ public class HtmlParser {
 
     public static void main(String[] args) {
         String html = "<html>...</html>"; // Your HTML content here
+        String word = "hello";
+        HtmlContentBean htmlContentBean = Mdict4jUtil.getWordDetail(word, "oald");
         HtmlContentBean bean = HtmlParser.parseHtml(html);
         System.out.println(bean);
     }
