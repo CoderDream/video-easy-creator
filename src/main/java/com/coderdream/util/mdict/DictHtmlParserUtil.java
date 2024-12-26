@@ -7,9 +7,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class HtmlParser {
+/**
+ * 解析HTML内容的工具类
+ */
+public class DictHtmlParserUtil {
 
-    public static HtmlContentBean parseHtml(String html) {
+    public static HtmlContentBean parseOaldHtml(String html) {
+        // 解析 OALD 字典的 HTML
         HtmlContentBean bean = new HtmlContentBean();
         bean.setRawHtml(html);
         Document doc = Jsoup.parse(html);
@@ -52,11 +56,35 @@ public class HtmlParser {
         return bean;
     }
 
-    public static void main(String[] args) {
-        String html = "<html>...</html>"; // Your HTML content here
-        String word = "hello";
-        HtmlContentBean htmlContentBean = Mdict4jUtil.getWordDetail(word, "oald");
-        HtmlContentBean bean = HtmlParser.parseHtml(html);
-        System.out.println(bean);
+    public static HtmlContentBean parseCollinsHtml(String html) {
+        // 解析 Collins 字典的 HTML
+        return null; // new HtmlContentBean("Collins", html);
     }
+
+    public static HtmlContentBean parseOxfordHtml(String html) {
+        // 解析 Oxford 字典的 HTML
+        return null; //new HtmlContentBean("Oxford", html);
+    }
+
+    public static HtmlContentBean parseDefaultHtml(String html) {
+        // 默认解析逻辑
+        return null; //new HtmlContentBean("Default", html);
+    }
+
+//    /**
+//     * 解析Oxford Advanced Learner's Dictionary的HTML内容
+//     * @param html  HTML内容
+//     * @return 解析结果的封装类
+//     */
+//    public static HtmlContentBean parseOaldHtml(String html) {
+//
+//    }
+
+//    public static void main(String[] args) {
+//        String html = "<html>...</html>"; // Your HTML content here
+//        String word = "hello";
+//        HtmlContentBean htmlContentBean = Mdict4jUtil.getWordDetail(word, "oald");
+//        HtmlContentBean bean = DictHtmlParserUtil.parseOaldHtml(html);
+//        System.out.println(bean);
+//    }
 }

@@ -15,4 +15,5 @@ public class Sentence {
     private String source; // 来源
     private String createdAt; // 创建时间
     private String updatedAt; // 更新时间
+
 }

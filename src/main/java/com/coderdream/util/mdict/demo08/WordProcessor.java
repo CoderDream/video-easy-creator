@@ -2,7 +2,7 @@ package com.coderdream.util.mdict.demo08;
 
 import com.coderdream.entity.DictionaryEntry;
 import com.coderdream.util.CdDateTimeUtils;
-import com.coderdream.util.CdFileUtils;
+import com.coderdream.util.CdFileUtil;
 import com.coderdream.util.mdict.Mdict4jUtil;
 import java.util.*;
 import java.util.concurrent.*;
@@ -20,7 +20,7 @@ public class WordProcessor {
 //        filename = "total.txt";
 //        String resourcePath = "classpath:13500/" + filename;
         // 读取文件内容
-        List<String> list = CdFileUtils.readFileContent(resourcePath);
+        List<String> list = CdFileUtil.readFileContent(resourcePath);
         list = list.stream()
             .limit(5000)
             .toList();

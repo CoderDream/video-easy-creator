@@ -1,0 +1,28 @@
+<configuration>
+
+    <!-- 默认控制台日志 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 用于记录失败的视频文件的日志文件 -->
+    <appender name="FAILED_VIDEO_LOG" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR:-logs}/failed_video_%d{yyyy-MM-dd_HH-mm}.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 根日志级别设置 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <!-- 日志设置，针对失败日志 -->
+    <logger name="FailedVideoLogger" level="ERROR">
+        <appender-ref ref="FAILED_VIDEO_LOG"/>
+    </logger>
+
+</configuration>

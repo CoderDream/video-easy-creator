@@ -1,17 +1,10 @@
 package com.coderdream.util.mdict.demo07;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.map.TableMap;
-import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.DictionaryEntry;
-import com.coderdream.util.CdFileUtils;
+import com.coderdream.util.CdFileUtil;
 import com.coderdream.util.mdict.Mdict4jUtil;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,7 +78,7 @@ public class MultiThreadDownloadAppleSrtEnExecutor {
         filename = "total.txt";
         String resourcePath = "classpath:13500/" + filename;
         // 读取文件内容
-        List<String> list = CdFileUtils.readFileContent(resourcePath);
+        List<String> list = CdFileUtil.readFileContent(resourcePath);
         list = list.stream()
             .limit(100)
             .toList();
@@ -222,7 +215,7 @@ public class MultiThreadDownloadAppleSrtEnExecutor {
 //        System.out.println("字幕大小：" + i);
 //        String srcFileName = DateUtil.format(new Date(), DatePattern.PURE_DATETIME_PATTERN) + "_en.srt";
 //        // 写文本
-//        CdFileUtils.writeToFile(srcFileName, newList);
+//        CdFileUtil.writeToFile(srcFileName, newList);
 
         // 将排序后的Map打印
 //        subtitleBaseEntityTreeMap.keySet().forEach(System.out::println);

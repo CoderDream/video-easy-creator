@@ -115,7 +115,7 @@ public class JsoupParser {
     public static void main(String[] args) {
         String html = "";
         String word = "hello";
-        HtmlContentBean htmlContentBean = Mdict4jUtil.getWordDetail(word, "oald");
+        HtmlContentBean htmlContentBean = Mdict4jUtil.getHtmlContentBean(word, "oald");
         html = htmlContentBean.getRawHtml();
         DictionaryEntry entry = JsoupParser.parseHtml(html);
         System.out.println(entry);

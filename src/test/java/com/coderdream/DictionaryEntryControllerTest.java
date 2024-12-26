@@ -7,7 +7,7 @@ import com.coderdream.entity.DictionaryEntry;
 import com.coderdream.entity.ExampleSentence;
 import com.coderdream.service.DictionaryEntryService;
 import com.coderdream.util.CdDateTimeUtils;
-import com.coderdream.util.CdFileUtils;
+import com.coderdream.util.CdFileUtil;
 import com.coderdream.util.mdict.Mdict4jUtil;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -205,7 +205,7 @@ class DictionaryEntryControllerTest {
         filename = "total.txt";
         String resourcePath = "classpath:13500/" + filename;
         // 读取文件内容
-        List<String> list = CdFileUtils.readFileContent(resourcePath);
+        List<String> list = CdFileUtil.readFileContent(resourcePath);
         list = list.stream()
             .limit(10)
             .toList();

@@ -1,7 +1,9 @@
 package com.coderdream.util.mdict;
 
 
+import com.coderdream.util.CdFileUtil;
 import io.github.eb4j.mdict.MDictDictionary;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,25 +66,28 @@ public class Mdict4jDemo {
 
         String mdxFile = "D:\\Download\\柯林斯COBUILD高阶英汉双解学习词典.mdx";
 
+        String folderPath =
+          CdFileUtil.getResourceRealPath() + File.separatorChar + "dict" + File.separatorChar;
+
         switch (dictType) {
             case "cambridge":
-                mdxFile = "E:\\BaiduPan\\0002_词典共享\\剑桥在线英汉双解词典完美版\\cdepe.mdx"; // 剑桥在线英汉双解词典完美版 400MB
+                mdxFile = folderPath + "cdepe.mdx"; // 剑桥在线英汉双解词典完美版 400MB
                 break;
             case "oaldpe":
-                mdxFile = "E:\\BaiduPan\\0002_词典共享\\牛津高阶英汉双解词典第10版完美版\\oaldpe.mdx"; // 74MB
+                mdxFile = folderPath + "oaldpe.mdx"; // 74MB
                 break;
             case "maldpe":
-                mdxFile = "E:\\BaiduPan\\0002_词典共享\\韦氏高阶英汉双解词典2019完美版\\maldpe.mdx"; // 28MB
+                mdxFile = folderPath + "maldpe.mdx"; // 28MB
                 break;
 
             case "c8":
-                mdxFile = "E:\\BaiduPan\\好用的词典~\\牛津高阶8简体spx\\牛津高阶8简体.mdx"; // 28MB
+                mdxFile = folderPath + "牛津高阶8简体.mdx"; // 28MB
                 break;   //
             case "collins":
-                mdxFile = "D:\\Download\\柯林斯COBUILD高阶英汉双解学习词典.mdx";
+                mdxFile = folderPath + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
                 break;   //
             default:
-                mdxFile = "D:\\Download\\柯林斯COBUILD高阶英汉双解学习词典.mdx";
+                mdxFile = folderPath + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
                 break;
         }
         MDictDictionary dictionary = MDictDictionary.loadDictionary(mdxFile);
@@ -96,7 +101,7 @@ public class Mdict4jDemo {
             System.out.println(entry.getKey());
             String html = entry.getValue();
 //            System.out.println(html);
-            bean = HtmlParser.parseHtml(html);
+            bean = DictHtmlParserUtil.parseOaldHtml(html);
             System.out.println(bean);
         }
 
@@ -108,7 +113,7 @@ public class Mdict4jDemo {
 //            System.out.println(entry.getKey());
 //            String html = entry.getValue();
 ////            System.out.println(html);
-//            bean = HtmlParser.parseHtml(html);
+//            bean = DictHtmlParserUtil.parseHtml(html);
 //            System.out.println(bean);
 //        }
 
@@ -151,7 +156,7 @@ public class Mdict4jDemo {
             System.out.println(entry.getKey());
             String html = entry.getValue();
 //            System.out.println(html);
-            bean = HtmlParser.parseHtml(html);
+            bean = DictHtmlParserUtil.parseOaldHtml(html);
             System.out.println("bean1:" + bean);
         }
 
@@ -163,7 +168,7 @@ public class Mdict4jDemo {
             System.out.println(entry.getKey());
             String html = entry.getValue();
 //            System.out.println(html);
-            bean = HtmlParser.parseHtml(html);
+            bean = DictHtmlParserUtil.parseOaldHtml(html);
             System.out.println("bean2:" + bean);
         }
 

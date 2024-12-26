@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true) // 添加此注解，setter 返回当前对象
 @TableName("dictionary_entity")  // 指定与数据库的映射表为 dictionary_entity
 public class DictionaryEntity {
 

@@ -1,0 +1,150 @@
+Google: Gemini Flash 2.0 Experimental (free)
+google/gemini-2.0-flash-exp:free
+$0
+$0
+1,048,576
+None
+Meta: Llama 3.1 70B Instruct (free)
+meta-llama/llama-3.1-70b-instruct:free
+$0
+$0
+8,192
+None
+Google: Gemini Flash 1.5 Experimental
+google/gemini-flash-1.5-exp
+$0
+$0
+1,000,000
+None
+Google: Gemini Pro 1.5 Experimental
+google/gemini-pro-1.5-exp
+$0
+$0
+1,000,000
+None
+Google: Gemini Flash 1.5 8B Experimental
+google/gemini-flash-1.5-8b-exp
+$0
+$0
+1,000,000
+None
+Google: Gemma 2 9B (free)
+google/gemma-2-9b-it:free
+$0
+$0
+4,096
+None
+Meta: Llama 3.2 1B Instruct (free)
+meta-llama/llama-3.2-1b-instruct:free
+$0
+$0
+4,096
+None
+Google: LearnLM 1.5 Pro Experimental (free)
+google/learnlm-1.5-pro-experimental:free
+$0
+$0
+40,960
+None
+Meta: Llama 3 8B Instruct (free)
+meta-llama/llama-3-8b-instruct:free
+$0
+$0
+8,192
+None
+Meta: Llama 3.1 405B Instruct (free)
+meta-llama/llama-3.1-405b-instruct:free
+$0
+$0
+8,000
+None
+Qwen 2 7B Instruct (free)
+qwen/qwen-2-7b-instruct:free
+$0
+$0
+8,192
+None
+OpenChat 3.5 7B (free)
+openchat/openchat-7b:free
+$0
+$0
+8,192
+None
+Meta: Llama 3.2 11B Vision Instruct (free)
+meta-llama/llama-3.2-11b-vision-instruct:free
+$0
+$0
+8,192
+None
+Mistral: Mistral 7B Instruct (free)
+mistralai/mistral-7b-instruct:free
+$0
+$0
+8,192
+None
+Meta: Llama 3.2 3B Instruct (free)
+meta-llama/llama-3.2-3b-instruct:free
+$0
+$0
+4,096
+None
+Microsoft: Phi-3 Medium 128K Instruct (free)
+microsoft/phi-3-medium-128k-instruct:free
+$0
+$0
+8,192
+None
+Microsoft: Phi-3 Mini 128K Instruct (free)
+microsoft/phi-3-mini-128k-instruct:free
+$0
+$0
+8,192
+None
+Meta: Llama 3.1 8B Instruct (free)
+meta-llama/llama-3.1-8b-instruct:free
+$0
+$0
+8,192
+None
+MythoMax 13B (free)
+gryphe/mythomax-l2-13b:free
+$0
+$0
+4,096
+None
+Google: Gemini Experimental 1206 (free)
+google/gemini-exp-1206:free
+$0
+$0
+2,097,152
+None
+Toppy M 7B (free)
+undi95/toppy-m-7b:free
+$0
+$0
+4,096
+None
+Hugging Face: Zephyr 7B (free)
+huggingfaceh4/zephyr-7b-beta:free
+$0
+$0
+4,096
+None
+Google: Gemini Experimental 1121 (free)
+google/gemini-exp-1121:free
+$0
+$0
+40,960
+None
+Google: Gemini Experimental 1114 (free)
+google/gemini-exp-1114:free
+$0
+$0
+40,960
+None
+Meta: Llama 3.2 90B Vision Instruct (free)
+meta-llama/llama-3.2-90b-vision-instruct:free
+$0
+$0
+4,096
+None
