@@ -2,13 +2,8 @@ package com.coderdream.util.wechat;
 
 import cn.hutool.core.date.DateUtil;
 import com.coderdream.util.CdConstants;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.io.*;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,33 +11,26 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * MarkdownSplitterAdvanced 类 用于处理 Markdown 文件，提取指定日期范围内的内容，并将图片拷贝到指定目录，生成新的
- * Markdown 文件。
- */
 @Slf4j
-public class MarkdownSplitterAdvanced {
+public class MarkdownSplitterAdvanced2 {
 
-  // 定义图片匹配的正则表达式
   private static final Pattern IMAGE_PATTERN = Pattern.compile(
     "!\\[(.*?)]\\((.*?)\\)");
-  // 定义根路径
   private static final Path ROOT_PATH = Paths.get(
     "D:\\04_GitHub\\hexo-project\\Hexo-BlueLake-Blog\\source\\_posts");
-  // 定义输入文件路径
   private static final Path INPUT_FILE_PATH = ROOT_PATH.resolve(
     "bai-ci-zan.md");
-
 
   /**
    * 处理 Markdown 文件，提取指定日期范围内的内容，并生成新的 Markdown 文件。
    *
    * @param targetDate 目标日期
    * @param dayNumber  天数序号
+   * @param title      文章标题
    * @param tags       文章标签
    */
   public static void processMarkdown(Date targetDate, Integer dayNumber,
-    List<String> tags) {
+    String title, List<String> tags) {
     // 1. 构造起始日期和结束日期字符串
     String startDateLine = String.format("### %s",
       DateUtil.format(targetDate, "yyyy-MM-dd"));
@@ -71,8 +59,6 @@ public class MarkdownSplitterAdvanced {
         }
         if (line.trim().equals(endDateLine)) {
           inSection = false;
-          log.warn("End date line found without corresponding start date: {}",
-            inSection);
           break; // 结束行之后的内容不需要了
         }
         if (inSection) {
@@ -102,6 +88,7 @@ public class MarkdownSplitterAdvanced {
       // 写入标题，时间，标签，分类
       writer.write("title: 考研词汇精选-" + dayNumberString);
       writer.newLine();
+      // 写入标题，时间，标签，分类
       writer.write("index_img: /images/yasicihui.png");
       writer.newLine();
 
@@ -123,12 +110,12 @@ public class MarkdownSplitterAdvanced {
       writer.write("---");
       writer.newLine();
 
-//      List<String> updatedContent = new ArrayList<>(); // 存储更新后的内容
+      List<String> updatedContent = new ArrayList<>(); // 存储更新后的内容
       // 遍历提取的内容，处理图片路径，并写入新文件
       for (String contentLine : extractedContent) {
         String updatedLine = copyImagesAndChangePath(contentLine,
-          imageOutputDir, outputFilePath.getParent());
-//        updatedContent.add(updatedLine);
+          INPUT_FILE_PATH, imageOutputDir, outputFilePath.getParent());
+        updatedContent.add(updatedLine);
         writer.write(updatedLine); // 将更新后的内容写入新文件
         writer.newLine();
       }
@@ -144,70 +131,136 @@ public class MarkdownSplitterAdvanced {
       "Created image directory: " + imageOutputDir); // 输出图片目录创建信息
   }
 
+//  public static void processMarkdown(Date targetDate, Integer dayNumber,
+//    String title, List<String> tags) throws IOException {
+//    String startDateLine = String.format("### %s", targetDate);
+////    Date startDate = DateUtil.parseDate(targetDate);
+//    Date nextDay = DateUtil.offsetDay(targetDate, 1);
+//    String endDateLine = String.format("### %s",
+//      DateUtil.format(nextDay, "yyyy-MM-dd"));
+//
+//    Path outputDir = INPUT_FILE_PATH.getParent();
+//    String dayNumberString = String.format("%03d", dayNumber);
+//    Path outputFilePath = outputDir.resolve(
+//      "bai-ci-zan-" + dayNumberString + ".md");
+//    Path imageOutputDir = outputDir.resolve("bai-ci-zan-" + dayNumberString);
+//
+//    List<String> extractedContent = new ArrayList<>();
+//    boolean inSection = false;
+//    String line;
+//
+//    try (BufferedReader reader = Files.newBufferedReader(INPUT_FILE_PATH)) {
+//      while ((line = reader.readLine()) != null) {
+//        if (line.trim().equals(startDateLine)) {
+//          inSection = true;
+//          continue;
+//        }
+//        if (line.trim().equals(endDateLine)) {
+//          inSection = false;
+//          break;//结束行之后的内容不需要了
+//        }
+//        if (inSection) {
+//          extractedContent.add(line);
+//        }
+//      }
+//    }
+//
+//    if (extractedContent.isEmpty()) {
+//      System.out.println("No matching content found for date: " + targetDate);
+//      return;
+//    }
+//
+//    // 生成新的 Markdown 文件
+//    // title: 百词斩
+//    //index_img: /images/duolingo.jpg
+//    //date: 2024-03-24 09:20:39
+//    //comments: true
+//    //tags:
+//    //	- English
+//    //categories:
+//    //    - 百词斩
+//    try (BufferedWriter writer = Files.newBufferedWriter(outputFilePath)) {
+//      //写入描述信息
+//      writer.write("---");
+//      writer.newLine();
+//      // 期数
+//      writer.write("title: 考研词汇精选-" + targetDate);
+//      writer.newLine();
+//      // 时间：基准时间+期数
+//      Date baseDate = DateUtil.parseDate(CdConstants.BAI_CI_ZAN_START_TIME);
+//      Date articleDate = DateUtil.offsetSecond(baseDate, dayNumber * 10);
+//      writer.write(
+//        "date: " + DateUtil.format(articleDate, "yyyy-MM-dd HH:mm:ss"));
+//      writer.newLine();
+//      writer.write("tags: ");
+//      writer.write("\t" + String.join(", ", tags));
+//      writer.newLine();
+//      writer.write("categories: ");
+//      writer.write("\t" + "百词斩");
+//      writer.newLine();
+//      writer.write("---");
+//      writer.newLine();
+//
+//      List<String> updatedContent = new ArrayList<>();
+//      for (String contentLine : extractedContent) {
+//        String updatedLine = copyImagesAndChangePath(contentLine,
+//          INPUT_FILE_PATH, imageOutputDir, outputFilePath.getParent());
+//        updatedContent.add(updatedLine);
+//        writer.write(updatedLine);
+//        writer.newLine();
+//      }
+//    }
+//
+//    System.out.println("Created file: " + outputFilePath);
+//    System.out.println("Created image directory: " + imageOutputDir);
+//  }
 
-  /**
-   * 拷贝图片文件，并修改 Markdown 中的图片引用路径。
-   *
-   * @param line           当前行内容
-   * @param imageOutputDir 图片输出目录
-   * @param targetDirPath  目标文件所在目录
-   * @return 处理后的字符串
-   */
   private static String copyImagesAndChangePath(String line,
-    Path imageOutputDir, Path targetDirPath) {
-    StringBuilder sb = new StringBuilder();
+    Path markdownFilePath, Path imageOutputDir, Path targetDirPath) {
+    StringBuffer sb = new StringBuffer();
     Matcher matcher = IMAGE_PATTERN.matcher(line);
     while (matcher.find()) {
       String imageDescription = matcher.group(1); //图片描述
       String originalImagePath = matcher.group(2); // 获取原始图片路径
       try {
-        Path originalPath = MarkdownSplitterAdvanced.INPUT_FILE_PATH.getParent()
+        Path originalPath = markdownFilePath.getParent()
           .resolve(originalImagePath).normalize();//获取原始图片的绝对路径
         if (Files.exists(originalPath)) {
           Path targetPath = imageOutputDir.resolve(
             originalPath.getFileName());//获取目标图片路径
-          Files.createDirectories(imageOutputDir); // 创建目标图片输出目录
+          Files.createDirectories(imageOutputDir);
           Files.copy(originalPath, targetPath,
             StandardCopyOption.REPLACE_EXISTING);//拷贝文件
           String relativePath = targetDirPath.relativize(targetPath).toString()
             .replace("\\", "/");//目标图片相对新文件的路径
           matcher.appendReplacement(sb,
-            "![" + imageDescription + "](" + relativePath + ")"); // 替换图片路径
-          log.info("Copied image from {} to {}, and replaced path in markdown.",
-            originalPath, targetPath); // 记录日志
-
+            "![" + imageDescription + "](" + relativePath + ")");
         } else {
           System.out.println(
-            "Image path does not exist:" + originalPath);
-          log.warn("Image path does not exist: {}", originalPath); // 记录日志
-          matcher.appendReplacement(sb, matcher.group(0)); // 如果图片不存在，则不替换
+            "Image path does not exist:" + originalPath.toString());
+          matcher.appendReplacement(sb, matcher.group(0));
         }
 
       } catch (IOException e) {
         System.err.println(
           "Error copying image: " + originalImagePath + " " + e.getMessage());
-        log.error("Error copying image: {} ", originalImagePath, e); // 记录错误日志
-        matcher.appendReplacement(sb, matcher.group(0)); // 如果拷贝失败，则不替换
+        matcher.appendReplacement(sb, matcher.group(0));
       }
     }
     matcher.appendTail(sb);
-    return sb.toString(); //返回处理后的字符串
+    return sb.toString();
   }
 
 
-  /**
-   * 主方法，用于测试 Markdown 处理逻辑。
-   *
-   * @param args 命令行参数
-   */
   public static void main(String[] args) {
+    String title = "2024-12-13 的百词斩";
     List<String> tags = List.of("百词斩", "单词", "学习");
     String startDateStr = "2024-11-25";
     int totalDay = 50; // "2025-01-14"
     Date startDate = DateUtil.parseDate(startDateStr);
     for (int dayNumber = 1; dayNumber <= totalDay; dayNumber++) {
       processMarkdown(DateUtil.offsetDay(startDate, dayNumber), dayNumber,
-        tags);
+        title, tags);
     }
   }
 }

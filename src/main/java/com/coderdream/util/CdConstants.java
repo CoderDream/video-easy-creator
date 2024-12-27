@@ -95,6 +95,9 @@ public class CdConstants {
 //  public static final String VIDEO_CN_PATH = "src/main/resources/video/cn/";
 //  public static final String VIDEO_EN_PATH = "src/main/resources/video/en/";
 
+  // 百词斩标准起始时间字符串
+  public static final String BAI_CI_ZAN_START_TIME = "2025-01-01 00:00:00";
+
   /**
    * 音频文件夹
    */
@@ -130,4 +133,8 @@ public class CdConstants {
    * "帮我实现如下功能：输入是是6组英文词汇，6行为1组；第1行英文单词或词组，第2行是英文释义，第1行和第2行不要处理，按原始文本返回，第3行是对第1行的中文简明翻译，翻译结果尽量少于20个字符串，第4行是对第2行的中文翻译，第5行是用第1行进行英文造句，第6行时对第5行进行中文翻译；请根据规则补齐空行，按文本文件格式返回给我，不要任何标记，移除空行，后面的5组也是按一样方式处理；以下是6组词汇：cephalopod\nthe group of animals to which the octopus belongs\npublicity stunt\nsomething a company might do to grab your attention and promote its products\na common ancestor\na distant relative from which two different species evolved\ncomparable to\nsimilar to\nvertebrates\nanimals that have a spine\nprotean\n(adjective) adaptable and changeable";
    */
   public static final String VOC_CN_PREFIX = "帮我实现如下功能：输入是是6组英文词汇，6行为1组；第1行英文单词或词组，第2行是英文释义，第1行和第2行不要处理，按原始文本返回，第3行是对第1行的中文简明翻译，翻译结果尽量少于20个字符串，第4行是对第2行的中文翻译，第5行是用第1行进行英文造句，我是要考雅思的考生，请优先选用《柯林斯英汉双解大词典》或《牛津双语词典》中的较难的例句，第6行时对第5行进行中文翻译；请根据规则补齐空行，按文本文件格式返回给我，不要任何标记，移除空行，后面的5组也是按一样方式处理；以下是6组词汇：";
+
+
+  public static final String VOC_EN_PREFIX = "帮我实现如下功能：输入是是6组英文词汇，6行为1组；第1行英文单词或词组，第2行是英文释义，第1行和第2行不要处理，按原始文本返回，第3行是对第1行的中文简明翻译，翻译结果尽量少于20个字符串，第4行是对第2行的中文翻译，第5行是用第1行进行英文造句，我是要考雅思的考生，请优先选用《柯林斯英汉双解大词典》或《牛津双语词典》中的较难的例句，第6行时对第5行进行中文翻译；请根据规则补齐空行，按文本文件格式返回给我，不要任何标记，移除空行，后面的5组也是按一样方式处理；以下是6组词汇：";
+
 }
