@@ -172,16 +172,16 @@ public class HighResImageGenUtil3 {
     String outputDir = "D:\\bcz\\word1_temp"; // 输出目录
 
     List<WordInfo> wordInfoList = Arrays.asList(
-      new WordInfo("adjective", "[ˈædʒɪktɪv]", "n. 形容词;adj. 形容词的；从属的",
-        "四级", 1),
-      new WordInfo("certainly", "[ˈsɜːt(ə)nli]", "adv. 当然；行（用于回答）；必定",
-        "四级", 1),
-      new WordInfo("cliff", "[klɪf]", "n. 悬崖；绝壁;", "四级", 3),
-      new WordInfo("compact", "[kəmˈpækt；ˈkɒmpækt]",
-        "n. 合同，契约；小粉盒;adj. 紧凑的，紧密的；简洁的;vt. 使简洁；使紧密结合",
-        "四级", 9),
-      new WordInfo("consumer", "[kənˈsjuːmə(r)]", "n. 消费者；用户，顾客", "四级",
-        1)
+//      new WordInfo("adjective", "[ˈædʒɪktɪv]", "n. 形容词;adj. 形容词的；从属的",
+//        "四级", 1),
+//      new WordInfo("certainly", "[ˈsɜːt(ə)nli]", "adv. 当然；行（用于回答）；必定",
+//        "四级", 1),
+//      new WordInfo("cliff", "[klɪf]", "n. 悬崖；绝壁;", "四级", 3),
+//      new WordInfo("compact", "[kəmˈpækt；ˈkɒmpækt]",
+//        "n. 合同，契约；小粉盒;adj. 紧凑的，紧密的；简洁的;vt. 使简洁；使紧密结合",
+//        "四级", 9),
+//      new WordInfo("consumer", "[kənˈsjuːmə(r)]", "n. 消费者；用户，顾客", "四级",
+//        1)
     );
 
     // 调用生成方法

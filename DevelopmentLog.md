@@ -6,7 +6,9 @@
 #### DONE
 - [x] 优化根据百词斩完整文档生成每日《考研词汇精选》
   - MarkdownSplitterAdvanced
-
+- [x] 优化根据Excel生成高级词汇表图片
+  - HighResImageGenUtil2
+  
 #### TODO
 - [ ] 生成百词斩日志封面图片
 - [ ] 生成多邻国日志封面图片

@@ -16,4 +16,5 @@ public class WordInfo  {
     private String cn;      // 释义
     private String levelStr;    // 等级
     private Integer times;  // 次数
+
 }

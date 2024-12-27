@@ -200,72 +200,72 @@ public class HighResImageGenUtil2b {
   public static List<WordInfo> generateWordInfoList() {
     List<WordInfo> wordInfoList = new ArrayList<>();
 
-    wordInfoList.add(
-      new WordInfo("adjective", "[ˈædʒɪktɪv]", "n. 形容词;adj. 形容词的；从属的",
-        "四级", 1));
-    wordInfoList.add(
-      new WordInfo("certainly", "[ˈsɜːt(ə)nli]", "adv. 当然；行（用于回答）；必定",
-        "四级", 1));
-    wordInfoList.add(
-      new WordInfo("cliff", "[klɪf]", "n. 悬崖；绝壁;", "四级", 3));
-    wordInfoList.add(new WordInfo("compact", "[kəmˈpækt；ˈkɒmpækt]",
-      "n. 合同，契约；小粉盒;adj. 紧凑的，紧密的；简洁的;vt. 使简洁；使紧密结合",
-      "四级", 9));
-    wordInfoList.add(
-      new WordInfo("consumer", "[kənˈsjuːmə(r)]", "n. 消费者；用户，顾客", "四级",
-        1));
-    wordInfoList.add(new WordInfo("dramatic", "[drəˈmætɪk]",
-      "adj. 戏剧的；急剧的；引人注目的；激动人心的", "四级", 1));
-    wordInfoList.add(
-      new WordInfo("increasingly", "[ɪnˈkriːsɪŋli]", "adv. 越来越多地；渐增地",
-        "四级", 1));
-    wordInfoList.add(new WordInfo("ladder", "[ˈlædə(r)]",
-      "n. 阶梯；途径；梯状物;vi. 成名；发迹;vt. 在……上装设梯子", "四级", 1));
-    wordInfoList.add(new WordInfo("lens", "[lenz]",
-      "n. 透镜，镜头；眼睛中的水晶体；晶状体；隐形眼镜；汽车的灯玻璃;vt. 给……摄影",
-      "四级", 4));
-    wordInfoList.add(new WordInfo("limitation", "[ˌlɪmɪˈteɪʃn]",
-      "n. 限制；限度；极限；追诉时效；有效期限；缺陷", "四级", 1));
-    wordInfoList.add(
-      new WordInfo("manual", "[ˈmænjuəl]", "adj. 手工的；体力的;n. 手册，指南",
-        "四级", 1));
-    wordInfoList.add(
-      new WordInfo("meantime", "[ˈmiːntaɪm]", "n. 其时，其间;adv. 同时；其间",
-        "四级", 1));
-    wordInfoList.add(
-      new WordInfo("mostly", "[ˈməʊstli]", "adv. 主要地；通常；多半地", "四级",
-        1));
-    wordInfoList.add(
-      new WordInfo("radar", "[ˈreɪdɑː(r)]", "n. [雷达] 雷达，无线电探测器;",
-        "四级", 1));
-    wordInfoList.add(new WordInfo("release", "[rɪˈliːs]",
-      "n. 释放；发布；让与;vt. 释放；发射；让与；允许发表", "四级", 3));
-    wordInfoList.add(new WordInfo("sophisticated", "[səˈfɪstɪkeɪtɪd]",
-      "adj. 复杂的；精致的；久经世故的；富有经验的;v. 使变得世故；使迷惑；篡改（sophisticate的过去分词形式）",
-      "四级", 1));
-    wordInfoList.add(
-      new WordInfo("usually", "[ˈjuːʒuəli]", "adv. 通常，经常", "四级", 1));
-    wordInfoList.add(new WordInfo("manufacturer", "[ˌmænjuˈfæktʃərə(r)]",
-      "n. 制造商；[经] 厂商", "六级", 1));
-    wordInfoList.add(new WordInfo("premium", "[ˈpriːmiəm]",
-      "n. 额外费用；奖金；保险费;(商)溢价;adj. 高价的；优质的", "六级", 1));
-    wordInfoList.add(new WordInfo("horizontal", "[ˌhɒrɪˈzɒnt(ə)l]",
-      "n. 水平线，水平面；水平位置;adj. 水平的；地平线的；同一阶层的", "考研", 1));
-    wordInfoList.add(new WordInfo("obsolete", "[ˈɒbsəliːt]",
-      "adj. 废弃的；老式的;n. 废词；陈腐的人;vt. 淘汰；废弃", "考研", 3));
-    wordInfoList.add(new WordInfo("opt", "[ɒpt]", "vi. 选择", "考研", 4));
-    wordInfoList.add(
-      new WordInfo("actually", null, "ad.实际上；竟然", "雅思", 2));
-    wordInfoList.add(
-      new WordInfo("broaden", null, "vt.&vi.放宽，变阔", "雅思", 1));
-    wordInfoList.add(
-      new WordInfo("completely", null, "ad.十分，完全地", "雅思", 2));
-    wordInfoList.add(
-      new WordInfo("interested", null, "adj.感兴趣的", "雅思", 2));
-    wordInfoList.add(
-      new WordInfo("listener", null, "n.听者，听众之一", "雅思", 1));
-    wordInfoList.add(new WordInfo("maker", null, "n.制造者，制造商", "雅思", 1));
-    wordInfoList.add(new WordInfo("photography", null, "n.摄影术", "雅思", 5));
+//    wordInfoList.add(
+//      new WordInfo("adjective", "[ˈædʒɪktɪv]", "n. 形容词;adj. 形容词的；从属的",
+//        "四级", 1));
+//    wordInfoList.add(
+//      new WordInfo("certainly", "[ˈsɜːt(ə)nli]", "adv. 当然；行（用于回答）；必定",
+//        "四级", 1));
+//    wordInfoList.add(
+//      new WordInfo("cliff", "[klɪf]", "n. 悬崖；绝壁;", "四级", 3));
+//    wordInfoList.add(new WordInfo("compact", "[kəmˈpækt；ˈkɒmpækt]",
+//      "n. 合同，契约；小粉盒;adj. 紧凑的，紧密的；简洁的;vt. 使简洁；使紧密结合",
+//      "四级", 9));
+//    wordInfoList.add(
+//      new WordInfo("consumer", "[kənˈsjuːmə(r)]", "n. 消费者；用户，顾客", "四级",
+//        1));
+//    wordInfoList.add(new WordInfo("dramatic", "[drəˈmætɪk]",
+//      "adj. 戏剧的；急剧的；引人注目的；激动人心的", "四级", 1));
+//    wordInfoList.add(
+//      new WordInfo("increasingly", "[ɪnˈkriːsɪŋli]", "adv. 越来越多地；渐增地",
+//        "四级", 1));
+//    wordInfoList.add(new WordInfo("ladder", "[ˈlædə(r)]",
+//      "n. 阶梯；途径；梯状物;vi. 成名；发迹;vt. 在……上装设梯子", "四级", 1));
+//    wordInfoList.add(new WordInfo("lens", "[lenz]",
+//      "n. 透镜，镜头；眼睛中的水晶体；晶状体；隐形眼镜；汽车的灯玻璃;vt. 给……摄影",
+//      "四级", 4));
+//    wordInfoList.add(new WordInfo("limitation", "[ˌlɪmɪˈteɪʃn]",
+//      "n. 限制；限度；极限；追诉时效；有效期限；缺陷", "四级", 1));
+//    wordInfoList.add(
+//      new WordInfo("manual", "[ˈmænjuəl]", "adj. 手工的；体力的;n. 手册，指南",
+//        "四级", 1));
+//    wordInfoList.add(
+//      new WordInfo("meantime", "[ˈmiːntaɪm]", "n. 其时，其间;adv. 同时；其间",
+//        "四级", 1));
+//    wordInfoList.add(
+//      new WordInfo("mostly", "[ˈməʊstli]", "adv. 主要地；通常；多半地", "四级",
+//        1));
+//    wordInfoList.add(
+//      new WordInfo("radar", "[ˈreɪdɑː(r)]", "n. [雷达] 雷达，无线电探测器;",
+//        "四级", 1));
+//    wordInfoList.add(new WordInfo("release", "[rɪˈliːs]",
+//      "n. 释放；发布；让与;vt. 释放；发射；让与；允许发表", "四级", 3));
+//    wordInfoList.add(new WordInfo("sophisticated", "[səˈfɪstɪkeɪtɪd]",
+//      "adj. 复杂的；精致的；久经世故的；富有经验的;v. 使变得世故；使迷惑；篡改（sophisticate的过去分词形式）",
+//      "四级", 1));
+//    wordInfoList.add(
+//      new WordInfo("usually", "[ˈjuːʒuəli]", "adv. 通常，经常", "四级", 1));
+//    wordInfoList.add(new WordInfo("manufacturer", "[ˌmænjuˈfæktʃərə(r)]",
+//      "n. 制造商；[经] 厂商", "六级", 1));
+//    wordInfoList.add(new WordInfo("premium", "[ˈpriːmiəm]",
+//      "n. 额外费用；奖金；保险费;(商)溢价;adj. 高价的；优质的", "六级", 1));
+//    wordInfoList.add(new WordInfo("horizontal", "[ˌhɒrɪˈzɒnt(ə)l]",
+//      "n. 水平线，水平面；水平位置;adj. 水平的；地平线的；同一阶层的", "考研", 1));
+//    wordInfoList.add(new WordInfo("obsolete", "[ˈɒbsəliːt]",
+//      "adj. 废弃的；老式的;n. 废词；陈腐的人;vt. 淘汰；废弃", "考研", 3));
+//    wordInfoList.add(new WordInfo("opt", "[ɒpt]", "vi. 选择", "考研", 4));
+//    wordInfoList.add(
+//      new WordInfo("actually", null, "ad.实际上；竟然", "雅思", 2));
+//    wordInfoList.add(
+//      new WordInfo("broaden", null, "vt.&vi.放宽，变阔", "雅思", 1));
+//    wordInfoList.add(
+//      new WordInfo("completely", null, "ad.十分，完全地", "雅思", 2));
+//    wordInfoList.add(
+//      new WordInfo("interested", null, "adj.感兴趣的", "雅思", 2));
+//    wordInfoList.add(
+//      new WordInfo("listener", null, "n.听者，听众之一", "雅思", 1));
+//    wordInfoList.add(new WordInfo("maker", null, "n.制造者，制造商", "雅思", 1));
+//    wordInfoList.add(new WordInfo("photography", null, "n.摄影术", "雅思", 5));
 
     return wordInfoList;
   }
@@ -283,16 +283,16 @@ public class HighResImageGenUtil2b {
     String outputDir = "D:\\bcz\\word1_temp"; // 输出目录
 
     List<WordInfo> wordInfoList = Arrays.asList(
-      new WordInfo("adjective", "[ˈædʒɪktɪv]", "n. 形容词;adj. 形容词的；从属的",
-        "四级", 1),
-      new WordInfo("certainly", "[ˈsɜːt(ə)nli]", "adv. 当然；行（用于回答）；必定",
-        "四级", 1),
-      new WordInfo("cliff", "[klɪf]", "n. 悬崖；绝壁;", "四级", 3),
-      new WordInfo("compact", "[kəmˈpækt；ˈkɒmpækt]",
-        "n. 合同，契约；小粉盒;adj. 紧凑的，紧密的；简洁的;vt. 使简洁；使紧密结合",
-        "四级", 9),
-      new WordInfo("consumer", "[kənˈsjuːmə(r)]", "n. 消费者；用户，顾客", "四级",
-        1)
+//      new WordInfo("adjective", "[ˈædʒɪktɪv]", "n. 形容词;adj. 形容词的；从属的",
+//        "四级", 1),
+//      new WordInfo("certainly", "[ˈsɜːt(ə)nli]", "adv. 当然；行（用于回答）；必定",
+//        "四级", 1),
+//      new WordInfo("cliff", "[klɪf]", "n. 悬崖；绝壁;", "四级", 3),
+//      new WordInfo("compact", "[kəmˈpækt；ˈkɒmpækt]",
+//        "n. 合同，契约；小粉盒;adj. 紧凑的，紧密的；简洁的;vt. 使简洁；使紧密结合",
+//        "四级", 9),
+//      new WordInfo("consumer", "[kənˈsjuːmə(r)]", "n. 消费者；用户，顾客", "四级",
+//        1)
     );
 
     // 调用生成方法

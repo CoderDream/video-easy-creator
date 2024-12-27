@@ -55,7 +55,7 @@ class DictUtilsTest {
    */
   @Test
   void processVocWithGemini_01() {
-    String folderName = "180830";
+    String folderName = "241226";
     String folderPath = CommonUtil.getFullPath(folderName);
     String fileName = "voc";
     log.info("processVocWithGemini 01 folderPath: {}", folderPath);
