@@ -62,11 +62,46 @@ public class CdConstants {
    */
   public static String CAMBRIDGE = "cambridge";
 
-
   /**
    * 牛津高阶英汉双解词典第10版完美版\\oaldpe.mdx
    */
   public static String OALDPE = "oaldpe";
+
+
+  /**
+   * 柯林斯COBUILD高阶英汉双解学习词典
+   */
+  public static String DICT_COLLINS = "collins";
+
+  /**
+   * 牛津高阶英汉双解词典第10版完美版\\oaldpe.mdx
+   */
+  public static String DICT_OALD = "oald";
+
+  /**
+   * 牛津高阶英汉双解词典第10版完美版\\oaldpe.mdx
+   */
+  public static String DICT_OALDPE = "oaldpe";
+
+  /**
+   * 牛津高阶英汉双解词典第10版完美版\\oaldpe.mdx
+   */
+  public static String DICT_CDEPE = "cdepe";
+
+  /**
+   * 牛津高阶英汉双解词典第10版完美版\\oaldpe.mdx
+   */
+  public static String DICT_CDEPE2 = "cdepe";
+
+  /**
+   * 牛津高阶英汉双解词典第10版完美版\\oaldpe.mdx
+   */
+  public static String DICT_CDEPE4 = "cdepe";
+
+  /**
+   * 牛津高阶英汉双解词典第10版完美版\\oaldpe.mdx
+   */
+  public static String DICT_OALDPE3 = "oaldpe";
 
 
   public static String SPEECH_KEY = System.getenv("SPEECH_KEY");

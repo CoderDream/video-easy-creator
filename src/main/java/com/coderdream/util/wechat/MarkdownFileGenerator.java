@@ -323,9 +323,11 @@ public class MarkdownFileGenerator {
   }
 
   public static void main(String[] args) {
-    String date = "2018-08-23";
+    String date = "2018-09-06";
     String introduction = "【BBC六分钟英语】哪些人会购买高端相机？";
-    String folderName = "180823";
+    introduction = "【BBC六分钟英语】如何战胜久坐不动的生活方式？";
+    String folderName = "180906";
+//    folderName = "241226";
     String folderPath = CommonUtil.getFullPath(folderName);
     String imageFolder = folderPath + "\\" + folderName;
     String englishTextFile = folderPath + "\\" + "script_dialog.txt";

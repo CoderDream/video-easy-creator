@@ -4,6 +4,7 @@ import com.coderdream.entity.DictionaryEntry;
 import com.coderdream.util.CdDateTimeUtils;
 import com.coderdream.util.CdFileUtil;
 import com.coderdream.util.mdict.Mdict4jUtil;
+import com.coderdream.util.mdict.Mdict4jUtil2;
 import java.util.*;
 import java.util.concurrent.*;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -37,7 +38,7 @@ public class WordProcessor {
 //        } catch (InterruptedException e) {
 //            Thread.currentThread().interrupt();
 //        }
-        return Mdict4jUtil.genDictionaryEntry(word);
+        return Mdict4jUtil2.genDictionaryEntry(word);
     }
 
     // 模拟批量写入数据库的方法

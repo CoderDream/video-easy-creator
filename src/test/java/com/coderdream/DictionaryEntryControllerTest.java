@@ -210,7 +210,7 @@ class DictionaryEntryControllerTest {
             .limit(10)
             .toList();
         // 生成字典条目列表
-        List<DictionaryEntry> entryList = Mdict4jUtil.genDictionaryEntryList(list, 0);
+        List<DictionaryEntry> entryList = null;// Mdict4jUtil.genDictionaryEntryList(list, 0);
 
         // 使用 HuTool 发起 POST 请求，模拟添加字典条目
 //        List<DictionaryEntry> entryList = Arrays.asList(entry);

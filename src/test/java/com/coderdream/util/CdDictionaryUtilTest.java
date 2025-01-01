@@ -17,21 +17,22 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
+//@SpringBootTest
 @Slf4j
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Transactional
-@Rollback(false)
-@ExtendWith(SpringExtension.class)
+//@Transactional
+//@Rollback(false)
+//@ExtendWith(SpringExtension.class)
 class CdDictionaryUtilTest {
 
   @Test
   @Order(101)
   void getWordDetail101() {
     String word = "chemistry";
+//    word = "hello";
     WordDetail wordDetail = CdDictionaryUtil.getWordDetail(word);
     assertNotNull(wordDetail);
-    log.info("wordDetail: {}", wordDetail);
+    log.info("chemistry wordDetail: {}", wordDetail);
   }
 
   @Test
@@ -63,6 +64,12 @@ class CdDictionaryUtilTest {
 
     for (DictionaryEntity dictionary : dictionaries) {
       System.out.println(dictionary);
+      // 获取单词详情html字符串
+      String htmlStr = dictionary.getReserved05();
+      // 获取WordDetail实体
+      WordDetail wordDetail = CdDictionaryUtil.getWordDetailFromHtmlStr(
+        htmlStr);
+      log.info("wordDetail: {}", wordDetail);
     }
 //        System.out.println(list);
     long end = System.currentTimeMillis();
@@ -92,6 +99,13 @@ class CdDictionaryUtilTest {
 
     for (DictionaryEntity dictionary : dictionaries) {
       System.out.println(dictionary);
+
+      // 获取单词详情html字符串
+      String htmlStr = dictionary.getReserved05();
+      // 获取WordDetail实体
+      WordDetail wordDetail = CdDictionaryUtil.getWordDetailFromHtmlStr(
+        htmlStr);
+      log.info("wordDetail: {}", wordDetail);
     }
 //        System.out.println(list);
     long end = System.currentTimeMillis();

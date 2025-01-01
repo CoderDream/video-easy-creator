@@ -125,7 +125,7 @@ public class CdDictionaryUtil {
    */
   public static DictionaryEntity getDictionaryEntity(String word, String source) {
     // 记录日志，方便调试
-    log.info("开始获取单词详情：word={}, source={}", word, source);
+//    log.info("开始获取单词详情：word={}, source={}", word, source);
 
     try {
       // 调用工具类获取单词的详细信息（HtmlContentBean）

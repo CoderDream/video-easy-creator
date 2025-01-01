@@ -2,19 +2,63 @@
 
 
 
-## 20241227
-#### DONE
-- [x] 优化根据百词斩完整文档生成每日《考研词汇精选》
-  - MarkdownSplitterAdvanced
-- [x] 优化根据Excel生成高级词汇表图片
-  - HighResImageGenUtil2
-  
-#### TODO
+## TODO
 - [ ] 生成百词斩日志封面图片
 - [ ] 生成多邻国日志封面图片
 - [ ] Java通过命令wmv视频转mp4
 - [ ] 生成听力视频（开始提示音，两遍男声两遍无字幕，女声一遍有字幕，男声一遍有字幕）
 
+
+## 20250101
+
+- [x] 给MarkDownload文件的单词补上音标
+  - MarkdownWordUtil.fillWordPhonetics(markdownFilePath)
+
+- [x] 优化根据百词斩完整文档生成每日《考研词汇精选》，补上音标
+  - MarkdownSplitterAdvanced
+
+## 20241231
+
+- [x] （1）通过字典查询单词 https://github.com/Grinner2436/mdict-java
+  - NormalDictUtil.query("hello");【牛津高阶8简体】
+  - SimpleDictUtil.query("hello");【Cambridge English-Chinese (Simplified) Dictionary】
+- [ ] （2）通过其他字典查询单词
+  - HtmlCollinsParser.query()
+  - HtmlOaldpeParser.query();
+  - HtmlOaldParser.query();
+
+
+## 20241230
+
+- [x] 将对话脚本文件分割成短句
+  - TextUtil.writeSentenceToFile(filePath, fileName);
+- [x] 英中文对话句子中间增加音标
+  - TranslationUtil.genPhonetics(fileName)
+
+## 20241229
+
+- [x] 分割长图片
+  - ImageSplitterUtil
+- [x] PDF保存为图片，可以设置清晰度ppi
+  - PdfToImageConverterUtil
+
+
+## 20241228
+
+- [x] 优雅的执行Windows控制台的命令
+  - CommandUtil.executeCommand(command);
+  - CommandExecutorTest.executeCommand_DeployHexo() 打包发布Hexo
+- [x] 根据原始文本生成字幕文本
+  - SubtitleParser
+
+
+## 20241227
+
+- [x] 优化根据百词斩完整文档生成每日《考研词汇精选》
+  - MarkdownSplitterAdvanced
+- [x] 优化根据Excel生成高级词汇表图片
+  - HighResImageGenUtil2
+  
 ## 20241225
 
 
@@ -31,12 +75,6 @@
   - DictUtil.processVocWithGemini()
 - [x] 通过调用Google Youtube API，查看油管频道简介
   - YouTubeApiUtil.processUsernames(usernames)
-
-
-
-
-
-
 
 ## 20241223
 

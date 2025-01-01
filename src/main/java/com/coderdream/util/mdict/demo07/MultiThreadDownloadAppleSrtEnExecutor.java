@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.coderdream.entity.DictionaryEntry;
 import com.coderdream.util.CdFileUtil;
 import com.coderdream.util.mdict.Mdict4jUtil;
+import com.coderdream.util.mdict.Mdict4jUtil2;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -99,7 +100,7 @@ public class MultiThreadDownloadAppleSrtEnExecutor {
                 String urlEn = urlEnList.pop();
                // List<DictionaryEntry> subtitleBaseEntitiesEn = GetSrtUtil.m1(urlEn);
 //                System.out.println("SIZE##" + subtitleBaseEntitiesCn.size() + ":" + urlEn);+
-                subtitleBaseEntityListEn.add(Mdict4jUtil.genDictionaryEntry(urlEn));
+                subtitleBaseEntityListEn.add(Mdict4jUtil2.genDictionaryEntry(urlEn));
 
 //                System.out.println("Thread" + getName() + "  " + downloadInfoEntityList.pop());
                 long period = System.currentTimeMillis() - startTime;

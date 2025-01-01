@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语音合成工具</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="header-content">
+            <div class="menu-icon">☰</div>
+            <h1>一点红语音合成</h1>
+            <div class="header-icons">
+                <span>❤</span>
+                <span>🎵</span>
+                <span>📺</span>
+                <span>🎬</span>
+            </div>
+            <p class="header-tip">吾是柠檬，满是心酸</p>
+        </div>
+    </header>
+    <main>
+        <div class="left-column">
+            <div class="input-area">
+                <textarea placeholder="请输入你需要合成的文字"></textarea>
+                <div class="text-count">0/80000</div>
+            </div>
+            <div class="playback-controls">
+                <button>🎵</button>
+                <button>🔄15</button>
+                <button>▶️</button>
+                <button>⏪15</button>
+                <button>⏱️</button>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="settings-area">
+                <div class="voice-info">
+                    <h2>晓辰 <span class="voice-style">微软</span></h2>
+                    <p class="language">zh-CN</p>
+                </div>
+                <div class="slider-control">
+                    <label>语速</label><input type="range" value="0">
+                </div>
+                <div class="slider-control">
+                    <label>音调</label><input type="range" value="0">
+                </div>
+                <button class="no-style-btn">无风格</button>
+            </div>
+            <div class="footer-btns">
+                <div class="progress-info">合成进度:[11/11]</div>
+                <div class="btns-group">
+                    <button>清空</button>
+                    <button>导入</button>
+                    <button>字幕</button>
+                    <button>翻译</button>
+                    <button>取消</button>
+                    <button class="start-btn">开始合成</button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>

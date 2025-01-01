@@ -67,7 +67,7 @@ class DictUtilsTest {
    */
   @Test
   void processVocWithGemini_02() {
-    List<String> folderNameList = Arrays.asList("180816", "180823", "180830");
+    List<String> folderNameList = Arrays.asList("180906","180913", "180920", "180927");
     for (String folderName : folderNameList) {
       String folderPath = CommonUtil.getFullPath(folderName);
       String fileName = "voc";

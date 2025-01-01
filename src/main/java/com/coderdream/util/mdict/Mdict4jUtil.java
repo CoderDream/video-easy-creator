@@ -1,23 +1,18 @@
 package com.coderdream.util.mdict;
 
-
 import com.coderdream.entity.DictionaryEntry;
 import com.coderdream.util.CdDateTimeUtils;
-import com.coderdream.util.CdFileUtil;
 import com.coderdream.util.mdict.demo05.JsoupParser;
 import io.github.eb4j.mdict.MDException;
 import io.github.eb4j.mdict.MDictDictionary;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 字典解析工具类
@@ -25,53 +20,36 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Mdict4jUtil {
 
-
   public static void main(String[] args) throws Exception {
-    //        String word = "a realistic possibility";
-    //        word = "math";
-    //        getWordDetail(word, "cambridge");
-    //        System.out.println("===============================");
-    //        getWordDetail(word, "oaldpe");
-    //        System.out.println("===============================");
-    //        getWordDetail(word, "maldpe");
-    //        System.out.println("===============================");
-    //        getWordDetail(word, "c8");
-    //        System.out.println("===============================");
-    //        getWordDetail(word, "");
-    // hangry
+    log.info("===============================");
+    List<String> list = Arrays.asList(
+//      "commonly"
+//      ,
+//      "trolley",
+//      "incinerator",
+//      "tinge",
+//      "wipe",
+//      "clamor",
+//      "linen",
+//      "startle",
+//      "capitulate",
+//      "attractive"
+      "chemistry"
+    );
 
-//        List<String> strings = FileUtil.readLines("D:\\Download\\20000words.txt", StandardCharsets.UTF_8);
-//
-//        int i = 0;
-//        int index = 10000;
-//        index = 5;
-//        for (String word : strings) {
-//            String[] split = word.split("\t");
-//            if (split.length > 1) {
-//                word = split[1].trim();
-//                log.info("{}", word);
-//                Mdict4jDemo.getWordDetail(word, "collins");
-//                if (i >= index) {
-//                    break;
-//                }
-//                i++;
-//            }
-//        }
+    List<String> dictTypes = Arrays.asList("cambridge",
+      "oaldpe",
+      "maldpe",
+      "c8",
+      "collins",
+      "oald");
+    String dictName = dictTypes.get(4);
+    log.info("字典类型：{}", dictName);
 
-    System.out.println("===============================");
-    List<String> list = Arrays.asList("hone", "demographic");
-//
-//        list = Arrays.asList("appliance");
     for (String word : list) {
-//            System.out.println(    Mdict4jUtil.getWordDetail(word, "oald"));;
-      System.out.println(Mdict4jUtil.genDictionaryEntry(word));
-//            Mdict4jUtil.getDictInfo(word);
-
-      // DictionaryEntry genDictionaryEntry(String word)
+      log.info("{}", Mdict4jUtil.genDictionaryEntry(word, dictName));
     }
   }
-
-  // a realistic possibility
 
   /**
    * 根据单词和字典类型获取 HtmlContentBean。
@@ -80,57 +58,84 @@ public class Mdict4jUtil {
    * @param dictType 字典类型（如 OALD, Collins 等）
    * @return HtmlContentBean 包含 HTML 内容的对象
    */
-  public static HtmlContentBean getHtmlContentBean(String word, String dictType) {
-    // 获取字典文件路径
+  public static HtmlContentBean getHtmlContentBean(String word,
+    String dictType) {
+    Instant start = Instant.now();
     String mdxFile = getMdxFilePath(dictType);
-//    log.info("加载字典文件，路径：{}", mdxFile);
+    log.info("加载字典文件，路径：{}", mdxFile);
 
     try {
-      // 加载字典文件
       MDictDictionary dictionary = MDictDictionary.loadDictionary(mdxFile);
-
-      // 读取字典条目，解析 HTML 内容
-//      return Optional.ofNullable(dictionary.readArticles(word))  // 首先获取字典条目
-//        .filter(entries -> entries != null && !entries.isEmpty())  // 确保字典条目不为null且非空
-//        .flatMap(entries -> entries.stream()  // 将条目转换为流
-//          .map(Entry::getValue)  // 提取 HTML 内容
-//          .map(html -> parseHtmlByDictType(html, dictType))  // 按字典类型解析
-//          .findFirst())  // 获取第一个结果（若无结果返回空）
-//        .orElseGet(() -> {
-//          log.warn("未找到单词 {} 在字典 {} 中的内容", word, dictType);
-//          return new HtmlContentBean();  // 返回空对象
-//        });
-//      return Optional.ofNullable(dictionary.readArticles(word))  // 获取字典条目
-//        .filter(entries -> entries != null && !entries.isEmpty())  // 确保字典条目不为空
-//        .flatMap(entries -> entries.stream()  // 将条目转换为流
-//          .map(Entry::getValue)  // 提取 HTML 内容
-//          .map(html -> parseHtmlByDictType(html, dictType))  // 按字典类型解析
-//          .findFirst())  // 获取第一个结果（若无结果返回空）
-//        .orElseGet(() -> {
-//          log.warn("未找到单词 {} 在字典 {} 中的内容", word, dictType);
-//          return new HtmlContentBean();  // 返回空对象
-//        });
-
-      return Optional.ofNullable(dictionary.readArticles(word))  // 获取字典条目
-        .filter(entries -> entries != null && !entries.isEmpty())  // 确保字典条目不为空
-        .map(entries -> entries.get(0))  // 直接获取第一个元素
-        .map(Entry::getValue)  // 提取 HTML 内容
-        .map(html -> parseHtmlByDictType(html, dictType))  // 按字典类型解析
+      HtmlContentBean result = Optional.of(dictionary.readArticles(word))
+        .filter(entries -> !entries.isEmpty())
+        .map(entries -> entries.get(0))
+        .map(Entry::getValue)
+        .map(html -> parseHtmlByDictType(html, dictType))
         .orElseGet(() -> {
           log.warn("未找到单词 {} 在字典 {} 中的内容", word, dictType);
-          return new HtmlContentBean();  // 返回空对象
+          return new HtmlContentBean();
         });
-
-
+      Instant finish = Instant.now();
+      long timeElapsed = Duration.between(start, finish).toMillis();
+      log.info("查询单词 {} 在字典 {} 中的 HtmlContentBean 耗时：{}， 结果： {}",
+        word, dictType, CdDateTimeUtils.genMessage(timeElapsed), result);
+      return result;
     } catch (MDException e) {
-      // 捕获异常，记录错误日志
       log.error("加载字典文件异常，路径：{}", mdxFile, e);
+      return new HtmlContentBean();
     }
-
-    // 异常或其他情况时，返回一个空对象
-    return new HtmlContentBean();
   }
 
+
+  /**
+   * 根据单词和字典类型获取 HtmlContentBean。
+   *
+   * @param word     查询的单词
+   * @param dictType 字典类型（如 OALD, Collins 等）
+   * @return HtmlContentBean 包含 HTML 内容的对象
+   */
+  /**
+   * 根据单词和字典类型获取 HTML 字符串。
+   *
+   * @param word     查询的单词
+   * @param dictType 字典类型（如 OALD, Collins 等）
+   * @return HTML 字符串
+   */
+  /**
+   * 根据单词和字典类型获取 HTML 字符串。
+   *
+   * @param word     查询的单词
+   * @param dictType 字典类型（如 OALD, Collins 等）
+   * @return HTML 字符串
+   */
+  public static String getHtmlString(String word, String dictType) {
+    Instant start = Instant.now();
+    String mdxFile = getMdxFilePath(dictType);
+    log.info("加载字典文件，路径：{}", mdxFile);
+    String result = "";
+    try {
+      MDictDictionary dictionary = MDictDictionary.loadDictionary(mdxFile);
+      result = Optional.of(dictionary.readArticles(word))
+        .filter(entries -> !entries.isEmpty())
+        .map(entries -> entries.get(0))
+        .map(Entry::getValue)
+        .orElseGet(() -> {
+          log.warn("未找到单词 {} 在字典 {} 中的内容", word, dictType);
+          return "";
+        });
+
+    } catch (MDException e) {
+      log.error("加载字典文件异常，路径：{}", mdxFile, e);
+      return "";
+    }
+    Instant finish = Instant.now();
+    long timeElapsed = Duration.between(start, finish).toMillis();
+//    log.info("查询单词 {} 在字典 {} 中的 HTML 耗时：{}， 结果： {}",
+//      word, dictType, CdDateTimeUtils.genMessage(timeElapsed), result);
+    log.info("查询单词 {} 在字典 {} 中的 HTML 耗时：{}",
+      word, dictType, CdDateTimeUtils.genMessage(timeElapsed));
+    return result;
+  }
 
   /**
    * 根据字典类型解析 HTML 内容。
@@ -141,7 +146,9 @@ public class Mdict4jUtil {
    */
   private static HtmlContentBean parseHtmlByDictType(String html,
     String dictType) {
+    log.info("解析字典类型：{}, html {}", dictType, html);
     return switch (dictType) {
+      case "oaldpe" -> DictHtmlParserUtil.parseDefaultHtml(html);
       case "Oald" -> DictHtmlParserUtil.parseOaldHtml(html); // 解析 OALD 字典的 HTML
       case "Collins" ->
         DictHtmlParserUtil.parseCollinsHtml(html); // 解析 Collins 字典的 HTML
@@ -154,7 +161,6 @@ public class Mdict4jUtil {
     };
   }
 
-
   /**
    * 获取单词的详细信息
    *
@@ -164,26 +170,31 @@ public class Mdict4jUtil {
    */
   public static HtmlContentBean getHtmlContentBeanBackupUglyVersion(String word,
     String dictType) {
-    // 获取字典文件路径
+    Instant start = Instant.now();
     String mdxFile = getMdxFilePath(dictType);
-
-    MDictDictionary dictionary = null;
-    List<Entry<String, String>> list = null;
+    log.info("加载字典文件，路径：{}", mdxFile);
+    HtmlContentBean bean = new HtmlContentBean();
     try {
-      dictionary = MDictDictionary.loadDictionary(mdxFile);
-      list = dictionary.readArticles(word);
+      MDictDictionary dictionary = MDictDictionary.loadDictionary(mdxFile);
+      List<Entry<String, String>> list = dictionary.readArticles(word);
+      if (list != null) {
+        for (Entry<String, String> entry : list) {
+          String html = entry.getValue();
+          // 考虑解析不同的字典文件，解析不同的html
+          bean = DictHtmlParserUtil.parseOaldHtml(html);
+        }
+      } else {
+        log.warn("未找到单词 {} 在字典 {} 中的内容", word, dictType);
+      }
     } catch (MDException e) {
       log.error("加载字典文件异常，字典文件路径，{}", mdxFile, e);
     }
 
-    HtmlContentBean bean = new HtmlContentBean();
-
-    for (Entry<String, String> entry : list) {
-      String html = entry.getValue();
-      // 考虑解析不同的字典文件，解析不同的html
-      bean = DictHtmlParserUtil.parseOaldHtml(html);
-    }
-
+    Instant finish = Instant.now();
+    long timeElapsed = Duration.between(start, finish).toMillis();
+    log.info(
+      "查询单词 {} 在字典 {} 中的 getHtmlContentBeanBackupUglyVersion 耗时：{}， 结果： {}",
+      word, dictType, CdDateTimeUtils.genMessage(timeElapsed), bean);
     return bean;
   }
 
@@ -194,55 +205,56 @@ public class Mdict4jUtil {
    * @return 字典文件路径
    */
   public static String getMdxFilePath(String dictType) {
+    String folderPath = "D:\\java_output\\dict"
+      + File.separatorChar;
 
-    String folderPath =
-      CdFileUtil.getResourceRealPath() + File.separatorChar + "dict"
-        + File.separatorChar;
-
-    // 剑桥在线英汉双解词典完美版 400MB
-    // 74MB
-    // 28MB
-    // 28MB
-    //
-    //
-    // C:\Users\CoderDream\Downloads\ABDM\牛津高阶英汉双解词典（第10版）V3.mdx
-    //
     return switch (dictType) {
-      case "cambridge" -> folderPath + "cdepe.mdx"; // 剑桥在线英汉双解词典完美版 400MB
-      case "oaldpe" -> folderPath + "oaldpe.mdx"; // 74MB
-      case "maldpe" -> folderPath + "maldpe.mdx"; // 28MB
-      case "c8" -> folderPath + "牛津高阶8简体.mdx"; // 28MB
-      //
-      case "collins" ->
-        folderPath + "柯林斯COBUILD高阶英汉双解学习词典.mdx";   //
-      case "oald" ->
-        "D:\\Download\\oald.mdx"; // C:\Users\CoderDream\Downloads\ABDM\牛津高阶英汉双解词典（第10版）V3.mdx
-      case "Oxford10" ->
-        "DC:\\Users\\CoderDream\\Downloads\\ABDM\\牛津高阶英汉双解词典（第10版）V3.mdx"; //
-      default -> "D:\\Download\\柯林斯COBUILD高阶英汉双解学习词典.mdx";
+      case "cambridge" -> folderPath + "cdepe.mdx";
+      case "oaldpe" -> folderPath + "oaldpe.mdx";
+      case "maldpe" -> folderPath + "maldpe.mdx";
+      case "c8" -> folderPath + "牛津高阶8简体.mdx";
+      case "collins" -> folderPath + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
+      case "oald" -> folderPath + "oald.mdx";
+      case "Oxford10" -> folderPath + "牛津高阶英汉双解词典（第10版）V3.mdx";
+      default -> folderPath + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
     };
   }
 
+  /**
+   * 生成字典词条列表
+   *
+   * @param wordList 单词列表
+   * @return 字典词条列表
+   */
   public static List<DictionaryEntry> genDictionaryEntryList(
-    List<String> wordList) {
+    List<String> wordList, String dictType) {
+    Instant start = Instant.now();
     List<DictionaryEntry> list = new ArrayList<>();
-    DictionaryEntry entry = null;
     for (String word : wordList) {
-      entry = genDictionaryEntry(word);
+      DictionaryEntry entry = genDictionaryEntry(word, dictType);
       list.add(entry);
     }
-
+    Instant finish = Instant.now();
+    long timeElapsed = Duration.between(start, finish).toMillis();
+    log.info("生成字典词条列表 耗时：{}，共 {} 个词条",
+      CdDateTimeUtils.genMessage(timeElapsed), wordList.size());
     return list;
   }
 
+  /**
+   * 生成字典词条列表，带起始排名。
+   *
+   * @param wordList      单词列表
+   * @param startCocaRank 起始排名
+   * @return 字典词条列表
+   */
   public static List<DictionaryEntry> genDictionaryEntryList(
-    List<String> wordList, Integer startCocaRank) {
-    long startTime = System.currentTimeMillis();
+    List<String> wordList, Integer startCocaRank, String dictType) {
+    Instant start = Instant.now();
     log.info("genDictionaryEntryList: {}", wordList.size());
     List<DictionaryEntry> list = new ArrayList<>();
-    DictionaryEntry entry = null;
     for (String word : wordList) {
-      entry = genDictionaryEntry(word);
+      DictionaryEntry entry = genDictionaryEntry(word, dictType);
       if (entry != null) {
         entry.setCocaRank(++startCocaRank);
         entry.setCreatedAt(new Date());
@@ -251,13 +263,10 @@ public class Mdict4jUtil {
         log.error("{} not found", word);
       }
     }
-
-    long endTime = System.currentTimeMillis();
-    long elapsedTime = endTime - startTime;
-    System.out.println("Elapsed time: " + elapsedTime + " ms");
-    log.info("Elapsed time: {} ms", elapsedTime);
-    log.error("genDictionaryEntryList 本次记录条数{}, 耗时{}。", wordList.size(),
-      CdDateTimeUtils.genMessage(elapsedTime));
+    Instant finish = Instant.now();
+    long timeElapsed = Duration.between(start, finish).toMillis();
+    log.info("genDictionaryEntryList 本次记录条数{}, 耗时{}。", wordList.size(),
+      CdDateTimeUtils.genMessage(timeElapsed));
 
     return list;
   }
@@ -268,69 +277,80 @@ public class Mdict4jUtil {
    * @param word 单词
    * @return 字典词条对象
    */
-  public static DictionaryEntry genDictionaryEntry(String word) {
+  public static DictionaryEntry genDictionaryEntry(String word,
+    String dictType) {
+    Instant start = Instant.now();
+//    HtmlContentBean htmlContentBean = Mdict4jUtil.getHtmlContentBean(word,
+//      "oald");
+
     HtmlContentBean htmlContentBean = Mdict4jUtil.getHtmlContentBean(word,
-      "oald");
+      dictType);
     String html = htmlContentBean.getRawHtml();
     DictionaryEntry entry = JsoupParser.parseHtml(html);
+
+    Instant finish = Instant.now();
+    long timeElapsed = Duration.between(start, finish).toMillis();
+    log.info("生成字典词条 {}，耗时: {} ", word,
+      CdDateTimeUtils.genMessage(timeElapsed));
     return entry;
   }
 
-  public static void getDictInfo(String word) throws Exception {
-    System.out.println("Hello Mdict4j!");
-
-    Path dictionaryPath = Paths.get("foo.mdx");
+  /**
+   * 获取字典信息，用于调试
+   *
+   * @param word 单词
+   */
+  public static void getDictInfo(String word) {
+    Instant start = Instant.now();
     String mdxFile = "D:\\Download\\oald.mdx";
-//        mdxFile = "D:\\Download\\柯林斯COBUILD高阶英汉双解学习词典.mdx";
-    MDictDictionary dictionary = MDictDictionary.loadDictionary(mdxFile);
+    try {
+      MDictDictionary dictionary = MDictDictionary.loadDictionary(mdxFile);
+      if (StandardCharsets.UTF_8.equals(dictionary.getEncoding())) {
+        log.info("MDX file encoding is UTF-8");
+      }
+      if (dictionary.isHeaderEncrypted()) {
+        log.info("MDX file is encrypted.");
+      }
+      if (dictionary.isIndexEncrypted()) {
+        log.info("MDX index part is encrypted.");
+      }
+      log.info("MdxVersion: {}", dictionary.getMdxVersion());
+      log.info("Format: {}", dictionary.getFormat());
+      log.info("CreationDate: {}", dictionary.getCreationDate());
+      log.info("Title: {}", dictionary.getTitle());
+      log.info("Description: {}", dictionary.getDescription());
 
-//        if (dictionary.isMDX()) {
-//            System.out.println("loaded file is .mdx");
-//        }
-    if (StandardCharsets.UTF_8.equals(dictionary.getEncoding())) {
-      System.out.println("MDX file encoding is UTF-8");
-    }
-    if (dictionary.isHeaderEncrypted()) {
-      System.out.println("MDX file is encrypted.");
-    }
-    if (dictionary.isIndexEncrypted()) {
-      System.out.println("MDX index part is encrypted.");
-    }
-    System.out.println(dictionary.getMdxVersion());
-    System.out.println(dictionary.getFormat());
-//        System.out.printf("MDX version: %d, format: %s", dictionary.getMdxVersion(), dictionary.getFormat());
-    System.out.println(dictionary.getCreationDate());
-    System.out.println(dictionary.getTitle());
-    System.out.println(dictionary.getDescription());
+      List<Entry<String, String>> list = dictionary.readArticles(word);
+      log.info("list1 size: {}", list.size());
+      HtmlContentBean bean = new HtmlContentBean();
+      if (list != null) {
+        for (Entry<String, String> entry : list) {
+          log.info("entry key: {}", entry.getKey());
+          String html = entry.getValue();
+          bean = DictHtmlParserUtil.parseOaldHtml(html);
+          log.info("bean1: {}", bean);
+        }
+      }
 
-    List<Entry<String, String>> list = dictionary.readArticles(word);
-    System.out.println("list1:" + list.size());
-    HtmlContentBean bean = new HtmlContentBean();
+      list = dictionary.readArticlesPredictive(word);
+      log.info("list2 size: {}", list.size());
+      if (list != null) {
+        for (Entry<String, String> entry : list) {
+          log.info("entry key: {}", entry.getKey());
+          String html = entry.getValue();
+          bean = DictHtmlParserUtil.parseOaldHtml(html);
+          log.info("bean2: {}", bean);
+        }
+      }
 
-    for (Entry<String, String> entry : list) {
-//            System.out.println("<div><span>%s</span>: %s</div>", entry.getKey(), entry.getValue());
 
-      System.out.println(entry.getKey());
-      String html = entry.getValue();
-//            System.out.println(html);
-      bean = DictHtmlParserUtil.parseOaldHtml(html);
-      System.out.println("bean1:" + bean);
-    }
-
-    list = dictionary.readArticlesPredictive(word);
-    System.out.println("list2:" + list.size());
-    for (Entry<String, String> entry : list) {
-//            System.out.println("<div><span>%s</span>: %s</div>", entry.getKey(), entry.getValue());
-
-      System.out.println(entry.getKey());
-      String html = entry.getValue();
-//            System.out.println(html);
-      bean = DictHtmlParserUtil.parseOaldHtml(html);
-      System.out.println("bean2:" + bean);
+    } catch (MDException e) {
+      log.error("加载字典文件异常，字典文件路径，{}", mdxFile, e);
     }
 
-//        return bean;
-
+    Instant finish = Instant.now();
+    long timeElapsed = Duration.between(start, finish).toMillis();
+    log.info("获取字典信息，单词: {}, 耗时: {}", word,
+      CdDateTimeUtils.genMessage(timeElapsed));
   }
-
 }

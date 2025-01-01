@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 
-public class TextToSrtConverter {
+public class TextToSrtConverter1 {
 
     public static void main(String[] args) {
         // 输入文本文件路径
