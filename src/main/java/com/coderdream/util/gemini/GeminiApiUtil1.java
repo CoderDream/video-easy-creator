@@ -1,15 +1,11 @@
 package com.coderdream.util.gemini;
 
 import com.coderdream.util.CdConstants;
-import com.coderdream.util.gemini.GenApiUtil.GenerateContentResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
 import java.net.http.HttpClient;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -26,7 +22,7 @@ import swiss.ameri.gemini.spi.JsonParser;
  * Gemini API 工具类，封装了 Gemini API 的调用逻辑。 用户只需要传入内容参数，无需关注内部细节。
  */
 @Slf4j
-public class GeminiApiUtil {
+public class GeminiApiUtil1 {
 
   private static final JsonParser parser = new GsonJsonParser();
   private static final HttpClient proxyClient;
@@ -46,7 +42,7 @@ public class GeminiApiUtil {
   /**
    * 禁止实例化工具类
    */
-  private GeminiApiUtil() {
+  private GeminiApiUtil1() {
     throw new AssertionError("禁止实例化");
   }
 
@@ -57,11 +53,8 @@ public class GeminiApiUtil {
    * @return 模型列表
    */
   public static List<Model> listModels() {
-        LocalDateTime startTime = LocalDateTime.now();
     log.info("----- 列出所有可用模型");
-    List<Model> models = genAi.listModels();
-    logTimeElapsed(startTime, "listModels");
-    return models;
+    return genAi.listModels();
   }
 
   /**
@@ -71,11 +64,8 @@ public class GeminiApiUtil {
    * @return 模型信息
    */
   public static Model getModel(ModelVariant modelVariant) {
-        LocalDateTime startTime = LocalDateTime.now();
     log.info("----- 获取模型信息：{}", modelVariant);
-    Model model = genAi.getModel(modelVariant);
-    logTimeElapsed(startTime, "getModel");
-    return model;
+    return genAi.getModel(modelVariant);
   }
 
 
@@ -86,12 +76,9 @@ public class GeminiApiUtil {
    * @return 标记数量
    */
   public static Long countTokens(String content) {
-    LocalDateTime startTime = LocalDateTime.now();
     log.info("----- 统计文本标记数量：{}", content);
     var model = createModel(content);
-    Long tokens = genAi.countTokens(model).join();
-    logTimeElapsed(startTime, "countTokens");
-    return tokens;
+    return genAi.countTokens(model).join();
   }
 
 
@@ -106,7 +93,6 @@ public class GeminiApiUtil {
    */
   public static GeneratedContent generateContent(String content)
     throws InterruptedException, ExecutionException, TimeoutException {
-    LocalDateTime startTime = LocalDateTime.now();
     // 打印content 的前100个字符
     if (content.length() > 100) {
       log.info("----- content的前100个字符: {}", content.substring(0, 100));
@@ -115,9 +101,8 @@ public class GeminiApiUtil {
     }
 //    log.info("----- 生成文本内容（阻塞式）: {}", content);
     var model = createModel(content);
-    GeneratedContent generatedContent = genAi.generateContent(model).get(120000, TimeUnit.SECONDS);
-     logTimeElapsed(startTime, "generateContent");
-      return generatedContent;
+
+    return genAi.generateContent(model).get(120000, TimeUnit.SECONDS);
   }
 
   /**
@@ -128,11 +113,9 @@ public class GeminiApiUtil {
    */
   public static List<GeneratedContent> generateContentStream(
     String content) {
-    LocalDateTime startTime = LocalDateTime.now();
     log.info("----- 生成文本内容（流式）: {}", content);
     var model = createModel(content);
     List<GeneratedContent> list = genAi.generateContentStream(model).toList();
-    logTimeElapsed(startTime, "generateContentStream");
     return list;
   }
 
@@ -149,13 +132,11 @@ public class GeminiApiUtil {
   public static GeneratedContent generateContentWithResponseSchema(
     String content, Schema schema)
     throws InterruptedException, ExecutionException, TimeoutException {
-    LocalDateTime startTime = LocalDateTime.now();
     log.info("----- 生成内容（阻塞式），指定响应模式: {}, schema: {}", content,
       schema);
     var model = createResponseSchemaModel(content, schema);
-      GeneratedContent generatedContent = genAi.generateContent(model)
-              .get(20, TimeUnit.SECONDS);
-    logTimeElapsed(startTime, "generateContentWithResponseSchema");
+    GeneratedContent generatedContent = genAi.generateContent(model)
+      .get(20, TimeUnit.SECONDS);
     return generatedContent;
   }
 
@@ -168,12 +149,10 @@ public class GeminiApiUtil {
    */
   public static List<GeneratedContent> generateContentStreamWithResponseSchema(
     String content, Schema schema) {
-      LocalDateTime startTime = LocalDateTime.now();
     log.info("----- 生成内容（流式），指定响应模式: {}, schema: {}", content,
       schema);
     var model = createResponseSchemaModel(content, schema);
     List<GeneratedContent> list = genAi.generateContentStream(model).toList();
-    logTimeElapsed(startTime, "generateContentStreamWithResponseSchema");
     return list;
   }
 
@@ -185,12 +164,10 @@ public class GeminiApiUtil {
    */
   public static List<GeneratedContent> multiChatTurn(
     List<String> contents) {
-    LocalDateTime startTime = LocalDateTime.now();
     log.info("----- 多轮对话：{}", contents);
     GenerativeModel chatModel = createMultiTurnChatModel(contents);
     List<GeneratedContent> list = genAi.generateContentStream(chatModel)
       .toList();
-    logTimeElapsed(startTime, "multiChatTurn");
     return list;
   }
 
@@ -208,12 +185,10 @@ public class GeminiApiUtil {
   public static GeneratedContent textAndImage(String text,
     String imagePath)
     throws IOException, ExecutionException, InterruptedException, TimeoutException {
-        LocalDateTime startTime = LocalDateTime.now();
     log.info("----- 文本和图片内容: text: {}, imagePath: {}", text, imagePath);
     var model = createTextAndImageModel(text, imagePath);
-      GeneratedContent generatedContent = genAi.generateContent(model).get(20, TimeUnit.SECONDS);
-    logTimeElapsed(startTime, "textAndImage");
-      return generatedContent;
+
+    return genAi.generateContent(model).get(20, TimeUnit.SECONDS);
   }
 
   /**
@@ -223,42 +198,10 @@ public class GeminiApiUtil {
    * @return 嵌入列表
    */
   public static List<GenAi.ContentEmbedding> embedContents(String content) {
-       LocalDateTime startTime = LocalDateTime.now();
     log.info("----- 内容嵌入: {}", content);
     var model = createEmbedModel(content);
-    List<GenAi.ContentEmbedding> embeddings = genAi.embedContents(model, null, null, null).join();
-    logTimeElapsed(startTime, "embedContents");
-    return embeddings;
+    return genAi.embedContents(model, null, null, null).join();
   }
-
-  /**
-   * 将 Duration 转换为 "HH:mm:ss.SSS" 格式的字符串
-   *
-   * @param duration Duration 对象
-   * @return 格式化后的字符串
-   */
-  private static String formatDuration(Duration duration) {
-    long millis = duration.toMillis();
-    long hours = millis / (3600 * 1000);
-    millis %= (3600 * 1000);
-    long minutes = millis / (60 * 1000);
-    millis %= (60 * 1000);
-    long seconds = millis / 1000;
-    long remainingMillis = millis % 1000;
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, remainingMillis);
-  }
-
-    /**
-     * 记录方法执行的耗时，并输出日志
-     * @param startTime 方法开始时间
-     * @param methodName  方法名称
-     */
-    private static void logTimeElapsed(LocalDateTime startTime, String methodName) {
-        LocalDateTime endTime = LocalDateTime.now();
-        Duration duration = Duration.between(startTime, endTime);
-        String elapsedTime = formatDuration(duration);
-        log.info("方法 {} 执行完成, 耗时: {}", methodName, elapsedTime);
-    }
 
   /**
    * 加载 scones.png 图片，并将其转换为 Base64 字符串。
@@ -268,7 +211,7 @@ public class GeminiApiUtil {
    */
   private static String loadSconesImage(String imagePath) throws IOException {
     // 加载 scones.png 图片，并将其转换为 Base64 字符串
-    try (InputStream is = GeminiApiUtil.class.getClassLoader()
+    try (InputStream is = GeminiApiUtil1.class.getClassLoader()
       .getResourceAsStream(imagePath)) {
       if (is == null) {
         throw new IllegalStateException("Image not found! ");

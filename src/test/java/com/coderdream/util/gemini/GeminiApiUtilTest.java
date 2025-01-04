@@ -1,8 +1,10 @@
 package com.coderdream.util.gemini;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.*;
 import swiss.ameri.gemini.api.GenAi;
 import swiss.ameri.gemini.api.GenAi.GeneratedContent;
@@ -79,6 +81,52 @@ public class GeminiApiUtilTest {
     GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
     log.info("2. Generated content: {}", generatedContent);
     log.info("----- 2.测试 generateContent 方法结束");
+  }
+
+  @Test
+  @Order(403)
+  void testGenerateContent_403() throws Exception {
+    log.info("----- 3.测试 generateContent 方法开始");
+    String prompt = "我是一个故事讲述者，请帮我根据书籍文本准备一份10000个中文字符的逐字稿，分三部分，第一部分：作者简介（100字左右）；第二部分：全书核心内容（8000字左右）；第三部分：总结（100字左右）；书籍文本如下：";
+    prompt =
+      "我是一个故事讲述者，请帮我根据附件文本准备一份5000个中文字符的逐字稿，分三部分，第一部分：作者简介（200字左右）；第二部分：全书核心内容（4500字左右）；第三部分：总结（200字左右），记得是逐字稿，故事要有趣味性，我要用来作为播客的脚本，"
+        + "给我的文本不要任何格式，字数4800~5000字，不要少也不要多，返回前先告诉我生成的逐字稿有多少个字，不达标要重新生成；";
+    String bookFileName = "D:\\0000\\01_BookStore\\0001_LuoXiang\\刑法学讲义.txt";
+    prompt += "书籍文本如下：";
+    prompt += FileUtils.readFileToString(new File(bookFileName), "UTF-8");
+    // 生成文本内容（阻塞式）
+    GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+    log.info("3. Generated content: {}", generatedContent);
+    log.info("----- 3.测试 generateContent 方法结束");
+  }
+
+
+  @Test
+  @Order(404)
+  void testGenerateContent_404() throws Exception {
+    log.info("----- 4.测试 generateContent 方法开始");
+    String prompt = "我是一个故事讲述者，请帮我根据书籍文本准备一份10000个中文字符的逐字稿，分三部分，第一部分：作者简介（100字左右）；第二部分：全书核心内容（8000字左右）；第三部分：总结（100字左右）；书籍文本如下：";
+    prompt =
+      "我是一个故事讲述者，请帮我根据附件文本准备一份5000个中文字符的逐字稿，分三部分，第一部分：作者简介（400字左右）；第二部分：全书核心内容（9000字左右）；第三部分：总结（400字左右），记得是逐字稿，故事要有趣味性，我要用来作为播客的脚本，"
+        + "给我的文本不要任何格式，字数9800~10000字，不要少也不要多，返回前先告诉我生成的逐字稿有多少个字，不达标要重新生成；";
+    String bookFileName = "D:\\0000\\01_BookStore\\0001_LuoXiang\\刑法学讲义.txt";
+    prompt += "书籍文本如下：";
+    prompt += FileUtils.readFileToString(new File(bookFileName), "UTF-8");
+    for (int i = 0; i < 10; i++) {
+      Thread.sleep(1000);
+      // 生成文本内容（阻塞式）
+      GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+      File bookFile = new File(bookFileName);
+      int index = i + 1;
+      String scriptFileName =
+        bookFile.getParent() + File.separator + bookFile.getName() + "_逐字稿V"
+          + index + ".txt";
+      FileUtils.writeStringToFile(new File(scriptFileName),
+        generatedContent.text(), "UTF-8");
+      log.info("4. Generated content: {}", generatedContent);
+    }
+
+    log.info("----- 4.测试 generateContent 方法结束");
   }
 
   @Test

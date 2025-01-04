@@ -373,7 +373,18 @@
             <version>1beta.0.2.6</version>
         </dependency>
 
-
+        <!-- https://mvnrepository.com/artifact/nl.siegmann.epublib/epublib-core -->
+        <dependency>
+            <groupId>nl.siegmann.epublib</groupId>
+            <artifactId>epublib-core</artifactId>
+            <version>3.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>  <!-- 排除 slf4j-simple -->
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <!--    <dependencyManagement>-->

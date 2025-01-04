@@ -10,14 +10,12 @@
 
 
 
-
-
-
-
 ## 20250104
 
 - [x] 完成GeminiApiUtil工具类初始版
   - GeminiApiUtil.generateContent()
+- [x] Epub转markdown、txt文件
+  - EpubToMarkdownUtil.processEpubToZip(fileName)
 
 ## 20250102
 
