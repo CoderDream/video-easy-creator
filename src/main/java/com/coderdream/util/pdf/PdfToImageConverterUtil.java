@@ -52,5 +52,5 @@ public class PdfToImageConverterUtil {
             System.out.println("文件夹已存在: " + pdfPath);
         }
     }
-
+// PDF used fonts: [Arial-BoldMT, MicrosoftYaHei, OpenSans-Bold, MicrosoftYaHei-Bold, OpenSans-Regular, ArialMT]
 }

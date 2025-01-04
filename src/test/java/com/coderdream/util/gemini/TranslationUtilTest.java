@@ -22,6 +22,13 @@ class TranslationUtilTest {
     log.info("translate: {}", translate);
   }
 
+  @Test
+  void translate_0202() {
+    String text = "翻译成简体中文：" + "Why are countryside walks no longer so popular?";
+    String translate = TranslationUtil.translate(text);
+    log.info("translate: {}", translate);
+  }
+
   //
 
   @Test
@@ -41,7 +48,7 @@ class TranslationUtilTest {
 
   @Test
   void genDescription() {
-    String folderName = "180906";
+    String folderName = "250102";
     String folderPath = CommonUtil.getFullPath(folderName);
     String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
     TranslationUtil.genDescription(fileName);

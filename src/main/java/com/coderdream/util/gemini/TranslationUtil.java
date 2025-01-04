@@ -27,48 +27,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class TranslationUtil {
 
-  public static String URL =
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="
-      + CdConstants.GEMINI_API_KEY;
-
   public static String translate(String text) {
-    // 使用 Hutool 的 JSONObject 构造 JSON 对象
-    JSONObject jsonObject = new JSONObject();
-
-    // 构造"contents"数组
-    JSONObject content = new JSONObject();
-    content.set("parts", new Object[]{
-      new JSONObject().set("text", text)  // 将动态参数填入 "text"
-    });
-
-    // 将"contents"加入到最终的 JSON 对象中
-    jsonObject.set("contents", new Object[]{content});
-
-    // 打印输出生成的 JSONObject
-    System.out.println(jsonObject.toStringPretty());
-
-    String result = HttpUtil.httpHutoolPost(URL, jsonObject.toString(),
-      CdConstants.PROXY_HOST,
-      CdConstants.PROXY_PORT);
-    log.info("{}", result);
-
-    // 使用 Hutool 将 JSON 字符串解析为对象
-    JSONObject resultObject = JSONUtil.parseObj(result);
-
-    // 将 JSON 数据转换为 GeminiApiResponse 实体类
-    GeminiApiResponse response = resultObject.toBean(GeminiApiResponse.class);
-
-    // 打印结果验证
-    System.out.println("模型版本号: " + response.getModelVersion());
-    System.out.println("候选结果数量: " + response.getCandidates().size());
-    System.out.println(
-      "第一条内容: " + response.getCandidates().get(0).getContent().getParts()
-        .get(0).getText());
-    result = response.getCandidates().get(0).getContent().getParts().get(0)
-      .getText();
-
-    return result;
+    return GeminiApiClient.generateContent(text);
   }
+
+
 
   /**
    * 处理词汇信息，将其翻译后写入文件。
@@ -89,7 +52,7 @@ public class TranslationUtil {
     // 调用翻译方法并记录日志
     log.info("开始翻译文本内容，包含 {} 个词汇", vocInfoList.size());
 
-    String result = translate(text.toString());  // 翻译文本
+    String result = GeminiApiClient.generateContent(text.toString());  // 翻译文本
 
     // 记录翻译后的结果日志
     log.info("翻译完成，开始写入文件: {}", fileName);
@@ -128,7 +91,7 @@ public class TranslationUtil {
     List<String> vocInfoList = CdFileUtil.readFileContent(fileName);
     String content = String.join("\n", vocInfoList);
     text += content;
-    String translate = TranslationUtil.translate(text);
+    String translate = GeminiApiClient.generateContent(text);
     log.info("translate: {}", translate);
     File file = new File(fileName);
     String filePath = file.getParent();
@@ -155,40 +118,40 @@ public class TranslationUtil {
     } catch (IOException e) {
       log.error("写入文件 {} 发生异常：{}", outputFilePath, e.getMessage(), e);
     }
-
   }
-  //
 
-  //
-
-  // 增加英文音标 phonetics
+  /**
+   * 生成文章描述
+   *
+   * @param fileName 文件名
+   */
   public static void genDescription(String fileName) {
 
     String text = "解析下面的文本，帮我写文章，用来发快手、小红书和公众号，要根据不同的平台特性生成不同风格的文章，快手的文章字数在500~600之间，小红书不超过800字，公众号不超过200字；另外，帮我每个平台取3个疑问句的标题，标题中间不要有任何标点符号、表情符号且不超过20个字，快手加入一些表情符号。文本如下：";
     List<String> vocInfoList = CdFileUtil.readFileContent(fileName);
     String content = String.join("\n", vocInfoList);
     text += content;
-    String translate = TranslationUtil.translate(text);
+    String translate = GeminiApiClient.generateContent(text);
     log.info("translate: {}", translate);
     File file = new File(fileName);
     String filePath = file.getParent();
     Path outputFilePath = Paths.get(filePath,
-      "description.txt");
+      "description.md");
     try (BufferedWriter writer = Files.newBufferedWriter(outputFilePath,
       StandardCharsets.UTF_8)) {
       for (String line : translate.split("\n")) {
         if (StrUtil.isNotEmpty(line)) {
           // 以斜线\ 分割字符串，然后逐个写入文件 斜线 \\\\ 反斜线  /
-          String[] split = line.split("/");
-          if (CollectionUtil.isNotEmpty(Arrays.asList(split))
-            && split.length == 3) {
-            writer.write(split[0]);
-            writer.newLine();
-            writer.write("/" + split[1] + "/");
-            writer.newLine();
-            writer.write(split[2]);
-            writer.newLine();
-          }
+//          String[] split = line.split("/");
+//          if (CollectionUtil.isNotEmpty(Arrays.asList(split))
+//            && split.length == 3) {
+//            writer.write(split[0]);
+//            writer.newLine();
+//            writer.write("/" + split[1] + "/");
+//            writer.newLine();
+          writer.write(line);
+          writer.newLine();
+//          }
         }
       }
       log.info("对话信息已成功写入到文件: {}", outputFilePath);

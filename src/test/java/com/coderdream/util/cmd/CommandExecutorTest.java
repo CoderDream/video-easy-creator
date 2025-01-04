@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 class CommandExecutorTest {
 
   @Test
-  void executeCommand_DeployHexo() {
+  void executeCommandDeployHexo() {
     //cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo g
     //cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo d
     List<String> commandList = Arrays.asList(

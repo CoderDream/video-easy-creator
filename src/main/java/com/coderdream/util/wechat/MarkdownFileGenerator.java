@@ -322,12 +322,11 @@ public class MarkdownFileGenerator {
     log.info("成功写入结尾字符串");
   }
 
-  public static void main(String[] args) {
-    String date = "2018-09-06";
-    String introduction = "【BBC六分钟英语】哪些人会购买高端相机？";
-    introduction = "【BBC六分钟英语】如何战胜久坐不动的生活方式？";
-    String folderName = "180906";
-//    folderName = "241226";
+  public static void genWechatArticle(String folderName, String title) {
+    String date =
+      "20" + folderName.substring(0, 2) + "-" + folderName.substring(2, 4) + "-"
+        + folderName.substring(4);
+
     String folderPath = CommonUtil.getFullPath(folderName);
     String imageFolder = folderPath + "\\" + folderName;
     String englishTextFile = folderPath + "\\" + "script_dialog.txt";
@@ -337,12 +336,39 @@ public class MarkdownFileGenerator {
     String endString = "在公众号里输入6位数字，获取【对话音频、英文文本、中文翻译、核心词汇和高级词汇表】电子档，6位数字【暗号】在文章的最后一张图片，如【220728】，表示22年7月28日这一期。公众号没有的文章说明还没有制作相关资料。年度合集在B站【六分钟英语】工房获取，每年共计300+文档，感谢支持！";
 
     try {
-      generateMarkdownFile(folderName, date, introduction, imageFolder,
+      generateMarkdownFile(folderName, date, title, imageFolder,
         englishTextFile,
         bilingualTextFile, vocabularyFile, endString);
       log.info("Markdown 文件生成完毕！");
     } catch (IOException e) {
       log.error("生成 Markdown 文件时出现异常：", e);
     }
+  }
+
+  public static void main(String[] args) {
+
+    String folderName = "123456";
+    String title = "【BBC六分钟英语】哪些人会购买高端相机？";
+    MarkdownFileGenerator.genWechatArticle(folderName, title);
+
+//    introduction = "【BBC六分钟英语】网络流行语雪花是什么意思？？";
+//    String folderName = "180920";
+////    folderName = "241226";
+//    String folderPath = CommonUtil.getFullPath(folderName);
+//    String imageFolder = folderPath + "\\" + folderName;
+//    String englishTextFile = folderPath + "\\" + "script_dialog.txt";
+//    String bilingualTextFile =
+//      folderPath + "\\" + folderName + "_中英双语对话脚本.txt";
+//    String vocabularyFile = folderPath + "\\" + "voc_cn.txt";
+//    String endString = "在公众号里输入6位数字，获取【对话音频、英文文本、中文翻译、核心词汇和高级词汇表】电子档，6位数字【暗号】在文章的最后一张图片，如【220728】，表示22年7月28日这一期。公众号没有的文章说明还没有制作相关资料。年度合集在B站【六分钟英语】工房获取，每年共计300+文档，感谢支持！";
+//
+//    try {
+//      generateMarkdownFile(folderName, date, introduction, imageFolder,
+//        englishTextFile,
+//        bilingualTextFile, vocabularyFile, endString);
+//      log.info("Markdown 文件生成完毕！");
+//    } catch (IOException e) {
+//      log.error("生成 Markdown 文件时出现异常：", e);
+//    }
   }
 }

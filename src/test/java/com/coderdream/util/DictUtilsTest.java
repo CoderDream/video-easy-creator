@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 @Slf4j
 class DictUtilsTest {
 
@@ -55,7 +55,7 @@ class DictUtilsTest {
    */
   @Test
   void processVocWithGemini_01() {
-    String folderName = "241226";
+    String folderName = "250102";
     String folderPath = CommonUtil.getFullPath(folderName);
     String fileName = "voc";
     log.info("processVocWithGemini 01 folderPath: {}", folderPath);

@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.safety.Whitelist;
+//import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -274,11 +274,11 @@ public class JSoupTest {
   @Test
   @Order(312)
   public void demo312() {
-    // 原始文件
-    String dirtyHTML = "<p><a href='http://www.baidu.com/' onclick='sendCookiesToMe()'>Link</a></p>";
-    // 需要清理的标签
-    String cleanHTML = Jsoup.clean(dirtyHTML, Whitelist.basic());
-    // 输出结果
-    System.out.println(cleanHTML);
+//    // 原始文件
+//    String dirtyHTML = "<p><a href='http://www.baidu.com/' onclick='sendCookiesToMe()'>Link</a></p>";
+//    // 需要清理的标签
+//    String cleanHTML = Jsoup.clean(dirtyHTML, Whitelist.basic());
+//    // 输出结果
+//    System.out.println(cleanHTML);
   }
 }

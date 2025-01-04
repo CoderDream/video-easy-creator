@@ -9,6 +9,21 @@
 - [ ] 生成听力视频（开始提示音，两遍男声两遍无字幕，女声一遍有字幕，男声一遍有字幕）
 
 
+
+
+
+
+
+## 20250104
+
+- [x] 完成GeminiApiUtil工具类初始版
+  - GeminiApiUtil.generateContent()
+
+## 20250102
+
+- [x] 【六分钟英语】生成文章描述
+  - TranslationUtil.genDescription(fileName);
+
 ## 20250101
 
 - [x] 给MarkDownload文件的单词补上音标
@@ -56,7 +71,7 @@
 
 - [x] 优化根据百词斩完整文档生成每日《考研词汇精选》
   - MarkdownSplitterAdvanced
-- [x] 优化根据Excel生成高级词汇表图片
+- [x] 【六分钟英语】优化根据Excel生成高级词汇表图片
   - HighResImageGenUtil2
   
 ## 20241225
