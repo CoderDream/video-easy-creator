@@ -1,6 +1,8 @@
 package com.coderdream.util.txt;
 
 import com.coderdream.entity.DialogDualEntity;
+import java.io.File;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * TextUtil 单元测试类
  */
+@Slf4j
 public class TextUtilTest {
 
 
@@ -29,7 +32,6 @@ public class TextUtilTest {
    * 文本文件的文件名
    */
   private static final String fileName = "商务职场英语口语900句V1_ch02_v1.txt";
-
 
   /**
    * 测试 extractHosts 方法
@@ -131,7 +133,7 @@ public class TextUtilTest {
 
     // 验证 dialog.txt 文件是否存在
     Path dialogFilePath = Paths.get(
-      "D:\\0000\\EnBook001\\商务职场英语口语900句", "dialog.txt");
+      filePath, "dialog.txt");
     assertTrue(Files.exists(dialogFilePath), "dialog.txt 文件应该存在");
 
     // 验证文件内容不为空
@@ -175,7 +177,36 @@ public class TextUtilTest {
 
     // 验证文件内容不为空
     List<String> lines = Files.readAllLines(dialogSingleFilePath);
-    assertTrue(!lines.isEmpty(), "dialog_single.txt 文件内容不应该为空");
+    assertFalse(lines.isEmpty(), "dialog_single.txt 文件内容不应该为空");
+  }
+
+  //
+
+  /**
+   * 测试 extractSimpleSentences 方法
+   */
+  @Test
+  void testWriteSentenceToFileList() {
+    TextUtil.writeSentenceToFileList(filePath, fileName);
+    File file = new File(fileName);
+    String pureFileName = file.getName()
+      .substring(0, file.getName().lastIndexOf("."));
+
+    // 验证 dialog_single.txt 文件是否存在
+    Path dialogSingleFilePath = Paths.get(filePath,
+      pureFileName + "_dialog_single_part_01.txt");
+    assertTrue(Files.exists(dialogSingleFilePath),
+      pureFileName + "_dialog_single_part01.txt 文件应该存在");
+
+    // 验证文件内容不为空
+    List<String> lines = null;
+    try {
+      lines = Files.readAllLines(dialogSingleFilePath);
+    } catch (IOException e) {
+      log.error("读取文件出错, {}", e.getMessage(), e);
+    }
+    assert lines != null;
+    assertFalse(lines.isEmpty(), "dialog_single_part_01.txt 文件内容不应该为空");
   }
 
   /**

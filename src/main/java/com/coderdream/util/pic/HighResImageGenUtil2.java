@@ -330,7 +330,7 @@ public class HighResImageGenUtil2 {
         // 示例数据
         String filePath = "src/main/resources";
         String fileName = "幻灯片";
-        String folderName = "250102";
+        String folderName = "180927";
         log.info("开始解析文件: {}", filePath);
         String fullPath = filePath + File.separator + fileName + ".txt";
 

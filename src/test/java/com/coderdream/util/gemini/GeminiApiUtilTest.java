@@ -1,5 +1,11 @@
 package com.coderdream.util.gemini;
 
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.coderdream.util.CdFileUtil;
+import com.coderdream.util.sentence.JsonToBook01BeanListUtil;
+import com.coderdream.util.sentence.ParagraphCounter;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -81,6 +87,173 @@ public class GeminiApiUtilTest {
     GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
     log.info("2. Generated content: {}", generatedContent);
     log.info("----- 2.测试 generateContent 方法结束");
+  }
+
+  @Test
+  @Order(405)
+  void testGenerateContent_405() throws Exception {
+    log.info("----- 405.测试 generateContent 方法开始");
+    String prompt = "帮我把下面的段落分割成句子：";
+    prompt += "\"I'm going to the store,\" she said.He exclaimed, \"That's amazing!\"Have you read \"The Lord of the Rings\"?My favorite song is \"Bohemian Rhapsody.\"She called him a \"genius,\" but I think he's just lucky.The \"expert\" didn't know what he was talking about.He said it was \"totally awesome.\"Let's go \"hang out\" later.The string variable was set to \"Hello World!\".The command is \"ls -l\".";
+    // 生成文本内容（阻塞式）
+    GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+    log.info("405. Generated content: {}", generatedContent);
+    log.info("----- 405.测试 generateContent 方法结束");
+  }
+
+  @Test
+  @Order(406)
+  void testGenerateContent_406() throws Exception {
+    log.info("----- 406.测试 generateContent 方法开始");
+    String prompt = "帮我把下面的段落分割成句子，用json返回给我：";
+    prompt += "Let me see. \"Wanted: manager for upand-coming firm. Must have good organizational skills. Experience a plus. Please contact Susan Lee.\" Oh, I don't know... 让我瞧瞧。 \"招聘：极富发展潜力的公司招聘经理。需良好的组织才能。需有经验。有意者请与苏珊·李联系\"。哦，我不知道......";
+    // 生成文本内容（阻塞式）
+    GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+    log.info("406. Generated content: {}", generatedContent);
+    log.info("----- 406.测试 generateContent 方法结束");
+//    String text = generatedContent.text();
+//    // 先移除```json
+//    text = text.replace("```json", "");
+//    // 再移除 ```
+//    text = text.replace("```", "");
+//    text = text.replace("\n", "");
+//    // 再转换成JSON对象
+//    JSONObject jsonObject = JSONUtil.parseObj(text);
+//    JSONArray jsonArray = jsonObject.getJSONArray("sentences");
+//    for (int i = 0; i < jsonArray.size(); i++) {
+//      String sentence = (String)jsonArray.get(i);
+////      String sentence = (String) sentenceObject.get("text");
+//      log.info("句子：{}", sentence);
+//    }
+  }
+
+  @Test
+  @Order(407)
+  void testGenerateContent_407() throws Exception {
+    log.info("----- 407.测试 generateContent 方法开始");
+    String prompt = "不要管以前的对话记录。帮我把下面的段落分割成句子，用json返回给我，json的格式如下：[{\"speaker\":\"A\",\"sentences\":[\"I'm looking for a job which offers lodging.\"]},{\"speaker\":\"B\",\"sentences\":[\"It's hard.\"]}]；段落内容如下：";
+    File txtFile = new File(
+      "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch01_v3.txt");
+    String text1 = FileUtils.readFileToString(txtFile, "UTF-8");
+    prompt += text1;
+    // 生成文本内容（阻塞式）
+    GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+    log.info("407. Generated content: {}", generatedContent);
+    log.info("----- 407.测试 generateContent 方法结束");
+    String text = generatedContent.text();
+    // 先移除```json
+    text = text.replace("```json", "");
+    // 再移除 ```
+    text = text.replace("```", "");
+    text = text.replace("\n", "");
+//    // 写入文本文件
+//    File bookFile = new File(txtFile.getParent() + "\\" + txtFile.getName()
+//      + "_逐字稿V_407.txt");
+//    FileUtils.writeStringToFile(bookFile, text, "UTF-8");
+
+    // TODO
+    JsonToBook01BeanListUtil.processBackup("", text,
+      new Integer[]{0, 12, 16, 18, 12, 20, 8}, "S101");
+
+//    JSONObject jsonObject = JSONUtil.parseObj(text);
+//    JSONArray jsonArray = jsonObject.getJSONArray("sentences");
+//    for (int i = 0; i < jsonArray.size(); i++) {
+//      String sentence = (String)jsonArray.get(i);
+////      String sentence = (String) sentenceObject.get("text");
+//      log.info("句子：{}", sentence);
+//    }
+  }
+
+  @Test
+  @Order(409)
+  void testGenerateContent_409() throws Exception {
+    log.info("----- 409.测试 generateContent 方法开始");
+    String prompt = "不要管以前的对话记录。帮我把下面的段落分割成句子，用json返回给我，中英文句子要分开，"
+      + "你返回给我的json里的对象数应该是段落有效行数的两倍，json的格式如下："
+      + "[{\"speaker\":\"A\",\"sentences\":[\"I'm looking for a job which offers lodging.\"]},"
+      + "{\"speaker\":\"B\",\"sentences\":[\"It's hard.\"]},"
+      + "{\"speaker\":\"A\",\"sentences\":[\"Is this vacancy still available?\"]},"
+      + "{\"speaker\":\"B\",\"sentences\":[\"Yes, we still need satisfying people.\"]},"
+      + "{\"speaker\":\"A\",\"sentences\":[\"What are the requirements to apply for the position?\"]},"
+      + "{\"speaker\":\"B\",\"sentences\":[\"You must have over two years' experience first.\"]},"
+      + "\"speaker\":\"A\",\"sentences\":[\"我正在找一份能提供住宿的工作。\"]},"
+      + "{\"speaker\":\"B\",\"sentences\":[\"这挺难的。\"]},"
+      + "{\"speaker\":\"A\",\"sentences\":[\"这个工作还招人吗？\"]},"
+      + "{\"speaker\":\"B\",\"sentences\":[\"是的，我们一直需要合适的人选。\"]},"
+      + "{\"speaker\":\"A\",\"sentences\":[\"应聘这个职务的条件是什么？\"]},"
+      + "{\"speaker\":\"B\",\"sentences\":[\"首先你必须有两年以上的经验。\"]}]；段落内容如下：";
+
+    File txtFile = new File(
+      "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch02.txt");
+    String text1 = FileUtils.readFileToString(txtFile, "UTF-8");
+    prompt += text1;
+    // 生成文本内容（阻塞式）
+    GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+    log.info("409. Generated content: {}", generatedContent);
+    log.info("----- 409.测试 generateContent 方法结束");
+    String text = generatedContent.text();
+    // 先移除```json
+    text = text.replace("```json", "");
+    // 再移除 ```
+    text = text.replace("```", "");
+    text = text.replace("\n", "");
+    // 写入文本文件
+    File bookFile = new File(txtFile.getParent() + "\\" + txtFile.getName()
+      + "_逐字稿V_4093.txt");
+    FileUtils.writeStringToFile(bookFile, text, "UTF-8");
+
+//    Integer[] rangeIndexes = new Integer[]{0, 12, 16, 18, 12, 20, 8};
+
+//    Integer[] rangeIndexes = ParagraphCounter.countLinesPerParagraph(text1);
+//    String chapterInfoTag = "S102";
+//    JsonToBook01BeanListUtil.processBackup(txtFile.getAbsolutePath(), text,
+//      rangeIndexes, chapterInfoTag);
+
+//    JSONObject jsonObject = JSONUtil.parseObj(text);
+//    JSONArray jsonArray = jsonObject.getJSONArray("sentences");
+//    for (int i = 0; i < jsonArray.size(); i++) {
+//      String sentence = (String)jsonArray.get(i);
+////      String sentence = (String) sentenceObject.get("text");
+//      log.info("句子：{}", sentence);
+//    }
+  }
+
+
+  @Test
+  @Order(408)
+  void testGenerateContent_408() throws Exception {
+    log.info("----- 408.测试 generateContent 方法开始");
+    String prompt = "帮我把下面的段落分割成句子，用字符串列表返回给我，不要添加任何序号：";
+    File txtFile = new File(
+      "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch01_v3.txt");
+    String text1 = FileUtils.readFileToString(txtFile, "UTF-8");
+    prompt += text1;
+    // 生成文本内容（阻塞式）
+    GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+    log.info("408. Generated content: {}", generatedContent);
+    log.info("----- 408.测试 generateContent 方法结束");
+    String text = generatedContent.text();
+    // 先移除```json
+    text = text.replace("```", "");
+    // 再移除 ```
+//    text = text.replace("```", "");
+    text = text.replace("\n", "");
+    List<String> sentences = JSONUtil.toList(text, String.class);
+    // 写入文本文件
+    File bookFile = new File(txtFile.getParent() + "\\" + txtFile.getName()
+      + "_逐字稿V2.txt");
+//    FileUtils.writeStringToFile(bookFile, text, "UTF-8");
+    CdFileUtil.writeToFile(bookFile.getAbsolutePath(), sentences);
+
+//    JsonToBook01BeanListUtil.process(text);
+
+//    JSONObject jsonObject = JSONUtil.parseObj(text);
+//    JSONArray jsonArray = jsonObject.getJSONArray("sentences");
+//    for (int i = 0; i < jsonArray.size(); i++) {
+//      String sentence = (String)jsonArray.get(i);
+////      String sentence = (String) sentenceObject.get("text");
+//      log.info("句子：{}", sentence);
+//    }
   }
 
   @Test

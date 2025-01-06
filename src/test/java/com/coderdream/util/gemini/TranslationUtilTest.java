@@ -48,7 +48,7 @@ class TranslationUtilTest {
 
   @Test
   void genDescription() {
-    String folderName = "250102";
+    String folderName = "180927"; // 250102
     String folderPath = CommonUtil.getFullPath(folderName);
     String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
     TranslationUtil.genDescription(fileName);

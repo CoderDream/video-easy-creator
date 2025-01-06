@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -234,5 +236,61 @@ public class CdFileUtil {
         }
 
         return reportPath;
+    }
+
+
+    /**
+     * 在文件名后添加指定的字符串，保留文件路径和扩展名
+     *
+     * @param filePath 原始文件路径
+     * @param part     要添加的字符串
+     * @return 修改后的文件路径
+     */
+    public static String addPostfixToFileName(String filePath, String part) {
+        // 将文件路径字符串转换为Path对象
+        Path path = Paths.get(filePath);
+
+        // 获取文件名
+        Path fileName = path.getFileName();
+        if (fileName == null) {
+            return filePath;  // 如果没有文件名，则直接返回原始路径
+        }
+
+        String fileNameStr = fileName.toString();
+        // 分割文件名和扩展名
+        int dotIndex = fileNameStr.lastIndexOf('.');
+        String baseName, extension = "";
+
+        if (dotIndex > 0) {
+            baseName = fileNameStr.substring(0, dotIndex);
+            extension = fileNameStr.substring(dotIndex);
+        } else {
+            baseName = fileNameStr; // 没有扩展名
+        }
+
+        // 构建新的文件名
+        String newFileName = baseName + part + extension;
+
+        // 获取文件所在的目录
+        Path parent = path.getParent();
+
+        // 构建新的文件路径，如果parent为空，则保持原路径不变
+        Path newPath = (parent != null) ? parent.resolve(newFileName) : Paths.get(newFileName);
+
+        return newPath.toString();
+    }
+
+    public static void main(String[] args) {
+//        String filePath = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch0201.txt";
+        String filePath = "商务职场英语口语900句V1_ch0201.txt";
+        String newFilePath = addPostfixToFileName(filePath, "_part01");
+        System.out.println("原始文件路径: " + filePath);
+        System.out.println("修改后的文件路径: " + newFilePath);
+
+        String filePath2 = "D:/0000/EnBook001/商务职场英语口语900句/商务职场英语口语900句V1_ch0201.txt";
+        String newFilePath2 = addPostfixToFileName(filePath2, "_part01");
+        System.out.println("原始文件路径2: " + filePath2);
+        System.out.println("修改后的文件路径2: " + newFilePath2);
+
     }
 }

@@ -2,6 +2,7 @@ package com.coderdream.util.txt;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.coderdream.entity.DialogDualEntity;
+import java.text.MessageFormat;
 import lombok.extern.slf4j.Slf4j;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -16,7 +17,6 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class TextUtil {
-
 
   /**
    * 用于匹配多个空格的正则表达式
@@ -43,7 +43,6 @@ public class TextUtil {
     throw new UnsupportedOperationException(
       "This is a utility class and cannot be instantiated");
   }
-
 
   /**
    * 查询所有段落的第一个中文/英文冒号前的名字，并去重后存储到相同文件夹的host.txt文档中
@@ -126,7 +125,6 @@ public class TextUtil {
     return null;
   }
 
-
 //  /**
 //   * 解析文本文件中的对话内容，并返回 DialogDualEntity 列表
 //   *
@@ -170,7 +168,8 @@ public class TextUtil {
    *
    * @return 包含对话信息的 DialogDualEntity 列表
    */
-  public static List<DialogDualEntity> parseDialogs(String filePath, String... fileName) {
+  public static List<DialogDualEntity> parseDialogs(String filePath,
+    String... fileName) {
     Path inputFilePath = Paths.get(filePath, fileName);
     List<DialogDualEntity> dialogs = new ArrayList<>();
     try (BufferedReader reader = Files.newBufferedReader(inputFilePath,
@@ -203,13 +202,48 @@ public class TextUtil {
     return dialogs;
   }
 
+  public static List<List<DialogDualEntity>> parseDialogsList(String filePath,
+    String... fileName) {
+    Path inputFilePath = Paths.get(filePath, fileName);
+    List<List<DialogDualEntity>> dialogsList = new ArrayList<>();
+    try (BufferedReader reader = Files.newBufferedReader(inputFilePath,
+      StandardCharsets.UTF_8)) {
+      String line;
+      List<String> paragraph = new ArrayList<>();
+      while ((line = reader.readLine()) != null) {
+        if (line.trim().isEmpty()) {
+          //处理段落
+          List<DialogDualEntity> dialogDualEntityList = parseParagraph(
+            paragraph);
+          if (CollectionUtil.isNotEmpty(dialogDualEntityList)) {
+            dialogsList.add(dialogDualEntityList);
+          }
+          paragraph.clear();// 清空段落
+          continue; // 跳过空行
+        }
+        paragraph.add(line);
+      }
+      //处理最后一段
+      List<DialogDualEntity> dialogDualEntityList = parseParagraph(paragraph);
+      if (CollectionUtil.isNotEmpty(dialogDualEntityList)) {
+        dialogsList.add(dialogDualEntityList);
+      }
+      log.info("从文件 {} 中成功读取并解析对话信息,共 {} 个段落", inputFilePath,
+        dialogsList.size());
+    } catch (IOException e) {
+      log.error("读取文件 {} 发生异常：{}", inputFilePath, e.getMessage(), e);
+    }
+    return dialogsList;
+  }
+
 
   /**
    * 将对话列表写入文件
    *
    * @param dialogs 对话列表
    */
-  public static void writeDialogsToFile(List<DialogDualEntity> dialogs, String filePath) {
+  public static void writeDialogsToFile(List<DialogDualEntity> dialogs,
+    String filePath) {
     Path outputFilePath = Paths.get(filePath, "dialog.txt");
 
     try (BufferedWriter writer = Files.newBufferedWriter(outputFilePath,
@@ -264,10 +298,44 @@ public class TextUtil {
 //    }
 //  }
 
-  public static void writeSentenceToFile( String filePath, String fileName) {
+  public static void writeSentenceToFile(String filePath, String fileName) {
     // 解析对话信息
     List<DialogDualEntity> dialogs = TextUtil.parseDialogs(filePath, fileName);
     Path outputFilePath = Paths.get(filePath, "dialog_single.txt");
+    writeDialogToFile(dialogs, outputFilePath);
+  }
+
+  public static void writeSentenceToFileList(String filePath, String fileName) {
+    // 解析对话信息
+    List<List<DialogDualEntity>> dialogsList = TextUtil.parseDialogsList(
+      filePath, fileName);
+    File file = new File(fileName);
+    String pureFileName = file.getName()
+      .substring(0, file.getName().lastIndexOf("."));
+
+    int count = 0;
+    Path outputFilePath;
+    for (List<DialogDualEntity> dialogs : dialogsList) {
+      count++;
+      outputFilePath = Paths.get(filePath,
+        pureFileName + "_dialog_single_part_"
+          + MessageFormat.format(
+          "{0,number,00}", count) + ".txt");
+
+      writeDialogToFile(dialogs, outputFilePath);
+    }
+    // total
+    outputFilePath = Paths.get(filePath,
+      pureFileName + "_dialog_single_total.txt");
+    List<DialogDualEntity> dialogs = new ArrayList<>();
+    for (List<DialogDualEntity> dialog : dialogsList) {
+      dialogs.addAll(dialog);
+    }
+    writeDialogToFile(dialogs, outputFilePath);
+  }
+
+  private static void writeDialogToFile(List<DialogDualEntity> dialogs,
+    Path outputFilePath) {
     try (BufferedWriter writer = Files.newBufferedWriter(outputFilePath,
       StandardCharsets.UTF_8)) {
       String contentAEn;
@@ -335,67 +403,7 @@ public class TextUtil {
 
     List<DialogDualEntity> dialogs = TextUtil.parseDialogs(filePath);
     Path outputFilePath = Paths.get(filePath, "dialog_single.txt");
-    try (BufferedWriter writer = Files.newBufferedWriter(outputFilePath,
-      StandardCharsets.UTF_8)) {
-      String contentAEn;
-      String contentBEn;
-      String contentACn;
-      String contentBCn;
-      for (DialogDualEntity dialog : dialogs) {
-        contentAEn = dialog.getContentAEn() != null ? removeRedundantSpaces(
-          dialog.getContentAEn()) : "";
-        contentACn = dialog.getContentACn() != null ? removeRedundantSpaces(
-          dialog.getContentACn()) : "";
-
-        List<String> contentAEnSentences = ParagraphUtil.splitSentences(
-          contentAEn);
-        List<String> contentACnSentences = ParagraphUtil.splitSentences(
-          contentACn);
-        if (CollectionUtil.isNotEmpty(contentAEnSentences)
-          && CollectionUtil.isNotEmpty(contentACnSentences)
-          && contentAEnSentences.size() == contentACnSentences.size()) {
-          for (int i = 0; i < contentAEnSentences.size(); i++) {
-            writer.write(contentAEnSentences.get(i));
-            writer.newLine();
-            writer.write(contentACnSentences.get(i));
-            writer.newLine();
-          }
-        } else {
-          writer.write(contentAEn);
-          writer.newLine();
-          writer.write(contentACn);
-          writer.newLine();
-        }
-
-        contentBEn = dialog.getContentBEn() != null ? removeRedundantSpaces(
-          dialog.getContentBEn()) : "";
-        contentBCn = dialog.getContentBCn() != null ? removeRedundantSpaces(
-          dialog.getContentBCn()) : "";
-
-        List<String> contentBEnSentences = ParagraphUtil.splitSentences(
-          contentBEn);
-        List<String> contentBCnSentences = ParagraphUtil.splitSentences(
-          contentBCn);
-        if (CollectionUtil.isNotEmpty(contentBEnSentences)
-          && CollectionUtil.isNotEmpty(contentBCnSentences)
-          && contentBEnSentences.size() == contentBCnSentences.size()) {
-          for (int i = 0; i < contentBEnSentences.size(); i++) {
-            writer.write(contentBEnSentences.get(i));
-            writer.newLine();
-            writer.write(contentBCnSentences.get(i));
-            writer.newLine();
-          }
-        } else {
-          writer.write(contentBEn);
-          writer.newLine();
-          writer.write(contentBCn);
-          writer.newLine();
-        }
-      }
-      log.info("对话信息已成功写入到文件: {}", outputFilePath);
-    } catch (IOException e) {
-      log.error("写入文件 {} 发生异常：{}", outputFilePath, e.getMessage(), e);
-    }
+    writeDialogToFile(dialogs, outputFilePath);
   }
 
   // List<String> sentences = ParagraphUtil.splitSentences(paragraph);
@@ -455,15 +463,15 @@ public class TextUtil {
       try {
         sentenceEnA = paragraph.get(lineEnIndex);
         sentenceEnB = paragraph.get(lineEnIndex + 1);
-        log.info("sentenceEnA:{} ; sentenceEnB:{}", sentenceEnA, sentenceEnB);
+//        log.info("sentenceEnA:{} ; sentenceEnB:{}", sentenceEnA, sentenceEnB);
         // 解析A的英文内容
         int colonIndexA = findFirstColonIndex(sentenceEnA);
         if (colonIndexA != -1) {
           hostAEn = sentenceEnA.substring(0, colonIndexA).trim();
-          log.info("hostAEn:{}", hostAEn);
+//          log.info("hostAEn:{}", hostAEn);
           dialog.setHostAEn(hostAEn);
           contentAEn = sentenceEnA.substring(colonIndexA + 1).trim();
-          log.info("contentAEn:{}", contentAEn);
+//          log.info("contentAEn:{}", contentAEn);
           dialog.setContentAEn(contentAEn);
         }
         // 解析B的英文内容
@@ -471,10 +479,10 @@ public class TextUtil {
           int colonIndexB = findFirstColonIndex(sentenceEnB);
           if (colonIndexB != -1) {
             hostBEn = sentenceEnB.substring(0, colonIndexB).trim();
-            log.info("hostBEn:{}", hostBEn);
+//            log.info("hostBEn:{}", hostBEn);
             dialog.setHostBEn(hostBEn);
             contentBEn = sentenceEnB.substring(colonIndexB + 1).trim();
-            log.info("contentBEn:{}", contentBEn);
+//            log.info("contentBEn:{}", contentBEn);
             dialog.setContentBEn(contentBEn);
           }
         }
@@ -488,15 +496,15 @@ public class TextUtil {
           log.warn("段落信息行数小于2，无法解析,段落内容：{},lineCnIndex {}",
             paragraph, lineCnIndex);
         }
-        log.info("sentenceCnA:{} ; sentenceCnB:{}", sentenceCnA, sentenceCnB);
+//        log.info("sentenceCnA:{} ; sentenceCnB:{}", sentenceCnA, sentenceCnB);
 
         int colonIndexCnA = findFirstColonIndex(sentenceCnA);
         if (colonIndexCnA != -1) {
           hostACn = sentenceCnA.substring(0, colonIndexCnA).trim();
-          log.info("hostACn:{}", hostACn);
+//          log.info("hostACn:{}", hostACn);
           dialog.setHostACn(hostACn);
           contentACn = sentenceCnA.substring(colonIndexCnA + 1).trim();
-          log.info("contentACn:{}", contentACn);
+//          log.info("contentACn:{}", contentACn);
           dialog.setContentACn(contentACn);
         }
 
@@ -505,10 +513,10 @@ public class TextUtil {
           int colonIndexCnB = findFirstColonIndex(sentenceCnB);
           if (colonIndexCnB != -1) {
             hostBCn = sentenceCnB.substring(0, colonIndexCnB).trim();
-            log.info("hostBCn:{}", hostBCn);
+//            log.info("hostBCn:{}", hostBCn);
             dialog.setHostBCn(hostBCn);
             contentBCn = sentenceCnB.substring(colonIndexCnB + 1).trim();
-            log.info("contentBCn:{}", contentBCn);
+//            log.info("contentBCn:{}", contentBCn);
             dialog.setContentBCn(contentBCn);
           }
         }

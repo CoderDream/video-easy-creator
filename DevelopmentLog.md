@@ -7,7 +7,26 @@
 - [ ] 生成多邻国日志封面图片
 - [ ] Java通过命令wmv视频转mp4
 - [ ] 生成听力视频（开始提示音，两遍男声两遍无字幕，女声一遍有字幕，男声一遍有字幕）
+- [ ] 生成中文音频
+- [ ] 生成英文音频
+- [ ] 收集提示音音频
+- [ ] 生成中文字幕
+- [ ] 生成英文字母
+- [ ] 生成音标字母
+- [ ] 生成ass字幕
 
+## 20250106
+
+- [x] 优化解析《商务职场英语口语900句》对话解析成句子（英中），分割成两部分，生成3份文件
+  - DialogSingleEntityUtil
+
+
+## 20250105
+
+- [x] 解析《商务职场英语口语900句》对话解析成句子（英中）
+  - TextUtil.writeSentenceToFile(filePath, fileName);
+- [x] Epub转markdown、txt文件
+  - EpubToMarkdownUtil.processEpubToZip(fileName)
 
 
 ## 20250104
@@ -60,7 +79,7 @@
 
 - [x] 优雅的执行Windows控制台的命令
   - CommandUtil.executeCommand(command);
-  - CommandExecutorTest.executeCommand_DeployHexo() 打包发布Hexo
+  - CommandExecutorTest.executeCommandDeployHexo() 打包发布Hexo
 - [x] 根据原始文本生成字幕文本
   - SubtitleParser
 
