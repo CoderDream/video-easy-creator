@@ -20,12 +20,12 @@ public class TextUtil4 {
     /**
      * 文本文件的路径
      */
-    private static final String FILE_PATH = "D:\\0000\\EnBook001\\商务职场英语口语900句";
+    private static final String FILE_PATH = "D:\\0000\\EnBook001\\900";
 
     /**
      * 文本文件的文件名
      */
-    private static final String FILE_NAME = "商务职场英语口语900句V1_ch02_v1.txt";
+    private static final String FILE_NAME = "900V1_ch02_v1.txt";
 
     /**
      *  用于匹配多个空格的正则表达式

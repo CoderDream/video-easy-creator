@@ -1,16 +1,15 @@
 package com.coderdream.util.gemini;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import com.coderdream.entity.DialogSingleEntity;
 import com.coderdream.entity.VocInfo;
-import com.coderdream.util.CdConstants;
-import com.coderdream.util.CdFileUtil;
-import com.coderdream.util.callapi.HttpUtil;
-import com.coderdream.util.txt.ParagraphUtil;
-import com.coderdream.util.txt.TextSingleUtil;
+import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdFileUtil;
+import com.coderdream.util.CommonUtil;
+import com.coderdream.util.cd.CdTextUtil;
+import com.coderdream.util.sentence.TextParserUtil;
+import com.coderdream.vo.SentenceVO;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +29,6 @@ public class TranslationUtil {
   public static String translate(String text) {
     return GeminiApiClient.generateContent(text);
   }
-
 
 
   /**
@@ -85,48 +83,89 @@ public class TranslationUtil {
   }
 
   // 增加英文音标 phonetics
-  public static void genPhonetics(String fileName) {
+  public static File genPhonetics(String fileName) {
 
-    String text = "解析下面的文本，整个英文句子的音标作为一个整体，插入到英文句子和中文句子之间，从而使原本的两句话变成三句话。这样，原本的12句话会变成18句话。文本如下：";
-    List<String> vocInfoList = CdFileUtil.readFileContent(fileName);
-    String content = String.join("\n", vocInfoList);
-    text += content;
-    String translate = GeminiApiClient.generateContent(text);
+    String jsonFileName = CdFileUtil.addPostfixToFileName(fileName, "_ai");
+    assert jsonFileName != null;
+    File jsonFile = new File(jsonFileName);
+    String translate = "";
+    if (!jsonFile.exists() || jsonFile.length() == 0) {
+      String text = "解析下面的文本，给每行英文句子加上音标，放到下一行，给的n行英文句子，返回2*n行数据给我。待添加音标的句子文本如下：";
+      List<String> sentences = CdTextUtil.getAllEnglishSentencesFromFile(
+        fileName);
+      String content = String.join("\n", sentences);
+      text += content;
+      translate = GeminiApiClient.generateContent(text);
+      FileUtil.writeUtf8String(translate, jsonFile);
+    } else {
+      translate = FileUtil.readString(jsonFile, StandardCharsets.UTF_8);
+    }
+
+    log.info("genPhonetics: {}", translate);
+    return writePhoneticsToFile(fileName, jsonFileName);
+  }
+
+  public static void genPhonetics(String fileName, String translateFileName) {
+
+//    String text = "解析下面的文本，整个英文句子的音标作为一个整体，插入到英文句子和中文句子之间，从而使原本的两句话变成三句话。这样，原本的12句话会变成18句话。文本如下：";
+//    List<String> vocInfoList = CdFileUtil.readFileContent(fileName);
+//    String content = String.join("\n", vocInfoList);
+//    text += content;
+    String translate = FileUtil.readString(new File(translateFileName),
+      StandardCharsets.UTF_8);// GeminiApiClient.generateContent(text);
     log.info("translate: {}", translate);
-    File file = new File(fileName);
+
+    // writePhoneticsToFile(fileName,  translate);
+  }
+
+  private static File writePhoneticsToFile(String fileName,
+    String jsonFileName) {
+    String addPostfixToFileName = CdFileUtil.addPostfixToFileName(fileName,
+      "_phonetics");
+    List<SentenceVO> sentenceVOPhList = CdTextUtil.parseSentencesFromFileWithEnglishAndPhonetics(
+      jsonFileName);
+    List<SentenceVO> sentenceVOCnList = CdTextUtil.parseSentencesFromFile(
+      fileName);
+    if (CollectionUtil.isEmpty(sentenceVOPhList) || CollectionUtil.isEmpty(
+      sentenceVOPhList) || sentenceVOPhList.size() != sentenceVOCnList.size()) {
+      log.error(" sentenceVOList is empty");
+      return null;
+    }
+    File file = new File(addPostfixToFileName);
     String filePath = file.getParent();
+    log.info("对话信息将写入到文件: {}", file.getName());
     Path outputFilePath = Paths.get(filePath,
-      "dialog_single_with_phonetics.txt");
+      file.getName());
     try (BufferedWriter writer = Files.newBufferedWriter(outputFilePath,
       StandardCharsets.UTF_8)) {
-      for (String line : translate.split("\n")) {
-        if (StrUtil.isNotEmpty(line)) {
-          // 以斜线\ 分割字符串，然后逐个写入文件 斜线 \\\\ 反斜线  /
-          String[] split = line.split("/");
-          if (CollectionUtil.isNotEmpty(Arrays.asList(split))
-            && split.length == 3) {
-            writer.write(split[0]);
-            writer.newLine();
-            writer.write("/" + split[1] + "/");
-            writer.newLine();
-            writer.write(split[2]);
-            writer.newLine();
-          }
-        }
+      SentenceVO sentenceVO = null;
+      SentenceVO sentenceVOCn = null;
+      for (int i = 0; i < sentenceVOPhList.size(); i++) {
+        sentenceVO = sentenceVOPhList.get(i);
+        sentenceVOCn = sentenceVOCnList.get(i);
+        writer.write(sentenceVO.getEnglish());
+        writer.newLine();
+        writer.write(sentenceVO.getPhonetics());
+        writer.newLine();
+        writer.write(sentenceVOCn.getChinese());
+        writer.newLine();
       }
       log.info("对话信息已成功写入到文件: {}", outputFilePath);
     } catch (IOException e) {
       log.error("写入文件 {} 发生异常：{}", outputFilePath, e.getMessage(), e);
     }
+    return file;
   }
 
   /**
    * 生成文章描述
    *
-   * @param fileName 文件名
+   * @param folderName 文件名
    */
-  public static void genDescription(String fileName) {
+  public static void genDescription(String folderName) {
 
+    String folderPath = CommonUtil.getFullPath(folderName);
+    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
     String text = "解析下面的文本，帮我写文章，用来发快手、小红书和公众号，要根据不同的平台特性生成不同风格的文章，快手的文章字数在500~600之间，小红书不超过800字，公众号不超过200字；另外，帮我每个平台取3个疑问句的标题，标题中间不要有任何标点符号、表情符号且不超过20个字，快手加入一些表情符号。文本如下：";
     List<String> vocInfoList = CdFileUtil.readFileContent(fileName);
     String content = String.join("\n", vocInfoList);
@@ -136,7 +175,7 @@ public class TranslationUtil {
     File file = new File(fileName);
     String filePath = file.getParent();
     Path outputFilePath = Paths.get(filePath,
-      "description.md");
+      folderName + "_description.md");
     try (BufferedWriter writer = Files.newBufferedWriter(outputFilePath,
       StandardCharsets.UTF_8)) {
       for (String line : translate.split("\n")) {

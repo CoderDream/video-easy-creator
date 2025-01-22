@@ -3,7 +3,7 @@ package com.coderdream.util.mdict;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.coderdream.entity.WordDetail;
-import com.coderdream.util.CdDictionaryUtil;
+import com.coderdream.util.cd.CdDictionaryUtil;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

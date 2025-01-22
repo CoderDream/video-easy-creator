@@ -1,9 +1,11 @@
 package com.coderdream.util.sentence;
 
+import cn.hutool.core.io.FileUtil;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.CoreDocument;
 import edu.stanford.nlp.pipeline.CoreSentence;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -16,8 +18,11 @@ public class StanfordSentenceSplitter {
     text = "Let me see. 'Wanted: manager for upand-coming firm. Must have good organizational skills. Experience a plus. Please contact Susan Lee.' Oh, I don't know... ";
     text = "\"I'm going to the store,\" she said.He exclaimed, \"That's amazing!\"Have you read \"The Lord of the Rings\"?My favorite song is \"Bohemian Rhapsody.\"She called him a \"genius,\" but I think he's just lucky.The \"expert\" didn't know what he was talking about.He said it was \"totally awesome.\"Let's go \"hang out\" later.The string variable was set to \"Hello World!\".The command is \"ls -l\".";
     text = "Yes, I will. Thank you, Mr.White. Good-bye. 好的，我会的。谢谢您，怀特先生。再见。";
+
+    text = FileUtil.readString("D:\\0000\\【中英雙語】2025川普就職演講\\【中英雙語】2025川普就職演講.txt", StandardCharsets.UTF_8);
     List<String> sentences = StanfordSentenceSplitter.splitSentences(text);
     sentences.forEach(System.out::println);
+    FileUtil.writeLines(sentences, "D:\\0000\\【中英雙語】2025川普就職演講\\【中英雙語】2025川普就職演講_split.txt", StandardCharsets.UTF_8);
   }
 
   public static List<String> splitSentences(String text) {

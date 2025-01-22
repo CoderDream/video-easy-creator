@@ -1,15 +1,9 @@
 package com.coderdream.util.gemini;
 
 import cn.hutool.core.io.FileUtil;
-import com.coderdream.util.CdFileUtil;
-import com.coderdream.util.CommonUtil;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.client.RestTemplate;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
 class TranslationUtilTest {
@@ -40,18 +34,52 @@ class TranslationUtilTest {
 
   @Test
   void genPhonetics_03() {
-    String fileName = "D:\\0000\\EnBook001\\商务职场英语口语900句\\dialog_single.txt";
+    String fileName = "D:\\0000\\EnBook001\\900\\dialog_single.txt";
+    TranslationUtil.genPhonetics(fileName);
+//    log.info("translate: {}", translate);
+  }
+
+  //
+
+  @Test
+  void genPhonetics_04() {
+    String fileName = "D:\\0000\\EnBook001\\900\\ch01\\900V1_ch0101_total.txt";
     TranslationUtil.genPhonetics(fileName);
 //    log.info("translate: {}", translate);
   }
 
 
   @Test
+  void genPhonetics_05() {
+    String fileName = "D:\\0000\\EnBook001\\900\\ch01\\900V1_ch0101_total.txt";
+    String newFileName = "D:\\0000\\EnBook001\\900\\ch01\\dialog_single_with_phonetics_raw.txt";
+    TranslationUtil.genPhonetics(fileName, newFileName);
+//    log.info("translate: {}", translate);
+  }
+
+
+  @Test
   void genDescription() {
-    String folderName = "180927"; // 250102
-    String folderPath = CommonUtil.getFullPath(folderName);
-    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
-    TranslationUtil.genDescription(fileName);
+    String folderName = "181101"; // 250102
+//    String folderPath = CommonUtil.getFullPath(folderName);
+//    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
+    TranslationUtil.genDescription(folderName);
+//    log.info("translate: {}", translate);
+  }
+
+  @Test
+  void genDescription_02() {
+//    String folderName = "180913"; // 250102
+//    List<String> folderNames = List.of("180906", "180920");
+    String todoFileName = "D:\\04_GitHub\\java-architect-util\\free-apps\\src\\main\\resources\\data\\bbc\\todo.txt";
+    List<String> folderNameList = FileUtil.readLines(todoFileName, "UTF-8");
+    for (String folderName : folderNameList) {
+      TranslationUtil.genDescription(folderName);
+    }
+
+//    String folderPath = CommonUtil.getFullPath(folderName);
+//    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
+//    TranslationUtil.genDescription(fileName);
 //    log.info("translate: {}", translate);
   }
 

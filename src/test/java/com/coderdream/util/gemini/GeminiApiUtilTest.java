@@ -1,12 +1,11 @@
 package com.coderdream.util.gemini;
 
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONObject;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
-import com.coderdream.util.CdFileUtil;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.sentence.JsonToBook01BeanListUtil;
-import com.coderdream.util.sentence.ParagraphCounter;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -133,7 +132,7 @@ public class GeminiApiUtilTest {
     log.info("----- 407.测试 generateContent 方法开始");
     String prompt = "不要管以前的对话记录。帮我把下面的段落分割成句子，用json返回给我，json的格式如下：[{\"speaker\":\"A\",\"sentences\":[\"I'm looking for a job which offers lodging.\"]},{\"speaker\":\"B\",\"sentences\":[\"It's hard.\"]}]；段落内容如下：";
     File txtFile = new File(
-      "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch01_v3.txt");
+      "D:\\0000\\EnBook001\\900\\900V1_ch01_v3.txt");
     String text1 = FileUtils.readFileToString(txtFile, "UTF-8");
     prompt += text1;
     // 生成文本内容（阻塞式）
@@ -184,7 +183,7 @@ public class GeminiApiUtilTest {
       + "{\"speaker\":\"B\",\"sentences\":[\"首先你必须有两年以上的经验。\"]}]；段落内容如下：";
 
     File txtFile = new File(
-      "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch02.txt");
+      "D:\\0000\\EnBook001\\900\\900V1_ch02.txt");
     String text1 = FileUtils.readFileToString(txtFile, "UTF-8");
     prompt += text1;
     // 生成文本内容（阻塞式）
@@ -225,7 +224,7 @@ public class GeminiApiUtilTest {
     log.info("----- 408.测试 generateContent 方法开始");
     String prompt = "帮我把下面的段落分割成句子，用字符串列表返回给我，不要添加任何序号：";
     File txtFile = new File(
-      "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch01_v3.txt");
+      "D:\\0000\\EnBook001\\900\\900V1_ch01_v3.txt");
     String text1 = FileUtils.readFileToString(txtFile, "UTF-8");
     prompt += text1;
     // 生成文本内容（阻塞式）
@@ -255,6 +254,7 @@ public class GeminiApiUtilTest {
 //      log.info("句子：{}", sentence);
 //    }
   }
+
 
   @Test
   @Order(403)
@@ -301,6 +301,32 @@ public class GeminiApiUtilTest {
 
     log.info("----- 4.测试 generateContent 方法结束");
   }
+
+  @Test
+  @Order(4010)
+  void testGenerateContent_4010() throws Exception {
+    log.info("----- 4.测试 generateContent 方法开始");
+    String prompt = FileUtil.readString(
+      CdFileUtil.getResourceRealPath() + "\\youtube\\description_prompt.txt",
+      StandardCharsets.UTF_8);
+    ;
+    prompt += "字幕如下：";
+    prompt += FileUtil.readString(
+      "D:\\0000\\EnBook001\\900\\ch003\\ch003_total.srt",
+      StandardCharsets.UTF_8);
+    // 生成文本内容（阻塞式）
+    GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+
+    String scriptFileName = "";
+    FileUtils.writeStringToFile(
+      new File("D:\\0000\\EnBook001\\900\\ch003\\ch003_description.txt"),
+      generatedContent.text(), "UTF-8");
+    log.info("4. Generated content: {}", generatedContent);
+
+    log.info("----- 4.测试 generateContent 方法结束");
+  }
+
+  //
 
   @Test
   @Order(501)

@@ -2,7 +2,7 @@ package com.coderdream.util.mdict;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;

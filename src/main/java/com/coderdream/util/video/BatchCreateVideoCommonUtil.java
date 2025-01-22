@@ -1,7 +1,6 @@
 package com.coderdream.util.video;
 
-import com.coderdream.util.CdConstants;
-import com.coderdream.util.CdTimeUtil;
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.ffmpeg.FfmpegUtil;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -11,7 +10,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

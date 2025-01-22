@@ -55,7 +55,7 @@ public class DialogParser {
         if (line.trim().isEmpty()) {
           continue; // 跳过空行
         }
-        DialogSingleEntity dialogEntity = parseLine(line);
+        DialogSingleEntity dialogEntity = DialogParser.parseLine(line);
         if (dialogEntity != null) {
           dialogList.add(dialogEntity);
         }
@@ -82,7 +82,7 @@ public class DialogParser {
    * @param line 单行文本
    * @return 对话实体
    */
-  private static DialogSingleEntity parseLine(String line) {
+  public static DialogSingleEntity parseLine(String line) {
     // 查找冒号位置
     Matcher colonMatcher = COLON_PATTERN.matcher(line);
     if (!colonMatcher.find()) {
@@ -113,9 +113,8 @@ public class DialogParser {
     return dialogEntity;
   }
 
-
   public static void main(String[] args) {
-    String filePath = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch0201.txt";
+    String filePath = "D:\\0000\\EnBook001\\900\\900V1_ch0201.txt";
     List<DialogSingleEntity> dialogList = parseDialogFile(filePath);
     if (dialogList.size() > 0) {
       dialogList.forEach(dialog -> log.info("{}", dialog));

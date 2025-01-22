@@ -25,7 +25,7 @@ public class JsonToBeanListConverter1 {
 
   public static void main(String[] args) {
 
-    String filename = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch01.txt_逐字稿V1.txt";
+    String filename = "D:\\0000\\EnBook001\\900\\900V1_ch01.txt_逐字稿V1.txt";
     File file = new File(filename);
 
     String jsonString = FileUtil.readString(file, StandardCharsets.UTF_8);
@@ -45,7 +45,7 @@ public class JsonToBeanListConverter1 {
     }
 
     Integer[] rangeIndexes = new Integer[]{0, 12, 16, 18, 12, 20, 8};
-    String chapterInfoFileName = "D:\\0000\\EnBook001\\商务职场英语口语900句\\chapter_info_v00.txt";
+    String chapterInfoFileName = "D:\\0000\\EnBook001\\900\\chapter_info_v00.txt";
     String chapterInfoTag = "S101";
     assert conversationItems != null;
 //    convertConversationItemListToBean(conversationItems, rangeIndexes);
@@ -55,7 +55,7 @@ public class JsonToBeanListConverter1 {
     //写入文件
     try {
       FileWriter writer = new FileWriter(
-        "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_single_sentence.txt");
+        "D:\\0000\\EnBook001\\900\\900V1_single_sentence.txt");
       assert strings != null;
       for (String sentence : strings) {
         writer.write(sentence + "\n");
@@ -69,7 +69,7 @@ public class JsonToBeanListConverter1 {
 //    //写入文件
 //    try {
 //      FileWriter writer = new FileWriter(
-//        "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_single_sentence.txt");
+//        "D:\\0000\\EnBook001\\900\\900V1_single_sentence.txt");
 //      for (String sentence : sentences) {
 //        writer.write(sentence + "\n");
 //      }

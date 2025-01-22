@@ -15,15 +15,83 @@
 - [ ] 生成音标字母
 - [ ] 生成ass字幕
 
+
+
+## 20250116
+
+- [x] 生成章节文本
+  - TextFileUtil.filterTextFile(sourcePath, targetPath);
+- [x] 全流程生成视频
+  - GenVideoUtil.process()
+- [x] 发布前准备（生成字幕及视频简介）
+  - PreparePublishUtil.process(folderPath, subFolder)
+
+
+
+## 20250115
+
+- [x] 生成字幕
+  - executeCommand_04
+- [x] 生成油管描述
+  - testGenerateContent_4010
+
+
+## 20250110
+
+- [x] 批量生成图片
+  - HighResImageVideoUtil.generateImages(backgroundImageName,   filePath, contentFileName);
+- [x] 批量生成视频
+  - SingleCreateVideoUtil.batchCreateSingleVideo(imagePath, audioPath,      videoPath)
+  - SingleCreateVideoUtilTest.batchCreateSingleVideo_01()
+
+## 20250109
+
+- [x] 获取音频文件夹中的音频时长，将时长写入时长文本中
+  - AudioFolderDurationUtil.createAudioDurationFileList(folderName,durationFileName)
+- [x] 优化合并文件夹中的音频，可以设置是否加头，是否加翻页声
+  - AudioMergerUtil.mergeWavFiles(inputDir, outputFilePath, i)
+
+## 20250108
+
+- [x] 根据内容和背景图片批量生成图片到文件夹
+  - HighResImageVideoUtil.generateImages(backgroundImageName,  filePath, contentFileName)
+
+- [x] 读取文本内容生成对话对象，含中英文及音标
+  - SentenceParser.parseSentencesFromFile
+
+## 20250107
+
+- [x] 生成单个的音频文件，适配中英文
+  - AzureSpeechService
+  
+- [x] 批量生成中英文语音
+  - SpeechUtil.genDialog2Audio900
+  
+- [x] 按模式生成单个文件（合并中文音频、英文音频）
+  - AudioMergerSingleBatch
+
+- [x] 合并指定文件夹中的音频文件到一个音频文件
+  - AudioMerger
+
+- [x] 根据音频文件和字幕脚本生成字幕文件
+  - SubtitleUtil.genSubtitleRaw()
+
+- [x] 音标和字幕脚本生成多个字幕文件
+  - SubtitleUtil.genSubtitleRaw()
+
+- [x] 创建单个视频文件
+  - SingleCreateVideoUtil.singleCreateVideo(imagePath,  audioFileName, videoFileName)
+
+
 ## 20250106
 
-- [x] 优化解析《商务职场英语口语900句》对话解析成句子（英中），分割成两部分，生成3份文件
+- [x] 优化解析《900》对话解析成句子（英中），分割成两部分，生成3份文件
   - DialogSingleEntityUtil
 
 
 ## 20250105
 
-- [x] 解析《商务职场英语口语900句》对话解析成句子（英中）
+- [x] 解析《900》对话解析成句子（英中）
   - TextUtil.writeSentenceToFile(filePath, fileName);
 - [x] Epub转markdown、txt文件
   - EpubToMarkdownUtil.processEpubToZip(fileName)

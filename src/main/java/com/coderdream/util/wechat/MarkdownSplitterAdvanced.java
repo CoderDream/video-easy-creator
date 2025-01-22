@@ -1,7 +1,7 @@
 package com.coderdream.util.wechat;
 
 import cn.hutool.core.date.DateUtil;
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.mdict.dict.parser.WordUtil;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -134,7 +134,8 @@ public class MarkdownSplitterAdvanced {
 //        updatedContent.add(updatedLine);
         // 更新前添加单词的音标
 //        writer.write(updatedLine); // 将更新后的内容写入新文件
-        Matcher h4Matcher = h4Pattern.matcher(updatedLine); // 创建 matcher 对象用于匹配标题行
+        Matcher h4Matcher = h4Pattern.matcher(
+          updatedLine); // 创建 matcher 对象用于匹配标题行
 
         if (h4Matcher.find()) { // 如果匹配到了标题行
           log.info("Found h4: {}", updatedLine); // 记录日志
@@ -142,8 +143,10 @@ public class MarkdownSplitterAdvanced {
           if (split.length == 3) { // 如果标题行分割后的长度等于3
             String word = split[2]; // 获取单词
             String wordPhonetics = WordUtil.getWordPhonetics(word); // 获取单词音标
-            log.info("word: {}, phonetic: {}", word, wordPhonetics); // 记录单词和音标日志
-            writer.write(updatedLine + " [" + wordPhonetics + "] "); // 将带有音标的标题行添加到列表
+            log.info("word: {}, phonetic: {}", word,
+              wordPhonetics); // 记录单词和音标日志
+            writer.write(
+              updatedLine + " [" + wordPhonetics + "] "); // 将带有音标的标题行添加到列表
           } else {
             writer.write(updatedLine); // 将非标题行添加到列表
             log.info("这一行单词格式有问题 h4: {}", updatedLine); // 记录日志
@@ -153,8 +156,7 @@ public class MarkdownSplitterAdvanced {
           writer.write(updatedLine); // 将非标题行添加到列表
         }
 
-
-          writer.newLine();
+        writer.newLine();
       }
     } catch (IOException e) {
       log.error("Error writing to output file: {}", outputFilePath,
@@ -225,11 +227,21 @@ public class MarkdownSplitterAdvanced {
    * @param args 命令行参数
    */
   public static void main(String[] args) {
+//    List<String> tags = List.of("百词斩", "单词", "学习");
+//    String startDateStr = "2024-11-25";
+//    int totalDay = 60; // "2025-01-14" 2025-01-24 - 60
+//    Date startDate = DateUtil.parseDate(startDateStr);
+//    for (int dayNumber = 1; dayNumber <= totalDay; dayNumber++) {
+//      processMarkdown(DateUtil.offsetDay(startDate, dayNumber), dayNumber,
+//        tags);
+//    }
+
     List<String> tags = List.of("百词斩", "单词", "学习");
-    String startDateStr = "2024-11-25";
-    int totalDay = 52; // "2025-01-14"
+    String startDateStr = "2025-01-23";
+    int startIndex = 59;
+    int totalDay = 60; // "2025-01-14"  - 60
     Date startDate = DateUtil.parseDate(startDateStr);
-    for (int dayNumber = 1; dayNumber <= totalDay; dayNumber++) {
+    for (int dayNumber = startIndex; dayNumber <= totalDay; dayNumber++) {
       processMarkdown(DateUtil.offsetDay(startDate, dayNumber), dayNumber,
         tags);
     }

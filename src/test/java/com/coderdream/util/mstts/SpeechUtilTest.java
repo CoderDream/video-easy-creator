@@ -1,7 +1,6 @@
 package com.coderdream.util.mstts;
 
-import com.coderdream.util.CdTimeUtil;
-import java.util.List;
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -113,6 +112,58 @@ class SpeechUtilTest {
       CdTimeUtil.formatDuration(durationMillis));
   }
 
+  // TODO: 2024-05-08 23:39:18 测试生成wav文件
+
+  @Test
+  void testContent2Audio_01() {
+    long startTime = System.currentTimeMillis(); // 开始时间
+    String folderName = "D:\\0000\\EnBook001\\900\\ch01\\";
+    String fileName = "dialog_single_with_phonetics";
+    String audioType = "wav";
+    SpeechUtil.genDialog2Audio900(folderName, "ch01", fileName, audioType);
+
+    // 确保所有任务执行完毕后关闭线程池
+    SpeechUtil.shutdownExecutor();
+    System.out.println("所有任务执行完毕，线程池已关闭！");
+    long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
+    long durationMillis = endTime - startTime; // 计算耗时（毫秒）
+    log.info("视频创建成功，耗时: {}",
+      CdTimeUtil.formatDuration(durationMillis));
+  }
+
+  @Test
+  void testContent2Audio_02() {
+    long startTime = System.currentTimeMillis(); // 开始时间
+    String folderName = "D:\\0000\\EnBook001\\900\\ch002\\";
+    String fileName = "ch002_total_phonetics";
+    String audioType = "wav";
+    SpeechUtil.genDialog2Audio900(folderName,"ch002", fileName, audioType);
+
+    // 确保所有任务执行完毕后关闭线程池
+    SpeechUtil.shutdownExecutor();
+    System.out.println("所有任务执行完毕，线程池已关闭！");
+    long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
+    long durationMillis = endTime - startTime; // 计算耗时（毫秒）
+    log.info("视频创建成功，耗时: {}",
+      CdTimeUtil.formatDuration(durationMillis));
+  }
+
+  @Test
+  void genDialog2CnAudio_01() {
+    long startTime = System.currentTimeMillis(); // 开始时间
+    String folderName = "D:\\0000\\EnBook001\\900\\ch01\\";
+    String fileName = "dialog_single_cn";
+    String audioType = "wav";
+    SpeechUtil.genDialog2CnAudio(folderName, fileName, audioType);
+
+    // 确保所有任务执行完毕后关闭线程池
+    SpeechUtil.shutdownExecutor();
+    System.out.println("所有任务执行完毕，线程池已关闭！");
+    long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
+    long durationMillis = endTime - startTime; // 计算耗时（毫秒）
+    log.info("中文音频创建成功，耗时: {}",
+      CdTimeUtil.formatDuration(durationMillis));
+  }
 
 //  @Test
 //  void testContent2wav2_01() {

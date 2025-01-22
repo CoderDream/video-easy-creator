@@ -130,7 +130,7 @@ public class TextParser1 {
     }
 
     public static void main(String[] args) {
-        String filePath = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch0202.txt";
+        String filePath = "D:\\0000\\EnBook001\\900\\900V1_ch0202.txt";
         List<List<DialogSingleEntity>> dialogList = parseTextFile(filePath);
         if(dialogList != null){
              dialogList.forEach(dialogSingleEntities ->{

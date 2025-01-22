@@ -1,6 +1,6 @@
 package com.coderdream.util.video;
 
-import com.coderdream.util.CdTimeUtil;
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.ffmpeg.DurationParser;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

@@ -13,7 +13,7 @@ class HighResImageGeneratorTest {
   @Test
   void generateImages() {
     String fileName = "CampingInvitation_02";
-    List<File> files = HighResImageVideoUtil.generateImages(fileName);
+    List<File> files = HighResImageVideoUtil5.generateImages(fileName);
     for (File file : files) {
       log.info("file: {}", file.getAbsolutePath());
       assertTrue(file.exists());

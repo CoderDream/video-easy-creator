@@ -1,7 +1,7 @@
 package com.coderdream.util.pic;
 
 import com.coderdream.util.FontSizeConverter;
-import com.coderdream.util.chatgpt.TextParserUtil;
+import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.vo.SentenceVO;
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -96,7 +96,7 @@ public class HighResImageGenerator3 {
         String filePath = "src/main/resources/CampingInvitation.txt";
         log.info("开始解析文件: {}", filePath);
 
-        List<SentenceVO> sentenceVOs = TextParserUtil.parseFileToSentenceVOs(filePath);
+        List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(filePath);
 
         // 设置路径
         String imagePath = "src/main/resources/background.png"; // 背景图片

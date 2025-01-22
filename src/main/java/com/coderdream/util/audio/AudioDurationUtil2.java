@@ -1,6 +1,6 @@
 package com.coderdream.util.audio;
 
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.ffmpeg.FfmpegUtil;
 import com.coderdream.util.video.BatchCreateVideoCommonUtil;
 import java.io.BufferedWriter;

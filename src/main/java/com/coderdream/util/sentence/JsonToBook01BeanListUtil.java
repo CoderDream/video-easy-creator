@@ -462,21 +462,21 @@ public class JsonToBook01BeanListUtil {
 
 
   public static void main(String[] args) {
-    String rawFilename = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch02.txt";
+    String rawFilename = "D:\\0000\\EnBook001\\900\\900V1_ch02.txt";
     File file1 = new File(rawFilename);
     String strings = FileUtil.readString(file1, StandardCharsets.UTF_8);
     Integer[] rangeIndexes = ParagraphCounter.countLinesPerParagraph(strings);
 
     String chapterInfoTag = "S101";
-    String filename = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch01.txt_逐字稿V_407.txt";
-    filename = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch02.txt_逐字稿V_409.txt";
+    String filename = "D:\\0000\\EnBook001\\900\\900V1_ch01.txt_逐字稿V_407.txt";
+    filename = "D:\\0000\\EnBook001\\900\\900V1_ch02.txt_逐字稿V_409.txt";
     File file = new File(filename);
 
     String jsonString = FileUtil.readString(file, StandardCharsets.UTF_8);
 
     processBackup(rawFilename, jsonString, rangeIndexes, chapterInfoTag);
 
-//    String filename = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch01_v3.txt_逐字稿V2.txt";
+//    String filename = "D:\\0000\\EnBook001\\900\\900V1_ch01_v3.txt_逐字稿V2.txt";
 //    File file = new File(filename);
 //
 //    List<String> stringList = FileUtil.readLines(file, StandardCharsets.UTF_8);
@@ -484,20 +484,20 @@ public class JsonToBook01BeanListUtil {
   }
 
   public static void process(List<String> stringList) {
-//    String filename = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch01.txt_逐字稿V1.txt";
+//    String filename = "D:\\0000\\EnBook001\\900\\900V1_ch01.txt_逐字稿V1.txt";
 //    File file = new File(filename);
 //
 //    String jsonString = FileUtil.readString(file, StandardCharsets.UTF_8);
 
     Integer[] rangeIndexes = new Integer[]{0, 12, 16, 18, 12, 20, 8};
-    String chapterInfoFileName = "D:\\0000\\EnBook001\\商务职场英语口语900句\\chapter_info_v00.txt";
+    String chapterInfoFileName = "D:\\0000\\EnBook001\\900\\chapter_info_v00.txt";
     String chapterInfoTag = "S101";
 
     List<String> strings = convertStringListToBeanWithChapterInfo(
       stringList,
       rangeIndexes, chapterInfoFileName, chapterInfoTag);
     //写入文件
-    String outputFilename = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_single_sentence.txt";
+    String outputFilename = "D:\\0000\\EnBook001\\900\\900V1_single_sentence.txt";
     try (FileWriter writer = new FileWriter(outputFilename)) {
       assert strings != null;
       for (String sentence : strings) {
@@ -511,7 +511,7 @@ public class JsonToBook01BeanListUtil {
   public static void processBackup(String rawFilename, String jsonString,
     Integer[] rangeIndexes,
     String chapterInfoTag) {
-//    String filename = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch01.txt_逐字稿V1.txt";
+//    String filename = "D:\\0000\\EnBook001\\900\\900V1_ch01.txt_逐字稿V1.txt";
 //    File file = new File(filename);
 //
 //    String jsonString = FileUtil.readString(file, StandardCharsets.UTF_8);
@@ -530,7 +530,7 @@ public class JsonToBook01BeanListUtil {
       System.out.println("Failed to convert JSON to List<ConversationItem>.");
     }
 
-    String chapterInfoFileName = "D:\\0000\\EnBook001\\商务职场英语口语900句\\chapter_info_v00.txt";
+    String chapterInfoFileName = "D:\\0000\\EnBook001\\900\\chapter_info_v00.txt";
 
 //    Integer[] rangeIndexes = new Integer[]{0, 12, 16, 18, 12, 20, 8};
 //    String chapterInfoTag = "S101";

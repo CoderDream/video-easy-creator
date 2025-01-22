@@ -1,6 +1,6 @@
 package com.coderdream.util.video;
 
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
 

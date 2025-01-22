@@ -11,8 +11,8 @@ public class ParagraphCounter {
 
   public static void main(String[] args) {
 
-    String filename = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch01.txt_逐字稿V_407.txt";
-    filename = "D:\\0000\\EnBook001\\商务职场英语口语900句\\商务职场英语口语900句V1_ch02.txt";
+    String filename = "D:\\0000\\EnBook001\\900\\900V1_ch01.txt_逐字稿V_407.txt";
+    filename = "D:\\0000\\EnBook001\\900\\900V1_ch02.txt";
     File file = new File(filename);
 
     String jsonString = FileUtil.readString(file, StandardCharsets.UTF_8);

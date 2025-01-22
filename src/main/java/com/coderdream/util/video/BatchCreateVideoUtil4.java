@@ -1,6 +1,6 @@
 package com.coderdream.util.video;
 
-import com.coderdream.util.CdTimeUtil;
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.ffmpeg.FfmpegUtil;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -98,7 +98,7 @@ public class BatchCreateVideoUtil4 {
               // 计算AUDIO时长
               double duration = FfmpegUtil.getAudioDuration(audioFile);
               // 生成视频
-              VideoCreatorUtil.createVideo(imageFile, audioFile, videoFile, duration);
+              VideoCreatorUtil5.createVideo(imageFile, audioFile, videoFile, duration);
               if (attempt > 0) {
                 log.info("视频创建成功：{}，尝试次数：{}", videoFile.getName(), attempt + 1);
               } else {

@@ -1,6 +1,6 @@
 package com.coderdream.util;
 
-import com.coderdream.util.pic.HighResImageVideoUtil;
+import com.coderdream.util.pic.HighResImageVideoUtil5;
 import com.coderdream.util.video.SingleCreateVideoUtil;
 import java.io.File;
 import java.util.List;
@@ -12,7 +12,7 @@ public class BatchProcessNoContentUtil {
   public static File batchProcess(String fileName) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
     // 1. 生成图片
-    List<File> imageFiles = HighResImageVideoUtil.generateImages(fileName);
+    List<File> imageFiles = HighResImageVideoUtil5.generateImages(fileName);
 
     // 2 生成中英文音频
 //    String audioType = CdConstants.AUDIO_TYPE_WAV;
@@ -28,7 +28,7 @@ public class BatchProcessNoContentUtil {
     // 生成单个音频文件
 //    File audioFile = MergeSingleAudioUtil.mergeAudio(fileName);
 //    // 计算AUDIO时长
-//    double duration = FfmpegUtil.getAudioDuration(audioFile);
+//    double duration = FfmpegUtil2.getAudioDuration(audioFile);
 //    log.info("音频时长：{}", duration);
 
 

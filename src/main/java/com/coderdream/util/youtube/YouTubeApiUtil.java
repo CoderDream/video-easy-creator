@@ -1,8 +1,7 @@
 package com.coderdream.util.youtube;
 
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.youtube.YouTube;

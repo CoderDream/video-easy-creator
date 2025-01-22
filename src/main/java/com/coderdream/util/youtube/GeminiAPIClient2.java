@@ -3,7 +3,7 @@ package com.coderdream.util.youtube;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSONObject;
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 
 public class GeminiAPIClient2 {
 

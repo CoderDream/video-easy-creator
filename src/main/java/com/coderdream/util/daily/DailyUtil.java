@@ -9,10 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DailyUtil {
 
    public static void process(String folderName, String title ) {
-//     String folderName = "250102";
-     String folderPath = CommonUtil.getFullPath(folderName);
-     String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
-     TranslationUtil.genDescription(fileName);
+     TranslationUtil.genDescription(folderName);
 
 //     String folderName = "123456";
 //     String title = "【BBC六分钟英语】哪些人会购买高端相机？";

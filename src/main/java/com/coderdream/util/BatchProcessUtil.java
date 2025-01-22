@@ -2,8 +2,10 @@ package com.coderdream.util;
 
 import com.coderdream.util.audio.AudioDurationUtil;
 import com.coderdream.util.audio.MergeSingleAudioUtil;
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.ffmpeg.FfmpegUtil;
-import com.coderdream.util.pic.HighResImageVideoUtil;
+import com.coderdream.util.mstts.SpeechUtil;
+import com.coderdream.util.pic.HighResImageVideoUtil5;
 import com.coderdream.util.video.BatchCreateVideoUtil;
 import com.coderdream.util.video.VideoMergeUtil;
 import java.io.File;
@@ -16,11 +18,11 @@ public class BatchProcessUtil {
   public static File batchProcess(String fileName) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
     // 1. 生成图片
-    List<File> imageFiles = HighResImageVideoUtil.generateImages(fileName);
+    List<File> imageFiles = HighResImageVideoUtil5.generateImages(fileName);
 
     // 2 生成中英文音频
     String audioType = CdConstants.AUDIO_TYPE_WAV;
-//    SpeechUtil.genDialog2Audio(fileName, audioType);
+    SpeechUtil.genDialog2Audio(fileName, audioType);
 //
 //    // 确保所有任务执行完毕后关闭线程池
 //    SpeechUtil.shutdownExecutor();

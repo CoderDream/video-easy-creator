@@ -1,7 +1,7 @@
 package com.coderdream.util.audio;
 
-import com.coderdream.util.CdConstants;
-import com.coderdream.util.CdTimeUtil;
+import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.video.BatchCreateVideoCommonUtil;
 import java.io.File;
 import java.io.IOException;
@@ -16,38 +16,52 @@ public class MergeSingleAudioUtil {
    * @param fileName 合并后的输出文件路径 return 合并后的音频文件
    */
   public static File mergeAudio(String fileName) {
-
     String outputFileName =
       BatchCreateVideoCommonUtil.getAudioPath(fileName) + fileName + "."
         + CdConstants.AUDIO_TYPE_WAV;
 
     File mergeFile = new File(outputFileName);
 
-    // 记录合并开始时间
-    long startTime = System.currentTimeMillis();
-    log.info("开始合并音频文件：{}", String.join(", ", fileName));
-
     // 创建临时的文件列表，用于FFmpeg concat命令
     File fileList = BatchCreateVideoCommonUtil.createAudioFileList(fileName);
 
+    assert fileList != null;
+    mergeAudio(outputFileName, fileList.getAbsolutePath());
+
+    return mergeFile;
+  }
+
+
+  /**
+   * 合并多个无损WAV格式的音频文件
+   *
+   * @param fileName 合并后的输出文件路径 return 合并后的音频文件
+   */
+  public static File mergeAudio(String outputFileName,
+    String fileListFileName) {
+    File mergeFile = new File(outputFileName);
+    // 记录合并开始时间
+    long startTime = System.currentTimeMillis();
+    log.info("开始合并音频文件：{}", String.join(", ", outputFileName));
+
     // 使用ProcessBuilder执行FFmpeg命令进行合并
-// 使用 StringBuilder 构建 FFmpeg 命令
+    // 使用 StringBuilder 构建 FFmpeg 命令
     StringBuilder commandBuilder = new StringBuilder();
 
-// 添加 FFmpeg 执行命令的各个部分
+    // 添加 FFmpeg 执行命令的各个部分
     commandBuilder.append("ffmpeg "); // 启动 FFmpeg
 
-// 添加 '-y' 参数，表示自动确认所有询问（例如覆盖文件等）
+    // 添加 '-y' 参数，表示自动确认所有询问（例如覆盖文件等）
     commandBuilder.append("-y ");
 
-// 添加 '-f concat' 参数，指定使用 concat 协议来合并文件
+    // 添加 '-f concat' 参数，指定使用 concat 协议来合并文件
     commandBuilder.append("-f concat ");
 
-// 添加 '-safe 0' 参数，允许路径包含特殊字符
+    // 添加 '-safe 0' 参数，允许路径包含特殊字符
     commandBuilder.append("-safe 0 ");
 
-// 添加 '-i' 参数，指定输入文件列表
-    commandBuilder.append("-i ").append(fileList.getAbsolutePath()).append(" ");
+    // 添加 '-i' 参数，指定输入文件列表
+    commandBuilder.append("-i ").append(fileListFileName).append(" ");
 
 // 添加 '-c copy' 参数，确保音频或视频流不被转码
     commandBuilder.append("-c copy ");
@@ -108,6 +122,19 @@ public class MergeSingleAudioUtil {
 //        .map(File::getAbsolutePath).toList();
 //
 //      List<String> audioFiles = new ArrayList<>();
+//      audioFiles.addAll(audioCnFileNames);
+//      audioFiles.addAll(audioEnFileNames);
+//
+//      // 合并后的输出文件路径
+//      String outputFile =
+//        BatchCreateVideoCommonUtil.getAudioPath(fileName) + fileName
+//          + "_output_merged_audio.wav";
+//      mergeAudio(audioFiles, fileName, outputFile);
+//    } catch (IOException e) {
+//      log.error("合并音频时出错", e);
+//    }
+
+//          List<String> audioFiles = new ArrayList<>();
 //      audioFiles.addAll(audioCnFileNames);
 //      audioFiles.addAll(audioEnFileNames);
 //

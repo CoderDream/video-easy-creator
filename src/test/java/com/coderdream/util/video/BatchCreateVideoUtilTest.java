@@ -2,7 +2,7 @@ package com.coderdream.util.video;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 import org.junit.jupiter.api.Test;
 
 class BatchCreateVideoUtilTest {

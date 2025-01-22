@@ -1,7 +1,7 @@
 package com.coderdream.util.mdict;
 
 import com.coderdream.entity.DictionaryEntry;
-import com.coderdream.util.CdDateTimeUtils;
+import com.coderdream.util.cd.CdDateTimeUtils;
 import com.coderdream.util.mdict.demo05.JsoupParser;
 import io.github.eb4j.mdict.MDException;
 import io.github.eb4j.mdict.MDictDictionary;

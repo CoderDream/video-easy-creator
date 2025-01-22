@@ -1,7 +1,6 @@
 package com.coderdream.util.gemini;
 
-import com.coderdream.util.CdConstants;
-import com.coderdream.util.gemini.GenApiUtil.GenerateContentResponse;
+import com.coderdream.util.cd.CdConstants;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
@@ -9,7 +8,6 @@ import java.net.ProxySelector;
 import java.net.http.HttpClient;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.ExecutionException;

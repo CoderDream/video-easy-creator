@@ -1,8 +1,7 @@
 package com.coderdream.util;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.coderdream.entity.VocInfo;
+import com.coderdream.util.cd.CdVocInfoUtil;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

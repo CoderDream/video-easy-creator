@@ -1,6 +1,6 @@
 package com.coderdream.util.epub;
 
-import com.coderdream.util.CdStringUtil;
+import com.coderdream.util.cd.CdStringUtil;
 import com.coderdream.util.markdown.MarkdownToTxtConverter;
 import com.vladsch.flexmark.html2md.converter.FlexmarkHtmlConverter;
 import com.vladsch.flexmark.parser.Parser;

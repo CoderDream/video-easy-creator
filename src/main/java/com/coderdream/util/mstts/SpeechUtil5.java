@@ -1,7 +1,7 @@
 package com.coderdream.util.mstts;
 
-import com.coderdream.util.CdConstants;
-import com.coderdream.util.chatgpt.TextParserUtil;
+import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.vo.SentenceVO;
 import com.microsoft.cognitiveservices.speech.AudioDataStream;
 import com.microsoft.cognitiveservices.speech.ResultReason;
@@ -41,7 +41,7 @@ public class SpeechUtil5 {
 
                 switch (lang.toLowerCase()) {
                     case "zh-cn" -> {
-                        speechKey = CdConstants.SPEECH_KEY;
+                        speechKey = CdConstants.SPEECH_KEY_EASTASIA;
                         speechConfig = SpeechConfig.fromSubscription(speechKey, CdConstants.SPEECH_REGION_EASTASIA);
                     }
                     case "en-us" -> {
@@ -95,7 +95,7 @@ public class SpeechUtil5 {
             log.info("目录创建成功: {}", dirEn.getAbsolutePath());
         }
 
-        List<SentenceVO> sentenceVOs = TextParserUtil.parseFileToSentenceVOs(fullFileName);
+        List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(fullFileName);
         int number = 0;
         for (SentenceVO sentenceVO : sentenceVOs) {
             number++;

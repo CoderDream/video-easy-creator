@@ -1,6 +1,7 @@
 package com.coderdream.util;
 
 import com.coderdream.entity.SentencePair;
+import com.coderdream.util.cd.CdStringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class ChatProcessor {
                        "比赛的结果取决于运气，因为两支队伍表现都很出色。";
 
         // 调用方法解析字符串
-        List<SentencePair> sentencePairs = parseStringToObjects(input);
+        List<SentencePair> sentencePairs = ChatProcessor.parseStringToObjects(input);
 
         // 打印结果
         for (SentencePair pair : sentencePairs) {

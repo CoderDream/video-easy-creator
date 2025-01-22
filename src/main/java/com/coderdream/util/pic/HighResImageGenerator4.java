@@ -3,7 +3,7 @@ package com.coderdream.util.pic;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import com.coderdream.util.FontSizeConverter;
-import com.coderdream.util.chatgpt.TextParserUtil;
+import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.vo.SentenceVO;
 import java.awt.Color;
 import java.awt.Font;
@@ -242,7 +242,7 @@ public class HighResImageGenerator4 {
     String fileName = "CampingInvitation_02";
     log.info("开始解析文件: {}", filePath);
     String fullPath = filePath + File.separator + fileName + ".txt";
-    List<SentenceVO> sentenceVOs = TextParserUtil.parseFileToSentenceVOs(
+    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
       fullPath);
 
     // 设置路径

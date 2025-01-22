@@ -1,7 +1,7 @@
 package com.coderdream.util.mdict;
 
 
-import com.coderdream.util.CdFileUtil;
+import com.coderdream.util.cd.CdFileUtil;
 import io.github.eb4j.mdict.MDictDictionary;
 import java.io.File;
 import java.nio.charset.StandardCharsets;

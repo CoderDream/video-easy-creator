@@ -28,7 +28,7 @@ class TextUtil4Test {
     TextUtil4.extractHosts();
 
     // 验证 host.txt 是否存在
-    Path hostFilePath = Paths.get("D:\\0000\\EnBook001\\商务职场英语口语900句",
+    Path hostFilePath = Paths.get("D:\\0000\\EnBook001\\900",
       "host.txt");
     assertTrue(Files.exists(hostFilePath), "host.txt 文件应该存在");
 
@@ -38,8 +38,8 @@ class TextUtil4Test {
 
     // 验证提取结果是否去重
     Set<String> expectedHosts = Files.readAllLines(
-        Paths.get("D:\\0000\\EnBook001\\商务职场英语口语900句",
-          "商务职场英语口语900句V1_ch02_v1.txt")).stream()
+        Paths.get("D:\\0000\\EnBook001\\900",
+          "900V1_ch02_v1.txt")).stream()
       .filter(line -> !line.trim().isEmpty()) //过滤空行
       .map(line -> {
         int colonIndex = findFirstColonIndex(line);
@@ -74,7 +74,7 @@ class TextUtil4Test {
 
     // 验证 dialog.txt 文件是否存在
     Path dialogFilePath = Paths.get(
-      "D:\\0000\\EnBook001\\商务职场英语口语900句", "dialog.txt");
+      "D:\\0000\\EnBook001\\900", "dialog.txt");
     assertTrue(Files.exists(dialogFilePath), "dialog.txt 文件应该存在");
 
     // 验证文件内容不为空

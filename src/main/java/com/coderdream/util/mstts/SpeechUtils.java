@@ -4,9 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.coderdream.entity.MsTtsEntity;
 import com.coderdream.util.BaseUtils;
-import com.coderdream.util.CdConstants;
-import com.coderdream.util.CdDateTimeUtils;
-import com.coderdream.util.CdFileUtil;
+import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdDateTimeUtils;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.ffmpeg.FfmpegCmdDurationUtils;
 import com.microsoft.cognitiveservices.speech.AudioDataStream;
 import com.microsoft.cognitiveservices.speech.CancellationReason;
@@ -54,7 +54,7 @@ public class SpeechUtils {
 //    private static String speechRegion = System.getenv("SPEECH_REGION"); //   private static String speechRegion = "eastus";
 
 //    public static void main(String[] args) throws InterruptedException, ExecutionException {
-//        speechKey = CdConstants.SPEECH_KEY;
+//        speechKey = CdConstants.SPEECH_KEY_EASTASIA;
 //        SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey, speechRegion);
 //
 ////        speechConfig.setSpeechSynthesisVoiceName("en-US-JennyNeural"); // zh-CN-XiaomengNeural\
@@ -95,7 +95,7 @@ public class SpeechUtils {
   public static void mm() {
     // Replace below with your own subscription key.
 
-    speechKey = CdConstants.SPEECH_KEY;
+    speechKey = CdConstants.SPEECH_KEY_EASTASIA;
     String speechSubscriptionKey = speechKey; // "YourSubscriptionKey";
     // Replace below with your own service region (e.g., "westus").
     String serviceRegion = CdConstants.SPEECH_REGION_EASTASIA; //speechRegion; //  "YourServiceRegion";
@@ -155,7 +155,7 @@ public class SpeechUtils {
   }
 
   public static void m1() {
-//        speechKey = CdConstants.SPEECH_KEY;
+//        speechKey = CdConstants.SPEECH_KEY_EASTASIA;
 //        SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey, speechRegion);
 //        System.out.println("speechConfig: " + speechConfig);
 //
@@ -171,7 +171,7 @@ public class SpeechUtils {
 
     // Replace below with your own subscription key.
 
-    speechKey = CdConstants.SPEECH_KEY;
+    speechKey = CdConstants.SPEECH_KEY_EASTASIA;
     String speechSubscriptionKey = speechKey; // "YourSubscriptionKey";
     // Replace below with your own service region (e.g., "westus").
     String serviceRegion = CdConstants.SPEECH_REGION_EASTASIA; //  "YourServiceRegion";
@@ -233,7 +233,7 @@ public class SpeechUtils {
   }
 
   public static void content2mp3() {
-    speechKey = CdConstants.SPEECH_KEY;
+    speechKey = CdConstants.SPEECH_KEY_EASTASIA;
     SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey,
       CdConstants.SPEECH_REGION_EASTASIA);
     // set the output format
@@ -271,7 +271,7 @@ public class SpeechUtils {
     String audioFileNameBi = audioPathBi + File.separator + dateStr + "_bi.mp3";
     String audioFileNameWx = audioPathWx + File.separator + dateStr + "_wx.mp3";
 
-    speechKey = CdConstants.SPEECH_KEY;
+    speechKey = CdConstants.SPEECH_KEY_EASTASIA;
     SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey,
       CdConstants.SPEECH_REGION_EASTASIA);
 
@@ -350,7 +350,7 @@ public class SpeechUtils {
 
     String audioFileName = filePath + File.separator + fileName + "." + "mp3";
 
-    speechKey = CdConstants.SPEECH_KEY;
+    speechKey = CdConstants.SPEECH_KEY_EASTASIA;
     SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey,
       CdConstants.SPEECH_REGION_EASTASIA);
 
@@ -408,7 +408,7 @@ public class SpeechUtils {
     String audioFileNameBi =
       audioPathBi + File.separator + dateStr + "_" + type + ".mp3";
 
-    speechKey = CdConstants.SPEECH_KEY;
+    speechKey = CdConstants.SPEECH_KEY_EASTASIA;
     SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey,
       CdConstants.SPEECH_REGION_EASTASIA);
 
@@ -471,7 +471,7 @@ public class SpeechUtils {
 //        String audioFileNameBi = audioPathBi + File.separator + dateStr + "_bi.mp3";
 //        String audioFileNameWx = audioPathWx + File.separator + dateStr + "_wx.mp3";
 //
-//        speechKey = CdConstants.SPEECH_KEY;
+//        speechKey = CdConstants.SPEECH_KEY_EASTASIA;
 //        SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey, speechRegion);
 //
 //        // set the output format
@@ -525,7 +525,7 @@ public class SpeechUtils {
 //        String audioFileNameBi = audioPathBi + File.separator + dateStr + "_bi.mp3";
 //        String audioFileNameWx = audioPathWx + File.separator + dateStr + "_wx.mp3";
 //
-//        speechKey = CdConstants.SPEECH_KEY;
+//        speechKey = CdConstants.SPEECH_KEY_EASTASIA;
 //        SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey, speechRegion);
 //
 //        // set the output format

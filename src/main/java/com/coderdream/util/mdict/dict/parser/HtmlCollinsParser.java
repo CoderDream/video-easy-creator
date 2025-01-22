@@ -1,12 +1,9 @@
 package com.coderdream.util.mdict.dict.parser;
 
 import com.coderdream.entity.DictCollinsBean;
-import com.coderdream.util.CdConstants;
-import com.coderdream.util.CdDateTimeUtils;
+import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdDateTimeUtils;
 import com.coderdream.util.mdict.Mdict4jUtil;
-import com.coderdream.util.mdict.dict.util.DictSimpleContentBean;
-import com.coderdream.util.mdict.dict.util.DictionaryQueriedUtil;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

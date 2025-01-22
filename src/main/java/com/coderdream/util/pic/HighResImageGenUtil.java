@@ -1,8 +1,8 @@
 package com.coderdream.util.pic;
 
-import com.coderdream.util.CdTimeUtil;
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.FontSizeConverter;
-import com.coderdream.util.chatgpt.TextParserUtil;
+import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.vo.SentenceVO;
 import java.awt.Color;
 import java.awt.Font;
@@ -123,7 +123,7 @@ public class HighResImageGenUtil {
     String fileName = "CampingInvitation_cht";
     log.info("开始解析文件: {}", filePath);
     String fullPath = filePath + File.separator + fileName + ".txt";
-    List<SentenceVO> sentenceVOs = TextParserUtil.parseFileToSentenceVOs(
+    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
       fullPath);
 
     // 设置路径

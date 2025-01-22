@@ -1,6 +1,6 @@
 package com.coderdream.util.gemini;
 
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;

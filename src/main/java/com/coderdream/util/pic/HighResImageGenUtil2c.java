@@ -1,7 +1,7 @@
 package com.coderdream.util.pic;
 
 import com.coderdream.entity.WordInfo;
-import com.coderdream.util.CdTimeUtil;
+import com.coderdream.util.cd.CdTimeUtil;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;

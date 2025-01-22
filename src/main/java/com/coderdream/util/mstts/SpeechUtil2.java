@@ -1,8 +1,8 @@
 package com.coderdream.util.mstts;
 
 import cn.hutool.core.util.StrUtil;
-import com.coderdream.util.CdConstants;
-import com.coderdream.util.chatgpt.TextParserUtil;
+import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.vo.SentenceVO;
 import com.microsoft.cognitiveservices.speech.AudioDataStream;
 import com.microsoft.cognitiveservices.speech.ResultReason;
@@ -22,7 +22,7 @@ public class SpeechUtil2 {
 
 
 //  public static void content2mp3() {
-//    String speechKey = CdConstants.SPEECH_KEY;
+//    String speechKey = CdConstants.SPEECH_KEY_EASTASIA;
 //    SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey,
 //      CdConstants.SPEECH_REGION_EASTASIA);
 //    // set the output format
@@ -58,7 +58,7 @@ public class SpeechUtil2 {
   }
 //
 //  public static void content2mp3(String ssml, String fileName) {
-//    String speechKey = CdConstants.SPEECH_KEY;
+//    String speechKey = CdConstants.SPEECH_KEY_EASTASIA;
 //    SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey,
 //      CdConstants.SPEECH_REGION_EASTASIA);
 //    // set the output format
@@ -78,7 +78,7 @@ public class SpeechUtil2 {
 //
 //  public static void content2mp3(List<String> textList, String voiceName,
 //    String pitch, String volume, String rate, String fileName) {
-//    String speechKey = CdConstants.SPEECH_KEY;
+//    String speechKey = CdConstants.SPEECH_KEY_EASTASIA;
 //    SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey,
 //      CdConstants.SPEECH_REGION_EASTASIA);
 //    // set the output format
@@ -110,7 +110,7 @@ public class SpeechUtil2 {
     String pitch, String volume, String rate, String fileName) {
 
     // 获取语音密钥和区域配置
-    String speechKey = CdConstants.SPEECH_KEY;
+    String speechKey = CdConstants.SPEECH_KEY_EASTASIA;
     SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey,
       CdConstants.SPEECH_REGION_EASTASIA);
 
@@ -170,7 +170,7 @@ public class SpeechUtil2 {
 
     switch (lang.toLowerCase()) {
       case "zh-cn" -> {
-        speechKey = CdConstants.SPEECH_KEY;
+        speechKey = CdConstants.SPEECH_KEY_EASTASIA;
         speechConfig = SpeechConfig.fromSubscription(speechKey,
           CdConstants.SPEECH_REGION_EASTASIA);
       }
@@ -184,7 +184,7 @@ public class SpeechUtil2 {
     }
 
     // 获取语音密钥和区域配置
-//    String speechKey = CdConstants.SPEECH_KEY;
+//    String speechKey = CdConstants.SPEECH_KEY_EASTASIA;
 //    SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey,
 //      CdConstants.SPEECH_REGION_EASTASIA);
 
@@ -267,7 +267,7 @@ public class SpeechUtil2 {
 //      log.info("目录创建成功: {}", dirEn.getAbsolutePath());
 //    }
 //
-//    List<SentenceVO> sentenceVOs = TextParserUtil.parseFileToSentenceVOs(
+//    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOs(
 //      fullFileName);
 //    int number = 0;
 //    for (SentenceVO sentenceVO : sentenceVOs) {
@@ -320,7 +320,7 @@ public class SpeechUtil2 {
       log.info("目录创建成功: {}", dirEn.getAbsolutePath());
     }
 
-    List<SentenceVO> sentenceVOs = TextParserUtil.parseFileToSentenceVOs(
+    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
       fullFileName);
     int number = 0;
     for (SentenceVO sentenceVO : sentenceVOs) {

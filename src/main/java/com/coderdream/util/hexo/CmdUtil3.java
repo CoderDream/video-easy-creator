@@ -1,6 +1,6 @@
 package com.coderdream.util.hexo;
 
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;

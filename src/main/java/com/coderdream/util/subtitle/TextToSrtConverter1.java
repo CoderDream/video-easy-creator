@@ -1,6 +1,6 @@
 package com.coderdream.util.subtitle;
 
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 import java.io.*;
 import java.util.*;
 import java.text.*;

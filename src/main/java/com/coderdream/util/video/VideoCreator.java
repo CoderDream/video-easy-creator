@@ -1,6 +1,6 @@
 package com.coderdream.util.video;
 
-import com.coderdream.util.CdTimeUtil;
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.ffmpeg.DurationParser;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -222,7 +222,9 @@ public class VideoCreator {
       command.add(videoFile.getAbsolutePath());
 
       String commandString = String.join(" ", command);
-      log.info("正在执行命令：{}", commandString);
+//      log.info("正在执行命令：{}", commandString);
+      // 打印构建的 ffmpeg 命令
+//      log.info("构建并执行 ffmpeg 命令：{}", String.join(" ", command));
 
       ProcessBuilder processBuilder = new ProcessBuilder(command);
       processBuilder.redirectErrorStream(true);

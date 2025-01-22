@@ -1,7 +1,7 @@
 package com.coderdream.util.wechat;
 
 import cn.hutool.core.date.DateUtil;
-import com.coderdream.util.CdConstants;
+import com.coderdream.util.cd.CdConstants;
 import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;

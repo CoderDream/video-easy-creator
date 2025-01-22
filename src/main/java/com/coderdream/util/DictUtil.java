@@ -2,6 +2,7 @@ package com.coderdream.util;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 //import com.coderdream.freeapps.util.callapi.HttpUtil;
@@ -13,9 +14,16 @@ import com.coderdream.entity.SentencePair;
 import com.coderdream.entity.VocInfo;
 import com.coderdream.entity.WordDetail;
 import com.coderdream.util.callapi.HttpUtil;
+import com.coderdream.util.cd.CdChatgptUtil;
+import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdDictionaryUtil;
+import com.coderdream.util.cd.CdFileUtil;
+import com.coderdream.util.cd.CdVocInfoUtil;
 import com.coderdream.util.gemini.TranslationUtil;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -389,13 +397,8 @@ public class DictUtil {
    */
   public static void processVoc(String folderName, String fileName) {
     String filePath = folderName + fileName + ".txt";
-    List<String> scriptList = new ArrayList<>();
 
-    List<VocInfo> vocInfoList = new ArrayList<>();
-
-    if (genRawList(filePath, scriptList, vocInfoList)) {
-      return;
-    }
+    List<VocInfo> vocInfoList = genRawList(filePath);
 
     // 查询词汇解释
     for (VocInfo vocInfo : vocInfoList) {
@@ -446,13 +449,8 @@ public class DictUtil {
    */
   public static void processVocWithGemini(String folderName, String fileName) {
     String filePath = folderName + fileName + ".txt";
-    List<String> scriptList = new ArrayList<>();
 
-    List<VocInfo> vocInfoList = new ArrayList<>();
-
-    if (genRawList(filePath, scriptList, vocInfoList)) {
-      return;
-    }
+    List<VocInfo> vocInfoList = null;// genRawList(filePath);
 
     // 写文件
     String newFileName = folderName + fileName
@@ -461,57 +459,51 @@ public class DictUtil {
     TranslationUtil.processVoc(vocInfoList, newFileName);
   }
 
-  private static boolean genRawList(String filePath, List<String> scriptList,
-    List<VocInfo> vocInfoList) {
-    try {
-      BufferedReader bufferedReader = new BufferedReader(
-        new FileReader(filePath));
-      String line;
-      while ((line = bufferedReader.readLine()) != null) {
-        line = specialUnicode(line);
-        if (StrUtil.isNotEmpty(line)) {
-          scriptList.add(line);
-        }
-      }
-      bufferedReader.close();
-    } catch (Exception e) {
-      log.error("文件不存在：{}", filePath, e);
-    }
+
+  /**
+   * @param vocFileName   文件夹路径
+   * @param vocCnFileName 文件名称
+   */
+  public static File genVocCnWithGemini(String vocFileName,
+    String vocCnFileName) {
+//    String filePath = folderName + fileName + ".txt";
+    List<String> scriptList = new ArrayList<>();
+    List<VocInfo> vocInfoList = genRawList(vocFileName);
+
+    // 写文件
+    // String vocCnFileName = folderName + fileName      + "_cn.txt";// CommonUtil.getFullPathFileName(folderName, fileName,      "_cn.txt");
+
+    assert vocInfoList != null;
+    TranslationUtil.processVoc(vocInfoList, vocCnFileName);
+    return new File(vocCnFileName);
+  }
+
+  private static List<VocInfo> genRawList(String filePath) {
+    List<VocInfo> vocInfoList = new ArrayList<>();
+
+    List<String> scriptList = FileUtil.readLines(filePath,
+      StandardCharsets.UTF_8);
 
     // 判断是否为6个词汇
     int size = 0;
-    if (scriptList.size() != 12) {
+    if (scriptList.size() != 12 && scriptList.size() != 18
+      && scriptList.size() != 17) {
       System.out.println("判断是否为6个词汇，当前为：" + scriptList.size());
-      return true;
+      return null;
     } else {
       size = scriptList.size();
     }
 
     VocInfo vocInfo;
-    String word;
-    int startIndex;
-    int endIndex;
-    String temp;
     for (int i = 0; i < size; i++) {
-      if ((i + 1) % 2 == 0) {
-        vocInfo = new VocInfo();
-        word = scriptList.get(i - 1);
-        startIndex = word.lastIndexOf("(");
-        endIndex = word.lastIndexOf(")");
-        if (startIndex != -1 && endIndex != -1) {
-          // 存在括号，则删除括号
-          temp = word.substring(startIndex, endIndex + 1);
-          System.out.println(word + "\t|\t" + temp);
-          word = word.replaceAll(temp, "");
-          word = word.replaceAll("\\(", "");
-          word = word.replaceAll("\\)", "");
-        }
-        vocInfo.setWord(word.trim());
-        vocInfo.setWordExplainEn(scriptList.get(i));
-        vocInfoList.add(vocInfo);
-      }
+      vocInfo = new VocInfo();
+
+      vocInfo.setWord(scriptList.get(i));
+      vocInfo.setWordExplainEn(scriptList.get(i + 1));
+      vocInfoList.add(vocInfo);
+      i += 2;
     }
-    return false;
+    return vocInfoList;
   }
 
   /**

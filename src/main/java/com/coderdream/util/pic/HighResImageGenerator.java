@@ -1,10 +1,10 @@
 package com.coderdream.util.pic;
 
 import com.coderdream.entity.WordInfo;
-import com.coderdream.util.CdConstants;
-import com.coderdream.util.CdTimeUtil;
+import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.FontSizeConverter;
-import com.coderdream.util.chatgpt.TextParserUtil;
+import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.util.video.BatchCreateVideoCommonUtil;
 import com.coderdream.vo.SentenceVO;
 import java.awt.Color;
@@ -168,7 +168,7 @@ public class HighResImageGenerator {
     String fullPath =
       CdConstants.RESOURCES_BASE_PATH + File.separator + fileName + ".txt";
 //    fullPath = fileName + ".txt";
-    List<SentenceVO> sentenceVOs = TextParserUtil.parseFileToSentenceVOs(
+    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
       fullPath);
 
     // 设置路径
@@ -327,7 +327,7 @@ public class HighResImageGenerator {
     String fileName = "CampingInvitation_cht";
     log.info("开始解析文件: {}", filePath);
     String fullPath = filePath + File.separator + fileName + ".txt";
-    List<SentenceVO> sentenceVOs = TextParserUtil.parseFileToSentenceVOs(
+    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
       fullPath);
 
     // 设置路径

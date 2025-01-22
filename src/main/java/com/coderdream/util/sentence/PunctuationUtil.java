@@ -63,8 +63,7 @@ public class PunctuationUtil {
         result = result.replaceAll(key, entry.getValue());
         result = removeSpaceAfterChinesePunctuation(result);
       }
-      log.info("英文标点替换为中文，耗时：{}",
-        formatTime(System.currentTimeMillis() - startTime));
+      //log.info("英文标点替换为中文，耗时：{}",        formatTime(System.currentTimeMillis() - startTime));
       return result;
     } catch (Exception e) {
       log.error("替换英文标点符号为中文符号时发生异常", e);
@@ -92,8 +91,7 @@ public class PunctuationUtil {
         result = result.replaceAll(key, entry.getValue());
         result = removeSpaceAfterChinesePunctuation(result);
       }
-      log.info("中文标点替换为英文，耗时：{}",
-        formatTime(System.currentTimeMillis() - startTime));
+      //log.info("中文标点替换为英文，耗时：{}",        formatTime(System.currentTimeMillis() - startTime));
       return result;
     } catch (Exception e) {
       log.error("替换中文标点符号为英文符号时发生异常", e);

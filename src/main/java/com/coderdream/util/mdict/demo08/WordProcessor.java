@@ -1,9 +1,8 @@
 package com.coderdream.util.mdict.demo08;
 
 import com.coderdream.entity.DictionaryEntry;
-import com.coderdream.util.CdDateTimeUtils;
-import com.coderdream.util.CdFileUtil;
-import com.coderdream.util.mdict.Mdict4jUtil;
+import com.coderdream.util.cd.CdDateTimeUtils;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.mdict.Mdict4jUtil2;
 import java.util.*;
 import java.util.concurrent.*;

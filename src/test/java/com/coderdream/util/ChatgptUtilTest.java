@@ -3,6 +3,7 @@ package com.coderdream.util;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.coderdream.entity.SentencePair;
+import com.coderdream.util.cd.CdChatgptUtil;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

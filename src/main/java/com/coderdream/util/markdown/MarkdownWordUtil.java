@@ -1,6 +1,5 @@
 package com.coderdream.util.markdown;
 
-import com.coderdream.util.CdFileUtil;
 import com.coderdream.util.markdown.my.MarkdownBean;
 import com.coderdream.util.mdict.dict.parser.WordUtil;
 import lombok.extern.slf4j.Slf4j;
