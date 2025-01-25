@@ -88,7 +88,7 @@ public class CdFileUtil {
       // 指定要下载的文件
       File file = ResourceUtils.getFile(resourcePath);
       // 定义UTF-16 Little Endian编码
-      Charset utf16Le = StandardCharsets.UTF_16LE;
+//      Charset utf16Le = StandardCharsets.UTF_16LE;
       // 读取文件内容到列表
 //            return FileUtil.readLines(file, "UTF-8");
 //            List<String> lines = FileUtil.readLines(file, utf16Le);
@@ -100,10 +100,11 @@ public class CdFileUtil {
         .collect(Collectors.toList());
     } catch (Exception e) {
 //            e.printStackTrace();
-      log.error("读取文件失败: {}", e.getMessage());
+      log.error("读取文件失败: {}, {}", resourcePath, e.getMessage(), e);
       // 抛出运行时异常或进行其他错误处理
-      throw new RuntimeException("读取文件失败", e);
+//      throw new RuntimeException("读取文件失败", e);
     }
+    return null;
   }
 
   /**

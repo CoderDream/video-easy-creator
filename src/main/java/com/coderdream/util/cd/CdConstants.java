@@ -104,7 +104,6 @@ public class CdConstants {
    */
   public static String DICT_OALDPE3 = "oaldpe";
 
-
 //  public static String SPEECH_KEY = System.getenv("SPEECH_KEY");
 
   /**
@@ -119,7 +118,6 @@ public class CdConstants {
   public static String SPEECH_KEY_EAST_US = "825596822f8649b78e20a8ab5dc5add6";// System.getenv("SPEECH_KEY_EAST_US");
 
 
-
   public static String SPEECH_KEY_EASTASIA = "AkKJ1ZPVFFPvujmwI5N1ik9J3mcl9dfK2y13gMRK4BFEurFcUPfTJQQJ99BAAC3pKaRXJ3w3AAAYACOGDyWB";// System.getenv("SPEECH_KEY_EASTASIA");
 
   /**
@@ -127,7 +125,7 @@ public class CdConstants {
    */
   public static String SPEECH_REGION_EASTASIA = "eastasia";
 
-  public static String SPEECH_VOICE_ZH_CN_XIAOCHEN ="zh-CN-XiaochenNeural";
+  public static String SPEECH_VOICE_ZH_CN_XIAOCHEN = "zh-CN-XiaochenNeural";
 
   public static final String IMAGE_PATH = "src/main/resources/pic";
   public static final String AUDIO_CN_PATH = "src/main/resources/wav/cn";
@@ -201,10 +199,24 @@ public class CdConstants {
   // srt扩展名
   public static final String SRT_EXTENSION = ".srt";
 
-
   /**
    * A:联想；B、小米；C、戴尔；D、三星
-   *
    */
   public static final String TEMPLATE_FLAG = "D";
+
+  public static Integer SINGLE_SCRIPT_LENGTH = 65;
+
+  public static String GEN_PHONETICS_TEXT = "解析下面的文本，给每行英文句子加上音标，放到下一行，给的n行英文句子，返回2*n行数据给我，以Scene开头的句子也都要加上音标，放到下一行。待添加音标的句子文本如下：";
+
+
+  public static final String OS_WINDOWS = "Windows";
+  public static final String OS_MAC = "Mac";
+  public static final String OS_LINUX = "Linux";
+  public static final String OS_UNKNOWN = "Unknown";
+
+  public static final String KEYWORD_WINDOWS = "windows";
+  public static final String KEYWORD_MAC1 = "mac";
+  public static final String KEYWORD_MAC2 = "darwin";
+  public static final String KEYWORD_LINUX1 = "linux";
+  public static final String KEYWORD_LINUX2 = "unix";
 }

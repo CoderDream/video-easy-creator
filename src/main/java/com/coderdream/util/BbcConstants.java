@@ -7,7 +7,6 @@ public class BbcConstants {
 
     public final static String ROOT_FOLDER_NAME = "D:\\14_LearnEnglish\\6MinuteEnglish\\";
 
-    public static Integer SINGLE_SCRIPT_LENGTH = 65;
 
     public static Integer SENTENCE_LENGTH = 80;
 

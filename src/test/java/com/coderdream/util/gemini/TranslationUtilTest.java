@@ -35,7 +35,7 @@ class TranslationUtilTest {
   @Test
   void genPhonetics_03() {
     String fileName = "D:\\0000\\EnBook001\\900\\dialog_single.txt";
-    TranslationUtil.genPhonetics(fileName);
+//    TranslationUtil.genPhonetics(fileName);
 //    log.info("translate: {}", translate);
   }
 
@@ -44,7 +44,7 @@ class TranslationUtilTest {
   @Test
   void genPhonetics_04() {
     String fileName = "D:\\0000\\EnBook001\\900\\ch01\\900V1_ch0101_total.txt";
-    TranslationUtil.genPhonetics(fileName);
+//    TranslationUtil.genPhonetics(fileName);
 //    log.info("translate: {}", translate);
   }
 

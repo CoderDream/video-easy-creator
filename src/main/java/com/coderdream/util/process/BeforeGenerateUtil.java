@@ -1,21 +1,23 @@
 package com.coderdream.util.process;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.DialogSingleEntity;
 import com.coderdream.entity.SentencePair;
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdStringUtil;
+import com.coderdream.util.gemini.TranslationUtil;
 import com.coderdream.util.sentence.DialogSingleEntityUtil;
 import com.coderdream.util.sentence.SentencePairFilter;
 import com.coderdream.util.txt.SceneExtractor;
-import com.coderdream.util.txt.SentenceSplitter;
 import com.coderdream.util.txt.filter.TextFileUtil;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +67,28 @@ public class BeforeGenerateUtil {
     } else {
       log.info("文件已存在: {}", fileNameTotal);
     }
+
+    // 生成带音标的文件
+    // 生成带音标的文件
+    String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+    if (CdFileUtil.isFileEmpty(aiFileName)) {
+      File file = TranslationUtil.genAiFile(fileNameTotal);
+      assert file != null;
+      log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
+    } else {
+      log.info("AI文件已存在: {}", aiFileName);
+    }
+
+    // 2. 生成
+    String phoneticsFileName =
+      folderPath + File.separator + subFolder + File.separator + subFolder
+        + "_total_phonetics.txt";
+    if (CdFileUtil.isFileEmpty(phoneticsFileName)) {
+      File file = TranslationUtil.genPhonetics(fileNameTotal, aiFileName);
+      log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
+    } else {
+      log.info("带音标文件已存在: {}", phoneticsFileName);
+    }
   }
 
   public static void processBook02(String folderPath, String subFolder) {
@@ -83,12 +107,8 @@ public class BeforeGenerateUtil {
     }
     String sceneCht = folderPath + File.separator + "scene_cht.txt";
     String sceneEn = folderPath + File.separator + "scene_en.txt";
-    // scense_cht.txt
-    // scense_en.txt
-
     List<String> scenseChtStringList = FileUtil.readLines(sceneCht,
       StandardCharsets.UTF_8);
-
     List<String> scenseEnStringList = FileUtil.readLines(sceneEn,
       StandardCharsets.UTF_8);
 
@@ -97,7 +117,7 @@ public class BeforeGenerateUtil {
       log.info("scene_cht.txt 与 scene_en.txt 文件行数不一致！");
       return;
     }
-    DialogSingleEntity dialogSingleEntity = new DialogSingleEntity();
+    DialogSingleEntity dialogSingleEntity;
     for (int i = 0; i < scenseChtStringList.size(); i++) {
       String cht = scenseChtStringList.get(i);
       String[] splitCht = cht.split("\t");
@@ -119,8 +139,7 @@ public class BeforeGenerateUtil {
     }
 
     List<SentencePair> sentencePairList = new ArrayList<>();
-    SentencePair sentencePair = null;
-
+    SentencePair sentencePair;
     List<String> stringList = FileUtil.readLines(sourcePath,
       StandardCharsets.UTF_8);
     for (String line : stringList) {
@@ -136,7 +155,6 @@ public class BeforeGenerateUtil {
         DialogSingleEntity dialogSingleEntityTemp = dialogSingleEntityListSceneMap.get(
           sceneIndex);
         if (dialogSingleEntityTemp != null) {
-
           sentencePair.setEnglishSentence(
             dialogSingleEntityTemp.getHostEn() + " "
               + dialogSingleEntityTemp.getContentEn());
@@ -163,7 +181,7 @@ public class BeforeGenerateUtil {
           int lastChineseCharIndex = CdStringUtil.findLastChineseCharOrPunctuationIndexWithoutPunct(
             lineWithoutSequence);
           String chineseSentence = "";
-          String englishSentence = "";
+          String englishSentence;
           //如果 lastChineseCharIndex 为 -1,则说明没有中文
           if (lastChineseCharIndex != -1) {
             chineseSentence = lineWithoutSequence.substring(0,
@@ -180,15 +198,13 @@ public class BeforeGenerateUtil {
         } else {
 
           //处理 同类表达
-          String patternStr = "同类表达";
-
+        //  String patternStr = "同类表达";
           replaceAndGenObject(line, "同类表达", sentencePairList);
           replaceAndGenObject(line, "这样回答", sentencePairList);
           replaceAndGenObject(line, "对话 A:", sentencePairList);
           replaceAndGenObject(line, "B:", sentencePairList);
         }
       }
-
     }
 
     List<SentencePair> filteredList1 = SentencePairFilter.filterDuplicateSentencePairs(
@@ -213,33 +229,41 @@ public class BeforeGenerateUtil {
     }
 
     List<String> totalList = new ArrayList<>();
+    String englishSentence;
+    String chineseSentence;
     for (SentencePair sentencePair2 : filteredList1) {
-      String chineseSentence = sentencePair2.getChineseSentence();
+      chineseSentence = sentencePair2.getChineseSentence();
       if (StrUtil.isBlank(chineseSentence)) {
         log.info("@@修改后 sentencePair1 {}", sentencePair2);
       }
 
       log.info("修改后 sentencePair2 {}", sentencePair2);
-      totalList.add(sentencePair2.getEnglishSentence());
-      totalList.add(
-        ZhConverterUtil.toTraditional(sentencePair2.getChineseSentence()));
+
+      englishSentence = sentencePair2.getEnglishSentence();
+      if (StrUtil.isBlank(englishSentence) && englishSentence.length() > CdConstants.SINGLE_SCRIPT_LENGTH) {
+        List<String> englishSentenceList = Arrays.asList( englishSentence.split("/."));
+        List<String> chineseSentenceList = Arrays.asList( chineseSentence.split("。"));
+        if (CollectionUtil.isNotEmpty(englishSentenceList) && CollectionUtil.isNotEmpty(chineseSentenceList)) {
+          if (englishSentenceList.size() != chineseSentenceList.size()) {
+            log.info("######### 英文和中文句子数量不一致！");
+            return;
+          } else {
+            log.info("######### 英文和中文句子数量相同致！");
+            for (int i = 0; i < englishSentenceList.size(); i++) {
+              String englishSentenceItem = englishSentenceList.get(i);
+              String chineseSentenceItem = chineseSentenceList.get(i);
+
+              totalList.add(englishSentenceItem);
+              totalList.add(chineseSentenceItem);
+            }
+          }
+        }
+      } else {
+        totalList.add(sentencePair2.getEnglishSentence());
+        totalList.add(ZhConverterUtil.toTraditional(chineseSentence));
+      }
     }
 
-    // 生成初剪文本
-//      String rawTxtPath = targetFolderPath + subFolder + "_raw.txt";
-//      if (CdFileUtil.isFileEmpty(rawTxtPath)) {
-//        String elapsedTime = TextFileUtil.filterTextFile(sourcePath, rawTxtPath);
-//        log.info("耗时：{}", elapsedTime);
-//      }
-//
-//      // 分割并校验文本
-//      boolean b = DialogSingleEntityUtil.genPart1AndPart2File(folderPath,
-//        subFolder);
-//      if (!b) {
-//        log.info("分割文本文件失败！");
-//        return;
-//      }
-//
     String fileNameTotal =
       folderPath + subFolder + File.separator + subFolder + "_total.txt";
     if (CdFileUtil.isFileEmpty(fileNameTotal)) {
@@ -251,13 +275,27 @@ public class BeforeGenerateUtil {
       log.info("文件已存在: {}", fileNameTotal);
     }
 
-//    String targetPath = targetFolderPath + subFolder + ".txt";
-//    if (CdFileUtil.isFileEmpty(targetPath)) {
-//      String elapsedTime = TextFileUtil.filterTextFile(sourcePath, targetPath);
-//      log.info("耗时：{}", elapsedTime);
-//    }
+    // 生成带音标的文件
+    // 生成带音标的文件
+    String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+    if (CdFileUtil.isFileEmpty(aiFileName)) {
+      File file = TranslationUtil.genAiFile(fileNameTotal);
+      assert file != null;
+      log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
+    } else {
+      log.info("AI文件已存在: {}", aiFileName);
+    }
 
-    // 2. 生成描述
+    // 2. 生成
+    String phoneticsFileName =
+      folderPath + File.separator + subFolder + File.separator + subFolder
+        + "_total_phonetics.txt";
+    if (CdFileUtil.isFileEmpty(phoneticsFileName)) {
+      File file = TranslationUtil.genPhonetics(fileNameTotal, aiFileName);
+      log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
+    } else {
+      log.info("带音标文件已存在: {}", phoneticsFileName);
+    }
 
   }
 

@@ -8,8 +8,11 @@ import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.CommonUtil;
 import com.coderdream.util.cd.CdTextUtil;
+import com.coderdream.util.process.ListSplitterStream;
+import com.coderdream.util.process.RemoveEmptyLines;
 import com.coderdream.util.sentence.TextParserUtil;
 import com.coderdream.vo.SentenceVO;
+import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +23,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -83,52 +87,101 @@ public class TranslationUtil {
   }
 
   // 增加英文音标 phonetics
-  public static File genPhonetics(String fileName) {
-
-    String jsonFileName = CdFileUtil.addPostfixToFileName(fileName, "_ai");
-    assert jsonFileName != null;
-    File jsonFile = new File(jsonFileName);
-    String translate = "";
-    if (!jsonFile.exists() || jsonFile.length() == 0) {
-      String text = "解析下面的文本，给每行英文句子加上音标，放到下一行，给的n行英文句子，返回2*n行数据给我。待添加音标的句子文本如下：";
-      List<String> sentences = CdTextUtil.getAllEnglishSentencesFromFile(
-        fileName);
-      String content = String.join("\n", sentences);
-      text += content;
-      translate = GeminiApiClient.generateContent(text);
-      FileUtil.writeUtf8String(translate, jsonFile);
-    } else {
-      translate = FileUtil.readString(jsonFile, StandardCharsets.UTF_8);
-    }
-
-    log.info("genPhonetics: {}", translate);
+  public static File genPhonetics(String fileName, String jsonFileName) {
     return writePhoneticsToFile(fileName, jsonFileName);
   }
 
-  public static void genPhonetics(String fileName, String translateFileName) {
+  public static File genAiFile(String fileName) {
+    List<String> sentences = CdTextUtil.getAllEnglishSentencesFromFile(
+      fileName);
+    String aiFileName = CdFileUtil.addPostfixToFileName(fileName, "_ai");
+    if (CollectionUtil.isEmpty(sentences)) {
+      log.error("sentences is empty");
+      return null;
+    }
+    int groupSize = 100;
+    if (sentences.size() > groupSize) {
+      // 拆分句子列表，每组包含 groupSize 个元素
+      List<List<String>> sentencesLists = ListSplitterStream.splitList(
+        sentences, groupSize);
+      int i = 0;
+      String jsonFileNamePart = null;
+      String translate = "";
+      StringBuilder translateTotal = new StringBuilder();
+      for (List<String> sentencesList : sentencesLists) {
+        jsonFileNamePart = CdFileUtil.addPostfixToFileName(
+          fileName, "_ai" + "_" + i++);
+        assert jsonFileNamePart != null;
+        File jsonFilePart = new File(jsonFileNamePart);
 
-//    String text = "解析下面的文本，整个英文句子的音标作为一个整体，插入到英文句子和中文句子之间，从而使原本的两句话变成三句话。这样，原本的12句话会变成18句话。文本如下：";
-//    List<String> vocInfoList = CdFileUtil.readFileContent(fileName);
-//    String content = String.join("\n", vocInfoList);
-//    text += content;
-    String translate = FileUtil.readString(new File(translateFileName),
-      StandardCharsets.UTF_8);// GeminiApiClient.generateContent(text);
-    log.info("translate: {}", translate);
+        if (!jsonFilePart.exists() || jsonFilePart.length() == 0) {
+          String text = CdConstants.GEN_PHONETICS_TEXT;
+          String content = String.join("\n", sentencesList);
+          text += content;
+          translate = GeminiApiClient.generateContent(text);
+          // 移除空行
+          translate = RemoveEmptyLines.removeEmptyLines(translate);
+          // 把 / / 替换为空格
+          translate = translate.replaceAll("/ /", " ");
+          FileUtil.writeUtf8String(translate, jsonFilePart);
+          translateTotal.append(translate);
+        }
 
-    // writePhoneticsToFile(fileName,  translate);
+        log.info("genPhonetics Total: {}", translate);
+      }
+      // 移除空行
+      String translateTotalString = RemoveEmptyLines.removeEmptyLines(translateTotal.toString());
+      // 把 / / 替换为空格
+      translateTotalString = translateTotalString.replaceAll("/ /", " ");
+
+      FileUtil.writeUtf8String(translateTotalString, aiFileName);
+    } else {
+      assert aiFileName != null;
+      File aiFile = new File(aiFileName);
+      String translate = "";
+      if (!aiFile.exists() || aiFile.length() == 0) {
+        String text = CdConstants.GEN_PHONETICS_TEXT;
+        String content = String.join("\n", sentences);
+        text += content;
+        translate = GeminiApiClient.generateContent(text);
+
+        // 移除空行
+        translate = RemoveEmptyLines.removeEmptyLines(translate);
+        // 把 / / 替换为空格
+        translate = translate.replaceAll("/ /", " ");
+        FileUtil.writeUtf8String(translate, aiFile);
+      }
+
+      log.info("genPhonetics: {}", translate);
+    }
+    return new File(aiFileName);
   }
 
-  private static File writePhoneticsToFile(String fileName,
+//  public static void genPhonetics(String fileName, String translateFileName) {
+//
+////    String text = "解析下面的文本，整个英文句子的音标作为一个整体，插入到英文句子和中文句子之间，从而使原本的两句话变成三句话。这样，原本的12句话会变成18句话。文本如下：";
+////    List<String> vocInfoList = CdFileUtil.readFileContent(fileName);
+////    String content = String.join("\n", vocInfoList);
+////    text += content;
+//    String translate = FileUtil.readString(new File(translateFileName),
+//      StandardCharsets.UTF_8);// GeminiApiClient.generateContent(text);
+//    log.info("translate: {}", translate);
+//
+//    // writePhoneticsToFile(fileName,  translate);
+//  }
+
+  private static File writePhoneticsToFile(String totalFileName,
     String jsonFileName) {
-    String addPostfixToFileName = CdFileUtil.addPostfixToFileName(fileName,
+    String addPostfixToFileName = CdFileUtil.addPostfixToFileName(totalFileName,
       "_phonetics");
     List<SentenceVO> sentenceVOPhList = CdTextUtil.parseSentencesFromFileWithEnglishAndPhonetics(
       jsonFileName);
     List<SentenceVO> sentenceVOCnList = CdTextUtil.parseSentencesFromFile(
-      fileName);
+      totalFileName);
     if (CollectionUtil.isEmpty(sentenceVOPhList) || CollectionUtil.isEmpty(
       sentenceVOPhList) || sentenceVOPhList.size() != sentenceVOCnList.size()) {
-      log.error(" sentenceVOList is empty");
+      log.error("音标列表和中文列表不一致, 音标列表大小： {}，中文列表大小： {},", sentenceVOPhList.size(),
+        sentenceVOCnList.size());
       return null;
     }
     File file = new File(addPostfixToFileName);
@@ -147,7 +200,7 @@ public class TranslationUtil {
         writer.newLine();
         writer.write(sentenceVO.getPhonetics());
         writer.newLine();
-        writer.write(sentenceVOCn.getChinese());
+        writer.write(ZhConverterUtil.toTraditional(sentenceVOCn.getChinese()));
         writer.newLine();
       }
       log.info("对话信息已成功写入到文件: {}", outputFilePath);

@@ -1,6 +1,8 @@
 package com.coderdream.util.cd;
 
+import cn.hutool.core.io.FileUtil;
 import com.coderdream.vo.SentenceVO;
+import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -39,33 +41,39 @@ public class CdTextUtil {
       throw new IllegalArgumentException("文件不存在：" + filePath);
     }
 
-    List<String> lines = new ArrayList<>();
-    // 使用 try-with-resources 语句自动关闭资源
-    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        lines.add(line);
-      }
-    } catch (IOException e) {
-      log.error("读取文件失败：{}, 异常：{}", filePath, e.getMessage(), e);
-    }
+//    List<String> lines = new ArrayList<>();
+//    // 使用 try-with-resources 语句自动关闭资源
+//    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+//      String line;
+//      while ((line = reader.readLine()) != null) {
+//        lines.add(line);
+//      }
+//    } catch (IOException e) {
+//      log.error("读取文件失败：{}, 异常：{}", filePath, e.getMessage(), e);
+//    }
+//    //1. 末尾为空行，则先去掉
+//    while (!lines.isEmpty() && lines.get(lines.size() - 1).trim().isEmpty()) {
+//      lines.remove(lines.size() - 1);
+//    }
+
+    List<String> strings = FileUtil.readLines(filePath, StandardCharsets.UTF_8);
     //1. 末尾为空行，则先去掉
-    while (!lines.isEmpty() && lines.get(lines.size() - 1).trim().isEmpty()) {
-      lines.remove(lines.size() - 1);
+    while (!strings.isEmpty() && strings.get(strings.size() - 1).trim().isEmpty()) {
+      strings.remove(strings.size() - 1);
     }
 
     // 2. 如果有效行数不为 2 的倍数，则报错退出
-    if (lines.size() % 2 != 0) {
-      log.error("文件有效行数不是2的倍数: {}, 行数：{}", filePath, lines.size());
+    if (strings.size() % 2 != 0) {
+      log.error("文件有效行数不是2的倍数: {}, 行数：{}", filePath, strings.size());
       throw new IllegalArgumentException("文件有效行数不是2的倍数");
     }
 
     List<SentenceVO> sentenceList = new ArrayList<>();
 
     // 3. 两行为一组，放到对象中，生成对象列表，第一行为 english，第二行为 chinese
-    for (int i = 0; i < lines.size(); i += 2) {
-      String english = lines.get(i).trim();
-      String phonetics = lines.get(i + 1).trim();
+    for (int i = 0; i < strings.size(); i += 2) {
+      String english = strings.get(i).trim();
+      String phonetics = strings.get(i + 1).trim();
       SentenceVO sentenceVO = new SentenceVO(english, phonetics, "");
       sentenceList.add(sentenceVO);
     }

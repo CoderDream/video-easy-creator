@@ -133,7 +133,7 @@ public class AudioMergerSingleBatch {
    * @param inputDir 输入目录
    * @return 文件路径列表
    */
-  private static List<String> listWavFiles(String inputDir) {
+  public static List<String> listWavFiles(String inputDir) {
     File dir = new File(inputDir);
     if (!dir.exists() || !dir.isDirectory()) {
       log.error("目录不存在或不是目录: {}", inputDir);

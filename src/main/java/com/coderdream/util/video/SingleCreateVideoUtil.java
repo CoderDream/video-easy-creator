@@ -69,7 +69,7 @@ public class SingleCreateVideoUtil {
     String videoFileName) {
 
     File videoFile = new File(videoFileName);
-    if (videoFile.exists() && videoFile.length() > 0) {
+    if (!CdFileUtil.isFileEmpty(videoFileName)) {
       log.info("视频文件已存在，无需重新生成，{}", videoFileName);
       return videoFile;
     }
@@ -85,7 +85,7 @@ public class SingleCreateVideoUtil {
 
       // 计算AUDIO时长
       double duration = FfmpegUtil.getAudioDuration(audioFile);
-      log.info("音频时长：{}", duration);
+      log.info("本音频时长：{}", duration);
 
       videoFile = new File(videoFileName);
 
@@ -93,11 +93,11 @@ public class SingleCreateVideoUtil {
       VideoCreatorUtil.createVideo(imageFile, audioFile, videoFile, duration);
 
     } catch (Exception e) {
-      log.error("视频创建过程中出现异常", e);
+      log.error("视频创建过程中出现异常，{}", videoFileName, e);
     }
     long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
     long durationMillis = endTime - startTime; // 计算耗时（毫秒）
-    log.info("视频批量创建成功，耗时: {}",
+    log.info("单个视频创建成功，耗时: {}",
       CdTimeUtil.formatDuration(durationMillis));
     return videoFile;
   }
@@ -139,7 +139,7 @@ public class SingleCreateVideoUtil {
       String videoFileName =
         videoPath + CdFileUtil.getPureFileNameWithoutExtensionWithPath(
           audioFileName) + ".mp4";
-      log.info("第{}个视频开始生成", videoFileName);
+      log.info("第{}个视频开始生成", i + 1);
       singleCreateVideo(imagePathName, audioFileName, videoFileName);
     }
 

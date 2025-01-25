@@ -109,7 +109,7 @@ public class TextParser {
       if (!lines.isEmpty()) {
         if (lines.size() % 2 != 0) {
           String paragraphContent = String.join("\n", lines);
-          log.error("2 段落不是偶数行，无法解析，段落内容:\n{}",
+          log.error("3 段落不是偶数行，无法解析，段落内容:\n{}",
             paragraphContent);
           System.exit(1); // 退出程序
         }

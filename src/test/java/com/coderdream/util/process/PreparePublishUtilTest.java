@@ -9,19 +9,23 @@ import org.junit.jupiter.api.Test;
 class PreparePublishUtilTest {
 
   @Test
-  void process() {
+  void process01() {
     String folderPath = "D:\\0000\\EnBook001\\900\\";
-    String subFolder = "ch009";
-    PreparePublishUtil.process(folderPath, subFolder);
+    String subFolder = "ch010"; // 商務英語
+    String bookName = "商務英語";
+    String chapterName = "900_cht_name.txt";
+    String shortSubFolder = "10";
+    PreparePublishUtil.process(folderPath, subFolder,shortSubFolder,bookName, chapterName);
   }
 
   @Test
   void process02() {
     String folderPath = "D:\\0000\\EnBook002\\";
-    String subFolder = "Chapter001";
+    String subFolder = "Chapter002";
     String bookName = "一輩子夠用的英語口語大全集";
     String chapterName = "book02_name.txt";
-    PreparePublishUtil.process(folderPath, subFolder,bookName, chapterName);
+    String shortSubFolder = "02";
+    PreparePublishUtil.process(folderPath, subFolder,shortSubFolder,bookName, chapterName);
   }
 
 

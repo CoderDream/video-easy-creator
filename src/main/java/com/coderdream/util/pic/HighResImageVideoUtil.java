@@ -122,7 +122,7 @@ public class HighResImageVideoUtil {
     try {
       templateImage = ImageIO.read(new File(imagePath));
     } catch (IOException e) {
-      log.error("加载背景图片失败: {}", e.getMessage(), e);
+      log.error("加载背景图片失败: {} {}", imagePath, e.getMessage(),e);
       throw new RuntimeException(e);
     }
 
