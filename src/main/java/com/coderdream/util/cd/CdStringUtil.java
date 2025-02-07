@@ -294,6 +294,37 @@ public class CdStringUtil {
     return replacedString;
   }
 
+
+  /**
+   * 判断字符串是否除了时间中的冒号外，只包含一个中文或英文冒号
+   *
+   * @param str 要判断的字符串
+   * @return 如果符合条件返回 true，否则返回 false
+   */
+  public static boolean hasSingleColonOutsideTime(String str) {
+    if (str == null || str.isEmpty()) {
+      return false; // 空字符串或 null 返回 false
+    }
+
+    // 1. 移除时间中的冒号（使用正则表达式匹配 HH:mm:ss 或 HH:mm 格式）
+    String timePattern = "(\\d{1,2}:\\d{2}(:\\d{2})?)";
+    Pattern pattern = Pattern.compile(timePattern);
+    Matcher matcher = pattern.matcher(str);
+    String strWithoutTimeColons = matcher.replaceAll("");
+
+    // 2. 计算剩余字符串中冒号的数量（中文或英文冒号）
+    int colonCount = 0;
+    for (int i = 0; i < strWithoutTimeColons.length(); i++) {
+      char c = strWithoutTimeColons.charAt(i);
+      if (c == ':' || c == '：') {
+        colonCount++;
+      }
+    }
+
+    // 3. 判断冒号的数量是否为 1
+    return colonCount == 1;
+  }
+
   /**
    * 判断字符串是否只包含一个中英文冒号
    *
@@ -351,10 +382,12 @@ public class CdStringUtil {
 
   /**
    * 查找字符串中第一个中文字符或中文标点的索引 (不使用 \p{Punct})
+   *
    * @param text 待查找的字符串
    * @return 如果找到，返回索引，否则返回 -1
    */
-  public static int findFirstChineseCharOrPunctuationIndexWithoutPunct(String text) {
+  public static int findFirstChineseCharOrPunctuationIndexWithoutPunct(
+    String text) {
     Pattern pattern = Pattern.compile("[\u4e00-\u9fa5。？！，、；：“”‘’（）《》【】…—·]");
     Matcher matcher = pattern.matcher(text);
     if (matcher.find()) {
@@ -364,11 +397,13 @@ public class CdStringUtil {
   }
 
   /**
-   *  查找字符串中最后一个中文字符或中文标点的索引 (不使用 \p{Punct})
-   * @param  text 待查找的字符串
-   * @return  如果找到，返回索引，否则返回 -1
+   * 查找字符串中最后一个中文字符或中文标点的索引 (不使用 \p{Punct})
+   *
+   * @param text 待查找的字符串
+   * @return 如果找到，返回索引，否则返回 -1
    */
-  public static int findLastChineseCharOrPunctuationIndexWithoutPunct(String text) {
+  public static int findLastChineseCharOrPunctuationIndexWithoutPunct(
+    String text) {
     Pattern pattern = Pattern.compile("[\u4e00-\u9fa5。？！，、；：“”‘’（）《》【】…—·]");
     Matcher matcher = pattern.matcher(text);
     int lastIndex = -1;
@@ -377,13 +412,16 @@ public class CdStringUtil {
     }
     return lastIndex;
   }
+
   /**
-   *  查找字符串中第一个中文字符或中文标点的索引
-   * @param  text 待查找的字符串
-   * @return  如果找到，返回索引，否则返回 -1
+   * 查找字符串中第一个中文字符或中文标点的索引
+   *
+   * @param text 待查找的字符串
+   * @return 如果找到，返回索引，否则返回 -1
    */
   public static int findFirstChineseCharOrPunctuationIndex(String text) {
-    Pattern pattern = Pattern.compile("[\u4e00-\u9fa5\\p{Punct}。？！，、；：“”‘’（）《》【】…—·]");
+    Pattern pattern = Pattern.compile(
+      "[\u4e00-\u9fa5\\p{Punct}。？！，、；：“”‘’（）《》【】…—·]");
     Matcher matcher = pattern.matcher(text);
     if (matcher.find()) {
       return matcher.start();
@@ -393,12 +431,14 @@ public class CdStringUtil {
 
 
   /**
-   *  查找字符串中最后一个中文字符或中文标点的索引
-   * @param  text 待查找的字符串
-   * @return  如果找到，返回索引，否则返回 -1
+   * 查找字符串中最后一个中文字符或中文标点的索引
+   *
+   * @param text 待查找的字符串
+   * @return 如果找到，返回索引，否则返回 -1
    */
   public static int findLastChineseCharOrPunctuationIndex(String text) {
-    Pattern pattern = Pattern.compile("[\u4e00-\u9fa5\\p{Punct}。？！，、；：“”‘’（）《》【】…—·]");
+    Pattern pattern = Pattern.compile(
+      "[\u4e00-\u9fa5\\p{Punct}。？！，、；：“”‘’（）《》【】…—·]");
     Matcher matcher = pattern.matcher(text);
     int lastIndex = -1;
     while (matcher.find()) {
@@ -409,9 +449,10 @@ public class CdStringUtil {
 
 
   /**
-   *  查找字符串中第一个中文字符的索引
-   * @param  text 待查找的字符串
-   * @return  如果找到，返回索引，否则返回 -1
+   * 查找字符串中第一个中文字符的索引
+   *
+   * @param text 待查找的字符串
+   * @return 如果找到，返回索引，否则返回 -1
    */
   public static int findFirstChineseCharIndex(String text) {
     Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]");
@@ -423,9 +464,10 @@ public class CdStringUtil {
   }
 
   /**
-   *  查找字符串中最后一个中文字符的索引
-   * @param  text 待查找的字符串
-   * @return  如果找到，返回索引，否则返回 -1
+   * 查找字符串中最后一个中文字符的索引
+   *
+   * @param text 待查找的字符串
+   * @return 如果找到，返回索引，否则返回 -1
    */
   public static int findLastChineseCharIndex(String text) {
     Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]");
@@ -447,15 +489,14 @@ public class CdStringUtil {
     String chineseSentence = "";
     String englishSentence = "";
     //如果 lastChineseCharIndex 为 -1,则说明没有中文
-    if(lastChineseCharIndex!=-1){
+    if (lastChineseCharIndex != -1) {
       chineseSentence = lineWithoutSequence.substring(0,
-        lastChineseCharIndex+1).trim(); // 需要加1,
+        lastChineseCharIndex + 1).trim(); // 需要加1,
       englishSentence = lineWithoutSequence.substring(
-        lastChineseCharIndex+1).trim();
-    }else {
-      englishSentence=lineWithoutSequence.trim(); // 没有中文，全部是英文
+        lastChineseCharIndex + 1).trim();
+    } else {
+      englishSentence = lineWithoutSequence.trim(); // 没有中文，全部是英文
     }
-
 
 //          log.debug("处理前的字符串：{}， 处理后的字符串：{}", line,
 //            lineWithoutSequence);

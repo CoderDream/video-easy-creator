@@ -39,7 +39,7 @@ public class ScriptParser {
           continue;
         }
         // 校验2：是否存在不含中英文冒号的行或者有多个中英文冒号
-        if (!CdStringUtil.hasOneColon(line)) {
+        if (!CdStringUtil.hasSingleColonOutsideTime(line)) {
           log.error(
             "第{}行格式错误，必须有且仅有一个冒号，且冒号必须为中英文冒号: {}",
             i + 1, line);

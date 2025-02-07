@@ -24,8 +24,8 @@ public class GenAudioUtil {
       log.info("文件夹已存在: {}", subFolderPath);
     }
 
-    String fileNameTotal =
-      subFolderPath + File.separator + subFolder + "_total.txt";
+//    String fileNameTotal =
+//      subFolderPath + File.separator + subFolder + "_total.txt";
 //    String fileName = "D:\\0000\\EnBook001\\900\\ch01\\900V1_ch0101_total.txt";
     String phoneticsFileName =
       folderPath + File.separator + subFolder + File.separator + subFolder

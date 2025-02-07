@@ -2,7 +2,6 @@ package com.coderdream.util.sentence;
 
 import com.coderdream.entity.DialogSingleEntity;
 import com.coderdream.util.cd.CdStringUtil;
-import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -200,8 +199,6 @@ public class TextParser {
       return null;
     }
     return dialogSingleEntity;
-    //         String result1 = PunctuationUtil.replaceEnglishPunctuationToChinese(text2);
-    //        String result2 = PunctuationUtil.replaceChinesePunctuationToEnglish(text1);
   }
 
   public static void main(String[] args) {

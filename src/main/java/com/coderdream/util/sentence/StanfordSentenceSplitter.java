@@ -39,7 +39,7 @@ public class StanfordSentenceSplitter {
 
     for (int i = 0; i < coreSentences.size(); i++) {
       CoreSentence sentence = coreSentences.get(i);
-      if (currentSentence.length() > 0) {
+      if (!currentSentence.isEmpty()) {
         currentSentence.append(" ");
       }
       currentSentence.append(sentence.text());
@@ -66,7 +66,7 @@ public class StanfordSentenceSplitter {
           }
         }
       }
-      if (i == coreSentences.size() - 1 && currentSentence.length() > 0) {
+      if (i == coreSentences.size() - 1 && !currentSentence.isEmpty()) {
         sentences.add(currentSentence.toString().trim());
       }
     }

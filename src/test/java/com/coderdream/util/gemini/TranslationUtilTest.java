@@ -1,6 +1,7 @@
 package com.coderdream.util.gemini;
 
 import cn.hutool.core.io.FileUtil;
+import java.io.File;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -81,6 +82,15 @@ class TranslationUtilTest {
 //    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
 //    TranslationUtil.genDescription(fileName);
 //    log.info("translate: {}", translate);
+  }
+
+  // File genAiFile(String fileName)
+
+  @Test
+  void genAiFile_01() {
+//    String folderName = "180913"; // 250102
+    String fileName = "D:\\0000\\EnBook002\\Chapter005\\Chapter005_total.txt";
+    File file = TranslationUtil.genAiFile(fileName);
   }
 
 }

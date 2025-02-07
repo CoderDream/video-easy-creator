@@ -263,8 +263,8 @@ public class GenSrtUtil {
   }
 
   /**
-   * @param folderName
-   * @return
+   * @param folderName 如：2201
+   * @return  如：2201_script_dialog.txt
    */
   public static File genScriptDialogNew(String folderName, String newFileName) {
     String fileName = "script_dialog";

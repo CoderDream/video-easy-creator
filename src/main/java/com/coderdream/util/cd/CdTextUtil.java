@@ -90,6 +90,53 @@ public class CdTextUtil {
     return sentenceList;
   }
 
+
+  /**
+   * 从文本文件中解析句子列表。
+   *
+   * @param filePath 文本文件路径
+   * @return 句子对象列表
+   * @throws IllegalArgumentException 如果文件不存在，或者有效行数不是2的倍数
+   */
+  public static List<SentenceVO> parseSentencesFromFileWithPhonetics(
+    String filePath) {
+    Instant start = Instant.now(); // 记录开始时间
+    log.info("开始解析文件：{}", filePath);
+
+    Path path = Paths.get(filePath);
+
+    if (!Files.exists(path)) {
+      log.error("文件不存在：{}", filePath);
+      throw new IllegalArgumentException("文件不存在：" + filePath);
+    }
+
+    List<String> strings = FileUtil.readLines(filePath, StandardCharsets.UTF_8);
+    //1. 末尾为空行，则先去掉
+    while (!strings.isEmpty() && strings.get(strings.size() - 1).trim().isEmpty()) {
+      strings.remove(strings.size() - 1);
+    }
+
+    List<SentenceVO> sentenceList = new ArrayList<>();
+
+    // 3. 两行为一组，放到对象中，生成对象列表，第一行为 english，第二行为 chinese
+    for (int i = 0; i < strings.size(); i ++) {
+      String phonetics = strings.get(i).trim();
+      SentenceVO sentenceVO = new SentenceVO("", phonetics, "");
+      sentenceList.add(sentenceVO);
+    }
+
+    Instant finish = Instant.now();
+    long timeElapsed = Duration.between(start, finish).toMillis();
+
+    long hours = timeElapsed / (1000 * 60 * 60);
+    long minutes = (timeElapsed % (1000 * 60 * 60)) / (1000 * 60);
+    long seconds = (timeElapsed % (1000 * 60)) / 1000;
+    long milliseconds = timeElapsed % 1000;
+    log.info("文件解析完成，耗时：{} 时 {} 分 {} 秒 {} 毫秒", hours, minutes,
+      seconds, milliseconds);
+    return sentenceList;
+  }
+
   /**
    * 从文本文件中解析句子列表。
    *

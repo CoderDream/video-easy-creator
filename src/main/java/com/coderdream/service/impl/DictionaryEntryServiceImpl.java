@@ -5,7 +5,7 @@ import com.coderdream.mapper.DictionaryEntryMapper;
 import com.coderdream.service.DictionaryEntryService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.coderdream.util.cd.CdConstants;
-import com.coderdream.util.cd.CdListUtils;
+import com.coderdream.util.cd.CdListUtil;
 import jakarta.annotation.Resource;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class DictionaryEntryServiceImpl extends ServiceImpl<DictionaryEntryMappe
         if (!CollectionUtils.isEmpty(dictionaryEntryList)) {
             log.info("本次批量执行的记录条数: {} ", dictionaryEntryList.size());
             // 分批处理
-            List<List<DictionaryEntry>> lists = CdListUtils.splitTo(dictionaryEntryList, CdConstants.BATCH_INSERT_UPDATE_ROWS);
+            List<List<DictionaryEntry>> lists = CdListUtil.splitTo(dictionaryEntryList, CdConstants.BATCH_INSERT_UPDATE_ROWS);
             for (List<DictionaryEntry> list : lists) {
                 count += dictionaryEntryMapper.insertOrUpdateBatch(list);
             }

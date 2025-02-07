@@ -7,12 +7,15 @@ import com.coderdream.entity.VocInfo;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.CommonUtil;
+import com.coderdream.util.cd.CdListUtil;
 import com.coderdream.util.cd.CdTextUtil;
 import com.coderdream.util.process.ListSplitterStream;
 import com.coderdream.util.process.RemoveEmptyLines;
 import com.coderdream.util.sentence.TextParserUtil;
+import com.coderdream.util.sentence.demo1.SentenceParser;
 import com.coderdream.vo.SentenceVO;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
+import freemarker.template.utility.StringUtil;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -105,12 +109,16 @@ public class TranslationUtil {
       List<List<String>> sentencesLists = ListSplitterStream.splitList(
         sentences, groupSize);
       int i = 0;
-      String jsonFileNamePart = null;
+      String englishFileNamePart;
+      String jsonFileNamePart;
       String translate = "";
       StringBuilder translateTotal = new StringBuilder();
       for (List<String> sentencesList : sentencesLists) {
+        i++;
+        englishFileNamePart = CdFileUtil.addPostfixToFileName(
+          fileName, "_en" + "_" + i);
         jsonFileNamePart = CdFileUtil.addPostfixToFileName(
-          fileName, "_ai" + "_" + i++);
+          fileName, "_ai" + "_" + i);
         assert jsonFileNamePart != null;
         File jsonFilePart = new File(jsonFileNamePart);
 
@@ -119,20 +127,47 @@ public class TranslationUtil {
           String content = String.join("\n", sentencesList);
           text += content;
           translate = GeminiApiClient.generateContent(text);
-          // 移除空行
-          translate = RemoveEmptyLines.removeEmptyLines(translate);
-          // 把 / / 替换为空格
-          translate = translate.replaceAll("/ /", " ");
-          FileUtil.writeUtf8String(translate, jsonFilePart);
-          translateTotal.append(translate);
+          List<SentenceVO> sentenceVOList = SentenceParser.parseSentences(
+            translate);
+          List<String> translateList = new ArrayList<>();
+          for (SentenceVO sentenceVO : sentenceVOList) {
+//            translateList.add(sentenceVO.getEnglish());
+            translateList.add(sentenceVO.getPhonetics());
+          }
+
+//          if (CollectionUtil.isNotEmpty(translateList)
+//            && translateList.size() == sentencesList.size() * 2) {
+
+          if (CollectionUtil.isNotEmpty(translateList)
+            && translateList.size() == sentencesList.size()) {
+            FileUtil.writeLines(translateList, jsonFilePart,
+              StandardCharsets.UTF_8);
+            FileUtil.writeLines(sentencesList, englishFileNamePart,
+              StandardCharsets.UTF_8);
+
+            translateTotal.append(translate);
+          } else {
+            FileUtil.writeLines(translateList, jsonFilePart,
+              StandardCharsets.UTF_8);
+            FileUtil.writeLines(sentencesList, englishFileNamePart,
+              StandardCharsets.UTF_8);
+
+            log.error(
+              "translateList size is not equal to sentencesList size,"
+                + " translateList.size {},"
+                + " sentencesList.size {}, "
+                + " jsonFileNamePart: {}",
+              translateList.size(), sentencesList.size(), jsonFileNamePart);
+            break;
+          }
+
         }
 
         log.info("genPhonetics Total: {}", translate);
       }
-      // 移除空行
-      String translateTotalString = RemoveEmptyLines.removeEmptyLines(translateTotal.toString());
-      // 把 / / 替换为空格
-      translateTotalString = translateTotalString.replaceAll("/ /", " ");
+      // 把字符串中的空格+斜线替换为回车换行加斜线
+      String translateTotalString = RemoveEmptyLines.removeEmptyLines(
+        translateTotal.toString());
 
       FileUtil.writeUtf8String(translateTotalString, aiFileName);
     } else {
@@ -149,7 +184,11 @@ public class TranslationUtil {
         translate = RemoveEmptyLines.removeEmptyLines(translate);
         // 把 / / 替换为空格
         translate = translate.replaceAll("/ /", " ");
-        FileUtil.writeUtf8String(translate, aiFile);
+
+        List<String> translateList = SentenceParser.getPhoneticsList(
+          SentenceParser.parseSentences(translate));
+
+        FileUtil.writeLines(translateList, aiFile, StandardCharsets.UTF_8);
       }
 
       log.info("genPhonetics: {}", translate);
@@ -176,11 +215,14 @@ public class TranslationUtil {
       "_phonetics");
     List<SentenceVO> sentenceVOPhList = CdTextUtil.parseSentencesFromFileWithEnglishAndPhonetics(
       jsonFileName);
+//    List<SentenceVO> sentenceVOPhList = CdTextUtil.parseSentencesFromFileWithPhonetics(
+//      jsonFileName);
     List<SentenceVO> sentenceVOCnList = CdTextUtil.parseSentencesFromFile(
       totalFileName);
     if (CollectionUtil.isEmpty(sentenceVOPhList) || CollectionUtil.isEmpty(
       sentenceVOPhList) || sentenceVOPhList.size() != sentenceVOCnList.size()) {
-      log.error("音标列表和中文列表不一致, 音标列表大小： {}，中文列表大小： {},", sentenceVOPhList.size(),
+      log.error("音标列表和中文列表不一致, 音标列表大小： {}，中文列表大小： {},",
+        sentenceVOPhList.size(),
         sentenceVOCnList.size());
       return null;
     }
@@ -196,7 +238,7 @@ public class TranslationUtil {
       for (int i = 0; i < sentenceVOPhList.size(); i++) {
         sentenceVO = sentenceVOPhList.get(i);
         sentenceVOCn = sentenceVOCnList.get(i);
-        writer.write(sentenceVO.getEnglish());
+        writer.write(sentenceVOCn.getEnglish());
         writer.newLine();
         writer.write(sentenceVO.getPhonetics());
         writer.newLine();

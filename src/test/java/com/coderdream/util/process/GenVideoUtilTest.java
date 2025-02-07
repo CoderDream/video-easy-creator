@@ -2,6 +2,7 @@ package com.coderdream.util.process;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -11,16 +12,32 @@ class GenVideoUtilTest {
   @Test
   void process() {
     String folderPath = "D:\\0000\\EnBook001\\900\\";
-    String subFolder = "ch010";
+    String subFolder = "ch020";
     GenVideoUtil.process(folderPath, subFolder);
     // assert that the process completes without any error
     assertTrue(true);
   }
 
+
+  @Test
+  void process0101() {
+    String folderPath = "D:\\0000\\EnBook001\\900\\";
+    List<String> subFolders = new ArrayList<>();
+    int end = 21;
+    for (int i = 15; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("ch" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenVideoUtil.process(folderPath, subFolder);
+    }
+  }
+
   @Test
   void process02() {
     String folderPath = "D:\\0000\\EnBook002\\";
-    String subFolder = "Chapter003";
+    String subFolder = "Chapter006";
     GenVideoUtil.process(folderPath, subFolder);
     // assert that the process completes without any error
     assertTrue(true);

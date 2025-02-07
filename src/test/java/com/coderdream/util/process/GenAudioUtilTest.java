@@ -2,6 +2,8 @@ package com.coderdream.util.process;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class GenAudioUtilTest {
@@ -9,7 +11,7 @@ class GenAudioUtilTest {
   @Test
   void process01() {
     String folderPath = "D:\\0000\\EnBook001\\900\\";
-    String subFolder = "ch010";
+    String subFolder = "ch020";
     GenAudioUtil.process(folderPath, subFolder);
     // assert that the process completes without any error
     assertTrue(true);
@@ -24,11 +26,29 @@ class GenAudioUtilTest {
     assertTrue(true);
   }
 
+
+  @Test
+  void process0101() {
+    String folderPath = "D:\\0000\\EnBook001\\900\\";
+    List<String> subFolders = new ArrayList<>();
+    int end = 21;
+    for (int i = 15; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("ch" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenAudioUtil.process(folderPath, subFolder);
+    }
+  }
+
   @Test
   void process02() {
     String folderPath = "D:\\0000\\EnBook002\\";
-    String subFolder = "Chapter004";
-    GenAudioUtil.process(folderPath, subFolder);
+    for (int i = 1; i <= 3; i++) {
+      String subFolder = "Chapter006";
+      GenAudioUtil.process(folderPath, subFolder);
+    }
     // assert that the process completes without any error
     assertTrue(true);
   }

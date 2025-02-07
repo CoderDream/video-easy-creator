@@ -206,7 +206,11 @@ public class CdConstants {
 
   public static Integer SINGLE_SCRIPT_LENGTH = 65;
 
-  public static String GEN_PHONETICS_TEXT = "解析下面的文本，给每行英文句子加上音标，放到下一行，给的n行英文句子，返回2*n行数据给我，以Scene开头的句子也都要加上音标，放到下一行。待添加音标的句子文本如下：";
+  public static String GEN_PHONETICS_TEXT = "解析下面的文本，给每行英文句子加上音标，"
+    + "放到下一行，给的n行英文句子，返回2*n行数据给我，"
+    + "以Scene开头的句子也都要加上音标，放到下一行，"
+    + "句子的音标只在句首句尾加斜线，中间不要有斜线。"
+    + "待添加音标的句子文本如下：";
 
 
   public static final String OS_WINDOWS = "Windows";

@@ -496,17 +496,45 @@ public class CdFileUtil {
     return !file.exists() || file.length() == 0;
   }
 
+
+  /**
+   * 根据文件名生成新的文件名，去掉最后的下划线加temp。
+   *
+   * @param inputFilePath 输入文件路径
+   * @return 生成的新文件名
+   */
+  public static String generateOutputFilePath(String inputFilePath) {
+    File inputFile = new File(inputFilePath);
+    String fileName = inputFile.getName();
+    String parentPath = inputFile.getParent(); // 获取父目录
+
+    // 移除文件名最后的 "_temp"
+    String newFileName = fileName.replace("_temp", "");  // 更简单的方法
+
+    // 构建新的文件路径
+    if (parentPath != null) {
+      return parentPath + File.separator + newFileName;
+    } else {
+      return newFileName; // 如果没有父目录，直接返回文件名
+    }
+  }
+
   public static void main(String[] args) {
 //        String filePath = "D:\\0000\\EnBook001\\900\\900V1_ch0201.txt";
-    String filePath = "900V1_ch0201.txt";
-    String newFilePath = CdFileUtil.addPostfixToFileName(filePath, "_part01");
-    System.out.println("原始文件路径: " + filePath);
-    System.out.println("修改后的文件路径: " + newFilePath);
+//    String filePath = "900V1_ch0201.txt";
+//    String newFilePath = CdFileUtil.addPostfixToFileName(filePath, "_part01");
+//    System.out.println("原始文件路径: " + filePath);
+//    System.out.println("修改后的文件路径: " + newFilePath);
+//
+//    String filePath2 = "D:/0000/EnBook001/900/900V1_ch0201.txt";
+//    String newFilePath2 = CdFileUtil.addPostfixToFileName(filePath2, "_part01");
+//    System.out.println("原始文件路径2: " + filePath2);
+//    System.out.println("修改后的文件路径2: " + newFilePath2);
 
-    String filePath2 = "D:/0000/EnBook001/900/900V1_ch0201.txt";
-    String newFilePath2 = CdFileUtil.addPostfixToFileName(filePath2, "_part01");
-    System.out.println("原始文件路径2: " + filePath2);
-    System.out.println("修改后的文件路径2: " + newFilePath2);
+
+    String inputFilePath = "D:\\0000\\EnBook002\\Chapter007\\Chapter007_temp.txt"; // 替换为你的输入文件路径
+    String outputFilePath = CdFileUtil.generateOutputFilePath(inputFilePath);
+    System.out.println("新的文件路径: " + outputFilePath);
 
   }
 }

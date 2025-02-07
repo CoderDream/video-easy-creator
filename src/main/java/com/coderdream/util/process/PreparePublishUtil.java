@@ -126,7 +126,7 @@ public class PreparePublishUtil {
 //
 //  }
   public static void process(String folderPath, String subFolder,
-    String shortSubFolder,
+    String shortSubFolder, String bookFolderName,
     String bookName, String chapterFileName) {
     // 1. 生成字幕
     String lang = "cmn";
@@ -142,7 +142,8 @@ public class PreparePublishUtil {
     String chapterName = chapterNameMap.get(shortSubFolder);
 
     String mp3FileName =
-      "D:\\0000\\" + bookName + "-EP-" + shortSubFolder + "-" + chapterName
+      "D:\\0000\\video\\" + bookFolderName + File.separator + bookName + "-EP-"
+        + shortSubFolder + "-" + chapterName
         + "\\" + bookName + "-EP-" + shortSubFolder + "-" + chapterName
         + ".MP3";
     File mp3File = new File(mp3FileName);

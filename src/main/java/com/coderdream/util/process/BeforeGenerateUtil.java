@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 public class BeforeGenerateUtil {
 
 
-  public static void process(String folderPath, String subFolder) {
+  public static void processGenRawTxt(String folderPath, String subFolder) {
     // 1. 生成章节文本
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";
 //    String subFolder = "ch004"; ❸
@@ -44,10 +44,45 @@ public class BeforeGenerateUtil {
     }
     // 生成初剪文本
     String rawTxtPath = targetFolderPath + subFolder + "_raw.txt";
+    String txtPath = targetFolderPath + subFolder + ".txt";
     if (CdFileUtil.isFileEmpty(rawTxtPath)) {
       String elapsedTime = TextFileUtil.filterTextFile(sourcePath, rawTxtPath);
-      log.info("耗时：{}", elapsedTime);
+      String elapsedTime2 = TextFileUtil.filterTextFile(sourcePath, txtPath);
+      log.info("耗时：{}：{}", elapsedTime,elapsedTime2);
     }
+  }
+
+
+  public static void genAiFile(String folderPath, String subFolder) {
+
+    String fileNameTotal =
+      folderPath + subFolder + File.separator + subFolder + "_total.txt";
+    if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+      File fileTotal = DialogSingleEntityUtil.genTotalFile(folderPath,
+        subFolder);
+      log.info("文件不存在或为空，已生成新文件: {}",
+        fileTotal.getAbsolutePath());
+    } else {
+      log.info("文件已存在: {}", fileNameTotal);
+    }
+
+    // 生成带音标的文件
+    // 生成带音标的文件
+    String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+    if (CdFileUtil.isFileEmpty(aiFileName)) {
+      File file = TranslationUtil.genAiFile(fileNameTotal);
+      assert file != null;
+      log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
+    } else {
+      log.info("AI文件已存在: {}", aiFileName);
+    }
+
+  }
+
+  public static void process(String folderPath, String subFolder) {
+    // 1. 生成章节文本
+//    String folderPath = "D:\\0000\\EnBook001\\900\\";
+//    String subFolder = "ch004"; ❸
 
     // 分割并校验文本
     boolean b = DialogSingleEntityUtil.genPart1AndPart2File(folderPath,
@@ -275,7 +310,6 @@ public class BeforeGenerateUtil {
       log.info("文件已存在: {}", fileNameTotal);
     }
 
-    // 生成带音标的文件
     // 生成带音标的文件
     String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
     if (CdFileUtil.isFileEmpty(aiFileName)) {
