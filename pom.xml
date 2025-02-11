@@ -736,10 +736,10 @@
             <!-- releases 和 snapshots 可以省略 -->
         </repository>
 
-        <repository>
-            <id>jpedal-lgpl</id>
-            <url>https://repo.clojars.org/</url>
-        </repository>
+<!--        <repository>-->
+<!--            <id>jpedal-lgpl</id>-->
+<!--            <url>https://repo.clojars.org/</url>-->
+<!--        </repository>-->
     </repositories>
     <pluginRepositories>
         <pluginRepository>
