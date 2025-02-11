@@ -740,6 +740,19 @@
 <!--            <id>jpedal-lgpl</id>-->
 <!--            <url>https://repo.clojars.org/</url>-->
 <!--        </repository>-->
+
+        <repository>
+            <id>geotoolkit</id>
+            <name>Geotoolkit Repository</name>
+            <url>https://maven.geotoolkit.org/</url>
+        </repository>
+
+        <!-- 如果你需要从 Maven Central 下载其他依赖，保留这个 -->
+        <repository>
+            <id>central</id>
+            <name>Maven Central Repository</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
