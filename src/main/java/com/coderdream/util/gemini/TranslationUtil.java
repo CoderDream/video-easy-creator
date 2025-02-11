@@ -181,19 +181,6 @@ public class TranslationUtil {
     return new File(aiFileName);
   }
 
-//  public static void genPhonetics(String fileName, String translateFileName) {
-//
-////    String text = "解析下面的文本，整个英文句子的音标作为一个整体，插入到英文句子和中文句子之间，从而使原本的两句话变成三句话。这样，原本的12句话会变成18句话。文本如下：";
-////    List<String> vocInfoList = CdFileUtil.readFileContent(fileName);
-////    String content = String.join("\n", vocInfoList);
-////    text += content;
-//    String translate = FileUtil.readString(new File(translateFileName),
-//      StandardCharsets.UTF_8);// GeminiApiClient.generateContent(text);
-//    log.info("translate: {}", translate);
-//
-//    // writePhoneticsToFile(fileName,  translate);
-//  }
-
   private static File writePhoneticsToFile(String totalFileName,
     String jsonFileName) {
     String addPostfixToFileName = CdFileUtil.addPostfixToFileName(totalFileName,

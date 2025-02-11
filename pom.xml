@@ -729,11 +729,17 @@
             <url>https://repo.clojars.org/</url>
         </repository>
 
+        <repository>
+            <id>psiegman-repo</id>
+            <name>Peter Siegman Repository</name>
+            <url>https://raw.githubusercontent.com/psiegman/mvn-repo/master/releases/</url>
+            <!-- releases 和 snapshots 可以省略 -->
+        </repository>
 
-<!--        <repository>-->
-<!--            <id>jpedal-lgpl</id>-->
-<!--            <url>https://repo.clojars.org/</url>-->
-<!--        </repository>-->
+        <repository>
+            <id>jpedal-lgpl</id>
+            <url>https://repo.clojars.org/</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
