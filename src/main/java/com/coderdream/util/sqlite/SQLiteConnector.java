@@ -9,7 +9,7 @@ public class SQLiteConnector {
   public static void main(String[] args) {
     Connection connection = null;
 
-    org.sqlite.JDBC jdbc = new org.sqlite.JDBC();
+//    org.sqlite.JDBC jdbc = new org.sqlite.JDBC();
     try {
       // 加载SQLite JDBC驱动程序
       Class.forName("org.sqlite.JDBC");

@@ -4,6 +4,7 @@ import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSONObject;
 import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.proxy.OperatingSystem;
 
 public class GeminiAPIClient2 {
 
@@ -11,7 +12,7 @@ public class GeminiAPIClient2 {
     private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
     // 设置代理服务器地址
     private static final String PROXY_HOST = "127.0.0.1";
-    private static final int PROXY_PORT = 7890;
+//    private static final int PROXY_PORT = 7890;
 
     public static String generateContent(String prompt) {
         // 构造请求体
@@ -26,7 +27,7 @@ public class GeminiAPIClient2 {
           .header("Content-Type", "application/json")
           .form("key", API_KEY)
           .body(requestBody.toString())
-          .setHttpProxy(PROXY_HOST, PROXY_PORT)  // 设置代理
+          .setHttpProxy(PROXY_HOST, OperatingSystem.getProxyPort())  // 设置代理
           .execute();
 
 //        String result2 = HttpRequest.post(API_URL)

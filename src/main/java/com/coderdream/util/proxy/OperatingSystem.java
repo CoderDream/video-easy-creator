@@ -1,5 +1,7 @@
 package com.coderdream.util.proxy;
 
+import java.io.File;
+
 import static com.coderdream.util.cd.CdConstants.KEYWORD_LINUX1;
 import static com.coderdream.util.cd.CdConstants.KEYWORD_LINUX2;
 import static com.coderdream.util.cd.CdConstants.KEYWORD_MAC1;
@@ -27,16 +29,89 @@ public class OperatingSystem {
         }
     }
 
+    /**
+     * @return
+     */
+    public static Integer getProxyPort() {
+        Integer proxyPort = null;
+        String osType = OperatingSystem.getOS();
+        System.out.println("操作系统类型: " + osType);
+
+        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+        switch (osType) {
+            case OS_WINDOWS -> proxyPort = 7890;
+            case OS_MAC -> proxyPort = 1087;
+            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+            default -> System.out.println("无法识别的操作系统。");
+        }
+        return proxyPort;
+    }
+
+    /**
+     * @return
+     */
+    public static String getFolderPath(String bookName) {
+//        Integer proxyPort = null;
+        String osType = OperatingSystem.getOS();
+        System.out.println("操作系统类型: " + osType);
+
+        String folderPath = "";
+        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+        switch (osType) {
+            case OS_WINDOWS -> folderPath = "D:\\0000\\" + bookName + "\\";
+            case OS_MAC -> folderPath = "/Volumes/System/0000/" + bookName + File.separator;
+            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+            default -> System.out.println("无法识别的操作系统。");
+        }
+        return folderPath;
+    }
+
+
+    public static String getBaseFolder() {
+//        Integer proxyPort = null;
+        String osType = OperatingSystem.getOS();
+        System.out.println("操作系统类型: " + osType);
+
+        String folderPath = "";
+        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+        switch (osType) {
+            case OS_WINDOWS -> folderPath = "D:\\0000" + File.separator;
+            case OS_MAC -> folderPath = "/Volumes/System/0000" + File.separator;
+            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+            default -> System.out.println("无法识别的操作系统。");
+        }
+        return folderPath;
+    }
+
+    // "D:\\0000\\bgmusic\\page.wav";
+
+    public static String getBaseFolderWav(String waveName) {
+//        Integer proxyPort = null;
+        String osType = OperatingSystem.getOS();
+        System.out.println("操作系统类型: " + osType);
+
+        String wavePath = "";
+        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+        switch (osType) {
+            case OS_WINDOWS -> wavePath = "D:\\0000\\bgmusic" + File.separator + waveName;
+            case OS_MAC -> wavePath = "/Volumes/System/0000/bgmusic" + File.separator + waveName;
+            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+            default -> System.out.println("无法识别的操作系统。");
+        }
+        return wavePath;
+    }
+
+
     public static void main(String[] args) {
-        String osType = getOS();
+        String osType = OperatingSystem.getOS();
         System.out.println("操作系统类型: " + osType);
 
         // 可以根据操作系统类型执行不同的逻辑
-      switch (osType) {
-        case OS_WINDOWS -> System.out.println("执行 Windows 相关的操作...");
-        case OS_MAC -> System.out.println("执行 Mac 相关的操作...");
-        case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-        default -> System.out.println("无法识别的操作系统。");
-      }
+        switch (osType) {
+            case OS_WINDOWS -> System.out.println("执行 Windows 相关的操作...");
+            case OS_MAC -> System.out.println("执行 Mac 相关的操作...");
+            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+            default -> System.out.println("无法识别的操作系统。");
+        }
     }
 }

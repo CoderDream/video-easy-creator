@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.coderdream.util.proxy.OperatingSystem;
 import org.junit.jupiter.api.Test;
 
 class GenVideoUtilTest {
@@ -36,8 +38,9 @@ class GenVideoUtilTest {
 
   @Test
   void process02() {
-    String folderPath = "D:\\0000\\EnBook002\\";
-    String subFolder = "Chapter007";
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    String subFolder = "Chapter008";
     GenVideoUtil.process(folderPath, subFolder);
     // assert that the process completes without any error
     assertTrue(true);
@@ -45,7 +48,8 @@ class GenVideoUtilTest {
 
   @Test
   void process03() {
-    String folderPath = "D:\\0000\\EnBook002\\";
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
     List<String> subFolders = Arrays.asList("Chapter004", "Chapter004");
     for (String subFolder : subFolders) {
 //    String subFolder = "Chapter003";

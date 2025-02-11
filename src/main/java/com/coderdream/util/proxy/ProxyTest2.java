@@ -14,7 +14,9 @@ public class ProxyTest2 {
             // 要访问的URL
             URL url = new URL("https://www.google.com");
 
-            // 创建代理对象
+            // 创建代理对象 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+
+
             Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 7890)); // 本地代理
 
             // 创建连接

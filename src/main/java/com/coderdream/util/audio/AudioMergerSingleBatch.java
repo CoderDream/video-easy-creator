@@ -13,6 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import com.coderdream.util.proxy.OperatingSystem;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -179,7 +180,7 @@ public class AudioMergerSingleBatch {
       try (BufferedWriter writer = new BufferedWriter(
         new FileWriter(listFilePath))) {
         // 增加翻页间隔，此处仅为示例
-        writer.write("file '" + "D:\\0000\\bgmusic\\page.wav" + "'");
+        writer.write("file '" + OperatingSystem.getBaseFolderWav("page.wav") + "'");
         writer.newLine();
         writer.write("file '" + wavFileNameEn + "'");
         writer.newLine();

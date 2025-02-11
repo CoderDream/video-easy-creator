@@ -9,6 +9,8 @@ import cn.hutool.json.JSONUtil;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
+
+import com.coderdream.util.proxy.OperatingSystem;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -155,7 +157,7 @@ public class YoutubeApiCaller {
             // 设置代理（如果需要）
 //            HttpUtil.createProxy("127.0.0.1", 7890);
             String proxyHost = "localhost";
-            int proxyPort = 7890;
+            int proxyPort = OperatingSystem.getProxyPort();
             HttpRequest httpRequest = HttpUtil.createPost(URL).timeout(10000);
             httpRequest.setProxy(new Proxy(
               Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)));
