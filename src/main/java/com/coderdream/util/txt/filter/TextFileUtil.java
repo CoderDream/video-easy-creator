@@ -59,7 +59,6 @@ public class TextFileUtil {
     return elapsedTime;
   }
 
-
   /**
    * 读取文件内容，先合并行，再根据规则过滤，并将结果写入目标文件。
    *

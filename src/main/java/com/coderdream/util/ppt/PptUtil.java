@@ -242,7 +242,7 @@ public class PptUtil {
             BeanUtils.copyProperties(wordInfoEntity, wordInfo);
             ++no;
             wordInfo.setNo(no);
-            wordInfo.setCn(wordInfoEntity.getComment());
+            wordInfo.setComment(wordInfoEntity.getComment());
             wordInfoList.add(wordInfo);
         }
         // 将列表分割成10个对象为一组，每组包含10个对象
@@ -293,7 +293,7 @@ public class PptUtil {
                     tbl.get_Item(0, y).getTextFrame().setText(wordInfo2.getNo() + "");
                     tbl.get_Item(1, y).getTextFrame().setText(wordInfo2.getWord());
                     tbl.get_Item(2, y).getTextFrame().setText(wordInfo2.getUk());
-                    tbl.get_Item(3, y).getTextFrame().setText(wordInfo2.getCn());
+                    tbl.get_Item(3, y).getTextFrame().setText(wordInfo2.getComment());
                     tbl.get_Item(4, y).getTextFrame().setText(wordInfo2.getLevelStr());
                     tbl.get_Item(5, y).getTextFrame().setText(wordInfo2.getTimes() + "");
                 }

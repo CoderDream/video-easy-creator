@@ -45,8 +45,8 @@ class GenAudioUtilTest {
   @Test
   void process02() {
     String folderPath = "D:\\0000\\EnBook002\\";
-    for (int i = 1; i <= 3; i++) {
-      String subFolder = "Chapter006";
+    for (int i = 1; i <= 5; i++) {
+      String subFolder = "Chapter008";
       GenAudioUtil.process(folderPath, subFolder);
     }
     // assert that the process completes without any error

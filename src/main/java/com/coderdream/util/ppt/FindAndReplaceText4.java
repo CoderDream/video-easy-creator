@@ -262,7 +262,7 @@ public class FindAndReplaceText4 {
       for (WordInfoEntity wordInfoEntity : wordInfoEntityList) {
         wordInfo = new WordInfo();
         BeanUtils.copyProperties(wordInfoEntity, wordInfo);
-        wordInfo.setCn(wordInfoEntity.getComment());
+        wordInfo.setComment(wordInfoEntity.getComment());
         wordInfoList.add(wordInfo);
       }
 
@@ -303,7 +303,7 @@ public class FindAndReplaceText4 {
                   tbl.get_Item(1, 1).getTextFrame().setText(wordInfo2.getWord());
 
                   tbl.get_Item(2, 1).getTextFrame().setText(wordInfo2.getUk());
-                  tbl.get_Item(3, 1).getTextFrame().setText(wordInfo2.getCn());
+                  tbl.get_Item(3, 1).getTextFrame().setText(wordInfo2.getComment());
                   tbl.get_Item(4, 1).getTextFrame().setText(wordInfo2.getLevelStr());
                   tbl.get_Item(5, 1).getTextFrame().setText(wordInfo2.getTimes()+"");
                 }

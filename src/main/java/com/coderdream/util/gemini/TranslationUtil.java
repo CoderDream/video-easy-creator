@@ -104,95 +104,80 @@ public class TranslationUtil {
       return null;
     }
     int groupSize = 100;
-    if (sentences.size() > groupSize) {
-      // 拆分句子列表，每组包含 groupSize 个元素
-      List<List<String>> sentencesLists = ListSplitterStream.splitList(
-        sentences, groupSize);
-      int i = 0;
-      String englishFileNamePart;
-      String jsonFileNamePart;
-      String translate = "";
-      StringBuilder translateTotal = new StringBuilder();
-      for (List<String> sentencesList : sentencesLists) {
-        i++;
-        englishFileNamePart = CdFileUtil.addPostfixToFileName(
-          fileName, "_en" + "_" + i);
-        jsonFileNamePart = CdFileUtil.addPostfixToFileName(
-          fileName, "_ai" + "_" + i);
-        assert jsonFileNamePart != null;
-        File jsonFilePart = new File(jsonFileNamePart);
+//    if (sentences.size() > groupSize) {
+    // 拆分句子列表，每组包含 groupSize 个元素
+    List<List<String>> sentencesLists = ListSplitterStream.splitList(
+      sentences, groupSize);
+    int i = 0;
+    String englishFileNamePart;
+    String jsonFileNamePart;
+    String translate = "";
+//    StringBuilder translateTotal = new StringBuilder();
 
-        if (!jsonFilePart.exists() || jsonFilePart.length() == 0) {
-          String text = CdConstants.GEN_PHONETICS_TEXT;
-          String content = String.join("\n", sentencesList);
-          text += content;
-          translate = GeminiApiClient.generateContent(text);
-          List<SentenceVO> sentenceVOList = SentenceParser.parseSentences(
-            translate);
-          List<String> translateList = new ArrayList<>();
-          for (SentenceVO sentenceVO : sentenceVOList) {
-//            translateList.add(sentenceVO.getEnglish());
-            translateList.add(sentenceVO.getPhonetics());
-          }
+    List<String> totalTranslateList = new ArrayList<>();
+    for (List<String> sentencesList : sentencesLists) {
+      i++;
+      englishFileNamePart = CdFileUtil.addPostfixToFileName(
+        fileName, "_en" + "_" + i);
+      jsonFileNamePart = CdFileUtil.addPostfixToFileName(
+        fileName, "_ai" + "_" + i);
+      assert jsonFileNamePart != null;
+      File jsonFilePart = new File(jsonFileNamePart);
 
-//          if (CollectionUtil.isNotEmpty(translateList)
-//            && translateList.size() == sentencesList.size() * 2) {
-
-          if (CollectionUtil.isNotEmpty(translateList)
-            && translateList.size() == sentencesList.size()) {
-            FileUtil.writeLines(translateList, jsonFilePart,
-              StandardCharsets.UTF_8);
-            FileUtil.writeLines(sentencesList, englishFileNamePart,
-              StandardCharsets.UTF_8);
-
-            translateTotal.append(translate);
-          } else {
-            FileUtil.writeLines(translateList, jsonFilePart,
-              StandardCharsets.UTF_8);
-            FileUtil.writeLines(sentencesList, englishFileNamePart,
-              StandardCharsets.UTF_8);
-
-            log.error(
-              "translateList size is not equal to sentencesList size,"
-                + " translateList.size {},"
-                + " sentencesList.size {}, "
-                + " jsonFileNamePart: {}",
-              translateList.size(), sentencesList.size(), jsonFileNamePart);
-            break;
-          }
-
-        }
-
-        log.info("genPhonetics Total: {}", translate);
-      }
-      // 把字符串中的空格+斜线替换为回车换行加斜线
-      String translateTotalString = RemoveEmptyLines.removeEmptyLines(
-        translateTotal.toString());
-
-      FileUtil.writeUtf8String(translateTotalString, aiFileName);
-    } else {
-      assert aiFileName != null;
-      File aiFile = new File(aiFileName);
-      String translate = "";
-      if (!aiFile.exists() || aiFile.length() == 0) {
+      if (!jsonFilePart.exists() || jsonFilePart.length() == 0) {
         String text = CdConstants.GEN_PHONETICS_TEXT;
-        String content = String.join("\n", sentences);
+        String content = String.join("\n", sentencesList);
         text += content;
         translate = GeminiApiClient.generateContent(text);
+        List<SentenceVO> sentenceVOList = SentenceParser.parseSentences(
+          translate);
+        List<String> translateList = new ArrayList<>();
+        for (SentenceVO sentenceVO : sentenceVOList) {
+          translateList.add(sentenceVO.getPhonetics());
+        }
 
-        // 移除空行
-        translate = RemoveEmptyLines.removeEmptyLines(translate);
-        // 把 / / 替换为空格
-        translate = translate.replaceAll("/ /", " ");
+        if (CollectionUtil.isNotEmpty(translateList)
+          && translateList.size() == sentencesList.size()) {
+          FileUtil.writeLines(translateList, jsonFilePart,
+            StandardCharsets.UTF_8);
+          FileUtil.writeLines(sentencesList, englishFileNamePart,
+            StandardCharsets.UTF_8);
+          totalTranslateList.addAll(translateList);
+//          translateTotal.append(translate);
+        } else {
+          FileUtil.writeLines(translateList, jsonFilePart,
+            StandardCharsets.UTF_8);
+          FileUtil.writeLines(sentencesList, englishFileNamePart,
+            StandardCharsets.UTF_8);
 
-        List<String> translateList = SentenceParser.getPhoneticsList(
-          SentenceParser.parseSentences(translate));
-
-        FileUtil.writeLines(translateList, aiFile, StandardCharsets.UTF_8);
+          totalTranslateList.addAll(translateList);
+          log.error(
+            "translateList size is not equal to sentencesList size,"
+              + " translateList.size {},"
+              + " sentencesList.size {}, "
+              + " jsonFileNamePart: {}",
+            translateList.size(), sentencesList.size(), jsonFileNamePart);
+          break;
+        }
       }
-
-      log.info("genPhonetics: {}", translate);
+//      log.info("genPhonetics Total: {}", translate);
     }
+
+    // 把字符串中的空格+斜线替换为回车换行加斜线
+//    String translateTotalString = RemoveEmptyLines.removeEmptyLines(
+//      translateTotal.toString());
+//
+//    FileUtil.writeUtf8String(translateTotalString, aiFileName);
+    if(totalTranslateList.size() != sentences.size()) {
+      log.error("totalTranslateList size is not equal to sentences size,"
+        + " totalTranslateList.size {},"
+        + " sentences.size {}",
+        totalTranslateList.size(), sentences.size());
+    } else {
+      FileUtil.writeLines(totalTranslateList, aiFileName, StandardCharsets.UTF_8);
+    }
+
+//    log.info("genPhonetics: {}", translate);
     return new File(aiFileName);
   }
 
@@ -213,14 +198,22 @@ public class TranslationUtil {
     String jsonFileName) {
     String addPostfixToFileName = CdFileUtil.addPostfixToFileName(totalFileName,
       "_phonetics");
-    List<SentenceVO> sentenceVOPhList = CdTextUtil.parseSentencesFromFileWithEnglishAndPhonetics(
-      jsonFileName);
-//    List<SentenceVO> sentenceVOPhList = CdTextUtil.parseSentencesFromFileWithPhonetics(
+    List<String> lines = FileUtil.readLines(new File(jsonFileName),
+      StandardCharsets.UTF_8);
+    if (CollectionUtil.isEmpty(lines)) {
+      log.error("lines is empty");
+      return null;
+    }
+
+//    List<SentenceVO> sentenceVOPhList = CdTextUtil.parseSentencesFromFileWithEnglishAndPhonetics(
 //      jsonFileName);
+    List<SentenceVO> sentenceVOPhList = CdTextUtil.parseSentencesFromFileWithPhonetics(
+      jsonFileName);
     List<SentenceVO> sentenceVOCnList = CdTextUtil.parseSentencesFromFile(
       totalFileName);
     if (CollectionUtil.isEmpty(sentenceVOPhList) || CollectionUtil.isEmpty(
-      sentenceVOPhList) || sentenceVOPhList.size() != sentenceVOCnList.size()) {
+      sentenceVOPhList) || (sentenceVOPhList.size() != sentenceVOCnList.size()
+      && sentenceVOPhList.size() * 2 != sentenceVOCnList.size())) {
       log.error("音标列表和中文列表不一致, 音标列表大小： {}，中文列表大小： {},",
         sentenceVOPhList.size(),
         sentenceVOCnList.size());

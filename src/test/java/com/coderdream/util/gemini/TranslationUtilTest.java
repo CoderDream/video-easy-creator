@@ -19,7 +19,8 @@ class TranslationUtilTest {
 
   @Test
   void translate_0202() {
-    String text = "翻译成简体中文：" + "Why are countryside walks no longer so popular?";
+    String text =
+      "翻译成简体中文：" + "Why are countryside walks no longer so popular?";
     String translate = TranslationUtil.translate(text);
     log.info("translate: {}", translate);
   }
@@ -61,7 +62,7 @@ class TranslationUtilTest {
 
   @Test
   void genDescription() {
-    String folderName = "181101"; // 250102
+    String folderName = "250206"; // 250102
 //    String folderPath = CommonUtil.getFullPath(folderName);
 //    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
     TranslationUtil.genDescription(folderName);
@@ -90,6 +91,15 @@ class TranslationUtilTest {
   void genAiFile_01() {
 //    String folderName = "180913"; // 250102
     String fileName = "D:\\0000\\EnBook002\\Chapter005\\Chapter005_total.txt";
+    File file = TranslationUtil.genAiFile(fileName);
+  }
+
+  @Test
+  void genAiFile_02() {
+//    String folderName = "180913"; // 250102
+    String folderName = "Chapter011";
+    String fileName =
+      "D:\\0000\\EnBook002\\" + folderName + "\\" + folderName + "_total.txt";
     File file = TranslationUtil.genAiFile(fileName);
   }
 

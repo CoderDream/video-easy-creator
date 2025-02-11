@@ -13,7 +13,8 @@ public class WordInfo  {
     private Integer no;  // 序号
     private String word;    // 单词
     private String uk;      // 英音
-    private String cn;      // 释义
+    private String us;      // 美音
+    private String comment;      // 释义
     private String levelStr;    // 等级
     private Integer times;  // 次数
 

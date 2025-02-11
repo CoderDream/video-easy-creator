@@ -40,7 +40,7 @@ public class GetSixMinutesPpt {
 
 
   public static void main(String[] args) {
-    String folderName = "250116";
+    String folderName = "250123";
     GetSixMinutesPpt.process(folderName);
   }
 
@@ -83,7 +83,7 @@ public class GetSixMinutesPpt {
         BeanUtils.copyProperties(wordInfoEntity, wordInfo);
         ++no;
         wordInfo.setNo(no);
-        wordInfo.setCn(wordInfoEntity.getComment());
+        wordInfo.setComment(wordInfoEntity.getComment());
         wordInfoList.add(wordInfo);
       }
 
@@ -403,7 +403,7 @@ public class GetSixMinutesPpt {
             .setText(wordInfo2.getWord());
 
           tbl.get_Item(2, y).getTextFrame().setText(wordInfo2.getUk());
-          tbl.get_Item(3, y).getTextFrame().setText(wordInfo2.getCn());
+          tbl.get_Item(3, y).getTextFrame().setText(wordInfo2.getComment());
           tbl.get_Item(4, y).getTextFrame()
             .setText(wordInfo2.getLevelStr());
           tbl.get_Item(5, y).getTextFrame()

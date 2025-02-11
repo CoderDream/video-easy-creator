@@ -105,7 +105,7 @@ public class HighResImageGenUtil2b {
 
       // 绘制数据行 (自动换行，分页)
       int currentX = tableX;
-      String[] data = {wordInfo.getWord(), wordInfo.getUk(), wordInfo.getCn(),
+      String[] data = {wordInfo.getWord(), wordInfo.getUk(), wordInfo.getComment(),
         wordInfo.getLevelStr(), String.valueOf(wordInfo.getTimes())};
       for (int j = 0; j < data.length; j++) {
         drawWrappedText(g2d, columnConfigs[j].font, columnConfigs[j].color,
@@ -115,7 +115,7 @@ public class HighResImageGenUtil2b {
       }
 
       // 分页逻辑
-      currentRowY += calculateRowHeight(wordInfo.getCn(), columnConfigs[2].font,
+      currentRowY += calculateRowHeight(wordInfo.getComment(), columnConfigs[2].font,
         columnConfigs[2].width) + 10; //加上行间距
       if (currentRowY > templateHeight - 100) { // 预留底部空间
         currentRowY = tableY;

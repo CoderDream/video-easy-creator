@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author CoderDream
+ * 该类使用 Stanford CoreNLP 库进行词形还原（Lemmatization）
  */
 public class CoreNlpUtils {
 
@@ -35,8 +36,7 @@ public class CoreNlpUtils {
 
         List<String> stringList = Arrays.asList("English", "Indians", "Indian");
 
-        // exactly
-
+        // 获取词形还原后的结果
         Map<String, String> stringMap = CoreNlpUtils.getLemmaList(stringList);
         for (Map.Entry<String, String> entry : stringMap.entrySet()) {
             String mapKey = entry.getKey();
@@ -45,60 +45,69 @@ public class CoreNlpUtils {
         }
     }
 
+    /**
+     * 对字符串列表进行词形还原
+     *
+     * @param stringList 待处理的字符串列表
+     * @return 包含原始字符串和词形还原结果的 Map，Key 为原始字符串，Value 为词形还原后的字符串。如果输入列表为空，则返回 null。
+     */
     public static Map<String, String> getLemmaList(List<String> stringList) {
+        // 创建一个 LinkedHashMap 用于存储结果，保持原始顺序
         Map<String, String> stringMap = new LinkedHashMap<>();
+        // 如果输入列表为空，直接返回 null
         if (CollectionUtil.isEmpty(stringList)) {
             return null;
         }
 
-        // creates a StanfordCoreNLP object, with POS tagging, lemmatization, NER, parsing, and coreference resolution
+        // 创建 StanfordCoreNLP 对象，配置 POS 标注、词形还原、NER（命名实体识别）、解析和共指消解等功能
         Properties props = new Properties();
         props.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
         StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 
-        // read some text in the text variable
+        // 将字符串列表合并成一个字符串，用空格分隔
         String text = stringList.stream().map(String::valueOf)
-            .collect(Collectors.joining(" ")); //   "Add your text here:Beijing sings Lenovo";
+          .collect(Collectors.joining(" ")); //   "Add your text here:Beijing sings Lenovo";
 
-        // create an empty Annotation just with the given text
+        // 创建一个 Annotation 对象，包含要处理的文本
         Annotation document = new Annotation(text);
 
-        // run all Annotators on this text
+        // 对文本进行所有配置的标注处理
         pipeline.annotate(document);
 
-        // these are all the sentences in this document
-        // a CoreMap is essentially a Map that uses class objects as keys and has values with custom types
+        // 获取文本中的所有句子
+        // CoreMap 本质上是一个 Map，使用 class 对象作为键，并具有自定义类型的值
         List<CoreMap> sentences = document.get(SentencesAnnotation.class);
 
         System.out.println("word\tpos\tlemma\tner");
+        // 遍历每个句子
         for (CoreMap sentence : sentences) {
-            // traversing the words in the current sentence
-            // a CoreLabel is a CoreMap with additional token-specific methods
+            // 遍历当前句子中的每个单词
+            // CoreLabel 是一个 CoreMap，具有特定于 token 的附加方法
             for (CoreLabel token : sentence.get(TokensAnnotation.class)) {
-                // this is the text of the token
+                // 获取 token 的文本
                 String word = token.get(TextAnnotation.class);
-                // this is the POS tag of the token
-                String pos = token.get(PartOfSpeechAnnotation.class);
-                // this is the NER label of the token
-                String ne = token.get(NamedEntityTagAnnotation.class);
+                // 获取 token 的词性标注
+//                String pos = token.get(PartOfSpeechAnnotation.class);
+                // 获取 token 的命名实体识别标签
+//                String ne = token.get(NamedEntityTagAnnotation.class);
+                // 获取 token 的词形还原结果
                 String lemma = token.get(LemmaAnnotation.class);
 
 //                System.out.println(word + "\t" + pos + "\t" + lemma + "\t" + ne);
-//                stringMap.put(word, lemma.toLowerCase());
-                stringMap.put(word, lemma);
+//                stringMap.put(word, lemma.toLowerCase()); // 可选择是否转换为小写
+                stringMap.put(word, lemma); // 存储原始单词和词形还原结果
             }
-            // this is the parse tree of the current sentence
-            Tree tree = sentence.get(TreeAnnotation.class);
+            // 获取当前句子的解析树
+//            Tree tree = sentence.get(TreeAnnotation.class);
 
-            // this is the Stanford dependency graph of the current sentence
-            SemanticGraph dependencies = sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
+            // 获取当前句子的 Stanford 依赖图
+//            SemanticGraph dependencies = sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
         }
-        // This is the coreference link graph
-        // Each chain stores a set of mentions that link to each other,
-        // along with a method for getting the most representative mention
-        // Both sentence and token offsets start at 1!
-        Map<Integer, CorefChain> graph = document.get(CorefChainAnnotation.class);
+        // 获取共指链接图
+        // 每个链存储一组相互链接的提及项，以及获取最具代表性的提及项的方法
+        // 句子和 token 偏移量均从 1 开始！
+//        Map<Integer, CorefChain> graph = document.get(CorefChainAnnotation.class);
 
-        return stringMap;
+        return stringMap; // 返回包含词形还原结果的 Map
     }
 }

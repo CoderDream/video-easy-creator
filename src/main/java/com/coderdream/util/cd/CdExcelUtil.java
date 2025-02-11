@@ -233,7 +233,7 @@ public class CdExcelUtil {
         List<WordInfo> recommendAppList = reader.readAll(WordInfo.class);
         for (WordInfo wordInfo : recommendAppList) {
             wordInfo.setWord(wordInfo.getWord().toLowerCase());
-            wordInfo.setCn(wordInfo.getCn().replaceAll("\n", ";"));
+            wordInfo.setComment(wordInfo.getComment().replaceAll("\n", ";"));
             wordInfo.setLevelStr(wordInfo.getLevelStr());
         }
         reader.close();

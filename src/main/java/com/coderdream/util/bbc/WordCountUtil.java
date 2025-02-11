@@ -13,9 +13,11 @@ import com.coderdream.util.CommonUtil;
 import com.coderdream.util.cd.CdExcelUtil;
 import com.coderdream.util.excel.MakeExcel;
 import com.coderdream.util.nlp.CoreNlpUtils;
+import com.coderdream.util.sqlite.SQLiteUtil;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -139,8 +142,11 @@ public class WordCountUtil {
     List<WordInfo> wordInfoList4 = new ArrayList<>();
     for (WordInfo wordInfo : wordInfoList) {
       String levelStr = wordInfo.getLevelStr();
-      if (levelStr != null) {
-        switch (levelStr) {
+//      levelStr = getLastCAndFollowing(levelStr); TODO
+      VocLevelEnum vocLevelEnum = VocLevelEnum.match(levelStr);
+      String level = vocLevelEnum != null ? vocLevelEnum.getLabel() : "";
+      if (level != null) {
+        switch (level) {
           case "C01":
             wordInfoList3.add(wordInfo);
             break;
@@ -167,6 +173,24 @@ public class WordCountUtil {
     MakeExcel.listFill(templateFileName, excelFileName, sheetName1,
       wordInfoList1, sheetName2, wordInfoList2,
       sheetName3, wordInfoList3, sheetName4, wordInfoList4);
+  }
+
+  /**
+   * 获取最后一个C及其后面的字符串
+   *
+   * @param inputString 输入字符串
+   * @return 最后一个C及其后面的字符串
+   */
+  public static String getLastCAndFollowing(String inputString) {
+    assert inputString != null;
+//    return Optional.of(inputString)
+//      .map(String::toUpperCase)
+//      .map(s -> s.lastIndexOf("C"))
+//      .filter(index -> index != -1)
+//      .map(inputString::substring)
+//      .orElse("");
+
+    return inputString.substring(0, 3);
   }
 
 //  /**
@@ -231,9 +255,6 @@ public class WordCountUtil {
 //            System.out.println();
     }
 
-    // 3.遍历字符串，去掉标点符号
-
-    // TODO
     List<String> rawWordSet = new ArrayList<>(stringSet);
 
     // 获取单词原型映射键值对
@@ -259,20 +280,39 @@ public class WordCountUtil {
     Map<WordEntity, Integer> c05WordMap = new LinkedHashMap<>();
     Map<WordEntity, Integer> c06WordMap = new LinkedHashMap<>();
 
+    // 初始化levelMap
     Map<String, String> levelMap = new TreeMap<>();
-    Map<String, WordEntity> c01WordList = WordCountUtil.getC01WordList();
-    Map<String, WordEntity> c02WordList = WordCountUtil.getC02WordList();
-    Map<String, WordEntity> c03WordList = WordCountUtil.getC03WordList();
-    Map<String, WordEntity> c04WordList = WordCountUtil.getC04WordList();
-    Map<String, WordEntity> c05WordList = WordCountUtil.getC05WordList();
-    Map<String, WordEntity> c06WordList = WordCountUtil.getC06WordList();
+    // String tableName = "C01_初中词汇正序版";
+//    Map<String, WordEntity> c01WordList = WordCountUtil.getWordList("C01_初中词汇正序版");
+//    Map<String, WordEntity> c02WordList = WordCountUtil.getWordList("C02_高中英语词汇正序版");// WordCountUtil.getC02WordList();
+//    Map<String, WordEntity> c03WordList = WordCountUtil.getWordList("C03_四级词汇正序版");//WordCountUtil.getC03WordList();
+//    Map<String, WordEntity> c04WordList = WordCountUtil.getWordList("C04_六级词汇正序版");//WordCountUtil.getC04WordList();
+//    Map<String, WordEntity> c05WordList = WordCountUtil.getWordList("C05_2013考研词汇正序版");//WordCountUtil.getC05WordList();
+//    Map<String, WordEntity> c06WordList = WordCountUtil.getWordList("C06_雅思词汇正序版");//WordCountUtil.getC06WordList();
+//
+//    addToLevelMap(levelMap, c06WordList);
+//    addToLevelMap(levelMap, c05WordList);
+//    addToLevelMap(levelMap, c04WordList);
+//    addToLevelMap(levelMap, c03WordList);
+//    addToLevelMap(levelMap, c02WordList);
+//    addToLevelMap(levelMap, c01WordList);
+    Map<String, WordEntity> wordListMap = new HashMap<>();
 
-    addToLevelMap(levelMap, c06WordList);
-    addToLevelMap(levelMap, c05WordList);
-    addToLevelMap(levelMap, c04WordList);
-    addToLevelMap(levelMap, c03WordList);
-    addToLevelMap(levelMap, c02WordList);
-    addToLevelMap(levelMap, c01WordList);
+    // 假设你有一个包含 300 个单词的 List<String>
+    List<String> wordsToFind = new ArrayList<>(stringIntegerMap.keySet());
+
+    // 调用 findWordsInSummaryTable 方法
+    List<WordEntity> foundWords = SQLiteUtil.findWordsInSummaryTable(
+      wordsToFind);
+
+    // 处理查询结果
+    if (foundWords != null) {
+      for (WordEntity word : foundWords) {
+        wordListMap.put(word.getWord(), word);
+        String levelStr = getLastCAndFollowing(word.getLevel());
+        levelMap.put(word.getWord(), levelStr);
+      }
+    }
 
     List<String> otherList = new ArrayList<>();
     String levelTemp;
@@ -285,22 +325,22 @@ public class WordCountUtil {
       if (levelTemp != null) {
         switch (levelTemp) {
           case "C01":
-            c01WordMap.put(c01WordList.get(word), count);
+            c01WordMap.put(wordListMap.get(word), count);
             break;
           case "C02":
-            c02WordMap.put(c02WordList.get(word), count);
+            c02WordMap.put(wordListMap.get(word), count);
             break;
           case "C03":
-            c03WordMap.put(c03WordList.get(word), count);
+            c03WordMap.put(wordListMap.get(word), count);
             break;
           case "C04":
-            c04WordMap.put(c04WordList.get(word), count);
+            c04WordMap.put(wordListMap.get(word), count);
             break;
           case "C05":
-            c05WordMap.put(c05WordList.get(word), count);
+            c05WordMap.put(wordListMap.get(word), count);
             break;
           case "C06":
-            c06WordMap.put(c06WordList.get(word), count);
+            c06WordMap.put(wordListMap.get(word), count);
             break;
 //                    default:
 //                        c00WordMap.put(c01WordList.get(word), count);
@@ -380,7 +420,6 @@ public class WordCountUtil {
 
   /**
    * 处理单个单词 过滤数字，处理省略形式 TODO
-   *
    */
   private static void processSingleWord(
     Map<String, String> abbrevCompleteMap,
@@ -419,7 +458,8 @@ public class WordCountUtil {
     WordInfo wordInfo;
     wordInfo = new WordInfo();
     BeanUtils.copyProperties(wordEntity, wordInfo);
-    VocLevelEnum vocLevelEnum = VocLevelEnum.init(wordEntity.getLevel());
+    VocLevelEnum vocLevelEnum = VocLevelEnum.init(
+      getLastCAndFollowing(wordEntity.getLevel()));
     if (vocLevelEnum != null) {
       wordInfo.setLevelStr(vocLevelEnum.getName());
     } else {
@@ -430,13 +470,12 @@ public class WordCountUtil {
   }
 
   /**
-   *
    * @param levelMap
-   * @param c01WordList
+   * @param wordList
    */
   private static void addToLevelMap(Map<String, String> levelMap,
-    Map<String, WordEntity> c01WordList) {
-    for (Entry<String, WordEntity> entry : c01WordList.entrySet()) {
+    Map<String, WordEntity> wordList) {
+    for (Entry<String, WordEntity> entry : wordList.entrySet()) {
       String word = entry.getKey();
       WordEntity wordEntity = entry.getValue();
 //      System.out.println(word + "：" + wordEntity);
@@ -459,7 +498,10 @@ public class WordCountUtil {
       } else {
         count = 1;
       }
-      stringIntegerMap.put(lemma, count);
+      lemma = lemma.trim();
+      if (StrUtil.isNotBlank(lemma)) {
+        stringIntegerMap.put(lemma, count);
+      }
     } else {
 //      System.out.println("CANNOT FIND lemma: " + wordTemp);
       count = stringIntegerMap.get(wordTemp);
@@ -468,7 +510,10 @@ public class WordCountUtil {
       } else {
         count = 1;
       }
-      stringIntegerMap.put(wordTemp, count);
+      wordTemp = wordTemp.trim();
+      if (StrUtil.isNotBlank(wordTemp)) {
+        stringIntegerMap.put(wordTemp, count);
+      }
     }
   }
 
@@ -538,6 +583,30 @@ public class WordCountUtil {
 //        System.out.println("去掉多余空格后的字符串" + second);//second为最终输出的字符串
 
     return first;
+  }
+
+  public static Map<String, WordEntity> getWordList(String tableName) {
+    Map<String, WordEntity> result = new LinkedHashMap<>();
+//    String folderPath =
+//      CdFileUtil.getResourceRealPath() + File.separatorChar + "data"
+//        + File.separatorChar + "dict";
+//    String filePath = folderPath + File.separator + "C01_初中词汇正序版.xlsx";
+
+//    String tableName = "C01_初中词汇正序版";
+//    List<WordEntity> allWords =
+//    assert allWords != null;
+//    for (WordEntity word : allWords) {
+//      log.info(word.toString());
+//    }
+
+    List<WordEntity> wordEntityList = SQLiteUtil.getAllWords(tableName);
+    assert wordEntityList != null;
+    for (WordEntity wordEntity : wordEntityList) {
+//      System.out.println(wordEntity);
+      result.put(wordEntity.getWord(), wordEntity);
+    }
+
+    return result;
   }
 
   public static Map<String, WordEntity> getC01WordList() {

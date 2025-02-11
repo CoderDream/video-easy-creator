@@ -135,9 +135,9 @@ public class HighResImageGenUtil2d {
 
           // 绘制数据行 (自动换行，分页)
           int currentX = tableX;
-          String[] data = {wordInfo.getWord(), wordInfo.getUk(), wordInfo.getCn(),
+          String[] data = {wordInfo.getWord(), wordInfo.getUk(), wordInfo.getComment(),
                   wordInfo.getLevelStr(), String.valueOf(wordInfo.getTimes())};
-          int rowHeight = calculateRowHeight(wordInfo.getCn(),
+          int rowHeight = calculateRowHeight(wordInfo.getComment(),
                   columnConfigs[2].font,
                   columnConfigs[2].width); // 计算当前行的高度，以释义列为准
 

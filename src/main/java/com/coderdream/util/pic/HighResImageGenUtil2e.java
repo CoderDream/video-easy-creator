@@ -101,7 +101,7 @@ public class HighResImageGenUtil2e {
     int headerHeight = 0;
       for (int i = 0; i < wordInfoList.size(); i++) {
           WordInfo wordInfo = wordInfoList.get(i);
-           int rowHeight = calculateRowHeight(wordInfo.getCn(),
+           int rowHeight = calculateRowHeight(wordInfo.getComment(),
                     columnConfigs[2].font,
                     columnConfigs[2].width); // 计算当前行的高度，以释义列为准
           if (i == 0 || currentRowY + rowHeight + 10 > templateHeight - BOTTOM_MARGIN) {
@@ -138,7 +138,7 @@ public class HighResImageGenUtil2e {
 
           // 绘制数据行 (自动换行，分页)
           int currentX = tableX;
-          String[] data = {wordInfo.getWord(), wordInfo.getUk(), wordInfo.getCn(),
+          String[] data = {wordInfo.getWord(), wordInfo.getUk(), wordInfo.getComment(),
                   wordInfo.getLevelStr(), String.valueOf(wordInfo.getTimes())};
 
 

@@ -17,6 +17,16 @@
 
 
 
+
+
+## 20250211
+
+- [x] 生成total、basic文本
+  - BeforeGenerateUtil.processGenDialogTxt(folderPath, subFolder);
+
+
+
+
 ## 20250116
 
 - [x] 生成章节文本

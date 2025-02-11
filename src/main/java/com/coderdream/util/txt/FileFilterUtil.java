@@ -24,7 +24,6 @@ public class FileFilterUtil {
 
     try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
       BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
-
       String line;
       while ((line = reader.readLine()) != null) {
         String filteredLine = filterLine(line);
@@ -33,7 +32,6 @@ public class FileFilterUtil {
           writer.newLine();
         }
       }
-
     } catch (IOException e) {
       System.err.println("发生 IO 异常: " + e.getMessage());
     }
@@ -55,7 +53,7 @@ public class FileFilterUtil {
     Pattern pattern = Pattern.compile("^[❶❷❸❹❺❻❼❽❾❿](.*)");
     Matcher matcher = pattern.matcher(line);
     if (matcher.matches()) {
-      return matcher.group(1).trim(); // 移除标记并去除首尾空格
+      return line;//matcher.group(1).trim(); // 移除标记并去除首尾空格
     }
 
     // 其他情况：移除该行 (返回 null)

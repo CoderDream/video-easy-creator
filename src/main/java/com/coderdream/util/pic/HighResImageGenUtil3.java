@@ -130,7 +130,7 @@ public class HighResImageGenUtil3 {
     int width, int columnSpacing, WordInfo wordInfo) {
     g2d.setFont(font);
     g2d.setColor(Color.BLACK);
-    String[] data = {wordInfo.getWord(), wordInfo.getUk(), wordInfo.getCn(),
+    String[] data = {wordInfo.getWord(), wordInfo.getUk(), wordInfo.getComment(),
       wordInfo.getLevelStr(), String.valueOf(wordInfo.getTimes())};
     int currentX = x;
     for (String item : data) {
