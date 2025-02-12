@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.coderdream.util.proxy.OperatingSystem;
 import org.junit.jupiter.api.Test;
 
 class GenAudioUtilTest {
@@ -44,11 +46,10 @@ class GenAudioUtilTest {
 
   @Test
   void process02() {
-    String folderPath = "D:\\0000\\EnBook002\\";
-
-    folderPath = "/Volumes/System/0000/EnBook002/";
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
     for (int i = 1; i <= 5; i++) {
-      String subFolder = "Chapter008";
+      String subFolder = "Chapter010";
       GenAudioUtil.process(folderPath, subFolder);
     }
     // assert that the process completes without any error

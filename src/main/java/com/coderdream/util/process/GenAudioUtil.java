@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class GenAudioUtil {
 
-    public static void process(String folderPath, String subFolder) {
+    public static boolean process(String folderPath, String subFolder) {
         String subFolderPath = folderPath + subFolder;
         if (CdFileUtil.isFileEmpty(subFolderPath)) {
             File file = new File(folderPath + subFolder);
@@ -27,9 +27,6 @@ public class GenAudioUtil {
             log.info("文件夹已存在: {}", subFolderPath);
         }
 
-//    String fileNameTotal =
-//      subFolderPath + File.separator + subFolder + "_total.txt";
-//    String fileName = "D:\\0000\\EnBook001\\900\\ch01\\900V1_ch0101_total.txt";
         String phoneticsFileName =
                 folderPath + File.separator + subFolder + File.separator + subFolder
                         + "_total_phonetics.txt";
@@ -38,7 +35,7 @@ public class GenAudioUtil {
         int size = 0;
         if (CollectionUtil.isEmpty(contentList) || contentList.size() % 3 != 0) {
             log.warn("文件行数不是3的倍数，大小: {}", contentList.size());
-            return;
+//            return ;
         } else {
             size = contentList.size() / 3;
         }
@@ -73,14 +70,14 @@ public class GenAudioUtil {
                     inputDirCn); // 获取中文音频文件列表
             if (wavFilesCn.isEmpty()) {
                 log.warn("中文目录{}下没有找到wav文件", inputDirCn);
-                return;
+                return false;
             }
 
             List<String> wavFilesEn = AudioMergerSingleBatch.listWavFiles(
                     inputDirEn); // 获取英文音频文件列表
             if (wavFilesEn.isEmpty()) {
                 log.warn("英文目录{}下没有找到wav文件", inputDirEn);
-                return;
+                return false;
             }
 
             // 如果两个列表大小不一致则立即退出
@@ -108,8 +105,7 @@ public class GenAudioUtil {
         String backgroundImageName = OperatingSystem.getBaseFolder() + "bgmusic" + File.separator + "content_bg.png";// "D:\\0000\\bgmusic\\background.png";
 
 
-        String filePath = folderPath + subFolder
-                + File.separator;// "D:\\0000\\EnBook001\\900\\ch002\\";
+        String filePath = folderPath + subFolder + File.separator;// "D:\\0000\\EnBook001\\900\\ch002\\";
 //    String chapter = subFolder;// "ch002";
         String language = "cht";
 //    String contentFileName = chapter + "_" + language;// "ch01_cht"; // 生成图片
@@ -117,5 +113,6 @@ public class GenAudioUtil {
                 filePath,
                 CdFileUtil.getPureFileNameWithoutExtensionWithPath(phoneticsFileName),
                 language);
+        return true;
     }
 }
