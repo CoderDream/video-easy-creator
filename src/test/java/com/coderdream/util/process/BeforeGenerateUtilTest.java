@@ -2,6 +2,7 @@ package com.coderdream.util.process;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.txt.FileFilterUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -151,7 +152,10 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processBook020101_02() {
-    String folderPath = "D:\\0000\\EnBook002\\";
+//    String folderPath = "D:\\0000\\EnBook002\\";
+
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
     List<String> subFolders = new ArrayList<>();
     int end = 51;
     for (int i = 11; i < end; i++) {
@@ -178,7 +182,10 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processGenDialogTxt_02() {
-    String folderPath = "D:\\0000\\EnBook002\\";
+//    String folderPath = "D:\\0000\\EnBook002\\";
+
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
 //    String subFolder = "Chapter004";
 //    BeforeGenerateUtil.processBook02(folderPath, subFolder);
 //    assertTrue(true);
