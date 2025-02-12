@@ -395,6 +395,9 @@ public class CdFileUtil {
     return fileName.substring(0, lastDotIndex);
   }
 
+  /**
+   * 获取不带扩展名的文件名
+   */
   public static String getPureFileNameWithoutExtensionWithPath(
     String filePath) {
     Path path = Paths.get(filePath);

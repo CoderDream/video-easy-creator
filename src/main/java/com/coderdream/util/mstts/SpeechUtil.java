@@ -394,7 +394,6 @@ public class SpeechUtil {
       // 获取视频文件路径，并将日志写入文件
       // 写入
       File file = new File(fileName);
-
       writeLogToFile(file.getParent() + File.separator + RETRY_LOG_PATH,
         logMessage);
     } catch (IOException e) {
