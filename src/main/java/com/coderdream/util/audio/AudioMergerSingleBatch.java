@@ -165,7 +165,7 @@ public class AudioMergerSingleBatch {
     List<String> listFiles = new ArrayList<>();
     // 如果两个列表大小不一致则立即退出
     if (wavFilesCn.size() != wavFilesEn.size()) {
-      log.error("两个列表大小不一致，无法合并");
+      log.error("两个列表大小不一致，无法合并，中文音频大小：{}；英文音频大小：{}", wavFilesCn.size(), wavFilesEn.size());
       return listFiles;
     }
     int size = wavFilesCn.size();

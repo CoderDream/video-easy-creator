@@ -48,11 +48,24 @@ class GenAudioUtilTest {
   void process02() {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    for (int i = 1; i <= 5; i++) {
-      String subFolder = "Chapter010";
+    String subFolder = "Chapter012";
+    GenAudioUtil.process(folderPath, subFolder);
+  }
+
+  @Test
+  void processBatch02() {
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 51;
+    for (int i = 11; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
       GenAudioUtil.process(folderPath, subFolder);
     }
-    // assert that the process completes without any error
-    assertTrue(true);
   }
 }

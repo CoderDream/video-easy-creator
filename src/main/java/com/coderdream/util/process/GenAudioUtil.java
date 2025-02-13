@@ -49,8 +49,8 @@ public class GenAudioUtil {
       audioType);
 
     // 确保所有任务执行完毕后关闭线程池
-    SpeechUtil.shutdownExecutor();
-    System.out.println("所有任务执行完毕，线程池已关闭！");
+//    SpeechUtil.shutdownExecutor();
+//    System.out.println("所有任务执行完毕，线程池已关闭！");
     long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
     long durationMillis = endTime - startTime; // 计算耗时（毫秒）
     log.info("音频创建成功，耗时: {}",
@@ -71,14 +71,18 @@ public class GenAudioUtil {
         inputDirCn); // 获取中文音频文件列表
       if (wavFilesCn.isEmpty()) {
         log.warn("中文目录{}下没有找到wav文件", inputDirCn);
-        return false;
+        SpeechUtil.genDialog2Audio900(folderPath, subFolder,
+                pureFileNamePhonetics,
+                audioType);
       }
 
       List<String> wavFilesEn = AudioMergerSingleBatch.listWavFiles(
         inputDirEn); // 获取英文音频文件列表
       if (wavFilesEn.isEmpty()) {
         log.warn("英文目录{}下没有找到wav文件", inputDirEn);
-        return false;
+        SpeechUtil.genDialog2Audio900(folderPath, subFolder,
+                pureFileNamePhonetics,
+                audioType);
       }
 
       // 如果两个列表大小不一致则立即退出
@@ -95,6 +99,7 @@ public class GenAudioUtil {
       }
     }
 
+    // 合成音频文件
     File file = AudioMergerSingleBatch.mergeWavFiles(inputDirCn, inputDirEn,
       outputFilePath);
     assert file != null;
