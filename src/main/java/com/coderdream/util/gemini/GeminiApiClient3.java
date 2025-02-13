@@ -4,6 +4,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.callapi.HttpUtil;
+import com.coderdream.util.proxy.OperatingSystem;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -15,7 +16,7 @@ public class GeminiApiClient3 {
   private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
   private static final String API_KEY = CdConstants.GEMINI_API_KEY;
   private static final String PROXY_HOST = CdConstants.PROXY_HOST;
-  private static final int PROXY_PORT = CdConstants.PROXY_PORT;
+//  private static final int PROXY_PORT = CdConstants.PROXY_PORT;
 
   public static String URL =
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="
@@ -46,7 +47,7 @@ public class GeminiApiClient3 {
 
     String result = HttpUtil.httpHutoolPost(URL, jsonObject.toString(),
       CdConstants.PROXY_HOST,
-      CdConstants.PROXY_PORT);
+            OperatingSystem.getProxyPort());
     log.info("{}", result);
 
     // 使用 Hutool 将 JSON 字符串解析为对象

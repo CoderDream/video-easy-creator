@@ -8,10 +8,12 @@ import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.util.cmd.CommandUtil;
+import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.sentence.SentenceParser;
 import com.coderdream.util.video.BatchCreateVideoCommonUtil;
 import com.coderdream.vo.SentenceDurationVO;
 import com.coderdream.vo.SentenceVO;
+
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
@@ -19,316 +21,318 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SubtitleUtil {
 
-  /**
-   * 生成带有文本的图片。
-   *
-   * @param fileName 文件名称
-   * @return 图片文件列表
-   */
-  public static List<SentenceDurationVO> genSubtitle(String fileName) {
-    String fullPath =
-      CdConstants.RESOURCES_BASE_PATH + File.separator + fileName + ".txt";
+    /**
+     * 生成带有文本的图片。
+     *
+     * @param fileName 文件名称
+     * @return 图片文件列表
+     */
+    public static List<SentenceDurationVO> genSubtitle(String fileName) {
+        String fullPath =
+                CdConstants.RESOURCES_BASE_PATH + File.separator + fileName + ".txt";
 //    fullPath = fileName + ".txt";
 
-    List<SubtitleEntity> subtitleEntities = new ArrayList<>();
-    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
-      fullPath);
+        List<SubtitleEntity> subtitleEntities = new ArrayList<>();
+        List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
+                fullPath);
 
-    String durationFileName =
-      BatchCreateVideoCommonUtil.getAudioPath(fileName) + fileName
-        + "_duration.txt";
-    File durationFile = new File(durationFileName);
+        String durationFileName =
+                BatchCreateVideoCommonUtil.getAudioPath(fileName) + fileName
+                        + "_duration.txt";
+        File durationFile = new File(durationFileName);
 //    durationFile.readAllLines();
 //    Files.readAllLines(Paths.get(durationFile));
 
-    Map<String, DurationEntity> durationEntityMap = new LinkedHashMap<>();
+        Map<String, DurationEntity> durationEntityMap = new LinkedHashMap<>();
 
-    // 使用 Hutool 的 readLines 方法读取文件所有行
-    List<String> lines = FileUtil.readLines(durationFile, "UTF-8");
-    for (String line : lines) {
+        // 使用 Hutool 的 readLines 方法读取文件所有行
+        List<String> lines = FileUtil.readLines(durationFile, "UTF-8");
+        for (String line : lines) {
 
-      DurationEntity durationEntity = new DurationEntity();
-      // 解析每行数据，并将其存储到 durationEntityMap 中
-      int lastIndex = line.lastIndexOf("." + CdConstants.AUDIO_TYPE_WAV);
-      int index = line.lastIndexOf(fileName);
-      String line2 = line.substring(index + fileName.length() + 1, lastIndex);
-      log.info("line2:{}", line2);
-      String[] split = line2.split("_");
+            DurationEntity durationEntity = new DurationEntity();
+            // 解析每行数据，并将其存储到 durationEntityMap 中
+            int lastIndex = line.lastIndexOf("." + CdConstants.AUDIO_TYPE_WAV);
+            int index = line.lastIndexOf(fileName);
+            String line2 = line.substring(index + fileName.length() + 1, lastIndex);
+            log.info("line2:{}", line2);
+            String[] split = line2.split("_");
 
-      if (split.length == 2) {
-        durationEntity.setIndexStr(split[0]);
-        durationEntity.setLang(split[1]);
-      } else {
-        log.error("未找到:{}", line2);
-      }
+            if (split.length == 2) {
+                durationEntity.setIndexStr(split[0]);
+                durationEntity.setLang(split[1]);
+            } else {
+                log.error("未找到:{}", line2);
+            }
 
-      String[] splitDuration = line.split("\t");
-      if (splitDuration.length == 2) {
-        String duration = splitDuration[1];
-        durationEntity.setDuration(Double.parseDouble(duration.trim()));
-      } else {
-        durationEntity.setDuration(0);
-        log.error("未找到:{}", line);
-      }
+            String[] splitDuration = line.split("\t");
+            if (splitDuration.length == 2) {
+                String duration = splitDuration[1];
+                durationEntity.setDuration(Double.parseDouble(duration.trim()));
+            } else {
+                durationEntity.setDuration(0);
+                log.error("未找到:{}", line);
+            }
 
 //      durationEntity.setDuration(line);
-      durationEntityMap.put(line2, durationEntity);
-    }
+            durationEntityMap.put(line2, durationEntity);
+        }
 
-    SubtitleEntity subtitleEntity = null;
+        SubtitleEntity subtitleEntity = null;
 
-    List<SentenceDurationVO> sentenceDurationVOs = new ArrayList<>();
-    SentenceDurationVO sentenceDurationVO = null;
+        List<SentenceDurationVO> sentenceDurationVOs = new ArrayList<>();
+        SentenceDurationVO sentenceDurationVO = null;
 
-    // 使用DecimalFormat来确保保留3位小数
-    DecimalFormat decimalFormat = new DecimalFormat("#.###");
-    // 3
-    //00:00:04,000 --> 00:00:06,000
-    int number = 0;
-    for (SentenceVO sentenceVO : sentenceVOs) {
-      number++;
-      // 创建字幕实体
-      sentenceDurationVO = new SentenceDurationVO();
-      sentenceDurationVO.setId(number);
-      String indexStr = MessageFormat.format(
-        "{0,number,000}",
-        number);
-      subtitleEntity = new SubtitleEntity();
-      subtitleEntity.setSubIndex(1);
-      subtitleEntity.setTimeStr("00:00");
-      subtitleEntity.setSubtitleSecond(sentenceVO.getEnglish());
-      subtitleEntity.setSubtitle(sentenceVO.getChinese());
-      subtitleEntities.add(subtitleEntity);
+        // 使用DecimalFormat来确保保留3位小数
+        DecimalFormat decimalFormat = new DecimalFormat("#.###");
+        // 3
+        //00:00:04,000 --> 00:00:06,000
+        int number = 0;
+        for (SentenceVO sentenceVO : sentenceVOs) {
+            number++;
+            // 创建字幕实体
+            sentenceDurationVO = new SentenceDurationVO();
+            sentenceDurationVO.setId(number);
+            String indexStr = MessageFormat.format(
+                    "{0,number,000}",
+                    number);
+            subtitleEntity = new SubtitleEntity();
+            subtitleEntity.setSubIndex(1);
+            subtitleEntity.setTimeStr("00:00");
+            subtitleEntity.setSubtitleSecond(sentenceVO.getEnglish());
+            subtitleEntity.setSubtitle(sentenceVO.getChinese());
+            subtitleEntities.add(subtitleEntity);
 //      log.info("subtitleEntity:{}", subtitleEntity);
-      String lang = CdConstants.LANG_CN;
-      String key = indexStr + "_" + lang;
-      String str = sentenceVO.getChinese() + "\t" + durationEntityMap.get(key)
-        .getDuration();
-      log.info("strCn:{}", str);
+            String lang = CdConstants.LANG_CN;
+            String key = indexStr + "_" + lang;
+            String str = sentenceVO.getChinese() + "\t" + durationEntityMap.get(key)
+                    .getDuration();
+            log.info("strCn:{}", str);
 
-      sentenceDurationVO.setChinese(sentenceVO.getChinese());
-      double chineseDuration = durationEntityMap.get(key).getDuration();
-      sentenceDurationVO.setChineseDuration(chineseDuration);
-      sentenceDurationVO.setPhonetics(sentenceVO.getPhonetics());
-      // 英文
-      lang = CdConstants.LANG_EN;
-      key = indexStr + "_" + lang;
-      str = sentenceVO.getEnglish() + "\t" + durationEntityMap.get(key)
-        .getDuration();
-      log.info("strEn:{}", str);
-      sentenceDurationVO.setEnglish(sentenceVO.getEnglish());
-      double englishDuration = durationEntityMap.get(key).getDuration();
+            sentenceDurationVO.setChinese(sentenceVO.getChinese());
+            double chineseDuration = durationEntityMap.get(key).getDuration();
+            sentenceDurationVO.setChineseDuration(chineseDuration);
+            sentenceDurationVO.setPhonetics(sentenceVO.getPhonetics());
+            // 英文
+            lang = CdConstants.LANG_EN;
+            key = indexStr + "_" + lang;
+            str = sentenceVO.getEnglish() + "\t" + durationEntityMap.get(key)
+                    .getDuration();
+            log.info("strEn:{}", str);
+            sentenceDurationVO.setEnglish(sentenceVO.getEnglish());
+            double englishDuration = durationEntityMap.get(key).getDuration();
 
-      sentenceDurationVO.setEnglishDuration(englishDuration);
+            sentenceDurationVO.setEnglishDuration(englishDuration);
 
-      // 计算时长
+            // 计算时长
 
-      // 计算总时长: 总时长 = 4 * 英文时长 + 中文时长
-      double totalDuration = 4 * englishDuration + chineseDuration;
+            // 计算总时长: 总时长 = 4 * 英文时长 + 中文时长
+            double totalDuration = 4 * englishDuration + chineseDuration;
 
-      // 格式化总时长为保留3位小数
-      totalDuration = Double.parseDouble(decimalFormat.format(totalDuration));
+            // 格式化总时长为保留3位小数
+            totalDuration = Double.parseDouble(decimalFormat.format(totalDuration));
 
-      sentenceDurationVO.setTotalDuration(totalDuration);
-      sentenceDurationVOs.add(sentenceDurationVO);
-    }
+            sentenceDurationVO.setTotalDuration(totalDuration);
+            sentenceDurationVOs.add(sentenceDurationVO);
+        }
 
-    // 遍历 sentenceDurationVOs
-    for (SentenceDurationVO sentenceDurationVO1 : sentenceDurationVOs) {
-      log.info("sentenceDurationVO:{}", sentenceDurationVO1);
-    }
+        // 遍历 sentenceDurationVOs
+        for (SentenceDurationVO sentenceDurationVO1 : sentenceDurationVOs) {
+            log.info("sentenceDurationVO:{}", sentenceDurationVO1);
+        }
 
-    // 设置路径
+        // 设置路径
 //    String outputDir = BatchCreateVideoCommonUtil.getPicPath(
 //      fileName);//  "src/main/resources/pic"; // 输出目录
 
-    return sentenceDurationVOs;
-  }
+        return sentenceDurationVOs;
+    }
 
-  /**
-   * @param
-   */
-  public static void genSubtitleRaw(String fileName) {
+    /**
+     * @param
+     */
+    public static void genSubtitleRaw(String fileName) {
 //    String translate = FileUtil.readString(new File(fileName),
 //      StandardCharsets.UTF_8);// GeminiApiClient.generateContent(text);
 //    log.info("translate: {}", translate);
 
-    List<String> sentenceList = new ArrayList<>();
-    sentenceList.add(
-      "Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.");
-    sentenceList.add("英文加中文配音，每次半小時，增强你的英文听力。");
+        List<String> sentenceList = new ArrayList<>();
+        sentenceList.add(
+                "Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.");
+        sentenceList.add("英文加中文配音，每次半小時，增强你的英文听力。");
 
-    // D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
-    List<SentenceVO> sentenceVOList = SentenceParser.parseSentencesFromFile(
-      fileName);
+        // D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+        List<SentenceVO> sentenceVOList = SentenceParser.parseSentencesFromFile(
+                fileName);
 
-    for (SentenceVO sentenceVO : sentenceVOList) {
-      log.info("sentenceVO:{}", sentenceVO);
-      sentenceList.add(sentenceVO.getEnglish());
-      sentenceList.add(sentenceVO.getEnglish());
-      sentenceList.add(sentenceVO.getEnglish());
-      sentenceList.add(sentenceVO.getChinese());
-      sentenceList.add(sentenceVO.getEnglish());
-    }
-    String srtRawFileName = CdFileUtil.addPostfixToFileName(fileName, "_raw");
+        for (SentenceVO sentenceVO : sentenceVOList) {
+            log.info("sentenceVO:{}", sentenceVO);
+            sentenceList.add(sentenceVO.getEnglish());
+            sentenceList.add(sentenceVO.getEnglish());
+            sentenceList.add(sentenceVO.getEnglish());
+            sentenceList.add(sentenceVO.getChinese());
+            sentenceList.add(sentenceVO.getEnglish());
+        }
+        String srtRawFileName = CdFileUtil.addPostfixToFileName(fileName, "_raw");
 //    log.info("srtRawFileName:{}", srtRawFileName);
-    CdFileUtil.writeToFile(srtRawFileName, sentenceList);
+        CdFileUtil.writeToFile(srtRawFileName, sentenceList);
 
-    // 生成字幕文件，调用 python 命令
-    File file = new File(srtRawFileName);
-    String path = file.getParent();
-    // D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
-    // D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics\audio\ch01_mix.wav
-    String audioFileName =
-      path + File.separator
-        + CdFileUtil.getPureFileNameWithoutExtensionWithPath(fileName)
-        + File.separator + "audio\\" + "ch01_mix.wav";
-    File audioFile = new File(audioFileName);
-    if (!audioFile.exists()) {
-      log.error("音频文件不存在:{}", audioFileName);
-      return;
+        // 生成字幕文件，调用 python 命令
+        File file = new File(srtRawFileName);
+        String path = file.getParent();
+        // D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+        // D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics\audio\ch01_mix.wav
+        String audioFileName =
+                path + File.separator
+                        + CdFileUtil.getPureFileNameWithoutExtensionWithPath(fileName)
+                        + File.separator + "audio\\" + "ch01_mix.wav";
+        File audioFile = new File(audioFileName);
+        if (!audioFile.exists()) {
+            log.error("音频文件不存在:{}", audioFileName);
+            return;
+        }
+
+        String srtFileName = CdFileUtil.changeExtension(audioFileName, "srt");
+        String lang = "eng"; //  String lang = "cmn";
+        log.info("audioFileName:{}", audioFileName);
+        SubtitleUtil.genSrtByExecuteCommand(audioFileName, srtRawFileName, srtFileName, lang);
     }
 
-    String srtFileName = CdFileUtil.changeExtension(audioFileName, "srt");
-    String lang = "eng"; //  String lang = "cmn";
-    log.info("audioFileName:{}", audioFileName);
-    SubtitleUtil.genSrtByExecuteCommand(audioFileName, srtRawFileName, srtFileName, lang);
-  }
-
-  public static void genSrtByExecuteCommand(String audioFileName,
-    String subtitleFileName, String srtFileName, String lang) {
+    public static void genSrtByExecuteCommand(String audioFileName,
+                                              String subtitleFileName, String srtFileName, String lang) {
 //    String path = "D:/0000/";
 //    String mp3FileName = path + "v1.mp3";
 //    String subtitleFileName = path + "v1_srt.txt";
 //    String srtFileName = path + "v1.srt";
 //    String lang = "cmn";
 
-    String command =
-      "python -m aeneas.tools.execute_task " + audioFileName + " "
-        + subtitleFileName
-        + " \"task_language=" + lang
-        + "|os_task_file_format=srt|is_text_type=plain\" "
-        + srtFileName;
-    CommandUtil.executeCommand(command);
-    // python -m aeneas.tools.execute_task D:/0000/v1.mp3 D:/0000/v1_srt.txt "task_language=cmn|os_task_file_format=srt|is_text_type=plain" D:/0000/v1.srt
-    //python -m aeneas.tools.execute_task D:/0000/v1.mp3 D:/0000/v1_srt.txt "task_language=eng|os_task_file_format=srt|is_text_type=plain" D:/0000/v1.srt
-  }
+        String python = OperatingSystem.getPythonEnv();
+        String command = python +
+                " -m aeneas.tools.execute_task " + audioFileName + " "
+                + subtitleFileName
+                + " \"task_language=" + lang
+                + "|os_task_file_format=srt|is_text_type=plain\" "
+                + srtFileName;
+        CommandUtil.executeCommand(command);
+        // python -m aeneas.tools.execute_task D:/0000/v1.mp3 D:/0000/v1_srt.txt "task_language=cmn|os_task_file_format=srt|is_text_type=plain" D:/0000/v1.srt
+        //python -m aeneas.tools.execute_task D:/0000/v1.mp3 D:/0000/v1_srt.txt "task_language=eng|os_task_file_format=srt|is_text_type=plain" D:/0000/v1.srt
+    }
 
-  /**
-   * 生成多份文件
-   *
-   * @param fileName
-   */
-  public static void genMultiSubtitle(String fileName, String srtFileName) {
-    List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFile(
-      fileName);
+    /**
+     * 生成多份文件
+     *
+     * @param fileName
+     */
+    public static void genMultiSubtitle(String fileName, String srtFileName) {
+        List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFile(
+                fileName);
 //    for (SentenceVO sentenceVO : sentenceVOs) {
 //      log.info(" sentenceVO:{}", sentenceVO);
 //    }
-    List<SubtitleEntity> subtitleList = SubtitleParser.parseSubtitleFile(
-      srtFileName);
-    // 如果两个列表大小不一致，则抛出异常
-    int size = sentenceVOs.size();
-    size = size * 5 + 2; // 每句英文有5行字幕，再加2个开头字幕
-    List<SubtitleEntity> subtitleListIndex;
-    List<SubtitleEntity> subtitleListEnglish;
-    List<SubtitleEntity> subtitleListPhonetics;
-    List<SubtitleEntity> subtitleListChinese;
-    SubtitleEntity subtitleEntityIndex;
-    SubtitleEntity subtitleEntityEnglish;
-    SubtitleEntity subtitleEntityPhonetics;
-    SubtitleEntity subtitleEntityChinese;
+        List<SubtitleEntity> subtitleList = SubtitleParser.parseSubtitleFile(
+                srtFileName);
+        // 如果两个列表大小不一致，则抛出异常
+        int size = sentenceVOs.size();
+        size = size * 5 + 2; // 每句英文有5行字幕，再加2个开头字幕
+        List<SubtitleEntity> subtitleListIndex;
+        List<SubtitleEntity> subtitleListEnglish;
+        List<SubtitleEntity> subtitleListPhonetics;
+        List<SubtitleEntity> subtitleListChinese;
+        SubtitleEntity subtitleEntityIndex;
+        SubtitleEntity subtitleEntityEnglish;
+        SubtitleEntity subtitleEntityPhonetics;
+        SubtitleEntity subtitleEntityChinese;
 
-    if (size != subtitleList.size()) {
-      throw new RuntimeException("文件大小不一致");
-    } else {
-      subtitleListIndex = new ArrayList<>();
-      subtitleListEnglish = new ArrayList<>();
-      subtitleListPhonetics = new ArrayList<>();
-      subtitleListChinese = new ArrayList<>();
-      int index = 0;
-      int sentenceIndex = 0;
-      for (int i = 2; i < subtitleList.size(); i++) {
-        index += 1;
-        sentenceIndex = (i - 2) / 5; // 每句英文有5行字幕，再加2个开头字幕
-        SentenceVO sentenceVO = sentenceVOs.get(sentenceIndex);
-        SubtitleEntity subtitleEntity = subtitleList.get(i);
+        if (size != subtitleList.size()) {
+            throw new RuntimeException("文件大小不一致");
+        } else {
+            subtitleListIndex = new ArrayList<>();
+            subtitleListEnglish = new ArrayList<>();
+            subtitleListPhonetics = new ArrayList<>();
+            subtitleListChinese = new ArrayList<>();
+            int index = 0;
+            int sentenceIndex = 0;
+            for (int i = 2; i < subtitleList.size(); i++) {
+                index += 1;
+                sentenceIndex = (i - 2) / 5; // 每句英文有5行字幕，再加2个开头字幕
+                SentenceVO sentenceVO = sentenceVOs.get(sentenceIndex);
+                SubtitleEntity subtitleEntity = subtitleList.get(i);
 
-        subtitleEntityIndex = new SubtitleEntity();
-        subtitleEntityIndex.setSubIndex(index);
-        subtitleEntityIndex.setTimeStr(subtitleEntity.getTimeStr());
-        subtitleEntityIndex.setSubtitle(index + "");
+                subtitleEntityIndex = new SubtitleEntity();
+                subtitleEntityIndex.setSubIndex(index);
+                subtitleEntityIndex.setTimeStr(subtitleEntity.getTimeStr());
+                subtitleEntityIndex.setSubtitle(index + "");
 
-        subtitleEntityEnglish = new SubtitleEntity();
-        subtitleEntityEnglish.setSubIndex(index);
-        subtitleEntityEnglish.setTimeStr(subtitleEntity.getTimeStr());
-        subtitleEntityEnglish.setSubtitle(sentenceVO.getEnglish());
+                subtitleEntityEnglish = new SubtitleEntity();
+                subtitleEntityEnglish.setSubIndex(index);
+                subtitleEntityEnglish.setTimeStr(subtitleEntity.getTimeStr());
+                subtitleEntityEnglish.setSubtitle(sentenceVO.getEnglish());
 
-        subtitleEntityPhonetics = new SubtitleEntity();
-        subtitleEntityPhonetics.setSubIndex(index);
-        subtitleEntityPhonetics.setTimeStr(subtitleEntity.getTimeStr());
-        subtitleEntityPhonetics.setSubtitle(sentenceVO.getPhonetics());
+                subtitleEntityPhonetics = new SubtitleEntity();
+                subtitleEntityPhonetics.setSubIndex(index);
+                subtitleEntityPhonetics.setTimeStr(subtitleEntity.getTimeStr());
+                subtitleEntityPhonetics.setSubtitle(sentenceVO.getPhonetics());
 
-        subtitleEntityChinese = new SubtitleEntity();
-        subtitleEntityChinese.setSubIndex(index);
-        subtitleEntityChinese.setTimeStr(subtitleEntity.getTimeStr());
-        subtitleEntityChinese.setSubtitle(sentenceVO.getChinese());
+                subtitleEntityChinese = new SubtitleEntity();
+                subtitleEntityChinese.setSubIndex(index);
+                subtitleEntityChinese.setTimeStr(subtitleEntity.getTimeStr());
+                subtitleEntityChinese.setSubtitle(sentenceVO.getChinese());
 
-        subtitleListIndex.add(subtitleEntityIndex);
-        subtitleListEnglish.add(subtitleEntityEnglish);
-        subtitleListPhonetics.add(subtitleEntityPhonetics);
-        subtitleListChinese.add(subtitleEntityChinese);
-      }
-    }
+                subtitleListIndex.add(subtitleEntityIndex);
+                subtitleListEnglish.add(subtitleEntityEnglish);
+                subtitleListPhonetics.add(subtitleEntityPhonetics);
+                subtitleListChinese.add(subtitleEntityChinese);
+            }
+        }
 
 //    log.info("subtitleListEnglish:{}", subtitleListEnglish);
 
-    String srtFileNameIndex = srtFileName.replace(".srt", "_index.srt");
-    String srtFileNameEnglish = srtFileName.replace(".srt", "_english.srt");
-    String srtFileNamePhonetics = srtFileName.replace(".srt", "_phonetics.srt");
-    String srtFileNameChinese = srtFileName.replace(".srt", "_chinese.srt");
-    log.info("srtFileNameIndex:{}", srtFileNameIndex);
-    log.info("srtFileNameEnglish:{}", srtFileNameEnglish);
-    log.info("srtFileNamePhonetics:{}", srtFileNamePhonetics);
-    log.info("srtFileNameChinese:{}", srtFileNameChinese);
-    writeToSubtitleFile(srtFileNameIndex, subtitleListIndex);
-    writeToSubtitleFile(srtFileNameEnglish, subtitleListEnglish);
-    writeToSubtitleFile(srtFileNamePhonetics, subtitleListPhonetics);
-    writeToSubtitleFile(srtFileNameChinese, subtitleListChinese);
-  }
-
-  public static void writeToSubtitleFile(String srtFileName,
-    List<SubtitleEntity> subtitleList) {
-    List<String> contents = new ArrayList<>();
-    for (SubtitleEntity subtitleEntity : subtitleList) {
-      contents.add(subtitleEntity.getSubIndex().toString());
-      contents.add(subtitleEntity.getTimeStr());
-      contents.add(subtitleEntity.getSubtitle());
-      // 如果不为空就添加第二行字幕
-      if (StrUtil.isNotEmpty(subtitleEntity.getSubtitleSecond())){
-        contents.add(subtitleEntity.getTimeStr());
-      }
-      contents.add("");
+        String srtFileNameIndex = srtFileName.replace(".srt", "_index.srt");
+        String srtFileNameEnglish = srtFileName.replace(".srt", "_english.srt");
+        String srtFileNamePhonetics = srtFileName.replace(".srt", "_phonetics.srt");
+        String srtFileNameChinese = srtFileName.replace(".srt", "_chinese.srt");
+        log.info("srtFileNameIndex:{}", srtFileNameIndex);
+        log.info("srtFileNameEnglish:{}", srtFileNameEnglish);
+        log.info("srtFileNamePhonetics:{}", srtFileNamePhonetics);
+        log.info("srtFileNameChinese:{}", srtFileNameChinese);
+        writeToSubtitleFile(srtFileNameIndex, subtitleListIndex);
+        writeToSubtitleFile(srtFileNameEnglish, subtitleListEnglish);
+        writeToSubtitleFile(srtFileNamePhonetics, subtitleListPhonetics);
+        writeToSubtitleFile(srtFileNameChinese, subtitleListChinese);
     }
 
-    FileUtil.writeUtf8Lines(contents, srtFileName);
-  }
+    public static void writeToSubtitleFile(String srtFileName,
+                                           List<SubtitleEntity> subtitleList) {
+        List<String> contents = new ArrayList<>();
+        for (SubtitleEntity subtitleEntity : subtitleList) {
+            contents.add(subtitleEntity.getSubIndex().toString());
+            contents.add(subtitleEntity.getTimeStr());
+            contents.add(subtitleEntity.getSubtitle());
+            // 如果不为空就添加第二行字幕
+            if (StrUtil.isNotEmpty(subtitleEntity.getSubtitleSecond())) {
+                contents.add(subtitleEntity.getTimeStr());
+            }
+            contents.add("");
+        }
+
+        FileUtil.writeUtf8Lines(contents, srtFileName);
+    }
 
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 //    genSubtitle("CampingInvitation_cht_03");
 
-    SubtitleUtil.genSubtitleRaw(      "");
+        SubtitleUtil.genSubtitleRaw("");
 
 //    String fileName = "D:\\\\0000\\\\EnBook001\\\\900\\\\ch01\\\\dialog_single_with_phonetics.txt";
 //    String srtFileName = "D:\\0000\\EnBook001\\900\\ch01\\dialog_single_with_phonetics\\audio\\ch01_mix.srt";
 //    genMultiSubtitle(fileName, srtFileName);
-  }
+    }
 
 
 }

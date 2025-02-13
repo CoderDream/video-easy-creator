@@ -167,7 +167,7 @@ public class CdConstants {
   public static final String PROXY_HOST = "127.0.0.1";
 
   // proxy-port 7890
-  public static final int PROXY_PORT = 7890;
+//  public static final int PROXY_PORT = 7890;
 
   /**
    * "帮我实现如下功能：输入是是6组英文词汇，6行为1组；第1行英文单词或词组，第2行是英文释义，第1行和第2行不要处理，按原始文本返回，第3行是对第1行的中文简明翻译，翻译结果尽量少于20个字符串，第4行是对第2行的中文翻译，第5行是用第1行进行英文造句，第6行时对第5行进行中文翻译；请根据规则补齐空行，按文本文件格式返回给我，不要任何标记，移除空行，后面的5组也是按一样方式处理；以下是6组词汇：cephalopod\nthe

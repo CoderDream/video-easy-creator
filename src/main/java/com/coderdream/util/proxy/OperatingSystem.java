@@ -83,6 +83,24 @@ public class OperatingSystem {
         return folderPath;
     }
 
+    public static String getVideoBaseFolder() {
+//        Integer proxyPort = null;
+        String osType = OperatingSystem.getOS();
+        System.out.println("操作系统类型: " + osType);
+
+        String folderPath = "";
+        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+        switch (osType) {
+            case OS_WINDOWS -> folderPath = "D:\\0000" + File.separator;
+            case OS_MAC -> folderPath = "/Users/coderdream/Documents/" + File.separator;
+            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+            default -> System.out.println("无法识别的操作系统。");
+        }
+        return folderPath;
+    }
+
+
+
     // "D:\\0000\\bgmusic\\page.wav";
 
     public static String getBaseFolderWav(String waveName) {
@@ -99,6 +117,22 @@ public class OperatingSystem {
             default -> System.out.println("无法识别的操作系统。");
         }
         return wavePath;
+    }
+
+    public static String getPythonEnv() {
+//        Integer proxyPort = null;
+        String osType = OperatingSystem.getOS();
+        System.out.println("操作系统类型: " + osType);
+
+        String python = "python";
+        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+        switch (osType) {
+            case OS_WINDOWS -> python = "python";
+            case OS_MAC -> python = "python3" ;
+            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+            default -> System.out.println("无法识别的操作系统。");
+        }
+        return python;
     }
 
 

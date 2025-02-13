@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import com.coderdream.util.proxy.OperatingSystem;
 import lombok.extern.slf4j.Slf4j;
 import swiss.ameri.gemini.api.*;
 import swiss.ameri.gemini.api.GenAi.GeneratedContent;
@@ -31,7 +33,7 @@ public class GeminiApiUtil1 {
   static {
     // 创建 HttpClient， 设置代理
     proxyClient = HttpClient.newBuilder()
-      .proxy(ProxySelector.of(new InetSocketAddress(CdConstants.PROXY_HOST, CdConstants.PROXY_PORT)))
+      .proxy(ProxySelector.of(new InetSocketAddress(CdConstants.PROXY_HOST, OperatingSystem.getProxyPort())))
       .build();
     // 创建 GenAi 实例
     String apiKey = CdConstants.GEMINI_API_KEY;
