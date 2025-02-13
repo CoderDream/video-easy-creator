@@ -1,5 +1,6 @@
 package com.coderdream.util.process;
 
+import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.Book002ChapterInfoEntity;
 import com.coderdream.entity.Book002ChapterStringEntity;
 import com.coderdream.entity.Book002ContentEntity;
@@ -8,8 +9,10 @@ import com.coderdream.entity.Book002SceneEntity;
 import com.coderdream.entity.Book002SceneStringEntity;
 import com.coderdream.entity.SentencePair;
 import com.coderdream.util.cd.CdStringUtil;
+import com.coderdream.util.proxy.OperatingSystem;
 import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -137,7 +140,7 @@ public class ChapterStringParser {
 //        String filePath = "D:\\0000\\EnBook002\\Chapter008\\Chapter008_temp.txt";
     Book002ChapterStringEntity chapterEntity = ChapterStringParser.parseChapterFile(
       filePath);
-
+    int errorCount = 0;
     if (chapterEntity != null) {
       chapterInfoEntity.setChapterStr(chapterEntity.getChapterStr());
       List<Book002SceneEntity> sceneEntityList = new ArrayList<>();
@@ -165,6 +168,12 @@ public class ChapterStringParser {
           sentencePair.setEnglishSentence(block.get(0)
             .substring(lastChineseCharOrPunctuationIndexWithoutPunct + 1)
             .trim());
+
+          if (StrUtil.isBlank(sentencePair.getEnglishSentence())
+            || StrUtil.isBlank(sentencePair.getChineseSentence())) {
+            log.warn("sentencePair 对话文本为空，忽略：{}", sentencePair);
+            errorCount++;
+          }
           contentEntity.setSentencePair(sentencePair);
 
           int blockSize = block.size();
@@ -175,7 +184,6 @@ public class ChapterStringParser {
             temp = temp.replace("同类表达 ", "");
             temp = temp.replace("对话 A:", "");
             temp = temp.replace("B:", "");
-//            if (!temp.startsWith("对话 A:") && !temp.startsWith("B:")) {
             // 查询是否有中文
             int firstIndex = CdStringUtil.findFirstChineseCharIndex(temp);
             sameSentencePair = new SentencePair();
@@ -190,8 +198,14 @@ public class ChapterStringParser {
             sameSentencePair.setChineseSentence(chineseSentence.trim());
             sameSentencePair.setEnglishSentence(englishSentence.trim());
 
+            if (StrUtil.isBlank(sameSentencePair.getEnglishSentence())
+              || StrUtil.isBlank(sameSentencePair.getChineseSentence())) {
+              log.warn("sameSentencePair 对话文本为空，忽略：{}",
+                sameSentencePair);
+              errorCount++;
+            }
+
             sameSentencePairList.add(sameSentencePair);
-//            }
           }
           // 设置同类表达列表
           contentEntity.setSameSentencePairList(sameSentencePairList);
@@ -203,6 +217,10 @@ public class ChapterStringParser {
       }
 
       chapterInfoEntity.setSceneEntityList(sceneEntityList);
+    }
+    if (errorCount > 0) {
+      log.warn("解析文件 {} 时，发现 {} 处对话文本为空。", filePath, errorCount);
+      return null;
     }
     return chapterInfoEntity;
   }
@@ -219,23 +237,61 @@ public class ChapterStringParser {
   }
 
   public static void main(String[] args) {
-    String filePath = "D:\\0000\\EnBook002\\Chapter008\\Chapter008_temp.txt";
-    Book002ChapterStringEntity chapterEntity = ChapterStringParser.parseChapterFile(
-      filePath);
+//    String filePath = "D:\\0000\\EnBook002\\Chapter008\\Chapter008_temp.txt";
 
-    if (chapterEntity != null) {
-      // 打印解析结果 (仅为示例，实际应用中可能不需要全部打印)
-      System.out.println("Chapter: " + chapterEntity.getChapterStr());
-      for (Book002SceneStringEntity scene : chapterEntity.getSceneStringEntityList()) {
-        System.out.println("\tScene: " + scene.getSceneTitle());
-        int i = 0;
-        for (List<String> block : scene.getContentStringList()) {
-          System.out.println("\t\tBlock " + (++i) + ": ");
-          for (String str : block) {
-            System.out.println("\t\t\t" + str);
-          }
-        }
-      }
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+//    String subFolder = "Chapter004";
+//    BeforeGenerateUtil.processBook02(folderPath, subFolder);
+//    assertTrue(true);
+//    System.out.println("done");
+    List<String> subFolders = new ArrayList<>();
+    int end = 51;
+    for (int i = 9; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
     }
+
+    for (String subFolder : subFolders) {
+      String sourcePath =
+        folderPath + subFolder + File.separator + subFolder + "_temp.txt";
+
+      Book002ChapterStringEntity chapterEntity = ChapterStringParser.parseChapterFile(
+        sourcePath);
+
+//      if (chapterEntity != null) {
+//        // 打印解析结果 (仅为示例，实际应用中可能不需要全部打印)
+//        System.out.println("Chapter: " + chapterEntity.getChapterStr());
+//        for (Book002SceneStringEntity scene : chapterEntity.getSceneStringEntityList()) {
+//          System.out.println("\tScene: " + scene.getSceneTitle());
+//          int i = 0;
+//          for (List<String> block : scene.getContentStringList()) {
+//            System.out.println("\t\tBlock " + (++i) + ": ");
+//            for (String str : block) {
+//              System.out.println("\t\t\t" + str);
+//            }
+//          }
+//        }
+//      }
+    }
+
+
+//    Book002ChapterStringEntity chapterEntity = ChapterStringParser.parseChapterFile(
+//      filePath);
+//
+//    if (chapterEntity != null) {
+//      // 打印解析结果 (仅为示例，实际应用中可能不需要全部打印)
+//      System.out.println("Chapter: " + chapterEntity.getChapterStr());
+//      for (Book002SceneStringEntity scene : chapterEntity.getSceneStringEntityList()) {
+//        System.out.println("\tScene: " + scene.getSceneTitle());
+//        int i = 0;
+//        for (List<String> block : scene.getContentStringList()) {
+//          System.out.println("\t\tBlock " + (++i) + ": ");
+//          for (String str : block) {
+//            System.out.println("\t\t\t" + str);
+//          }
+//        }
+//      }
+//    }
   }
 }

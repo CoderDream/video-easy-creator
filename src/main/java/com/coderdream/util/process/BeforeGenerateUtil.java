@@ -56,6 +56,11 @@ public class BeforeGenerateUtil {
     }
   }
 
+  /**
+   * 生成对话文本
+   * @param folderPath  文件夹路径
+   * @param subFolder 子文件夹名称
+   */
   public static void processGenDialogTxt(String folderPath, String subFolder) {
     // 1. 生成章节文本
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";
@@ -99,11 +104,11 @@ public class BeforeGenerateUtil {
         String sceneTitle = sceneEntity.getSceneTitle();
         // 替换为普通空格
         sceneTitle = sceneTitle.replace(IDSP, " ");
-        // TODO
         int firstSpaceIndex = sceneTitle.indexOf(" ");
         int secondSpaceIndex =
           (firstSpaceIndex != -1) ? sceneTitle.indexOf(" ", firstSpaceIndex + 1)
             : -1;
+        // 将第一个空格后的内容替换为普通空格，并获取场景编号，并获取对话文本 Scene相关信息放入 basic 对话文本列表中
         if (firstSpaceIndex != -1 && secondSpaceIndex != -1) {
           String sceneNumber = StrUtil.sub(sceneTitle, firstSpaceIndex + 1,
             secondSpaceIndex);
@@ -120,13 +125,23 @@ public class BeforeGenerateUtil {
 
         List<Book002ContentEntity> contentEntityList = sceneEntity.getContentEntityList();
         for (Book002ContentEntity contentEntity : contentEntityList) {
+          // 将第一句
           SentencePair sentencePair = contentEntity.getSentencePair();
+          if(StrUtil.isBlank(sentencePair.getEnglishSentence())
+            || StrUtil.isBlank(sentencePair.getChineseSentence())) {
+            log.warn("sentencePair 对话文本为空，忽略：{}", sentencePair);
+          }
+
           basicStringList.add(sentencePair.getEnglishSentence());
           basicStringList.add(
             ZhConverterUtil.toTraditional(sentencePair.getChineseSentence()));
 
           List<SentencePair> sameSentencePairList = contentEntity.getSameSentencePairList();
           for (SentencePair sameSentencePair : sameSentencePairList) {
+            if(StrUtil.isBlank(sameSentencePair.getEnglishSentence())
+              || StrUtil.isBlank(sameSentencePair.getChineseSentence())) {
+              log.warn("sameSentencePair 对话文本为空，忽略：{}", sameSentencePair);
+            }
             dialogStringList.add(sameSentencePair.getEnglishSentence());
             dialogStringList.add(ZhConverterUtil.toTraditional(
               sameSentencePair.getChineseSentence()));
@@ -142,8 +157,7 @@ public class BeforeGenerateUtil {
         StandardCharsets.UTF_8);
       File elapsedTime3 = FileUtil.writeLines(dialogStringList, dialogPath,
         StandardCharsets.UTF_8);
-//      String elapsedTime2 = TextFileUtil.filterTextFile(sourcePath, txtPath);
-//      log.info("耗时：{}：{}", elapsedTime1, elapsedTime2);
+
     }
   }
 
@@ -450,6 +464,47 @@ public class BeforeGenerateUtil {
     }
 
     // 2. 生成
+    String phoneticsFileName =
+      folderPath + File.separator + subFolder + File.separator + subFolder
+        + "_total_phonetics.txt";
+    if (CdFileUtil.isFileEmpty(phoneticsFileName)) {
+      File file = TranslationUtil.genPhonetics(fileNameTotal, aiFileName);
+      log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
+    } else {
+      log.info("带音标文件已存在: {}", phoneticsFileName);
+    }
+  }
+
+  public static void processBook002_AI(String folderPath, String subFolder) {
+    String fileNameTotal =
+      folderPath + subFolder + File.separator + subFolder + "_total.txt";
+    if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+      return;
+    }
+
+    // 生成带音标的文件
+    String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+    if (CdFileUtil.isFileEmpty(aiFileName)) {
+      File file = TranslationUtil.genAiFile(fileNameTotal);
+      assert file != null;
+      log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
+    } else {
+      log.info("AI文件已存在: {}", aiFileName);
+    }
+  }
+
+
+  public static void processBook002Phonetics(String folderPath, String subFolder) {
+    String fileNameTotal =
+      folderPath + subFolder + File.separator + subFolder + "_total.txt";
+    if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+      return;
+    }
+
+    // 生成带音标的文件
+    String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+
+    // 2. 生成英文+音标的文件
     String phoneticsFileName =
       folderPath + File.separator + subFolder + File.separator + subFolder
         + "_total_phonetics.txt";

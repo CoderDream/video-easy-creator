@@ -13,6 +13,7 @@ import com.coderdream.util.bbc.WordCountUtil;
 import com.coderdream.util.cd.CdMP3SplitterUtil;
 import com.coderdream.util.cd.CdPythonUtil;
 import com.coderdream.util.cd.TextProcessor;
+import com.coderdream.util.gemini.TranslationUtil;
 import com.coderdream.util.ppt.GetSixMinutesPpt;
 import com.coderdream.util.subtitle.SubtitleUtil;
 import java.io.BufferedWriter;
@@ -269,7 +270,11 @@ public class SixMinutesStepByStep {
       log.info("文件已存在: {}", pptxFileName);
     }
 
+    TranslationUtil.genDescription(folderName);
+
+
   }
+
 
 
 }

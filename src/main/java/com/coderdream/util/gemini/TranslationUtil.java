@@ -251,6 +251,12 @@ public class TranslationUtil {
     String filePath = file.getParent();
     Path outputFilePath = Paths.get(filePath,
       folderName + "_description.md");
+
+    if (FileUtil.exist(fileName)) {
+      log.info("文件已存在：{}", fileName);
+      return;
+    }
+
     try (BufferedWriter writer = Files.newBufferedWriter(outputFilePath,
       StandardCharsets.UTF_8)) {
       for (String line : translate.split("\n")) {

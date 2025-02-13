@@ -28,7 +28,11 @@ class PreparePublishUtilTest {
 //    String folderPath = "D:\\0000\\" + bookFolderName + "\\";
 
     String bookFolderName = "EnBook002";
+<<<<<<< Updated upstream
     String folderPath = OperatingSystem.getFolderPath(bookFolderName);
+=======
+    String folderPath = "D:\\0000\\" + bookFolderName + "\\";
+>>>>>>> Stashed changes
     String subFolder = "Chapter010";
     String bookName = "一輩子夠用的英語口語大全集";
     String chapterName = "book02_name.txt";

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.txt.FileFilterUtil;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +25,8 @@ class BeforeGenerateUtilTest {
 
   @Test
   void genAiFile() {
-    String folderPath = "D:\\0000\\EnBook001\\900\\";
+    String bookName = "EnBook001";
+    String folderPath = OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
     String subFolder = "ch017";
     BeforeGenerateUtil.genAiFile(folderPath, subFolder);
     assertTrue(true);
@@ -33,7 +35,8 @@ class BeforeGenerateUtilTest {
 
   @Test
   void process() {
-    String folderPath = "D:\\0000\\EnBook001\\900\\";
+    String bookName = "EnBook001";
+    String folderPath = OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
     String subFolder = "ch020";
     BeforeGenerateUtil.process(folderPath, subFolder);
     assertTrue(true);
@@ -42,7 +45,8 @@ class BeforeGenerateUtilTest {
 
   @Test
   void process00() {
-    String folderPath = "D:\\0000\\EnBook001\\900\\";
+    String bookName = "EnBook001";
+    String folderPath = OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
 //    String subFolder = "ch012";
 //    BeforeGenerateUtil.process(folderPath, subFolder);
 //    assertTrue(true);
@@ -63,7 +67,10 @@ class BeforeGenerateUtilTest {
 
   @Test
   void process01() {
-    String folderPath = "D:\\0000\\EnBook001\\900\\";
+//    String folderPath = "D:\\0000\\EnBook001\\900\\";
+//
+    String bookName = "EnBook001";
+    String folderPath = OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
 //    String subFolder = "ch012";
 //    BeforeGenerateUtil.process(folderPath, subFolder);
 //    assertTrue(true);
@@ -85,7 +92,8 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processBook02() {
-    String folderPath = "D:\\0000\\EnBook002\\";
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
 //    String subFolder = "Chapter004";
 //    BeforeGenerateUtil.processBook02(folderPath, subFolder);
 //    assertTrue(true);
@@ -106,7 +114,8 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processBook0203() {
-    String folderPath = "D:\\0000\\EnBook002\\";
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
 //    String subFolder = "Chapter004";
 //    BeforeGenerateUtil.processBook02(folderPath, subFolder);
 //    assertTrue(true);
@@ -125,7 +134,8 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processBook0201() {
-    String folderPath = "D:\\0000\\EnBook002\\";
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
     String subFolder = "Chapter007";
     BeforeGenerateUtil.processBook02(folderPath, subFolder);
     assertTrue(true);
@@ -134,7 +144,8 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processBook020201() {
-    String folderPath = "D:\\0000\\EnBook002\\";
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
     String subFolder = "Chapter007";
     BeforeGenerateUtil.processBook0202(folderPath, subFolder);
     assertTrue(true);
@@ -143,7 +154,8 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processBook020101() {
-    String folderPath = "D:\\0000\\EnBook002\\";
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
     String subFolder = "Chapter008";
     BeforeGenerateUtil.processBook0201(folderPath, subFolder);
     assertTrue(true);
@@ -152,8 +164,11 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processBook020101_02() {
+<<<<<<< Updated upstream
 //    String folderPath = "D:\\0000\\EnBook002\\";
 
+=======
+>>>>>>> Stashed changes
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
     List<String> subFolders = new ArrayList<>();
@@ -168,13 +183,30 @@ class BeforeGenerateUtilTest {
     }
   }
 
+  @Test
+  void processBook002_AI_01() {
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    List<String> subFolders = new ArrayList<>();
+    int end = 51;
+    for (int i = 11; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      BeforeGenerateUtil.processBook002_AI(folderPath, subFolder);
+    }
+  }
+
   /**
    * 生成 total 和 basic
    */
   @Test
   void processGenDialogTxt() {
-    String folderPath = "D:\\0000\\EnBook002\\";
-    String subFolder = "Chapter008";
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    String subFolder = "Chapter016";
     BeforeGenerateUtil.processGenDialogTxt(folderPath, subFolder);
     assertTrue(true);
     System.out.println("done");
@@ -182,8 +214,11 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processGenDialogTxt_02() {
+<<<<<<< Updated upstream
 //    String folderPath = "D:\\0000\\EnBook002\\";
 
+=======
+>>>>>>> Stashed changes
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
 //    String subFolder = "Chapter004";

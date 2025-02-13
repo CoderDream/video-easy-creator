@@ -33,7 +33,7 @@ class DailyUtilTest {
 
   @Test
   void process_250123() {
-    String folderName = "250123";
+    String folderName = "181206";
     TranslationUtil.genDescription(folderName);
   }
 
@@ -42,8 +42,8 @@ class DailyUtilTest {
   @Test
   void process_180927() {
 
-//    String folderName = "180927";
-    String folderName = "250130";
+    String folderName = "181129";
+//    String folderName = "250130";
     String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
       folderName);// "【BBC六分钟英语】泰国50年老汤真的能吃吗？";
     DailyUtil.process(folderName, title);
