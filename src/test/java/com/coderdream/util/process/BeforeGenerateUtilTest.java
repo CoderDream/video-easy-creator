@@ -179,7 +179,40 @@ class BeforeGenerateUtilTest {
   }
 
   @Test
+  void processBook002_AI_00() {
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    List<String> subFolders = new ArrayList<>();
+    int end = 17;
+    for (int i = 16; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      BeforeGenerateUtil.processBook002_AI(folderPath, subFolder);
+    }
+  }
+
+  @Test
   void processBook002_AI_01() {
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    List<String> subFolders = new ArrayList<>();
+    int end = 51;
+    for (int i = 18; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      BeforeGenerateUtil.processBook002_AI(folderPath, subFolder);
+    }
+  }
+
+  //
+  @Test
+  void processBook002Phonetics_01() {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
     List<String> subFolders = new ArrayList<>();
@@ -190,7 +223,7 @@ class BeforeGenerateUtilTest {
     }
 
     for (String subFolder : subFolders) {
-      BeforeGenerateUtil.processBook002_AI(folderPath, subFolder);
+      BeforeGenerateUtil.processBook002Phonetics(folderPath, subFolder);
     }
   }
 

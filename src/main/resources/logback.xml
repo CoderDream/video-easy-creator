@@ -7,6 +7,35 @@
         </encoder>
     </appender>
 
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %logger{36} - %msg%n</pattern>
+            <!--  更详细的配置，可以自定义颜色
+            <pattern>
+                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %X{user} %X{request} %highlight(%-5level) %logger{36} - %msg%n</pattern>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %replace(%msg){'\n', ''}%n</pattern>
+            </pattern>
+            -->
+        </encoder>
+    </appender>
+
+<!--    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder>-->
+<!--            <pattern>%replace(%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n){-->
+<!--                '(\\d{2}:\\d{2}:\\d{2}\\.\\d{3})', '\\033[36m$1\\033[0m'-->
+<!--                | '\\[([^\\]]+)\\]', '\\033[35m[$2]\\033[0m'-->
+<!--                | '(ERROR)', '\\033[31;1m$1\\033[0m'-->
+<!--                | '(WARN)', '\\033[33;1m$1\\033[0m'-->
+<!--                | '(INFO)', '\\033[32m$1\\033[0m'-->
+<!--                | '(DEBUG)', '\\033[34m$1\\033[0m'-->
+<!--                | '(TRACE)', '\\033[37;1m$1\\033[0m'-->
+<!--                | '([a-zA-Z0-9_]+\\.[a-zA-Z0-9_\\.]+[a-zA-Z0-9_]+)', '\\033[33m$1\\033[0m'-->
+<!--                | '(-)', '\\033[37m$1\\033[0m'-->
+<!--                }</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
     <!-- 用于记录失败的视频文件的日志文件 -->
     <appender name="FAILED_VIDEO_LOG" class="ch.qos.logback.core.FileAppender">
         <file>${LOG_DIR:-logs}/failed_video_%d{yyyy-MM-dd_HH-mm}.log</file>
@@ -18,6 +47,7 @@
     <!-- 根日志级别设置 -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
+        <appender-ref ref="CONSOLE" />
     </root>
 
     <!-- 日志设置，针对失败日志 -->
