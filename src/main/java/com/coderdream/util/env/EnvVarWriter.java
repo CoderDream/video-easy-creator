@@ -13,7 +13,6 @@ public class EnvVarWriter {
             // 修改子进程的环境变量
             Map<String, String> env = processBuilder.environment();
             env.put("MY_TEMP_VAR", "HelloWorld");
-            env.put("GEMINI_API_KEY", "HelloWorld");
 
             // 启动子进程
             Process process = processBuilder.start();
