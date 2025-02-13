@@ -130,7 +130,7 @@ public class MarkdownFileGenerator {
     writer.write("\t" + String.join(", ", "六分钟英语"));
     writer.newLine();
     writer.write("categories: ");
-    writer.write("\t" + "学习笔记");
+    writer.write("\t" + "六分钟英语");
     writer.newLine();
     writer.write("---");
     writer.newLine();

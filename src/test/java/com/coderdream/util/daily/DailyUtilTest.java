@@ -4,8 +4,11 @@ import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cmd.CommandUtil;
 import com.coderdream.util.gemini.TranslationUtil;
+import com.coderdream.util.process.bbc.SixMinutesStepByStep;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DailyUtilTest {
@@ -37,7 +40,13 @@ class DailyUtilTest {
     TranslationUtil.genDescription(folderName);
   }
 
-
+  @Test
+  void processBatch02() {
+    for (String num : NUMBER_LIST) {
+      String folderName = "" + num;
+      TranslationUtil.genDescription(folderName);
+    }
+  }
 
   @Test
   void process_180927() {
@@ -47,6 +56,39 @@ class DailyUtilTest {
     String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
       folderName);// "【BBC六分钟英语】泰国50年老汤真的能吃吗？";
     DailyUtil.process(folderName, title);
+
+    List<String> commandList = Arrays.asList(
+      "cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo g",
+      "cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo d");
+    for (String command : commandList) {
+      CommandUtil.executeCommand(command);
+    }
+  }
+
+
+  private List<String> NUMBER_LIST;
+
+  @BeforeEach
+  void init() {
+    String folderPath =
+      CdFileUtil.getResourceRealPath() + File.separatorChar + "data"
+        + File.separatorChar + "bbc"
+        + File.separatorChar;
+
+    NUMBER_LIST = FileUtil.readLines(folderPath + "todo.txt", "UTF-8");
+//        list = new ArrayList<>(Arrays.asList("test1", "test2"));
+  }
+
+  @Test
+  void processBatch() {
+    // D:\04_GitHub\video-easy-creator\src\main\resources\data\bbc\todo.txt
+    for (String num : NUMBER_LIST) {
+      String folderName = "" + num;
+      String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
+        folderName);
+      DailyUtil.process(folderName, title);
+      TranslationUtil.genDescription(folderName);
+    }
 
     List<String> commandList = Arrays.asList(
       "cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo g",

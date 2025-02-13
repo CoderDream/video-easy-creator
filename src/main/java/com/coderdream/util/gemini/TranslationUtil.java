@@ -326,9 +326,10 @@ public class TranslationUtil {
         String filePath = file.getParent();
         Path outputFilePath = Paths.get(filePath,
                 folderName + "_description.md");
-
-        if (FileUtil.exist(fileName)) {
-            log.info("文件已存在：{}", fileName);
+        File outputFile = new File(filePath,
+          folderName + "_description.md");
+        if (FileUtil.exist(outputFile)) {
+            log.info("文件已存在：{}", outputFile);
             return;
         }
 

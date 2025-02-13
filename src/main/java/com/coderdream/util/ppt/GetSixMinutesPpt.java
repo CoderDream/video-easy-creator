@@ -40,12 +40,33 @@ public class GetSixMinutesPpt {
 
 
   public static void main(String[] args) {
-    String folderName = "250123";
-    GetSixMinutesPpt.process(folderName);
+    String folderName = "181213";
+//    GetSixMinutesPpt.process(folderName);
+    GetSixMinutesPpt.genPic(folderName);
+  }
+
+  /**
+   * 生成PPT图片
+   *
+   * @param folderName
+   */
+  public static void genPic(String folderName) {
+
+    String pptFilePath = CommonUtil.getFullPathFileName(
+      folderName, folderName, ".pptx");
+    String outputDir =
+      CommonUtil.getFullPath(folderName) + folderName + File.separator;
+    if (!new File(outputDir).exists()) {
+      boolean mkdir = new File(outputDir).mkdirs();
+      if (mkdir) {
+        log.info("创建目录成功:{}", outputDir);
+      }
+    }
+
+    PptToPng.savePptToPng(pptFilePath, outputDir, 1920, 1080);
   }
 
   public static void process(String folderName) {
-
 
     //    String presentationName =
     //      RunExamples.getDataDir_Text() + "TextReplaceExample.pptx";
@@ -94,7 +115,7 @@ public class GetSixMinutesPpt {
           wordInfoList.subList(j, Math.min(j + 10, wordInfoList.size())));
       }
       // 判断是否为空
-      if(CollectionUtil.isEmpty(wordInfoListGroups)) {
+      if (CollectionUtil.isEmpty(wordInfoListGroups)) {
         log.info("wordInfoListGroups is empty");
         return;
       }
@@ -362,7 +383,6 @@ public class GetSixMinutesPpt {
             fillTable(pres.getSlides().get_Item(tableIndex + 5),
               wordInfoListGroups.get(5));
             break;
-
 
 //          case 3:
 //            break;

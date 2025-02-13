@@ -11,15 +11,11 @@ import com.coderdream.util.bbc.ProcessScriptUtil;
 import com.coderdream.util.bbc.TranslateUtil;
 import com.coderdream.util.bbc.WordCountUtil;
 import com.coderdream.util.cd.CdMP3SplitterUtil;
-import com.coderdream.util.cd.CdPythonUtil;
 import com.coderdream.util.cd.TextProcessor;
 import com.coderdream.util.gemini.TranslationUtil;
 import com.coderdream.util.ppt.GetSixMinutesPpt;
 import com.coderdream.util.subtitle.SubtitleUtil;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -268,6 +264,13 @@ public class SixMinutesStepByStep {
       GetSixMinutesPpt.process(folderName);
     } else {
       log.info("文件已存在: {}", pptxFileName);
+    }
+
+    // 生成pptx的图片
+    if (!CdFileUtil.isFileEmpty(pptxFileName)) {
+      GetSixMinutesPpt.process(folderName);
+    } else {
+      log.info("文件不存在: {}", pptxFileName);
     }
 
     TranslationUtil.genDescription(folderName);

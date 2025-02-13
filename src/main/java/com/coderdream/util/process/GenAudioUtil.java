@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.coderdream.util.audio.AudioMergerSingleBatch;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
+import com.coderdream.util.mstts.GenDualAudioUtil;
 import com.coderdream.util.mstts.SpeechUtil;
 import com.coderdream.util.pic.HighResImageVideoUtil;
 
@@ -45,7 +46,7 @@ public class GenAudioUtil {
     String pureFileNamePhonetics = CdFileUtil.getPureFileNameWithoutExtensionWithPath(
       phoneticsFileName);
     String audioType = "wav";
-    SpeechUtil.genDialog2Audio900(folderPath, subFolder, pureFileNamePhonetics,
+    GenDualAudioUtil.genDialog2Audio900(folderPath, subFolder, pureFileNamePhonetics,
       audioType);
 
     // 确保所有任务执行完毕后关闭线程池
