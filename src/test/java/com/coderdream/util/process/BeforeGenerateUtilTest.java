@@ -164,11 +164,6 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processBook020101_02() {
-<<<<<<< Updated upstream
-//    String folderPath = "D:\\0000\\EnBook002\\";
-
-=======
->>>>>>> Stashed changes
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
     List<String> subFolders = new ArrayList<>();
@@ -214,11 +209,6 @@ class BeforeGenerateUtilTest {
 
   @Test
   void processGenDialogTxt_02() {
-<<<<<<< Updated upstream
-//    String folderPath = "D:\\0000\\EnBook002\\";
-
-=======
->>>>>>> Stashed changes
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
 //    String subFolder = "Chapter004";
