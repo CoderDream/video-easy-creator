@@ -26,7 +26,8 @@ class BeforeGenerateUtilTest {
   @Test
   void genAiFile() {
     String bookName = "EnBook001";
-    String folderPath = OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
+    String folderPath =
+      OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
     String subFolder = "ch017";
     BeforeGenerateUtil.genAiFile(folderPath, subFolder);
     assertTrue(true);
@@ -36,7 +37,8 @@ class BeforeGenerateUtilTest {
   @Test
   void process() {
     String bookName = "EnBook001";
-    String folderPath = OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
+    String folderPath =
+      OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
     String subFolder = "ch020";
     BeforeGenerateUtil.process(folderPath, subFolder);
     assertTrue(true);
@@ -46,7 +48,8 @@ class BeforeGenerateUtilTest {
   @Test
   void process00() {
     String bookName = "EnBook001";
-    String folderPath = OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
+    String folderPath =
+      OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
 //    String subFolder = "ch012";
 //    BeforeGenerateUtil.process(folderPath, subFolder);
 //    assertTrue(true);
@@ -70,7 +73,8 @@ class BeforeGenerateUtilTest {
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";
 //
     String bookName = "EnBook001";
-    String folderPath = OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
+    String folderPath =
+      OperatingSystem.getFolderPath(bookName) + "900" + File.separator;
 //    String subFolder = "ch012";
 //    BeforeGenerateUtil.process(folderPath, subFolder);
 //    assertTrue(true);
@@ -182,16 +186,8 @@ class BeforeGenerateUtilTest {
   void processBook002_AI_00() {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    List<String> subFolders = new ArrayList<>();
-    int end = 17;
-    for (int i = 16; i < end; i++) {
-      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
-      subFolders.add("Chapter" + dayNumberString);
-    }
-
-    for (String subFolder : subFolders) {
-      BeforeGenerateUtil.processBook002_AI(folderPath, subFolder);
-    }
+    String subFolder = "Chapter033";
+    BeforeGenerateUtil.processBook002_AI(folderPath, subFolder);
   }
 
   @Test
@@ -200,7 +196,7 @@ class BeforeGenerateUtilTest {
     String folderPath = OperatingSystem.getFolderPath(bookName);
     List<String> subFolders = new ArrayList<>();
     int end = 51;
-    for (int i = 18; i < end; i++) {
+    for (int i = 35; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);
     }
@@ -234,8 +230,8 @@ class BeforeGenerateUtilTest {
   void processGenDialogTxt() {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    String subFolder = "Chapter016";
-    BeforeGenerateUtil.processGenDialogTxt(folderPath, subFolder);
+    String subFolder = "Chapter031";
+    BeforeGenerateUtil.processGenDialogTxt(folderPath, subFolder, false);
     assertTrue(true);
     System.out.println("done");
   }
@@ -255,8 +251,10 @@ class BeforeGenerateUtilTest {
       subFolders.add("Chapter" + dayNumberString);
     }
 
+    boolean replaceFlag = true;
     for (String subFolder : subFolders) {
-      BeforeGenerateUtil.processGenDialogTxt(folderPath, subFolder);
+      BeforeGenerateUtil.processGenDialogTxt(folderPath, subFolder,
+        replaceFlag);
     }
   }
 

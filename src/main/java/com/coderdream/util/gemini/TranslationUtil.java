@@ -7,15 +7,11 @@ import com.coderdream.entity.VocInfo;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.CommonUtil;
-import com.coderdream.util.cd.CdListUtil;
 import com.coderdream.util.cd.CdTextUtil;
 import com.coderdream.util.process.ListSplitterStream;
-import com.coderdream.util.process.RemoveEmptyLines;
-import com.coderdream.util.sentence.TextParserUtil;
 import com.coderdream.util.sentence.demo1.SentenceParser;
 import com.coderdream.vo.SentenceVO;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
-import freemarker.template.utility.StringUtil;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -25,9 +21,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -104,7 +101,6 @@ public class TranslationUtil {
       return null;
     }
     int groupSize = 100;
-//    if (sentences.size() > groupSize) {
     // 拆分句子列表，每组包含 groupSize 个元素
     List<List<String>> sentencesLists = ListSplitterStream.splitList(
       sentences, groupSize);
@@ -112,7 +108,6 @@ public class TranslationUtil {
     String englishFileNamePart;
     String jsonFileNamePart;
     String translate = "";
-//    StringBuilder translateTotal = new StringBuilder();
 
     List<String> totalTranslateList = new ArrayList<>();
     for (List<String> sentencesList : sentencesLists) {
@@ -128,13 +123,7 @@ public class TranslationUtil {
         String text = CdConstants.GEN_PHONETICS_TEXT;
         String content = String.join("\n", sentencesList);
         text += content;
-        translate = GeminiApiClient.generateContent(text);
-        List<SentenceVO> sentenceVOList = SentenceParser.parseSentences(
-          translate);
-        List<String> translateList = new ArrayList<>();
-        for (SentenceVO sentenceVO : sentenceVOList) {
-          translateList.add(sentenceVO.getPhonetics());
-        }
+        List<String> translateList = getStringsFromGemini(text, sentencesList.size());
 
         if (CollectionUtil.isNotEmpty(translateList)
           && translateList.size() == sentencesList.size()) {
@@ -145,20 +134,42 @@ public class TranslationUtil {
           totalTranslateList.addAll(translateList);
 //          translateTotal.append(translate);
         } else {
-          FileUtil.writeLines(translateList, jsonFilePart,
-            StandardCharsets.UTF_8);
-          FileUtil.writeLines(sentencesList, englishFileNamePart,
-            StandardCharsets.UTF_8);
+//          FileUtil.writeLines(translateList, jsonFilePart,
+//            StandardCharsets.UTF_8);
+//          FileUtil.writeLines(sentencesList, englishFileNamePart,
+//            StandardCharsets.UTF_8);
 
-          totalTranslateList.addAll(translateList);
-          log.error(
-            "translateList size is not equal to sentencesList size,"
-              + " translateList.size {},"
-              + " sentencesList.size {}, "
-              + " jsonFileNamePart: {}",
-            translateList.size(), sentencesList.size(), jsonFileNamePart);
-          break;
+//          totalTranslateList.addAll(translateList);
+
+
+          if (CollectionUtil.isNotEmpty(translateList)
+            && translateList.size() == sentencesList.size()) {
+            FileUtil.writeLines(translateList, jsonFilePart,
+              StandardCharsets.UTF_8);
+            FileUtil.writeLines(sentencesList, englishFileNamePart,
+              StandardCharsets.UTF_8);
+            totalTranslateList.addAll(translateList);
+//          translateTotal.append(translate);
+          } else {
+//          FileUtil.writeLines(translateList, jsonFilePart,
+//            StandardCharsets.UTF_8);
+//          FileUtil.writeLines(sentencesList, englishFileNamePart,
+//            StandardCharsets.UTF_8);
+
+//          totalTranslateList.addAll(translateList);
+            log.error(
+              "translateList size is not equal to sentencesList size,"
+                + " translateList.size {},"
+                + " sentencesList.size {}, "
+                + " jsonFileNamePart: {}",
+              translateList.size(), sentencesList.size(), jsonFileNamePart);
+            break;
+          }
         }
+      } else {
+        List<String> translateList = FileUtil.readLines(jsonFilePart,
+          StandardCharsets.UTF_8);
+        totalTranslateList.addAll(translateList);
       }
 //      log.info("genPhonetics Total: {}", translate);
     }
@@ -179,6 +190,67 @@ public class TranslationUtil {
 
 //    log.info("genPhonetics: {}", translate);
     return new File(aiFileName);
+  }
+
+  // 最大重试次数
+  private static final int MAX_RETRY_ATTEMPTS = 10;
+
+  /**
+   * 从 Gemini 获取字符串列表。
+   *
+   * @param text 输入文本
+   * @param size 期望的列表大小
+   * @return 翻译后的字符串列表
+   */
+  private static @NotNull List<String> getStringsFromGemini(String text, int size) {
+    return getStringsFromGeminiWithRetry(text, size, MAX_RETRY_ATTEMPTS);
+  }
+
+  /**
+   * 从 Gemini 获取字符串列表（带重试机制）。
+   *
+   * @param text              输入文本
+   * @param size              期望的列表大小
+   * @param remainingAttempts 剩余重试次数
+   * @return 翻译后的字符串列表。如果多次重试后仍无法获得期望大小的列表，则返回空列表。
+   */
+  /**
+   * 从 Gemini 获取字符串列表（带重试机制）。
+   *
+   * @param text              输入文本
+   * @param size              期望的列表大小
+   * @param remainingAttempts 剩余重试次数
+   * @return 翻译后的字符串列表。如果多次重试后仍无法获得期望大小的列表，则返回空列表。
+   */
+  private static @NotNull List<String> getStringsFromGeminiWithRetry(String text, int size, int remainingAttempts) {
+    // 如果重试次数用尽，返回空列表
+    if (remainingAttempts <= 0) {
+      // 可以选择抛出异常，或者返回空列表，具体取决于需求
+      log.error("在多次尝试后，未能从 Gemini 获取到期望大小的翻译列表。"); // 使用 log.error
+      return Collections.emptyList(); // 或者其他合适的默认值
+    }
+
+    // 调用 Gemini API 生成内容
+    String translate = GeminiApiClient.generateContent(text);
+    // 解析句子
+    List<SentenceVO> sentenceVOList = SentenceParser.parseSentences(translate);
+    // 提取音标
+    List<String> translateList = new ArrayList<>();
+    for (SentenceVO sentenceVO : sentenceVOList) {
+      translateList.add(sentenceVO.getPhonetics());
+    }
+
+    // 如果列表大小不符合预期，则进行重试
+    if (translateList.size() != size) {
+      // 使用 log.error 记录错误信息，而不是 System.err.println
+      log.error("翻译结果大小不匹配。期望: {}, 实际: {}, 正在重试... (剩余 {} 次尝试)",
+        size, translateList.size(), remainingAttempts - 1);
+      // 递归调用，减少剩余重试次数
+      return getStringsFromGeminiWithRetry(text, size, remainingAttempts - 1);
+    }
+
+    // 返回翻译结果
+    return translateList;
   }
 
   private static File writePhoneticsToFile(String totalFileName,

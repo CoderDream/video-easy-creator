@@ -60,8 +60,9 @@ public class BeforeGenerateUtil {
    * 生成对话文本
    * @param folderPath  文件夹路径
    * @param subFolder 子文件夹名称
+   * @param replaceFlag 是否替换
    */
-  public static void processGenDialogTxt(String folderPath, String subFolder) {
+  public static void processGenDialogTxt(String folderPath, String subFolder, boolean replaceFlag) {
     // 1. 生成章节文本
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";
 //    String subFolder = "ch004"; ❸
@@ -83,7 +84,7 @@ public class BeforeGenerateUtil {
     String totalPath =
       folderPath + subFolder + File.separator + subFolder + "_total.txt";
     if (CdFileUtil.isFileEmpty(dialogPath) || CdFileUtil.isFileEmpty(basicPath)
-      || CdFileUtil.isFileEmpty(totalPath)) {
+      || CdFileUtil.isFileEmpty(totalPath) || replaceFlag) {
 
       Map<Integer, DialogSingleEntity> dialogSingleEntityListSceneMap = getSceneMap(
         folderPath);
@@ -98,6 +99,7 @@ public class BeforeGenerateUtil {
       List<String> basicStringList = new ArrayList<>();
       List<String> dialogStringList = new ArrayList<>();
       List<String> totalStringList = new ArrayList<>();
+      assert chapterInfoEntity != null;
       List<Book002SceneEntity> sceneEntityList = chapterInfoEntity.getSceneEntityList();
       for (Book002SceneEntity sceneEntity : sceneEntityList) {
 

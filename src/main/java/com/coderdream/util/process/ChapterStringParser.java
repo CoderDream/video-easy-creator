@@ -4,7 +4,6 @@ import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.Book002ChapterInfoEntity;
 import com.coderdream.entity.Book002ChapterStringEntity;
 import com.coderdream.entity.Book002ContentEntity;
-import com.coderdream.entity.Book002DialogPairEntity;
 import com.coderdream.entity.Book002SceneEntity;
 import com.coderdream.entity.Book002SceneStringEntity;
 import com.coderdream.entity.SentencePair;
@@ -90,6 +89,7 @@ public class ChapterStringParser {
         if (blockStartMatcher.find()) {
           // 新的块开始
           if (blockCount >= 10) {
+            assert currentScene != null;
             log.warn("Scene中的块数量超过10个，可能有问题。Scene: {}",
               currentScene.getSceneTitle());
           }
@@ -169,10 +169,36 @@ public class ChapterStringParser {
             .substring(lastChineseCharOrPunctuationIndexWithoutPunct + 1)
             .trim());
 
-          if (StrUtil.isBlank(sentencePair.getEnglishSentence())
-            || StrUtil.isBlank(sentencePair.getChineseSentence())) {
-            log.warn("sentencePair 对话文本为空，忽略：{}", sentencePair);
-            errorCount++;
+          if (invalidSentencePair(sentencePair)) {
+            // 找到第一个英文出现的位置，作为中文的末尾位置
+            int lastEnglishLetterIndex = CdStringUtil.findFirstEnglishLetterIndex(
+              block.get(0));
+            sentencePair.setChineseSentence(block.get(0)
+              .substring(1, lastEnglishLetterIndex)
+              .trim());
+            sentencePair.setEnglishSentence(block.get(0)
+              .substring(lastEnglishLetterIndex)
+              .trim());
+
+            // 适配先英文后中文
+            if (invalidSentencePair(sentencePair)) {
+
+              // 找到第一个英文出现的位置，作为中文的末尾位置
+              int firstChineseCharIndex = CdStringUtil.findFirstChineseCharIndex(
+                block.get(0));
+              sentencePair.setChineseSentence(block.get(0)
+                .substring(firstChineseCharIndex)
+                .trim());
+              sentencePair.setEnglishSentence(block.get(0)
+                .substring(1, firstChineseCharIndex)
+                .trim());
+
+              if (invalidSentencePair(sentencePair)) {
+                log.warn("sentencePair 对话文本为空，忽略：{}", sentencePair);
+                errorCount++;
+              }
+
+            }
           }
           contentEntity.setSentencePair(sentencePair);
 
@@ -181,9 +207,13 @@ public class ChapterStringParser {
           SentencePair sameSentencePair;
           for (int j = 1; j < blockSize; j++) {
             String temp = block.get(j);
-            temp = temp.replace("同类表达 ", "");
+            temp = temp.replace("同类表达", "");
+            temp = temp.replace("这样回答", "");
+            temp = temp.replace("这样提问", "");
             temp = temp.replace("对话 A:", "");
+            temp = temp.replace("对话A:", "");
             temp = temp.replace("B:", "");
+            temp = temp.trim(); // 去掉前后空格
             // 查询是否有中文
             int firstIndex = CdStringUtil.findFirstChineseCharIndex(temp);
             sameSentencePair = new SentencePair();
@@ -198,8 +228,7 @@ public class ChapterStringParser {
             sameSentencePair.setChineseSentence(chineseSentence.trim());
             sameSentencePair.setEnglishSentence(englishSentence.trim());
 
-            if (StrUtil.isBlank(sameSentencePair.getEnglishSentence())
-              || StrUtil.isBlank(sameSentencePair.getChineseSentence())) {
+            if (invalidSentencePair(sameSentencePair)) {
               log.warn("sameSentencePair 对话文本为空，忽略：{}",
                 sameSentencePair);
               errorCount++;
@@ -223,6 +252,15 @@ public class ChapterStringParser {
       return null;
     }
     return chapterInfoEntity;
+  }
+
+  public static int MIN_SENTENCE_LENGTH = 1;
+
+  public static boolean invalidSentencePair(SentencePair sentencePair) {
+    return StrUtil.isBlank(sentencePair.getEnglishSentence())
+      || StrUtil.isBlank(sentencePair.getChineseSentence())
+      || sentencePair.getChineseSentence().length() <= MIN_SENTENCE_LENGTH
+      || sentencePair.getEnglishSentence().length() <= MIN_SENTENCE_LENGTH;
   }
 
   public static void getTextFile() {
@@ -274,7 +312,6 @@ public class ChapterStringParser {
 //        }
 //      }
     }
-
 
 //    Book002ChapterStringEntity chapterEntity = ChapterStringParser.parseChapterFile(
 //      filePath);

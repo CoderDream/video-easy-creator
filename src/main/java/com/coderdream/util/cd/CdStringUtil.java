@@ -381,6 +381,21 @@ public class CdStringUtil {
   }
 
   /**
+   * 查找字符串中第一个英文字符（A-Z 或 a-z）的索引。
+   *
+   * @param text 待查找的字符串
+   * @return 如果找到，返回索引；否则返回 -1
+   */
+  public static int findFirstEnglishLetterIndex(String text) {
+    Pattern pattern = Pattern.compile("[A-Za-z]"); // 或者 Pattern.compile("[a-zA-Z]");
+    Matcher matcher = pattern.matcher(text);
+    if (matcher.find()) {
+      return matcher.start();
+    }
+    return -1;
+  }
+
+  /**
    * 查找字符串中第一个中文字符或中文标点的索引 (不使用 \p{Punct})
    *
    * @param text 待查找的字符串
