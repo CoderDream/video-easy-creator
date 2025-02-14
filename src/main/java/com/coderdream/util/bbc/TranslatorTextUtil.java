@@ -10,6 +10,7 @@ import com.google.gson.JsonPrimitive;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,63 +27,65 @@ import okhttp3.Response;
  *
  * @author CoderDream
  */
+@Slf4j
 public class TranslatorTextUtil {
 
-    private static String key = TextTranslatorConstant.API_KEY;// "<YOUR-TRANSLATOR-KEY>";
-    public String endpoint = "https://api.cognitive.microsofttranslator.com";
+  private static String key = TextTranslatorConstant.API_KEY;// "<YOUR-TRANSLATOR-KEY>";
+  public String endpoint = "https://api.cognitive.microsofttranslator.com";
 
 //    public String endpoint = "https://trans4cd.cognitiveservices.azure.com/";
 
-    // 语言支持：https://learn.microsoft.com/zh-cn/azure/ai-services/translator/language-support
-    public String route = "/translate?api-version=3.0&from=en&to=zh-Hans"; // "/translate?api-version=3.0&from=en&to=sw&to=it";
-    public String url = endpoint.concat(route);
+  // 语言支持：https://learn.microsoft.com/zh-cn/azure/ai-services/translator/language-support
+  public String route = "/translate?api-version=3.0&from=en&to=zh-Hans"; // "/translate?api-version=3.0&from=en&to=sw&to=it";
+  public String url = endpoint.concat(route);
 
-    // location, also known as region.
-    // required if you're using a multi-service or regional (not global) resource. It can be found in the Azure portal on the Keys and Endpoint page.
-    private static String location = TextTranslatorConstant.LOCATION;// "<YOUR-RESOURCE-LOCATION>";
+  // location, also known as region.
+  // required if you're using a multi-service or regional (not global) resource. It can be found in the Azure portal on the Keys and Endpoint page.
+  private static String location = TextTranslatorConstant.LOCATION;// "<YOUR-RESOURCE-LOCATION>";
 
-    // Instantiates the OkHttpClient.
-    OkHttpClient client = new OkHttpClient();
+  // Instantiates the OkHttpClient.
+  OkHttpClient client = new OkHttpClient();
 
-    // This function performs a POST request.
-    public String process(String text) throws IOException {
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType,
-            "[{\"Text\": \"" + text + "\"}]");
-        Request request = new Request.Builder()
-            .url(url)
-            .post(body)
-            .addHeader("Ocp-Apim-Subscription-Key", key)
-            // location required if you're using a multi-service or regional (not global) resource.
-            .addHeader("Ocp-Apim-Subscription-Region", location)
-            .addHeader("Content-type", "application/json")
-            .build();
-        Response response = client.newCall(request).execute();
-        return response.body().string();
-    }
+  // This function performs a POST request.
+  public String process(String text) throws IOException {
+    MediaType mediaType = MediaType.parse("application/json");
+    RequestBody body = RequestBody.create(mediaType,
+      "[{\"Text\": \"" + text + "\"}]");
+    Request request = new Request.Builder()
+      .url(url)
+      .post(body)
+      .addHeader("Ocp-Apim-Subscription-Key", key)
+      // location required if you're using a multi-service or regional (not global) resource.
+      .addHeader("Ocp-Apim-Subscription-Region", location)
+      .addHeader("Content-type", "application/json")
+      .build();
+    Response response = client.newCall(request).execute();
+    assert response.body() != null;
+    return response.body().string();
+  }
 
-    // This function prettifies the json response.
-    public static String prettify(String json_text) {
-        JsonParser parser = new JsonParser();
-        JsonElement json = parser.parse(json_text);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(json);
-    }
+  // This function prettifies the json response.
+  public static String prettify(String json_text) {
+    JsonParser parser = new JsonParser();
+    JsonElement json = parser.parse(json_text);
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    return gson.toJson(json);
+  }
 
-    public static List<String> parserTrans(String json_text) {
-        List<String> result = new ArrayList<>();
-        JsonParser parser = new JsonParser();
-        JsonElement json = parser.parse(json_text);
-        if (json instanceof JsonArray) { // translations -> {JsonArray@1903} "[{"text":"嘿，朋友！今天你做什么了？","to":"zh-Hans"}]"
-            JsonArray arr = (JsonArray) json;
-            if (arr != null && arr.size() == 1) {
-                Object obj = arr.get(0);
-                if (obj instanceof JsonObject) {
-                    JsonObject jsonObject = (JsonObject) obj;
-                    Object objContent = jsonObject.get("translations");
-                    if (objContent instanceof JsonArray) {
-                        JsonArray resultArr = (JsonArray) objContent;
-                        if (resultArr != null && resultArr.size() == 1) {
+  public static List<String> parserTrans(String json_text) {
+    List<String> result = new ArrayList<>();
+    JsonParser parser = new JsonParser();
+    JsonElement json = parser.parse(json_text);
+    if (json instanceof JsonArray) { // translations -> {JsonArray@1903} "[{"text":"嘿，朋友！今天你做什么了？","to":"zh-Hans"}]"
+      JsonArray arr = (JsonArray) json;
+      if (arr != null && arr.size() == 1) {
+        Object obj = arr.get(0);
+        if (obj instanceof JsonObject) {
+          JsonObject jsonObject = (JsonObject) obj;
+          Object objContent = jsonObject.get("translations");
+          if (objContent instanceof JsonArray) {
+            JsonArray resultArr = (JsonArray) objContent;
+            if (resultArr != null && resultArr.size() == 1) {
 //                            for (Object objInt : resultArr) {
 ////                                System.out.println(objInt.getClass());
 //                                if (objInt instanceof JsonPrimitive) {
@@ -92,52 +95,55 @@ public class TranslatorTextUtil {
 //                                    }
 //                                }
 //                            }
-                            Object objTextMap = resultArr.get(0);
-                            if (objTextMap instanceof JsonObject) {
-                                JsonObject jsonObjectText = (JsonObject) objTextMap;
-                                Object objText = jsonObjectText.get("text");
-                                if (objText instanceof JsonPrimitive) {
-                                    JsonPrimitive jsonPrimitive = (JsonPrimitive) objText;
-                                    if (jsonPrimitive.isString()) {
-                                        result.add(jsonPrimitive.getAsString());
-                                    }
-                                }
-                            }
-                        }
-                    }
+              Object objTextMap = resultArr.get(0);
+              if (objTextMap instanceof JsonObject) {
+                JsonObject jsonObjectText = (JsonObject) objTextMap;
+                Object objText = jsonObjectText.get("text");
+                if (objText instanceof JsonPrimitive) {
+                  JsonPrimitive jsonPrimitive = (JsonPrimitive) objText;
+                  if (jsonPrimitive.isString()) {
+                    result.add(jsonPrimitive.getAsString());
+                  }
                 }
+              }
             }
+          }
         }
+      }
+    }
 
 //        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return result;
+    return result;
+  }
+
+  public static List<String> translatorText(String text) {
+    List<String> result = new ArrayList<>();
+    try {
+      TranslatorTextUtil translatorTextUtil = new TranslatorTextUtil();
+
+//      text = text.replace("\n", " ");
+      // 双引号替换成单引号
+      text = text.replace("\"", "'");
+      String response = translatorTextUtil.process(text);
+      if (response.contains("error")) {
+        log.error("错误信息： {}", prettify(response));
+      }
+
+      List<String> contextList = parserTrans(response);
+      result.addAll(contextList);
+    } catch (Exception e) {
+      log.error("异常信息： {}", e.getMessage(), e);
     }
 
-    public static List<String> translatorText(String text) {
-        List<String> result = new ArrayList<>();
-        try {
-            TranslatorTextUtil translatorTextUtil = new TranslatorTextUtil();
+    return result;
+  }
 
-            String response = translatorTextUtil.process(text);
-            if(response.contains("error")) {
-                System.out.println(prettify(response));
-            }
-
-            List<String> contextList = parserTrans(response);
-            result.addAll(contextList);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        return result;
+  public static void main(String[] args) {
+    String content = "Hello, friend! What did you do today? How are you? I am fine.";
+    List<String> stringList = translatorText(content);
+    for (String str : stringList) {
+      System.out.println(str);
     }
-
-    public static void main(String[] args) {
-        String content = "Hello, friend! What did you do today?";
-        List<String> stringList = translatorText(content);
-        for (String str : stringList) {
-            System.out.println(str);
-        }
 //
 //        String text = "How are you? I am fine. What did you do today?";
 ////        breakSentence(text);
@@ -166,5 +172,5 @@ public class TranslatorTextUtil {
 //                }
 //            }
 //        }
-    }
+  }
 }

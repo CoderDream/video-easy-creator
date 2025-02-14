@@ -239,7 +239,7 @@ public class SixMinutesStepByStep {
     if (CdFileUtil.isFileEmpty(srcFileNameCn)) {
       TranslateUtil.translateEngSrc(folderName);
     } else {
-      log.info("文件已存在: {}", srcFileNameCn);
+      log.info("chn 文件已存在: {}", srcFileNameCn);
     }
 
     String excelCoreVocFileName = CommonUtil.getFullPathFileName(folderName,

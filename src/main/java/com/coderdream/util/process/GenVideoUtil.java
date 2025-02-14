@@ -45,7 +45,11 @@ public class GenVideoUtil {
                 + shortSubFolder + "-" + chapterName
                 + File.separator + bookName + "-EP-" + shortSubFolder + "-" + chapterName
                 + ".mp4";
+        String listFileName = OperatingSystem.getVideoBaseFolder() + File.separator + bookFolderName + File.separator + bookName + "-EP-"
+          + shortSubFolder + "-" + chapterName
+          + File.separator + bookName + "-EP-" + shortSubFolder + "-" + chapterName
+          + "_list.txt";
 
-        VideoMergerUtil.mergerVideos(videoPath, mp4FileName);
+        VideoMergerUtil.mergerVideos(videoPath, mp4FileName, listFileName);
     }
 }

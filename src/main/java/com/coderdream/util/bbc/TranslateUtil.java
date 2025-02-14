@@ -22,7 +22,7 @@ public class TranslateUtil {
 
   public static void main(String[] args) {
 
-    String folderName = "181122";
+    String folderName = "181213";
     TranslateUtil.process(folderName);
 //        TranslateUtil.mergeScriptContent(folderName);
 
@@ -32,8 +32,8 @@ public class TranslateUtil {
 //        str = removeEnContent(str);
 //        System.out.println(str);
 //
-    List<String> NUMBER_LIST = Arrays.asList("201015");
-    TranslateUtil.translateTitleWithScriptFile(NUMBER_LIST, "script");
+//    List<String> NUMBER_LIST = Arrays.asList("201015");
+//    TranslateUtil.translateTitleWithScriptFile(NUMBER_LIST, "script");
 
 //        TranslateUtil.mergeScriptContentWx(folderName);
 
@@ -271,6 +271,7 @@ public class TranslateUtil {
       ".txt");
     List<String> stringList = CdFileUtil.readFileContent(srcFileName);
 
+    assert stringList != null;
     List<String> newList = translate(folderName, stringList);
 
     String srcFileNameCn = CommonUtil.getFullPathFileName(folderName, fileName,
@@ -314,8 +315,6 @@ public class TranslateUtil {
     String srcFileNameCn = folderName + fileName + "_dialog.cn.txt";
     // 写中文翻译文本
     CdFileUtil.writeToFile(srcFileNameCn, newList);
-
-
   }
 
   private static @NotNull List<String> translate(String folderName,

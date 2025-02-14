@@ -1,8 +1,8 @@
 package com.coderdream.util.video;
 
-import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 
 import com.coderdream.util.cd.CdTimeUtil;
@@ -11,10 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +21,21 @@ public class VideoMergerUtil {
    * 使用 FFmpeg 合并多个视频文件。
    *
    * @param videoFileNames 要合并的视频文件列表（按顺序）
-   * @param outputFile 输出的合并后的视频文件
+   * @param outputFile     输出的合并后的视频文件
    */
-  public static void mergeVideos(List<String> videoFileNames, String outputFile)
+  public static void mergeVideos(List<String> videoFileNames, String outputFile,String listFileName)
     throws IOException {
-    // 1. 创建一个包含所有视频文件路径的文本文件 (FFmpeg concat demuxer 格式)
-    Path listFile = Files.createTempFile("ffmpeg_concat_list", ".txt");
-    try (BufferedWriter writer = Files.newBufferedWriter(listFile,
-      StandardOpenOption.CREATE)) {
+    // 1. 创建一个包含所有视频文件路径的文本文件
+    File listFile = new File(listFileName);
+    // **获取父目录并创建**
+    File parentDir = listFile.getParentFile();
+    if (parentDir != null && !parentDir.exists()) {
+      parentDir.mkdirs(); // 确保目录存在
+    }
+
+    try (BufferedWriter writer = new BufferedWriter(
+      new FileWriter(listFile))) {
+      // 写入每个视频文件的路径
       for (String videoFileName : videoFileNames) {
         writer.write("file '" + videoFileName + "'");
         writer.newLine();
@@ -48,7 +51,7 @@ public class VideoMergerUtil {
     command.add("-safe");
     command.add("0");
     command.add("-i");
-    command.add(listFile.toAbsolutePath().toString());
+    command.add(listFileName);
     command.add("-c");
     command.add("copy"); // 使用流复制，避免重新编码，速度快
     command.add(outputFile);
@@ -87,15 +90,13 @@ public class VideoMergerUtil {
     }
 
     // 5. 删除列表文件
-    try {
-      Files.delete(listFile);
-    } catch (IOException e) {
-      log.warn("无法删除临时列表文件: {}", listFile, e);
+    boolean del = FileUtil.del(listFileName);
+    if (!del) {
+      log.warn("无法删除临时列表文件: {}", listFile);
     }
   }
 
-
-  public static void mergerVideos(String videoPath, String outputFile) {
+  public static void mergerVideos(String videoPath, String outputFile, String listFileName) {
 
     // 记录合并开始时间
     long startTime = System.currentTimeMillis();
@@ -108,13 +109,13 @@ public class VideoMergerUtil {
       videoPathNameList.add(videoPath + videoPathName);
     }
     try {
-      mergeVideos(videoPathNameList, outputFile);
+      mergeVideos(videoPathNameList, outputFile, listFileName);
     } catch (IOException e) {
       log.error("视频合并失败，{}", e.getMessage(), e);
     }
     long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
     long durationMillis = endTime - startTime; // 计算耗时（毫秒）
     log.info("音频合并成功: {}，耗时: {}", videoPath,
-            CdTimeUtil.formatDuration(durationMillis));
+      CdTimeUtil.formatDuration(durationMillis));
   }
 }

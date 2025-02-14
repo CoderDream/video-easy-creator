@@ -55,7 +55,7 @@ public class MergeSingleVideoUtil {
       String fileListFileName =
         BatchCreateVideoCommonUtil.getVideoPath(fileName) + "file_list.txt";
       File listFile = new File(fileListFileName);
-      try (BufferedWriter writer = new BufferedWriter(
+      try (BufferedWriter ignored = new BufferedWriter(
         new FileWriter(listFile))) {
         for (int i = 0; i < size; i++) {
           // 写入每个视频文件的路径
