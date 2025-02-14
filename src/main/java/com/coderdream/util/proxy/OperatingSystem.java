@@ -92,7 +92,7 @@ public class OperatingSystem {
         // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
         switch (osType) {
             case OS_WINDOWS -> folderPath = "D:\\0000" + File.separator;
-            case OS_MAC -> folderPath = "/Users/coderdream/Documents/" + File.separator;
+            case OS_MAC -> folderPath = "/Users/coderdream/Documents" + File.separator;
             case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
             default -> System.out.println("无法识别的操作系统。");
         }

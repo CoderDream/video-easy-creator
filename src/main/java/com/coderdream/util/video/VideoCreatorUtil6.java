@@ -4,85 +4,60 @@ import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
 
 import static com.coderdream.util.cd.CdConstants.OS_MAC;
 import static com.coderdream.util.cd.CdConstants.OS_WINDOWS;
 
 @Slf4j
-public class VideoCreatorUtil {
+public class VideoCreatorUtil6 {
 
     private static final int MAX_RETRIES = 10;
-    private static final int RETRY_INTERVAL_MS = 5000; // 重试间隔，5秒
     private static final String RETRY_LOG_SUFFIX = "_retry_log.txt";
     private static final String FAILURE_LOG_SUFFIX = "_failure_log.txt";
 
-    // ThreadPoolExecutor 参数
-    private static final int CORE_POOL_SIZE = Runtime.getRuntime().availableProcessors(); // 核心线程数
-    private static final int MAXIMUM_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 2; // 最大线程数
-    private static final long KEEP_ALIVE_TIME = 60L; // 空闲线程存活时间 (秒)
-    private static final TimeUnit UNIT = TimeUnit.SECONDS;
-    private static final BlockingQueue<Runnable> WORK_QUEUE = new LinkedBlockingQueue<>(100); // 工作队列
-    private static final RejectedExecutionHandler HANDLER = new ThreadPoolExecutor.CallerRunsPolicy(); // 拒绝策略
-
-
-    private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(
-            CORE_POOL_SIZE,
-            MAXIMUM_POOL_SIZE,
-            KEEP_ALIVE_TIME,
-            UNIT,
-            WORK_QUEUE,
-            HANDLER
-    );
-
     /**
-     * 使用FFmpeg将图片和无损音频合成一个视频 (支持多线程)
+     * 使用FFmpeg将图片和无损音频合成一个视频
      *
      * @param imageFile 图片文件
      * @param audioFile 无损音频文件
      * @param videoFile 输出的视频文件
      * @param duration  视频时长
      */
-    public static void createVideo(File imageFile, File audioFile, File videoFile, double duration) {
-        executor.submit(() -> {
-            int attempt = 0;
-            while (attempt < MAX_RETRIES) {
+    public static void createVideo(File imageFile, File audioFile, File videoFile,
+                                   double duration) {
+        int attempt = 0;
+        while (attempt < MAX_RETRIES) {
+            try {
+                createVideoCore(imageFile, audioFile, videoFile, duration);
+                if (attempt > 0) {
+                    logRetryAttempt(imageFile, attempt);
+                }
+                return;
+            } catch (Exception e) {
+                attempt++;
+                log.error("创建视频失败 (文件: {}, 尝试次数: {}): {}",
+                        imageFile.getName(), attempt, e.getMessage());  // 更详细的错误信息
+                if (attempt >= MAX_RETRIES) {
+                    logFinalFailure(imageFile);
+                } else {
+                    logRetryAttempt(imageFile, attempt);
+                }
                 try {
-                    createVideoCore(imageFile, audioFile, videoFile, duration);
-                    if (attempt > 0) {
-                        logRetryAttempt(imageFile, attempt);
-                    }
-                    return; // 成功创建视频，退出循环
-                } catch (Exception e) {
-                    attempt++;
-                    log.error("创建视频失败 (文件: {}, 尝试次数: {}): {}",
-                            imageFile.getName(), attempt, e.getMessage());
-                    if (attempt >= MAX_RETRIES) {
-                        logFinalFailure(imageFile);
-                    } else {
-                        logRetryAttempt(imageFile, attempt);
-                    }
-                    try {
-                        Thread.sleep(RETRY_INTERVAL_MS); // 增加重试间隔
-                    } catch (InterruptedException ie) {
-                        log.error("线程休眠被中断: {}", ie.getMessage());
-                        Thread.currentThread().interrupt();
-                        return; // 中断时，直接退出方法
-                    }
+                    Thread.sleep(1000); // 稍作等待后重试
+                } catch (InterruptedException ie) {
+                    log.error("线程休眠被中断: {}", ie.getMessage());
+                    Thread.currentThread().interrupt();  // 重新设置中断标志
+                    return;  // 中断时，直接退出方法
                 }
             }
-        });
+        }
     }
 
     private static void createVideoCore(File imageFile, File audioFile, File videoFile,
@@ -94,7 +69,7 @@ public class VideoCreatorUtil {
         command.add("-loop");
         command.add("1"); // 循环输入图片
         command.add("-framerate");
-        command.add(String.format("%.6f", 1.0 / duration)); // 根据时长计算帧率
+        command.add("60"); // 设置帧率为 60
         command.add("-t");
         command.add(String.format("%.2f", duration)); // 设置视频时长
         command.add("-i");
@@ -114,26 +89,16 @@ public class VideoCreatorUtil {
             command.add("p4"); // 使用 p4 预设.  可以根据需要调整 (p1 - p7, slow, medium, fast, etc.)
             command.add("-b:v"); //设置比特率
             command.add("10000k");
-            //command.add("-rc");  // 如果需要, 可以尝试使用 VBR (可变比特率)
-            //command.add("vbr");
-            //command.add("-cq");
-            //command.add("19");
-
+            //command.add("-rc");
+            //command.add("vbr");  // 使用 vbr 可变比特率
+            //command.add("-cq");  //和 -rc vbr 一起使用
+            //command.add("19");   //和 -rc vbr 一起使用
         } else if (OS_MAC.equals(os)) {
             // macOS 使用 VideoToolbox 硬件加速 (h264_videotoolbox)
             command.add("-c:v");
             command.add("h264_videotoolbox");
-            command.add("-q:v");
-            command.add("40"); // 调整质量值 (原60，现在尝试40，可以进一步调整)
-
-            //  更精细的码率控制 (可选, 如果 -q:v 效果不好)
-            // command.add("-b:v");
-            // command.add("10M");  // 目标比特率 (例如 10 Mbps)
-            // command.add("-maxrate:v");
-            // command.add("12M"); // 最大比特率
-            // command.add("-bufsize:v");
-            // command.add("24M"); // 缓冲区大小
-
+            command.add("-q:v");  // 使用质量模式, 1-100, 值越小质量越高
+            command.add("60"); // 设置质量 (根据需要调整)
         } else {
             // 其他操作系统使用 libx264 软件编码
             command.add("-c:v");
@@ -163,10 +128,10 @@ public class VideoCreatorUtil {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                //  可以处理 FFmpeg 的输出, 例如记录日志或显示进度
-                //  但要注意, 大量的 FFmpeg 输出可能会导致程序阻塞,
-                //  所以如果不需要详细的 FFmpeg 输出, 最好不要在这里打印每一行
-                log.debug("{}", line); // 将FFmpeg的输出也记录到日志中, 使用debug级别
+                // 在这里可以处理 FFmpeg 的输出，例如记录日志或显示进度
+                // 但要注意，大量的 FFmpeg 输出可能会导致程序阻塞，
+                // 所以如果不需要详细的 FFmpeg 输出，最好不要在这里打印每一行
+                //log.info("{}", line); // 将FFmpeg的输出也记录到日志中
             }
         }
 
@@ -180,6 +145,7 @@ public class VideoCreatorUtil {
             throw new Exception("FFmpeg 进程执行失败，退出代码: " + exitCode);
         }
     }
+
 
     private static void logRetryAttempt(File imageFile, int attempt) {
         try {
@@ -214,20 +180,6 @@ public class VideoCreatorUtil {
                 StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
             writer.write(message);
             writer.newLine();
-        }
-    }
-
-    // 关闭线程池的方法
-    public static void shutdown() {
-        executor.shutdown();
-        try {
-            // 等待一段时间（例如60秒）让任务完成，或者强制关闭
-            if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
-                executor.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            executor.shutdownNow();
-            Thread.currentThread().interrupt();
         }
     }
 }

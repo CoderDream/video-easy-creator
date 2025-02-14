@@ -163,7 +163,7 @@ public class PreparePublishUtil {
         String srtFileName = CdFileUtil.changeExtension(mp3FileName, "srt");
         // D:\0000\EnBook001\900\ch003\ch003_total.txt
         String subtitleFileName =
-                folderPath + subFolder + File.separator + subFolder +
+                OperatingSystem.getBaseFolder() + bookFolderName + File.separator + subFolder + File.separator + subFolder +
                         "_total.txt";
         File totalFile = new File(subtitleFileName);
         if (!totalFile.exists() || totalFile.length() == 0) {
