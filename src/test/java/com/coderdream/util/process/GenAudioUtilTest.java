@@ -48,7 +48,7 @@ class GenAudioUtilTest {
   void process02() {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    String subFolder = "Chapter012";
+    String subFolder = "Chapter008";
     GenAudioUtil.process(folderPath, subFolder);
   }
 

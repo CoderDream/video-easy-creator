@@ -59,4 +59,22 @@ class GenVideoUtilTest {
     }
 
   }
+
+
+  @Test
+  void process02_Merge() {
+//    String bookFolderName = "EnBook002";
+//    String folderPath = "D:\\0000\\" + bookFolderName + "\\";
+
+    String bookFolderName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookFolderName);
+
+    String subFolder = "Chapter010";
+    String bookName = "一輩子夠用的英語口語大全集";
+    String chapterName = "book02_name.txt";
+    String shortSubFolder = subFolder.substring(8);
+    GenVideoUtil.processVideoMerger(folderPath, subFolder, shortSubFolder,
+      bookFolderName, bookName,
+      chapterName);
+  }
 }

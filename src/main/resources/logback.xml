@@ -7,18 +7,46 @@
         </encoder>
     </appender>
 
+    <!-- 日志的格式 https://blog.csdn.net/qq_37207676/article/details/117692013
+    %d          表示日期
+    %thread     表示线程名
+    %-5level    日志级别，从左显示5个字符宽度
+    %logger{56} 日志打印所属的类名，限定长度56个字符
+    %msg        日志消息
+    %n          是换行符
+    颜色设置    %颜色（以上参数），例如，%highlight(%-5level)
+    支持颜色    "%black", "%red", "%green","%yellow","%blue", "%magenta","%cyan", "%white", "%gray", "%boldRed",
+                "%boldGreen", "%boldYellow", "%boldBlue", "%boldMagenta""%boldCyan", "%boldWhite" and "%highlight"
+-->
+
+    <property name="LOG_COLOR_FORMAT" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%cyan(%thread)] [%highlight(%-5level)] [%green(%logger{56})]: %highlight(%msg) %n"/>
+
+<!--    <property name="LOG_COLOR_FORMAT" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%cyan(%thread)] [%highlight(%-5level)] [%green(%logger{56})]: %msg%n"/>-->
+
+    <!-- 控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %logger{36} - %msg%n</pattern>
-            <!--  更详细的配置，可以自定义颜色
-            <pattern>
-                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
-                <pattern>%d{HH:mm:ss.SSS} [%thread] %X{user} %X{request} %highlight(%-5level) %logger{36} - %msg%n</pattern>
-                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %replace(%msg){'\n', ''}%n</pattern>
-            </pattern>
-            -->
+        <!-- 过滤掉 TRACE 级别的日志-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 日志的格式化输出 -->
+            <pattern>${LOG_COLOR_FORMAT}</pattern>
         </encoder>
     </appender>
+
+<!--    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder>-->
+<!--            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %logger{36} - %msg%n</pattern>-->
+<!--            &lt;!&ndash;  更详细的配置，可以自定义颜色-->
+<!--            <pattern>-->
+<!--                %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n-->
+<!--                <pattern>%d{HH:mm:ss.SSS} [%thread] %X{user} %X{request} %highlight(%-5level) %logger{36} - %msg%n</pattern>-->
+<!--                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %replace(%msg){'\n', ''}%n</pattern>-->
+<!--            </pattern>-->
+<!--            &ndash;&gt;-->
+<!--        </encoder>-->
+<!--    </appender>-->
 
 <!--    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">-->
 <!--        <encoder>-->
@@ -45,7 +73,7 @@
     </appender>
 
     <!-- 根日志级别设置 -->
-    <root level="INFO">
+    <root level="TRACE">
 <!--        <appender-ref ref="STDOUT"/>-->
         <appender-ref ref="CONSOLE" />
     </root>

@@ -1,5 +1,6 @@
 package com.coderdream.util.mstts;
 
+import com.coderdream.util.cd.CdConstants;
 import com.microsoft.cognitiveservices.speech.*;
 import com.microsoft.cognitiveservices.speech.audio.*;
 
@@ -8,21 +9,22 @@ import java.util.concurrent.ExecutionException;
 
 public class SpeechSynthesis {
     // This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
-    private static String speechKey =  "AkKJ1ZPVFFPvujmwI5N1ik9J3mcl9dfK2y13gMRK4BFEurFcUPfTJQQJ99BAAC3pKaRXJ3w3AAAYACOGDyWB";// System.getenv("SPEECH_KEY");
-    private static String speechRegion = "eastasia";// System.getenv("SPEECH_REGION");
+    private static String speechKey =  CdConstants.SPEECH_KEY_EAST_US;// System.getenv("SPEECH_KEY");
+    private static String speechRegion =  "eastus2" ;// "eastasia";// System.getenv("SPEECH_REGION");
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey, speechRegion);
 
-//        speechConfig.setSpeechSynthesisVoiceName("en-US-AvaMultilingualNeural"); // zh-CN-XiaochenNeural
+        speechConfig.setSpeechSynthesisVoiceName("en-US-AvaMultilingualNeural"); // zh-CN-XiaochenNeural
 
-        speechConfig.setSpeechSynthesisVoiceName("zh-CN-XiaochenNeural"); //
+//        speechConfig.setSpeechSynthesisVoiceName("zh-CN-XiaochenNeural"); //
 
         SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer(speechConfig);
 
         // Get text from the console and synthesize to the default speaker.
         System.out.println("Enter some text that you want to speak >");
-        String text = "英文加中文配音，每次半小時，增强你的英文听力。";// new Scanner(System.in).nextLine();
+//        String text = "英文加中文配音，每次半小時，增强你的英文听力。";// new Scanner(System.in).nextLine();
+        String text = "I usually go to bed at ten, but last night I went to bed at eleven.";// new Scanner(System.in).nextLine();
 //        if (text.isEmpty())
 //        {
 //            return;

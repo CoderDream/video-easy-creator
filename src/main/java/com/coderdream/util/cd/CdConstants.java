@@ -115,10 +115,10 @@ public class CdConstants {
   /**
    * 美国西部
    */
-  public static String SPEECH_KEY_EAST_US = "825596822f8649b78e20a8ab5dc5add6";// System.getenv("SPEECH_KEY_EAST_US");
+  public static String SPEECH_KEY_EAST_US = System.getenv("SPEECH_KEY_EAST_US");
 
 
-  public static String SPEECH_KEY_EASTASIA = "AkKJ1ZPVFFPvujmwI5N1ik9J3mcl9dfK2y13gMRK4BFEurFcUPfTJQQJ99BAAC3pKaRXJ3w3AAAYACOGDyWB";// System.getenv("SPEECH_KEY_EASTASIA");
+  public static String SPEECH_KEY_EASTASIA = System.getenv("SPEECH_KEY_EASTASIA");
 
   /**
    * 东亚 eastasia
