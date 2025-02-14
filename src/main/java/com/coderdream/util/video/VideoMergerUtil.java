@@ -4,6 +4,8 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedWriter;
@@ -22,7 +24,7 @@ public class VideoMergerUtil {
   /**
    * 使用 FFmpeg 合并多个视频文件。
    *
-   * @param videoFiles 要合并的视频文件列表（按顺序）
+   * @param videoFileNames 要合并的视频文件列表（按顺序）
    * @param outputFile 输出的合并后的视频文件
    */
   public static void mergeVideos(List<String> videoFileNames, String outputFile)
@@ -95,14 +97,24 @@ public class VideoMergerUtil {
 
   public static void mergerVideos(String videoPath, String outputFile) {
 
-    List<String> videoPathNameList = FileUtil.listFileNames(videoPath);
+    // 记录合并开始时间
+    long startTime = System.currentTimeMillis();
+    List<String> videoPathNameListReal = FileUtil.listFileNames(videoPath);
 
     // 如果图片列表数量和音频列表数量不一致，则抛出异常
-    videoPathNameList.sort(String::compareTo);
+    videoPathNameListReal.sort(String::compareTo);
+    List<String> videoPathNameList = new ArrayList<>();
+    for (String videoPathName : videoPathNameListReal) {
+      videoPathNameList.add(videoPath + videoPathName);
+    }
     try {
       mergeVideos(videoPathNameList, outputFile);
     } catch (IOException e) {
       log.error("视频合并失败，{}", e.getMessage(), e);
     }
+    long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
+    long durationMillis = endTime - startTime; // 计算耗时（毫秒）
+    log.info("音频合并成功: {}，耗时: {}", videoPath,
+            CdTimeUtil.formatDuration(durationMillis));
   }
 }

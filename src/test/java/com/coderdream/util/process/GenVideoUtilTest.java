@@ -69,12 +69,30 @@ class GenVideoUtilTest {
     String bookFolderName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookFolderName);
 
-    String subFolder = "Chapter010";
+    String subFolder = "Chapter020";
     String bookName = "一輩子夠用的英語口語大全集";
     String chapterName = "book02_name.txt";
     String shortSubFolder = subFolder.substring(8);
     GenVideoUtil.processVideoMerger(folderPath, subFolder, shortSubFolder,
       bookFolderName, bookName,
       chapterName);
+  }
+
+
+  @Test
+  void processBatch02() {
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 51;
+    for (int i = 11; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenVideoUtil.process(folderPath, subFolder);
+    }
   }
 }
