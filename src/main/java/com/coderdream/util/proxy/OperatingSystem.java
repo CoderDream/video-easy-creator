@@ -29,6 +29,22 @@ public class OperatingSystem {
         }
     }
 
+    public static String getSixMinutesBaseFolder() {
+//        Integer proxyPort = null;
+        String osType = OperatingSystem.getOS();
+        System.out.println("操作系统类型: " + osType);
+
+        String folderPath = "";
+        switch (osType) {
+            case OS_WINDOWS -> folderPath = "D:\\14_LearnEnglish\\6MinuteEnglish" + File.separator; // "D:\\14_LearnEnglish\\6MinuteEnglish\\";
+            case OS_MAC -> folderPath = "/Volumes/System/0001" + File.separator;
+            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+            default -> System.out.println("无法识别的操作系统。");
+        }
+        return folderPath;
+    }
+
+
     /**
      * @return
      */
@@ -51,7 +67,6 @@ public class OperatingSystem {
      * @return
      */
     public static String getFolderPath(String bookName) {
-//        Integer proxyPort = null;
         String osType = OperatingSystem.getOS();
         System.out.println("操作系统类型: " + osType);
 
@@ -66,9 +81,41 @@ public class OperatingSystem {
         return folderPath;
     }
 
+    public static String getBaseGitHubFolder() {
+        String osType = OperatingSystem.getOS();
+        System.out.println("操作系统类型: " + osType);
+
+        String folderPath = "";
+        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+        switch (osType) {
+            case OS_WINDOWS -> folderPath = "D:" + File.separator;
+            case OS_MAC -> folderPath = "/Volumes/System" + File.separator;
+            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+            default -> System.out.println("无法识别的操作系统。");
+        }
+        return folderPath;
+    }
+
+    /**
+     * 获取Hexo项目地址
+     * @return
+     */
+    public static String getHexoFolder() {
+        String osType = OperatingSystem.getOS();
+        System.out.println("操作系统类型: " + osType);
+
+        String folderPath = ""; // "04_GitHub/hexo-project/Hexo-BlueLake-Blog/
+        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+        switch (osType) {
+            case OS_WINDOWS -> folderPath = "D:\\04_GitHub\\hexo-project\\Hexo-BlueLake-Blog\\";
+            case OS_MAC -> folderPath = "/Volumes/System/04_GitHub/Hexo-BlueLake-Blog/";
+            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+            default -> System.out.println("无法识别的操作系统。");
+        }
+        return folderPath;
+    }
 
     public static String getBaseFolder() {
-//        Integer proxyPort = null;
         String osType = OperatingSystem.getOS();
         System.out.println("操作系统类型: " + osType);
 

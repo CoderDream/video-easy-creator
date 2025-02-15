@@ -1,7 +1,9 @@
 package com.coderdream.util.sqlite;
 
+import com.coderdream.util.cd.CdFileUtil;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -72,7 +74,7 @@ public class SQLiteVocabularyMerger {
         }
     }
 
-   /**
+    /**
      * 合并数据到词汇总表
      *
      * @param connection 数据库连接
@@ -87,7 +89,7 @@ public class SQLiteVocabularyMerger {
             String selectSQL = "SELECT * FROM \"" + tableName + "\"";
 
             try (Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(selectSQL)) {
+                 ResultSet resultSet = statement.executeQuery(selectSQL)) {
 
                 while (resultSet.next()) {
                     String word = resultSet.getString(WORD_COLUMN);
@@ -96,21 +98,21 @@ public class SQLiteVocabularyMerger {
                     String definition = resultSet.getString("释义");
                     String level = resultSet.getString(LEVEL_COLUMN);
 
-                     // 先检查数据库中是否已存在该单词
-                        if (!wordExists(connection, word)) {
-                            insertData(connection, word, phoneticUK, phoneticUS, definition, level);
-                        } else
-                        {
-                            //如果存在, 则更新
-                            String existingLevel = getExistingLevel(connection, word);
-                            String newLevel = mergeLevels(existingLevel, level);  // 合并等级
-                            updateExistingWord(connection,word,phoneticUK,phoneticUS,definition,newLevel);
-                        }
+                    // 先检查数据库中是否已存在该单词
+                    if (!wordExists(connection, word)) {
+                        insertData(connection, word, phoneticUK, phoneticUS, definition, level);
+                    } else {
+                        //如果存在, 则更新
+                        String existingLevel = getExistingLevel(connection, word);
+                        String newLevel = mergeLevels(existingLevel, level);  // 合并等级
+                        updateExistingWord(connection, word, phoneticUK, phoneticUS, definition, newLevel);
+                    }
                 }
             }
             log.info("表 {} 处理完成", tableName);
         }
     }
+
     /**
      * 检查单词是否已存在于汇总表中。
      */
@@ -126,8 +128,10 @@ public class SQLiteVocabularyMerger {
         }
         return false;
     }
+
     /**
      * 获取数据库里已经存在的单词的等级
+     *
      * @param connection
      * @param word
      * @return
@@ -150,19 +154,20 @@ public class SQLiteVocabularyMerger {
 
     /**
      * 更新现有单词数据, 包括合并等级.
+     *
      * @param connection
      * @param word
      * @param phoneticUK
      * @param phoneticUS
      * @param definition
-     * @param level  合并后的等级
+     * @param level      合并后的等级
      * @throws SQLException
      */
-    private void updateExistingWord(Connection connection,String word, String phoneticUK, String phoneticUS, String definition, String level)
-        throws SQLException{
+    private void updateExistingWord(Connection connection, String word, String phoneticUK, String phoneticUS, String definition, String level)
+            throws SQLException {
         //构建更新sql
         String updateSQL = "UPDATE \"" + SUMMARY_TABLE_NAME
-            + "\" SET \"英音\" = ?, \"美音\" = ?, \"释义\" = ?, \"等级\" = ? WHERE \"单词\" = ?";
+                + "\" SET \"英音\" = ?, \"美音\" = ?, \"释义\" = ?, \"等级\" = ? WHERE \"单词\" = ?";
         //更新汇总表
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateSQL)) {
             preparedStatement.setString(1, phoneticUK);
@@ -236,8 +241,9 @@ public class SQLiteVocabularyMerger {
         return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
     }
 
-
-    private static final String DB_URL = "D:/04_GitHub/video-easy-creator/src/main/resources/data/dict/dict.db"; // 数据库文件路径
+    private static final String FOLDER_PATH = CdFileUtil.getResourceRealPath() + File.separatorChar
+            + "data" + File.separatorChar + "dict" + File.separatorChar;
+    private static final String DB_URL = FOLDER_PATH + "dict.db"; // 数据库文件路径
 
     public static void main(String[] args) {
         SQLiteVocabularyMerger merger = new SQLiteVocabularyMerger();

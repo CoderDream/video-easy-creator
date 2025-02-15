@@ -1,11 +1,13 @@
 package com.coderdream.util;
 
+import com.coderdream.util.proxy.OperatingSystem;
+
 /**
  * @author CoderDream
  */
 public class BbcConstants {
 
-    public final static String ROOT_FOLDER_NAME = "D:\\14_LearnEnglish\\6MinuteEnglish\\";
+    public final static String ROOT_FOLDER_NAME = OperatingSystem.getSixMinutesBaseFolder();// "D:\\14_LearnEnglish\\6MinuteEnglish\\";
 
 
     public static Integer SENTENCE_LENGTH = 80;

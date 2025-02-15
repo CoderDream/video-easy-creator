@@ -1,9 +1,12 @@
 package com.coderdream.util.sqlite;
 
 import com.coderdream.entity.WordEntity;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.sqlite.SQLiteUtil; // 假设这是你的SQLite工具类
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -242,12 +245,16 @@ public class SQLiteGeminiUpdaterPro {
         }
     }
 
+    private static final String FOLDER_PATH = CdFileUtil.getResourceRealPath() + File.separatorChar
+            + "data" + File.separatorChar + "dict" + File.separatorChar;
+    private static final String DB_URL = FOLDER_PATH + "dict.db"; // 数据库文件路径
 
     public static void main(String[] args) {
         // 替换为你的实际参数
-        String dbPath = "D:/04_GitHub/video-easy-creator/src/main/resources/data/dict/dict.db";
+        // "D:/04_GitHub/video-easy-creator/src/main/resources/data/dict/dict.db";
 
-        SQLiteGeminiUpdaterPro updater = new SQLiteGeminiUpdaterPro(dbPath);
+
+        SQLiteGeminiUpdaterPro updater = new SQLiteGeminiUpdaterPro(DB_URL);
         for (int i = 0; i < 10; i++) {
             updater.updateUSTranslation();
         }

@@ -328,11 +328,11 @@ public class MarkdownFileGenerator {
         + folderName.substring(4);
 
     String folderPath = CommonUtil.getFullPath(folderName);
-    String imageFolder = folderPath + "\\" + folderName;
-    String englishTextFile = folderPath + "\\" + "script_dialog.txt";
+    String imageFolder = folderPath  + File.separator + folderName;
+    String englishTextFile = folderPath  + File.separator + "script_dialog.txt";
     String bilingualTextFile =
-      folderPath + "\\" + folderName + "_中英双语对话脚本.txt";
-    String vocabularyFile = folderPath + "\\" + "voc_cn.txt";
+      folderPath  + File.separator + folderName + "_中英双语对话脚本.txt";
+    String vocabularyFile = folderPath  + File.separator + "voc_cn.txt";
     String endString = "在公众号里输入6位数字，获取【对话音频、英文文本、中文翻译、核心词汇和高级词汇表】电子档，6位数字【暗号】在文章的最后一张图片，如【220728】，表示22年7月28日这一期。公众号没有的文章说明还没有制作相关资料。年度合集在B站【六分钟英语】工房获取，每年共计300+文档，感谢支持！";
 
     try {
@@ -355,11 +355,11 @@ public class MarkdownFileGenerator {
 //    String folderName = "180920";
 ////    folderName = "241226";
 //    String folderPath = CommonUtil.getFullPath(folderName);
-//    String imageFolder = folderPath + "\\" + folderName;
-//    String englishTextFile = folderPath + "\\" + "script_dialog.txt";
+//    String imageFolder = folderPath  + File.separator + folderName;
+//    String englishTextFile = folderPath  + File.separator + "script_dialog.txt";
 //    String bilingualTextFile =
-//      folderPath + "\\" + folderName + "_中英双语对话脚本.txt";
-//    String vocabularyFile = folderPath + "\\" + "voc_cn.txt";
+//      folderPath  + File.separator + folderName + "_中英双语对话脚本.txt";
+//    String vocabularyFile = folderPath  + File.separator + "voc_cn.txt";
 //    String endString = "在公众号里输入6位数字，获取【对话音频、英文文本、中文翻译、核心词汇和高级词汇表】电子档，6位数字【暗号】在文章的最后一张图片，如【220728】，表示22年7月28日这一期。公众号没有的文章说明还没有制作相关资料。年度合集在B站【六分钟英语】工房获取，每年共计300+文档，感谢支持！";
 //
 //    try {
