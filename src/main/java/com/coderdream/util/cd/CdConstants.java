@@ -1,5 +1,9 @@
 package com.coderdream.util.cd;
 
+import com.coderdream.util.proxy.OperatingSystem;
+
+import java.io.File;
+
 /**
  * @author CoderDream
  */
@@ -223,4 +227,6 @@ public class CdConstants {
   public static final String KEYWORD_MAC2 = "darwin";
   public static final String KEYWORD_LINUX1 = "linux";
   public static final String KEYWORD_LINUX2 = "unix";
+
+  public static final String POSTS_FOLDER = OperatingSystem.getHexoFolder() + "source" + File.separator + "_posts";
 }

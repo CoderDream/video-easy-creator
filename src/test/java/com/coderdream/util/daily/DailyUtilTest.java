@@ -4,7 +4,6 @@ import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cmd.CommandUtil;
 import com.coderdream.util.gemini.TranslationUtil;
-import com.coderdream.util.process.bbc.SixMinutesStepByStep;
 
 import java.io.File;
 import java.util.Arrays;

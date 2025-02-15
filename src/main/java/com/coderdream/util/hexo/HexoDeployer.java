@@ -1,5 +1,6 @@
 package com.coderdream.util.hexo;
 
+import com.coderdream.util.proxy.OperatingSystem;
 import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 
@@ -57,7 +58,7 @@ public class HexoDeployer {
     public static void main(String[] args) {
         try {
             // 传入 Hexo 项目的路径并执行命令
-            String folderPath = "D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/";
+            String folderPath = OperatingSystem.getHexoFolder();
             executeHexoCommands(folderPath);
         } catch (IOException | InterruptedException e) {
             log.error("执行命令时发生异常: {}", e.getMessage(), e);
