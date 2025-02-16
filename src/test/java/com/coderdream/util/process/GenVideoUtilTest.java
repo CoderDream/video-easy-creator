@@ -40,7 +40,7 @@ class GenVideoUtilTest {
   void process02() {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    String subFolder = "Chapter007";
+    String subFolder = "Chapter013";
     GenVideoUtil.process(folderPath, subFolder);
     // assert that the process completes without any error
     assertTrue(true);
@@ -69,7 +69,7 @@ class GenVideoUtilTest {
     String bookFolderName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookFolderName);
 
-    String subFolder = "Chapter004";
+    String subFolder = "Chapter009";
     String bookName = "一輩子夠用的英語口語大全集";
     String chapterName = "book02_name.txt";
     String shortSubFolder = subFolder.substring(8);

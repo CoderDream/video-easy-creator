@@ -48,7 +48,7 @@ public class SingleCreateVideoUtil {
       videoFile = new File(videoFileName);
 
       // 生成视频
-      VideoCreatorUtil5.createVideo(imageFile, audioFile, videoFile, duration);
+      VideoCreatorUtil.createVideo(imageFile, audioFile, videoFile, duration);
 
     } catch (Exception e) {
       log.error("视频创建过程中出现异常", e);

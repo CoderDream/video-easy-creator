@@ -5,13 +5,12 @@ import com.coderdream.util.proxy.OperatingSystem;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,15 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-//import static com.coderdream.util.cd.Constants.OS_MAC;
-//import static com.coderdream.util.cd.Constants.OS_WINDOWS;
-
 @Slf4j
-public class VideoCreatorUtil {
+public class VideoCreatorUtil10 {
 
     public static final String OS_WINDOWS = "Windows";
     public static final String OS_MAC = "Mac";
-    private static final int MAX_RETRIES = 3;
+    private static final int MAX_RETRIES = 10;
     private static final long RETRY_INTERVAL_MS = 3000;
     private static final String RETRY_LOG_SUFFIX = "_retry_log.txt";
     private static final String FAILURE_LOG_SUFFIX = "_failure_log.txt";
@@ -41,23 +37,11 @@ public class VideoCreatorUtil {
 
     // 根据 M4 芯片特性调整线程池参数 (假设核心数为8)
     private static final int CORE_POOL_SIZE = 8; // M4核心数
-    private static final int MAXIMUM_POOL_SIZE = 8; // 限制最大并发任务数
+    private static final int MAXIMUM_POOL_SIZE = 16; // 允许的最大线程数
     private static final long KEEP_ALIVE_TIME = 60L;
     private static final TimeUnit UNIT = TimeUnit.SECONDS;
     private static final BlockingQueue<Runnable> WORK_QUEUE = new LinkedBlockingQueue<>(100);
-
-    // 自定义 RejectedExecutionHandler
-    private static final RejectedExecutionHandler HANDLER = (r, executor1) -> {
-        if (!executor1.isShutdown()) {
-            log.warn("任务被拒绝：{}，线程池状态：[active: {}, queue: {}, completed: {}]",
-                    r.toString(),
-                    executor1.getActiveCount(),
-                    executor1.getQueue().size(),
-                    executor1.getCompletedTaskCount());
-        }
-    };
-    //private static final RejectedExecutionHandler HANDLER = new ThreadPoolExecutor.DiscardPolicy(); // 尝试 DiscardPolicy
-    //private static final RejectedExecutionHandler HANDLER = new ThreadPoolExecutor.CallerRunsPolicy();
+    private static final RejectedExecutionHandler HANDLER = new ThreadPoolExecutor.CallerRunsPolicy();
 
     private static final ThreadPoolExecutor executor = new ThreadPoolExecutor(
             CORE_POOL_SIZE,
@@ -68,6 +52,7 @@ public class VideoCreatorUtil {
             HANDLER
     );
 
+
     /**
      * 使用FFmpeg将图片和无损音频合成一个视频
      *
@@ -77,67 +62,53 @@ public class VideoCreatorUtil {
      * @param duration  视频时长
      */
     public static void createVideo(File imageFile, File audioFile, File videoFile, double duration) {
-        log.info("提交任务：{}，活跃线程数：{}，等待队列：{}，已完成任务：{}",
-                videoFile.getAbsolutePath(),
-                executor.getActiveCount(),
-                executor.getQueue().size(),
-                executor.getCompletedTaskCount());
+        executor.submit(() -> { // 提交到线程池
+            long startTime = System.currentTimeMillis(); // 记录开始时间
 
-        executor.submit(() -> {
-            long startTime = System.currentTimeMillis();
-            log.info("任务开始执行：{}", videoFile.getAbsolutePath());
-
-            try {
-                // 校验输入文件是否存在
-                if (!isFileValid(imageFile) || !isFileValid(audioFile)) {
-                    log.error("图片文件或音频文件不存在，无法创建视频");
-                    logFinalFailure(imageFile, "图片文件或音频文件不存在");
-                    return;
-                }
-
-                // 校验文件格式是否支持
-                if (!isImageFormatSupported(imageFile)) {
-                    log.error("不支持的图片格式: {}", imageFile.getAbsolutePath());
-                    logFinalFailure(imageFile, "不支持的图片格式");
-                    return;
-                }
-
-                // 校验音频文件
-                if (!isAudioFormatSupported(audioFile)) {
-                    log.error("不支持的音频格式: {}", audioFile.getAbsolutePath());
-                    logFinalFailure(imageFile, "不支持的音频格式");
-                    return;
-                }
-
-                int attempt = 0;
-                while (attempt < MAX_RETRIES) {
-                    attempt++;
-                    try {
-                        log.info("开始第 {} 次尝试创建视频：{}", attempt, videoFile.getAbsolutePath());
-                        createVideoCore(imageFile, audioFile, videoFile, duration);
-                        log.info("视频创建成功：{}", videoFile.getAbsolutePath());
-
-                        long endTime = System.currentTimeMillis();
-                        long durationMillis = endTime - startTime;
-                        log.info("视频创建成功 (文件: {}), 耗时: {}", videoFile.getAbsolutePath(), CdTimeUtil.formatDuration(durationMillis));
-
-                        return; // 成功，结束循环
-
-                    } catch (Exception e) {
-                        log.error("创建视频失败 (文件: {}, 尝试次数: {}): {}", imageFile.getName(), attempt, e.getMessage(), e);
-                        logRetryAttempt(imageFile, attempt, e.getMessage());
-                        sleepWithInterrupt(RETRY_INTERVAL_MS);
-                    }
-                }
-
-                log.error("达到最大重试次数，视频创建最终失败：{}", videoFile.getAbsolutePath());
-                logFinalFailure(imageFile, "达到最大重试次数");
-
-            } catch (Exception e) { // 捕获更外层的异常
-                log.error("任务执行过程中发生异常：{}", videoFile.getAbsolutePath(), e);
-            } finally {
-                log.info("任务执行完成：{}", videoFile.getAbsolutePath());
+            // 校验输入文件是否存在
+            if (!isFileValid(imageFile) || !isFileValid(audioFile)) {
+                log.error("图片文件或音频文件不存在，无法创建视频");
+                logFinalFailure(imageFile, "图片文件或音频文件不存在");
+                return;
             }
+
+            // 校验文件格式是否支持
+            if (!isImageFormatSupported(imageFile)) {
+                log.error("不支持的图片格式: {}", imageFile.getAbsolutePath());
+                logFinalFailure(imageFile, "不支持的图片格式");
+                return;
+            }
+
+            if (!isAudioFormatSupported(audioFile)) {
+                log.error("不支持的音频格式: {}", audioFile.getAbsolutePath());
+                logFinalFailure(imageFile, "不支持的音频格式");
+                return;
+            }
+
+            int attempt = 0;
+            while (attempt < MAX_RETRIES) {
+                attempt++;
+                try {
+                    log.info("开始第 {} 次尝试创建视频：{}", attempt, videoFile.getAbsolutePath());
+                    createVideoCore(imageFile, audioFile, videoFile, duration);
+                    log.info("视频创建成功：{}", videoFile.getAbsolutePath());
+
+                    // 耗时统计
+                    long endTime = System.currentTimeMillis();
+                    long durationMillis = endTime - startTime;
+                    log.info("视频创建成功 (文件: {}), 耗时: {}", videoFile.getAbsolutePath(), CdTimeUtil.formatDuration(durationMillis));
+
+                    return; // 成功，结束循环
+
+                } catch (Exception e) {
+                    log.error("创建视频失败 (文件: {}, 尝试次数: {}): {}", imageFile.getName(), attempt, e.getMessage(), e);
+                    logRetryAttempt(imageFile, attempt, e.getMessage());
+                    sleepWithInterrupt(RETRY_INTERVAL_MS);
+                }
+            }
+
+            log.error("达到最大重试次数，视频创建最终失败：{}", videoFile.getAbsolutePath());
+            logFinalFailure(imageFile, "达到最大重试次数");
         });
     }
 
@@ -197,6 +168,9 @@ public class VideoCreatorUtil {
 
         if (exitCode == 0) {
             // 移除耗时统计
+            // long endTime = System.currentTimeMillis();  // 移除，移到线程submit处
+            // long durationMillis = endTime - startTime;
+            // log.info("视频创建成功 (文件: {}), 耗时: {}", videoFile.getAbsolutePath(), CdTimeUtil.formatDuration(durationMillis));
         } else {
             throw new Exception("FFmpeg 进程执行失败，退出代码: " + exitCode + ", FFmpeg 输出: " + ffmpegOutput);
         }
@@ -232,6 +206,7 @@ public class VideoCreatorUtil {
         // 视频编码器参数
         if (videoCodec.equals("h264_nvenc")) {
             command.add("-preset");
+            command.add("p4");
             command.add("-b:v");
             command.add("10000k");
         } else if (videoCodec.equals("h264_videotoolbox")) {
@@ -314,51 +289,13 @@ public class VideoCreatorUtil {
     public static void shutdown() {
         executor.shutdown();
         try {
-            // 等待所有任务完成或超时
+            // 等待一段时间（例如60秒）让任务完成，或者强制关闭
             if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
-                log.warn("线程池关闭超时，尝试强制关闭");
                 executor.shutdownNow();
             }
         } catch (InterruptedException e) {
-            log.error("线程池关闭被中断", e);
             executor.shutdownNow();
             Thread.currentThread().interrupt();
-        } finally {
-            log.info("线程池已关闭，活跃线程数：{}，等待队列：{}，已完成任务：{}",
-                    executor.getActiveCount(),
-                    executor.getQueue().size(),
-                    executor.getCompletedTaskCount());
         }
-    }
-
-    //示例用法
-    public static void main(String[] args) throws InterruptedException {
-        // 假设有多个视频需要创建
-        File imageFile = new File("path/to/your/image.jpg");
-        File audioFile = new File("path/to/your/audio.mp3");
-        String outputPath = "path/to/output/";
-
-        // 确保输出目录存在
-        File outputDir = new File(outputPath);
-        if (!outputDir.exists()) {
-            if (outputDir.mkdirs()) {
-                log.info("成功创建输出目录：{}", outputPath);
-            } else {
-                log.error("创建输出目录失败：{}", outputPath);
-                return; // 目录创建失败，直接退出
-            }
-        }
-
-        for (int i = 0; i < 88; i++) { // 修改循环次数为 88
-            String videoFileName = String.format("video_%03d.mp4", i); // 确保文件名唯一
-            File videoFile = new File(outputPath + videoFileName);
-            log.info("提交视频创建任务：{}", videoFile.getAbsolutePath());  // 打印提交任务的日志
-            createVideo(imageFile, audioFile, videoFile, 10.0); // 创建88个视频
-        }
-
-        // 等待所有任务执行完成
-        Thread.sleep(5000); // 确保任务被提交
-        shutdown();
-        System.out.println("All tasks submitted. Shutting down the executor.");
     }
 }
