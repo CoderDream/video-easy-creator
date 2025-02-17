@@ -5,6 +5,7 @@ import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.video.SingleCreateVideoUtil;
 
+import com.coderdream.util.video.demo02.FFmpegOneByOne;
 import com.coderdream.util.video.demo02.FFmpegParallelOptimized;
 
 import java.io.File;
@@ -45,6 +46,21 @@ public class GenVideoUtil {
                 folderPath + subFolder + File.separator + "video_cht" + File.separator;
         FFmpegParallelOptimized.process(imagePath, audioPath,
                 videoPath);
+        long endTime = System.currentTimeMillis();
+        long durationMillis = endTime - startTime;
+        log.info("批量生成视频成功: {} , 耗时: {}", subFolder, CdTimeUtil.formatDuration(durationMillis));
+    }
+
+    public static void processV4(String folderPath, String subFolder) {
+        long startTime = System.currentTimeMillis();
+        String imagePath =
+          folderPath + subFolder + File.separator + "pic_cht" + File.separator;
+        String audioPath =
+          folderPath + subFolder + File.separator + "audio_mix" + File.separator;
+        String videoPath =
+          folderPath + subFolder + File.separator + "video_cht" + File.separator;
+        FFmpegOneByOne.process(imagePath, audioPath,
+          videoPath);
         long endTime = System.currentTimeMillis();
         long durationMillis = endTime - startTime;
         log.info("批量生成视频成功: {} , 耗时: {}", subFolder, CdTimeUtil.formatDuration(durationMillis));
