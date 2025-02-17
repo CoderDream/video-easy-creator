@@ -6,7 +6,6 @@ import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.ffmpeg.FfmpegUtil;
 import com.coderdream.util.video.PureCreateVideo;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
@@ -19,9 +18,19 @@ public class FFmpegParallelOptimized {
     String videoPath) {
 
     // --- 线程池配置 ---
-    int corePoolSize = 2; // 8;  // 核心线程数：与 CPU 核心数相同
-    int maximumPoolSize = 4;// 32; // 最大线程数：允许的峰值线程数，根据实际情况调整
+//    int corePoolSize = 2; // 8;  // 核心线程数：与 CPU 核心数相同
+//    int maximumPoolSize = 4;// 32; // 最大线程数：允许的峰值线程数，根据实际情况调整
+
+    // 获取 CPU 核心数
+    int cpuCores = Runtime.getRuntime().availableProcessors();
+    System.out.println("Detected CPU cores: " + cpuCores);
+
+    // 创建线程池
+    // 核心线程数等于 CPU 核心数
+    int maximumPoolSize = cpuCores * 2; // 最大线程数设置为 CPU 核心数的两倍（根据需要调整）
+
     long keepAliveTime = 60; // 空闲线程存活时间（秒）：超过核心线程数的线程，空闲时间超过此值会被回收
+
     TimeUnit unit = TimeUnit.SECONDS;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>(
       8); //  100 工作队列：用于存放待执行的任务，这里使用有界队列，防止任务过多导致内存溢出
@@ -30,7 +39,7 @@ public class FFmpegParallelOptimized {
 
     // 创建 ThreadPoolExecutor
     ThreadPoolExecutor executor = new ThreadPoolExecutor(
-      corePoolSize,
+      cpuCores,
       maximumPoolSize,
       keepAliveTime,
       unit,
@@ -78,21 +87,16 @@ public class FFmpegParallelOptimized {
           audioFileName) + ".mp4";
 
       Callable<Integer> task = () -> {  //使用Callable
-        try {
-          File videoFile = new File(videoFileName);
-          if (!CdFileUtil.isFileEmpty(videoFileName)) {
-            log.info("视频文件已存在，无需重新生成，{}", videoFileName);
-            return -1; // 如果文件已存在，则返回 -1
-          }
-          // 计算AUDIO时长
-          double duration = FfmpegUtil.getAudioDuration(
-            new File(audioFileName));
-          PureCreateVideo.createVideoCore(new File(imagePathName),
-            new File(audioFileName), videoFile, duration);
-        } catch (IOException | InterruptedException e) {
-          e.printStackTrace();
-          return -1; // 出现异常时返回 -1
+        if (!CdFileUtil.isFileEmpty(videoFileName)) {
+          log.info("视频文件已存在，无需重新生成，{}", videoFileName);
+          return -1; // 如果文件已存在，则返回 -1
         }
+        // 计算AUDIO时长
+        double duration = FfmpegUtil.getAudioDuration(
+          new File(audioFileName));
+        PureCreateVideo.createVideoCore(imagePathName,
+          audioFileName, videoFileName, duration);
+
         return 0;
       };
 
@@ -104,7 +108,7 @@ public class FFmpegParallelOptimized {
     // --- 获取任务结果 (可选) ---
     for (Future<Integer> future : futures) {
       try {
-        Integer exitCode = null; // 获取任务的返回值（阻塞，直到任务完成）
+        Integer exitCode; // 获取任务的返回值（阻塞，直到任务完成）
         try {
           exitCode = future.get();
         } catch (InterruptedException e) {

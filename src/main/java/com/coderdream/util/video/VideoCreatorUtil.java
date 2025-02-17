@@ -23,7 +23,7 @@ public class VideoCreatorUtil {
      * @param videoFile 输出的视频文件
      * @param duration  视频时长
      */
-    public static void createVideo(File imageFile, File audioFile, File videoFile,
+    public static void createVideo(String imageFile, String audioFile, String videoFile,
       double duration) {
         int attempt = 0;
         while (attempt < MAX_RETRIES) {
