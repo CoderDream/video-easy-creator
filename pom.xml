@@ -571,6 +571,33 @@
             <version>0.4.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.googlecode.juniversalchardet</groupId>
+            <artifactId>juniversalchardet</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.aliyun/alimt20181012 -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alimt20181012</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.aliyun/tea-openapi -->
+<!--        <dependency>-->
+<!--            <groupId>com.aliyun</groupId>-->
+<!--            <artifactId>tea-openapi</artifactId>-->
+<!--            <version>0.3.6</version>-->
+<!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2</version>
+        </dependency>
+
 
     </dependencies>
 
