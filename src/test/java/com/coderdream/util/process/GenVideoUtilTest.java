@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class GenVideoUtilTest {
 
   @Test
-  void process() {
+  void process() throws InterruptedException {
     String folderPath = "D:\\0000\\EnBook001\\900\\";
     String subFolder = "ch020";
     GenVideoUtil.process(folderPath, subFolder);
@@ -22,7 +22,7 @@ class GenVideoUtilTest {
 
 
   @Test
-  void process0101() {
+  void process0101() throws InterruptedException {
     String folderPath = "D:\\0000\\EnBook001\\900\\";
     List<String> subFolders = new ArrayList<>();
     int end = 21;
@@ -37,10 +37,10 @@ class GenVideoUtilTest {
   }
 
   @Test
-  void process02() {
+  void process02() throws InterruptedException {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    String subFolder = "Chapter011";
+    String subFolder = "Chapter013";
     GenVideoUtil.process(folderPath, subFolder);
     // assert that the process completes without any error
     assertTrue(true);
@@ -56,8 +56,19 @@ class GenVideoUtilTest {
     assertTrue(true);
   }
 
+  // processV3
   @Test
-  void process03() {
+  void processV3_02() {
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    String subFolder = "Chapter013";
+    GenVideoUtil.processV3(folderPath, subFolder);
+    // assert that the process completes without any error
+    assertTrue(true);
+  }
+
+  @Test
+  void process03() throws InterruptedException {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
     List<String> subFolders = Arrays.asList("Chapter004", "Chapter004");
@@ -89,7 +100,7 @@ class GenVideoUtilTest {
   }
 
   @Test
-  void processBatch02() {
+  void processBatch02() throws InterruptedException {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
 
