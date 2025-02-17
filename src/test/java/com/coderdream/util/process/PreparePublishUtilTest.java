@@ -17,7 +17,7 @@ class PreparePublishUtilTest {
     void process01() {
         String bookFolderName = "EnBook001";
         String folderPath = "D:\\0000\\EnBook001\\900\\";
-        String subFolder = "ch015"; // 商務英語
+        String subFolder = "ch017"; // 商務英語
         String bookName = "商務英語";
         String chapterName = "900_cht_name.txt";
         String shortSubFolder = subFolder.substring(3);
@@ -57,7 +57,7 @@ class PreparePublishUtilTest {
         String bookFolderName = "EnBook002";
         String folderPath = OperatingSystem.getFolderPath(bookFolderName);
 
-        String subFolder = "Chapter009";
+        String subFolder = "Chapter011";
         String bookName = "一輩子夠用的英語口語大全集";
         String chapterName = "book02_name.txt";
         String shortSubFolder = subFolder.substring(8);
