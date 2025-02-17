@@ -22,7 +22,7 @@ public class FFmpegParallelOptimized {
 //    int maximumPoolSize = 4;// 32; // 最大线程数：允许的峰值线程数，根据实际情况调整
 
     // 获取 CPU 核心数
-    int cpuCores = Runtime.getRuntime().availableProcessors();
+    int cpuCores = 4; //Runtime.getRuntime().availableProcessors();
     System.out.println("Detected CPU cores: " + cpuCores);
 
     // 创建线程池

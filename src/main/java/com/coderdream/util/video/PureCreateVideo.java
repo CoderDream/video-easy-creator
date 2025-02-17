@@ -86,7 +86,7 @@ public class PureCreateVideo {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    log.trace("{}", line);
+//                    log.trace("{}", line);
                 }
             }
 

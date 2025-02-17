@@ -23,24 +23,24 @@ public class VideoCreatorUtil6 {
      * @param videoFile 输出的视频文件
      * @param duration  视频时长
      */
-    public static void createVideo(File imageFile, File audioFile, File videoFile,
+    public static void createVideo(String imageFile, String audioFile, String videoFile,
                                    double duration) {
         int attempt = 0;
         while (attempt < MAX_RETRIES) {
             try {
                 PureCreateVideo.createVideoCore(imageFile, audioFile, videoFile, duration);
                 if (attempt > 0) {
-                    logRetryAttempt(imageFile, attempt);
+                    logRetryAttempt(new File(imageFile), attempt);
                 }
                 return;
             } catch (Exception e) {
                 attempt++;
                 log.error("创建视频失败 (文件: {}, 尝试次数: {}): {}",
-                        imageFile.getName(), attempt, e.getMessage());  // 更详细的错误信息
+                        new File(imageFile).getName(), attempt, e.getMessage());  // 更详细的错误信息
                 if (attempt >= MAX_RETRIES) {
-                    logFinalFailure(imageFile);
+                    logFinalFailure(new File(imageFile));
                 } else {
-                    logRetryAttempt(imageFile, attempt);
+                    logRetryAttempt(new File(imageFile), attempt);
                 }
                 try {
                     Thread.sleep(1000); // 稍作等待后重试

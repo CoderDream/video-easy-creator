@@ -43,35 +43,34 @@ public class VideoCreatorUtil7 {
      * @param videoFile 输出的视频文件
      * @param duration  视频时长
      */
-    public static void createVideo(File imageFile, File audioFile, File videoFile, double duration) {
-        executor.submit(() -> {
-            int attempt = 0;
-            while (attempt < MAX_RETRIES) {
+    public static void createVideo(String imageFile, String audioFile, String videoFile,
+                                   double duration) {
+        int attempt = 0;
+        while (attempt < MAX_RETRIES) {
+            try {
+                PureCreateVideo.createVideoCore(imageFile, audioFile, videoFile, duration);
+                if (attempt > 0) {
+                    logRetryAttempt(new File(imageFile), attempt);
+                }
+                return;
+            } catch (Exception e) {
+                attempt++;
+                log.error("创建视频失败 (文件: {}, 尝试次数: {}): {}",
+                        new File(imageFile).getName(), attempt, e.getMessage());  // 更详细的错误信息
+                if (attempt >= MAX_RETRIES) {
+                    logFinalFailure(new File(imageFile));
+                } else {
+                    logRetryAttempt(new File(imageFile), attempt);
+                }
                 try {
-                    PureCreateVideo.createVideoCore(imageFile, audioFile, videoFile, duration);
-                    if (attempt > 0) {
-                        logRetryAttempt(imageFile, attempt);
-                    }
-                    return; // 成功创建视频，退出循环
-                } catch (Exception e) {
-                    attempt++;
-                    log.error("创建视频失败 (文件: {}, 尝试次数: {}): {}",
-                            imageFile.getName(), attempt, e.getMessage());
-                    if (attempt >= MAX_RETRIES) {
-                        logFinalFailure(imageFile);
-                    } else {
-                        logRetryAttempt(imageFile, attempt);
-                    }
-                    try {
-                        Thread.sleep(RETRY_INTERVAL_MS); // 增加重试间隔
-                    } catch (InterruptedException ie) {
-                        log.error("线程休眠被中断: {}", ie.getMessage());
-                        Thread.currentThread().interrupt();
-                        return; // 中断时，直接退出方法
-                    }
+                    Thread.sleep(1000); // 稍作等待后重试
+                } catch (InterruptedException ie) {
+                    log.error("线程休眠被中断: {}", ie.getMessage());
+                    Thread.currentThread().interrupt();  // 重新设置中断标志
+                    return;  // 中断时，直接退出方法
                 }
             }
-        });
+        }
     }
 
 

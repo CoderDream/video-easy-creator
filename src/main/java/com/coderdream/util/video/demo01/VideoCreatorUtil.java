@@ -27,37 +27,37 @@ public class VideoCreatorUtil {
      * @param videoFile 输出的视频文件
      * @param duration  视频时长
      */
-    public static void createVideo(File imageFile, File audioFile, File videoFile,
+    public static void createVideo(String imageFile, String audioFile, String videoFile,
                                    double duration) {
         int attempt = 0;
         while (attempt < MAX_RETRIES) {
             attempt++;
             try {
-                log.info("开始第 {} 次尝试创建视频：{}", attempt, videoFile.getAbsolutePath());
+                log.info("开始第 {} 次尝试创建视频：{}", attempt, new File(videoFile).getAbsolutePath());
                 PureCreateVideo.createVideoCore(imageFile, audioFile, videoFile, duration);
-                log.info("视频创建成功：{}", videoFile.getAbsolutePath());
+                log.info("视频创建成功：{}", new File(videoFile).getAbsolutePath());
                 return; // 成功，结束循环
-            } catch (FileNotFoundException e) {
-                log.error("文件未找到异常：{}", e.getMessage());
-                logFinalFailure(imageFile, "文件未找到异常: " + e.getMessage());
-                return; // 文件找不到，不再重试
-            } catch (IOException e) {
-                log.error("IO异常 (文件: {}, 尝试次数: {}): {}", imageFile.getName(), attempt, e.getMessage(), e);
-                logRetryAttempt(imageFile, attempt, e.getMessage());
-                sleepWithInterrupt(RETRY_INTERVAL_MS);
-            } catch (InterruptedException e) {
-                log.warn("线程休眠被中断：{}", e.getMessage());
-                Thread.currentThread().interrupt();
-                return; // 中断，退出
+//            } catch (FileNotFoundException e) {
+//                log.error("文件未找到异常：{}", e.getMessage());
+//                logFinalFailure(new File(imageFile), "文件未找到异常: " + e.getMessage());
+//                return; // 文件找不到，不再重试
+//            } catch (IOException e) {
+//                log.error("IO异常 (文件: {}, 尝试次数: {}): {}", new File(imageFile).getName(), attempt, e.getMessage(), e);
+//                logRetryAttempt(new File(imageFile), attempt, e.getMessage());
+//                sleepWithInterrupt(RETRY_INTERVAL_MS);
+//            } catch (InterruptedException e) {
+//                log.warn("线程休眠被中断：{}", e.getMessage());
+//                Thread.currentThread().interrupt();
+//                return; // 中断，退出
             } catch (Exception e) {
-                log.error("创建视频失败 (文件: {}, 尝试次数: {}): {}", imageFile.getName(), attempt, e.getMessage(), e);
-                logRetryAttempt(imageFile, attempt, e.getMessage());
+                log.error("创建视频失败 (文件: {}, 尝试次数: {}): {}", new File(imageFile).getName(), attempt, e.getMessage(), e);
+                logRetryAttempt(new File(imageFile), attempt, e.getMessage());
                 sleepWithInterrupt(RETRY_INTERVAL_MS);
             }
         }
 
-        log.error("达到最大重试次数，视频创建最终失败：{}", videoFile.getAbsolutePath());
-        logFinalFailure(imageFile, "达到最大重试次数");
+        log.error("达到最大重试次数，视频创建最终失败：{}",new File(videoFile).getAbsolutePath());
+        logFinalFailure(new File(imageFile), "达到最大重试次数");
     }
 
     //封装sleep操作

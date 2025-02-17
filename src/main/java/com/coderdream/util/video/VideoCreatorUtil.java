@@ -36,9 +36,9 @@ public class VideoCreatorUtil {
             } catch (Exception e) {
                 attempt++;
                 log.error("创建视频失败 (文件: {}, 尝试次数: {}): {}",
-                  imageFile.getName(), attempt, e.getMessage());  // 更详细的错误信息
+                new  File(imageFile).getName(), attempt, e.getMessage());  // 更详细的错误信息
                 if (attempt >= MAX_RETRIES) {
-                    logFinalFailure(imageFile);
+                    logFinalFailure(new File(imageFile));
                 } else {
                     logRetryAttempt(imageFile, attempt);
                 }
@@ -56,12 +56,12 @@ public class VideoCreatorUtil {
 
 
 
-    private static void logRetryAttempt(File imageFile, int attempt) {
+    private static void logRetryAttempt(String imageFile, int attempt) {
         try {
             String fileName =
-              imageFile.getName().substring(0, imageFile.getName().lastIndexOf("."));
+              new File(imageFile).getName().substring(0, new File(imageFile).getName().lastIndexOf("."));
             String logFileName = fileName + RETRY_LOG_SUFFIX;
-            String logMessage = String.format("文件：%s，尝试次数：%d", imageFile.getName(), attempt);
+            String logMessage = String.format("文件：%s，尝试次数：%d", new File(imageFile).getName(), attempt);
             writeLogToFile(BatchCreateVideoCommonUtil.getVideoPath(fileName), logFileName, logMessage);
         } catch (IOException e) {
             log.error("记录重试日志时出错", e);

@@ -23,7 +23,7 @@ public class VideoCreator implements Callable<Boolean> {
     @Override
     public Boolean call() {
         try {
-            VideoCreatorUtil.createVideo(imageFile, audioFile, outputFile, duration);
+            VideoCreatorUtil.createVideo(imageFile.getAbsolutePath(), audioFile.getAbsolutePath(), outputFile.getAbsolutePath(), duration);
             return true;
         } catch (Exception e) {
             log.error("创建视频失败: 图片={}, 音频={}, 目标文件={}",
