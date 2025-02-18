@@ -16,6 +16,10 @@
 - [ ] 生成ass字幕
 
 
+## 20250218
+
+- [x] 生成封面图片（先根据模板生成ppt，然后再生成图片）
+  - GenCoverUtil.process(folderPath, chapterFileName, presentationName);
 
 
 

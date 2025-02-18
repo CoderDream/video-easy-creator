@@ -1,5 +1,6 @@
 package com.coderdream.util.ppt;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import com.aspose.slides.IAutoShape;
 import com.aspose.slides.IPlaceholder;
@@ -7,9 +8,8 @@ import com.aspose.slides.IShape;
 import com.aspose.slides.ISlide;
 import com.aspose.slides.Presentation;
 import com.aspose.slides.SaveFormat;
-//import com.coderdream.freeapps.util.bbc.DictUtils;
-//import com.coderdream.freeapps.util.bbc.VocInfo;
 import com.coderdream.util.cd.CdFileUtil;
+import com.coderdream.util.resource.ResourcesSourcePathUtil;
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,24 +17,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import lombok.extern.slf4j.Slf4j;
-//import com.aspose.slides.examples.RunExamples;
 
 @Slf4j
 public class GenCoverUtil {
 
   public static void main(String[] args) {
     String presentationName = "D:\\0000\\ppt\\商务英语.pptx";
+    String folderPath = "D:\\0000\\ppt\\";
     String chapterFileName = "900_cht_name.txt";
-    GenCoverUtil.process(chapterFileName, presentationName);
+    GenCoverUtil.process(folderPath, chapterFileName, presentationName);
   }
 
-  public static void process(String chapterFileName,
+  public static void process(String folderPath, String chapterFileName,
     String presentationName) {
 
+    String resourcesPath = ResourcesSourcePathUtil.getResourcesSourceAbsolutePath();
     List<String> contentList = CdFileUtil.readFileContent(
-      "D:\\04_GitHub\\video-easy-creator\\src\\main\\resources\\"
-        + chapterFileName);
-    //ExEnd:FontFamily
+      resourcesPath + File.separator + chapterFileName);
+    if (CollectionUtil.isEmpty(contentList)) {
+      log.error("{} 文件内容为空", chapterFileName);
+      return;
+    }
     LicenseUtil.loadLicense(MicrosoftConstants.PPTX_TO_OTHER);
     List<String> slogans = Arrays.asList(
       "越聽越明瞭",
@@ -47,75 +50,92 @@ public class GenCoverUtil {
       if (split.length == 3) {
         // 随机整数0~4
         int i = new Random().nextInt(slogans.size());
-        extracted(split[1], split[2], slogans.get(i), presentationName);
+        extracted(folderPath, split[1], split[2], slogans.get(i),
+          presentationName);
       }
     }
   }
 
-  private static void extracted(String ep, String topic, String slogan,
-    String presentationName) {
-    Map<String, String> props = new HashMap<>(); // 末日滚动：我们为什么喜欢末日滚动？
-    props.put("ep", "EP-" + ep);
-    props.put("topic", topic);
-    props.put("slogan", slogan);
+  private static void extracted(String folderPath, String ep, String topic,
+    String slogan, String presentationName) {
 
     // 实例化Presentation类
     Presentation pres = new Presentation(presentationName);
     try {
-
-      ISlide sld = pres.getSlides().get_Item(0);
-      System.out.println("##$$## " + 1);
-      // 遍历形状以查找占位符
-      for (IShape shp : sld.getShapes()) {
-        if (shp.getPlaceholder() != null) {
-          IPlaceholder placeholder = shp.getPlaceholder();
-//            System.out.println("## \t " + shp.getPlaceholder().getType());
-//            shp.getPlaceholder().
-
-          int type = placeholder.getType();
-
-//            System.out.println("## \t " + type);
-          switch (type) {
-            case 1:
-              System.out.println(
-                "## \t " + shp.getPlaceholder().getType() + "这是占位符");
-              // 更改每个占位符中的文本
-//                ((IAutoShape) shp).getTextFrame().setText("这是占位符");
-              System.out.println(((IAutoShape) shp).getTextFrame().getText());
-              String text = ((IAutoShape) shp).getTextFrame().getText();
-              String newText = props.get(text);
-              log.info("## \t {} \t {}", text, newText);
-              if (StrUtil.isNotEmpty(newText)) {
-                ((IAutoShape) shp).getTextFrame().setText(newText);
-              }
-
-              break;
-            case 15:
-//                PictureFrame sh = shp.getFrame();
-
-              // 更改每个占位符中的文本
-//                ((IAutoShape) shp).getTextFrame().setText("这是占位符");
-              break;
-            default:
-              System.out.println("## \t " + "DEFAULT");
-          }
-
-          // com.aspose.slides.PictureFrame cannot be cast to com.aspose.slides.IAutoShape
-        }
-      }
-
       // 将演示文稿保存到磁盘
       String newPptName = CdFileUtil.addPostfixToFileName(presentationName,
         "_" + ep);
-      pres.save(newPptName, SaveFormat.Pptx);
-      File file = new File(newPptName);
-      String coverDir = file.getParent() + "\\cover\\";
-      File coverDirFile = new File(coverDir);
-      if (!coverDirFile.exists()) {
-        boolean mkdir = coverDirFile.mkdirs();
-        log.info("## \t {}", mkdir);
+
+      // 防止重复生成
+      if (CdFileUtil.isFileEmpty(newPptName)) {
+        Map<String, String> props = new HashMap<>(); // 末日滚动：我们为什么喜欢末日滚动？
+        props.put("ep", "EP-" + ep);
+        props.put("topic", topic);
+        props.put("slogan", slogan);
+
+        ISlide sld = pres.getSlides().get_Item(0);
+        System.out.println("##$$## " + 1);
+        // 遍历形状以查找占位符
+        for (IShape shp : sld.getShapes()) {
+          if (shp.getPlaceholder() != null) {
+            IPlaceholder placeholder = shp.getPlaceholder();
+//            System.out.println("## \t " + shp.getPlaceholder().getType());
+//            shp.getPlaceholder().
+
+            int type = placeholder.getType();
+
+//            System.out.println("## \t " + type);
+            switch (type) {
+              case 1:
+                System.out.println(
+                  "## \t " + shp.getPlaceholder().getType() + "这是占位符");
+                // 更改每个占位符中的文本
+//                ((IAutoShape) shp).getTextFrame().setText("这是占位符");
+                System.out.println(((IAutoShape) shp).getTextFrame().getText());
+                String text = ((IAutoShape) shp).getTextFrame().getText();
+                String newText = props.get(text);
+                log.info("## \t {} \t {}", text, newText);
+                if (StrUtil.isNotEmpty(newText)) {
+                  ((IAutoShape) shp).getTextFrame().setText(newText);
+                }
+
+                break;
+              case 15:
+//                PictureFrame sh = shp.getFrame();
+
+                // 更改每个占位符中的文本
+//                ((IAutoShape) shp).getTextFrame().setText("这是占位符");
+                break;
+              default:
+                System.out.println("## \t " + "DEFAULT");
+            }
+
+            // com.aspose.slides.PictureFrame cannot be cast to com.aspose.slides.IAutoShape
+          }
+        }
+        // 保存演示文稿到磁盘
+        pres.save(newPptName, SaveFormat.Pptx);
       }
-      PptToPng1080p.savePptToPng1080p(newPptName, coverDir);
+      // 生成封面图
+      String coverPath = folderPath + "cover" + File.separator;
+      File coverPathFile = new File(coverPath);
+      if (!coverPathFile.exists()) {
+        boolean mkdir = coverPathFile.mkdirs();
+        if (mkdir) {
+          log.info("封面图创建目录成功，路径：{}", coverPath);
+        } else {
+          log.error("封面图创建目录失败，路径：{}", coverPath);
+          return;
+        }
+      }
+      String outputFileName = coverPath + "Chapter0" + ep + ".png";
+      if (!CdFileUtil.isFileEmpty(outputFileName)) {
+        log.info("封面图已存在，路径：{}", outputFileName);
+      } else {
+//        log.info("封面图不存在，开始生成，路径：{}", outputFileName);
+        PptToImageConverter.convertFirstSlideToImage(newPptName,
+          outputFileName);
+      }
     } finally {
       pres.dispose();
     }

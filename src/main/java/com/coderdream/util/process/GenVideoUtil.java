@@ -3,6 +3,7 @@ package com.coderdream.util.process;
 import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
+import com.coderdream.util.video.GenHeadVideo;
 import com.coderdream.util.video.SingleCreateVideoUtil;
 
 import com.coderdream.util.video.demo02.FFmpegOneByOne;
@@ -21,7 +22,6 @@ import com.coderdream.util.video.demo01.BatchVideoCreator;
 import lombok.extern.slf4j.Slf4j;
 import com.coderdream.util.video.VideoMergerUtil;
 
-import static com.coderdream.util.mdict.demo07.MultiThreadDownloadAppleSrtEnExecutor.startTime;
 
 @Slf4j
 public class GenVideoUtil {
@@ -64,7 +64,22 @@ public class GenVideoUtil {
           videoPath);
     }
 
-    //
+    public static void genHeadVideo(String folderPath, String subFolder) {
+        long startTime = System.currentTimeMillis();
+        // D:\0000\ppt\Book02\cover
+        String imagePath =
+          folderPath + subFolder + File.separator + "pic_cht" + File.separator;
+        String audioPath =
+          OperatingSystem.getBaseFolder() + "bgmusic" + File.separator;
+        String videoPath =
+          folderPath + subFolder + File.separator + "video_cht" + File.separator;
+        GenHeadVideo.process(imagePath, audioPath,
+          videoPath);
+        long endTime = System.currentTimeMillis();
+        long durationMillis = endTime - startTime;
+        log.info("批量生成视频成功: {} , 耗时: {}", subFolder, CdTimeUtil.formatDuration(durationMillis));
+    }
+
 
     public static void processV2(String folderPath, String subFolder) {
 //        String imageDir = "path/to/your/images";

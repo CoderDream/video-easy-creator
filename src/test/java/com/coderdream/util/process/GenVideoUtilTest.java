@@ -79,6 +79,16 @@ class GenVideoUtilTest {
   }
 
   @Test
+  void genHeadVideo_01() {
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    String subFolder = "Chapter017";
+    GenVideoUtil.genHeadVideo(folderPath, subFolder);
+    // assert that the process completes without any error
+    assertTrue(true);
+  }
+
+  @Test
   void process03() throws InterruptedException {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);

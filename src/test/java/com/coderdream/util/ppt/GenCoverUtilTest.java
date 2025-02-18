@@ -1,7 +1,6 @@
 package com.coderdream.util.ppt;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import com.coderdream.util.proxy.OperatingSystem;
 import org.junit.jupiter.api.Test;
 
 class GenCoverUtilTest {
@@ -10,6 +9,8 @@ class GenCoverUtilTest {
   void process() {
     String presentationName = "D:\\0000\\ppt\\Book02\\Book02模板.pptx";
     String chapterFileName = "book02_name.txt";
-    GenCoverUtil.process(chapterFileName, presentationName);
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    GenCoverUtil.process(folderPath, chapterFileName, presentationName);
   }
 }

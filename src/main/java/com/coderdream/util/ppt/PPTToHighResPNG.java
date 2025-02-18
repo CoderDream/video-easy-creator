@@ -17,7 +17,7 @@ public class PPTToHighResPNG {
 
     public static void main(String[] args) throws IOException {
         // 输入的 PPT 文件路径
-        String pptFilePathStr = "D:\\14_LearnEnglish\\6MinuteEnglish\\2018\\181213\\181213.pptx";
+        String pptFilePathStr = "D:\\0000\\ppt\\Book02\\Book02模板_01.pptx";
         Path pptFilePath = Paths.get(pptFilePathStr);
 
         // 从 PPT 文件路径中提取文件夹名称
@@ -42,8 +42,8 @@ public class PPTToHighResPNG {
             int targetWidth = 3840;  // 目标宽度
             int targetHeight = 2160; // 目标高度
 
-            double scaleX = targetWidth / (double) pageSize.getWidth();   // 宽度缩放比例, 强制类型转换为double
-            double scaleY = targetHeight / (double) pageSize.getHeight(); // 高度缩放比例, 强制类型转换为double
+            double scaleX = targetWidth / pageSize.getWidth();   // 宽度缩放比例, 强制类型转换为double
+            double scaleY = targetHeight / pageSize.getHeight(); // 高度缩放比例, 强制类型转换为double
 
             // 遍历幻灯片并导出为 PNG
             int slideIndex = 0;
