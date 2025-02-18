@@ -68,7 +68,7 @@ public class CommandUtil {
         builder.redirectErrorStream(true); // 将错误输出重定向到标准输出
         Process process = builder.start(); // 启动进程
 
-        log.debug("进程已启动，正在获取输出流");
+//        log.debug("进程已启动，正在获取输出流");
 
         // 获取控制台的字符编码
         Charset consoleCharset = getConsoleCharset();
@@ -85,7 +85,7 @@ public class CommandUtil {
         if (console != null) {
             return console.charset();
         } else {
-            log.warn("无法获取控制台，将使用默认字符集");
+//            log.warn("无法获取控制台，将使用默认字符集");
             return Charset.defaultCharset();
         }
     }

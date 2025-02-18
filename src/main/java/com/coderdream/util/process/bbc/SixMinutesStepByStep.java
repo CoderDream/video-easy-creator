@@ -267,17 +267,12 @@ public class SixMinutesStepByStep {
     }
 
     // 生成pptx的图片
-    if (!CdFileUtil.isFileEmpty(pptxFileName)) {
-      GetSixMinutesPpt.process(folderName);
-    } else {
-      log.info("文件不存在: {}", pptxFileName);
-    }
-
+//    if (!CdFileUtil.isFileEmpty(pptxFileName)) {
+//      GetSixMinutesPpt.process(folderName);
+//    } else {
+//      log.info("文件不存在: {}", pptxFileName);
+//    }
     TranslationUtil.genDescription(folderName);
-
-
   }
-
-
 
 }

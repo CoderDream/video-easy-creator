@@ -86,15 +86,16 @@ class DailyUtilTest {
   @Test
   void processBatch() {
     // D:\04_GitHub\video-easy-creator\src\main\resources\data\bbc\todo.txt
-    for (String num : NUMBER_LIST) {
-      String folderName = "" + num;
-      String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
-        folderName);
-      DailyUtil.process(folderName, title);
-      TranslationUtil.genDescription(folderName);
-    }
+//    for (String num : NUMBER_LIST) {
+//      String folderName = "" + num;
+//      String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
+//        folderName);
+//      DailyUtil.process(folderName, title);
+//      TranslationUtil.genDescription(folderName);
+//    }
 
     List<String> commandList = Arrays.asList(
+      "cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo clean",
       "cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo g",
       "cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo d");
     for (String command : commandList) {
