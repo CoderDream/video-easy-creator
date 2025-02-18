@@ -1,1 +1,11 @@
+# 将所有文本文件设置为自动转换换行符 (根据 core.autocrlf 设置)
 * text=auto
+
+# 或者, 明确指定特定文件的换行符
+*.html text eol=crlf   # HTML 文件使用 CRLF
+*.sh text eol=lf      # Shell 脚本使用 LF
+*.txt text eol=lf
+
+# 将特定文件标记为二进制文件, Git 不会处理其换行符
+*.jpg binary
+*.png binary

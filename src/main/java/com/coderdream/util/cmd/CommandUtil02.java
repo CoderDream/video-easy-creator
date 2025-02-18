@@ -1,7 +1,6 @@
 package com.coderdream.util.cmd;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
@@ -9,16 +8,13 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * 命令执行工具类，用于执行 Windows 控制台命令
  */
 @Slf4j
-public class CommandUtil {
+public class CommandUtil02 {
 
     /**
      * 执行指定的 Windows 控制台命令，并将执行过程中的输出显示在控制台中，并记录执行时间
@@ -43,13 +39,13 @@ public class CommandUtil {
         }
     }
 
-   /**
-     * 执行命令并获取 BufferedReader
-     *
-     * @param command 要执行的命令字符串
-     * @return BufferedReader
-     * @throws IOException
-     */
+  /**
+   * 执行命令并获取 BufferedReader
+   *
+   * @param command 要执行的命令字符串
+   * @return BufferedReader
+   * @throws IOException
+   */
     private static BufferedReader getCommandReader(String command) throws IOException {
         ProcessBuilder builder;
         List<String> commandList;
@@ -73,22 +69,41 @@ public class CommandUtil {
         // 获取控制台的字符编码
         Charset consoleCharset = getConsoleCharset();
 
-        return new BufferedReader(new InputStreamReader(process.getInputStream(), consoleCharset));
+        return new BufferedReader(
+                new InputStreamReader(process.getInputStream(), consoleCharset));
+        // 使用控制台的字符编码创建 BufferedReader
     }
+
     /**
-     * 获取控制台字符编码 (Java 9+)
-     *
-     * @return Charset
-     */
-    private static Charset getConsoleCharset() {
-        Console console = System.console();
-        if (console != null) {
-            return console.charset();
-        } else {
-            log.warn("无法获取控制台，将使用默认字符集");
-            return Charset.defaultCharset();
-        }
-    }
+    * 获取控制台字符编码
+    *
+    * @return Charset
+    */
+   private static Charset getConsoleCharset() {
+       // 优先尝试获取系统属性指定的控制台编码
+       String charsetName = System.getProperty("sun.stdout.encoding");
+       if (charsetName != null) {
+           try {
+               return Charset.forName(charsetName);
+           } catch (IllegalArgumentException e) {
+               log.warn("指定的控制台编码无效: {}", charsetName, e);
+           }
+       }
+
+        charsetName = System.getProperty("native.encoding");
+       if (charsetName != null) {
+           try {
+               return Charset.forName(charsetName);
+           } catch (IllegalArgumentException e) {
+               log.warn("指定的控制台编码无效: {}", charsetName, e);
+           }
+       }
+
+       // 如果系统属性未指定，则使用默认字符集
+       log.info("使用默认字符集");
+       return Charset.defaultCharset();
+   }
+
 
     /**
      * 格式化时长为时分秒
@@ -100,7 +115,7 @@ public class CommandUtil {
         long seconds = duration.getSeconds();
         long absSeconds = Math.abs(seconds);
         return String.format("%02d:%02d:%02d",
-            absSeconds / 3600, (absSeconds % 3600) / 60, absSeconds % 60);
+                absSeconds / 3600, (absSeconds % 3600) / 60, absSeconds % 60);
     }
 
     public static void main(String[] args) {

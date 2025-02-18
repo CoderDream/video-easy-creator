@@ -82,8 +82,7 @@ class GenVideoUtilTest {
   void genHeadVideo_01() {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    String subFolder = "Chapter017";
-    GenVideoUtil.genHeadVideo(folderPath, subFolder);
+    GenVideoUtil.genHeadVideo(folderPath);
     // assert that the process completes without any error
     assertTrue(true);
   }
