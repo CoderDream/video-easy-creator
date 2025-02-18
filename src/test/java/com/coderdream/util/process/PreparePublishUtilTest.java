@@ -16,8 +16,8 @@ class PreparePublishUtilTest {
     @Test
     void process01() {
         String bookFolderName = "EnBook001";
-        String folderPath = "D:\\0000\\EnBook001\\900\\";
-        String subFolder = "ch017"; // 商務英語
+        String folderPath = OperatingSystem.getVideoBaseFolder() + bookFolderName +  File.separator;
+        String subFolder = "ch018"; // 商務英語
         String bookName = "商務英語";
         String chapterName = "900_cht_name.txt";
         String shortSubFolder = subFolder.substring(3);

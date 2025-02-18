@@ -94,10 +94,11 @@ class DailyUtilTest {
 //      TranslationUtil.genDescription(folderName);
 //    }
 
+    String baseHexoFolder = OperatingSystem.getHexoFolder();
     List<String> commandList = Arrays.asList(
-      "cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo clean",
-      "cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo g",
-      "cd D:/04_GitHub/hexo-project/Hexo-BlueLake-Blog/ && hexo d");
+    //  "cd " + baseHexoFolder + " && hexo clean",
+      "cd " + baseHexoFolder + " && hexo g",
+      "cd " + baseHexoFolder + " && hexo d");
     for (String command : commandList) {
       CommandUtil.executeCommand(command);
     }
