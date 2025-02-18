@@ -21,6 +21,8 @@ import com.coderdream.util.video.demo01.BatchVideoCreator;
 import lombok.extern.slf4j.Slf4j;
 import com.coderdream.util.video.VideoMergerUtil;
 
+import static com.coderdream.util.mdict.demo07.MultiThreadDownloadAppleSrtEnExecutor.startTime;
+
 @Slf4j
 public class GenVideoUtil {
 
@@ -52,7 +54,6 @@ public class GenVideoUtil {
     }
 
     public static void processV4(String folderPath, String subFolder) {
-        long startTime = System.currentTimeMillis();
         String imagePath =
           folderPath + subFolder + File.separator + "pic_cht" + File.separator;
         String audioPath =
@@ -61,9 +62,6 @@ public class GenVideoUtil {
           folderPath + subFolder + File.separator + "video_cht" + File.separator;
         FFmpegOneByOne.process(imagePath, audioPath,
           videoPath);
-        long endTime = System.currentTimeMillis();
-        long durationMillis = endTime - startTime;
-        log.info("批量生成视频成功: {} , 耗时: {}", subFolder, CdTimeUtil.formatDuration(durationMillis));
     }
 
     //

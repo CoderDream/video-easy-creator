@@ -1,19 +1,20 @@
 package com.coderdream.util.video;
 
-import static com.coderdream.util.cd.CdConstants.OS_MAC;
-import static com.coderdream.util.cd.CdConstants.OS_WINDOWS;
-
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+
+import static com.coderdream.util.cd.CdConstants.OS_MAC;
+import static com.coderdream.util.cd.CdConstants.OS_WINDOWS;
 
 @Slf4j
-public class PureCreateVideo {
+public class PureCreateVideo2160 {
 
     public static boolean createVideoCore(String imageFilePath, String audioFilePath, String videoFilePath,
                                           double duration) { // 返回 boolean 值
@@ -24,7 +25,7 @@ public class PureCreateVideo {
         command.add("-loop");
         command.add("1");
         command.add("-framerate");
-        command.add("30");
+        command.add("60");
         command.add("-t");
         command.add(String.valueOf(duration));
         command.add("-i");
@@ -32,7 +33,7 @@ public class PureCreateVideo {
         command.add("-i");
         command.add(audioFilePath);
         command.add("-s");
-        command.add("1920x1080");
+        command.add("3840x2160");
 
         String os = OperatingSystem.getOS();
         if (OS_WINDOWS.equals(os)) {
@@ -41,7 +42,7 @@ public class PureCreateVideo {
             command.add("-preset");
             command.add("p4");
             command.add("-b:v");
-            command.add("5000k");
+            command.add("10000k");
             command.add("-profile:v");
             command.add("high");
             command.add("-bf");
@@ -56,7 +57,7 @@ public class PureCreateVideo {
 //            command.add("60");
             // 尝试 1：使用 -b:v 和 -realtime
             command.add("-b:v");
-            command.add("5000k");
+            command.add("10000k");
             command.add("-realtime");
             command.add("1");
 
