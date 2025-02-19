@@ -1,23 +1,32 @@
 package com.coderdream.util.bbc;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import com.coderdream.entity.DialogSingleEntity;
 import com.coderdream.entity.SubtitleEntity;
+import com.coderdream.entity.VocInfo;
 import com.coderdream.util.BbcConstants;
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.CommonUtil;
+import com.coderdream.util.cd.CdTimeUtil;
+import com.coderdream.util.gemini.GeminiApiClient;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author CoderDream
  */
+@Slf4j
 public class TranslateUtil {
 
   public static void main(String[] args) {
@@ -492,6 +501,97 @@ public class TranslateUtil {
     }
   }
 
+  /**
+   * 优化句子
+   *
+   * @param arr
+   * @param j
+   */
+  private static void upgradeTranslate(String[] arr, int j,
+    List<String> subtitleList) {
+    if ("抢".equals(arr[j])) {
+      arr[j] = "罗伯";
+    }
+    if ("山 姆".equals(arr[j])) {
+      arr[j] = "山姆";
+    }
+    if ("井".equals(arr[j])) {
+      arr[j] = "嗯";
+    }
+    if ("右".equals(arr[j])) {
+      arr[j] = "是的";
+    }
+
+    if ("右！".equals(arr[j])) {
+      arr[j] = "好的！";
+    }
+
+    // 医 管 局！
+    // （Michael Collins） 去掉大括号及大括号内的内容
+    arr[j] = removeEnContent(arr[j]);
+    arr[j] = arr[j].replaceAll(" 6 Minute English ", "六分钟英语");
+    arr[j] = arr[j].replaceAll("医 管 局", "哈哈");
+    arr[j] = arr[j].replaceAll("乔吉", "乔治");
+    arr[j] = arr[j].replaceAll("成语", "谚语");
+    arr[j] = arr[j].replaceAll("Rob", "罗伯");
+    arr[j] = arr[j].replaceAll("伟大！", "太好了！");
+    arr[j] = arr[j].replaceAll("右。", "好的。"); // Right应该翻译成好的，而不是右
+    arr[j] = arr[j].replaceAll("山 姆", "山姆");
+    arr[j] = arr[j].replaceAll("6分钟", "六分钟");
+    arr[j] = arr[j].replaceAll(" 6 分钟", "六分钟");
+    arr[j] = arr[j].replaceAll(";", "；");
+    arr[j] = arr[j].replaceAll("“拯救大象”（Save the Elephants）", "“拯救大象”");
+    arr[j] = arr[j].replaceAll("六分钟又到了",
+      "六分钟时间又到了"); // 英国广播公司（BBC）
+    arr[j] = arr[j].replaceAll("英国广播公司（BBC）",
+      "英国广播公司"); // 英国广播公司（BBC）
+
+    arr[j] = arr[j].replaceAll("——", " —— ");// ——
+    if (-1 != arr[j].lastIndexOf("程序") && -1 != subtitleList.get(j)
+      .lastIndexOf("programme")) {
+      arr[j] = arr[j].replaceAll("程序", "节目");
+    }
+    if (-1 != arr[j].lastIndexOf("课程") && -1 != subtitleList.get(j)
+      .lastIndexOf("programme")) {
+      arr[j] = arr[j].replaceAll("课程", "节目");
+    }
+
+    // 维克托
+    arr[j] = arr[j].replaceAll("Victor;", "维克多");
+
+    arr[j] = arr[j].trim();//去掉前后空格
+    arr[j] = arr[j].replaceAll("一百个", "一百岁");
+
+    if (arr[j].equals("幸运")) {
+      arr[j] = arr[j].replaceAll("幸运", "幸运的是");
+    }
+
+    // 针对230413的AI翻译优化
+    arr[j] = arr[j].replaceAll("垃圾场", "情绪低落");
+    arr[j] = arr[j].replaceAll("垃圾堆", "情绪低落");
+    arr[j] = arr[j].replaceAll("最尖锐的", "极度");
+    arr[j] = arr[j].replaceAll(" Covid", "冠状病毒");
+    arr[j] = arr[j].replaceAll("Covid", "冠状病毒");
+    arr[j] = arr[j].replaceAll("英国广播公司（BBC）", "BBC");//英国广播公司（BBC）
+    arr[j] = arr[j].replaceAll("《纪录片》（The Documentary）",
+      "《纪录片》");//《纪录片》（The Documentary）
+    arr[j] = arr[j].replaceAll("海伦·罗素（Helen Russell）",
+      "海伦·罗素");// 海伦·罗素（Helen Russell）
+    arr[j] = arr[j].replaceAll("托马斯·迪克森（Thomas Dixon）",
+      "托马斯·迪克森");// 托马斯·迪克森（Thomas Dixon）
+    // 针对230302的AI翻译优化
+    arr[j] = arr[j].replaceAll("Rob", "'dunk'");
+    arr[j] = arr[j].replaceAll("扣篮", "'dunk'");
+    arr[j] = arr[j].replaceAll("英国广播公司（BBC）", "BBC");//英国广播公司（BBC）
+    arr[j] = arr[j].replaceAll("迈克尔·罗森（Michael Rosen）", "迈克尔·罗森");
+    arr[j] = arr[j].replaceAll("朱莉·塞迪维（Julie Sedivy）", "朱莉·塞迪维");
+    arr[j] = arr[j].replaceAll("计划", "节目");
+
+    //
+    // 针对230330的AI翻译优化
+    arr[j] = arr[j].replaceAll("历克斯·米尔克（Alex Mielke）", "历克斯·米尔克");
+  }
+
   public static void translateEngSrc(String folderName) {
     String fileName = "eng";
     String srcFileName = CommonUtil.getFullPathFileName(folderName, fileName,
@@ -620,15 +720,172 @@ public class TranslateUtil {
     // 写中文翻译文本
     CdFileUtil.writeToFile(srcFileNameCn, newList);
 
-//        // 双语字幕
-//        String srcFileNameEnCn = CommonUtil.getFullPathFileName(folderName, "audio5", ".srt");
-//        // 写双语歌词文本
-//         CdFileUtil.writeToFile(srcFileNameEnCn, newListEnCn);
-//
-//        // 双语歌词
-//        String lrcFileNameEnCn = CommonUtil.getFullPathFileName(folderName, "audio5", ".lrc");
-//        // 写双语歌词文本
-//         CdFileUtil.writeToFile(lrcFileNameEnCn, lrcListEnCn);
+  }
+
+  public static void translateSrc(String srcFileNameEng,
+    String srcFileNameChn) {
+    //String fileName = "eng";
+//        String srcFileName = CommonUtil.getFullPathFileName(folderName, fileName, ".srt");
+//    String srcFileName = folderName + fileName + ".eng" + ".srt";
+    // readSrcFileContent
+
+    List<SubtitleEntity> SubtitleEntityList = CdFileUtil.readSrcFileContent(
+      srcFileNameEng);
+
+    List<String> subtitleList = SubtitleEntityList.stream()
+      .map(SubtitleEntity::getSubtitle)
+      .collect(Collectors.toList());
+
+//    String text = subtitleList.stream().map(String::valueOf)
+//      .collect(Collectors.joining("\r\n"));
+//    List<String> stringListCn = TranslatorTextUtil.translatorText(text);
+    List<String> stringListCn = new ArrayList<>();
+    // 按200行分割字符串数组
+    List<List<String>> stringListEnGroup = ListUtil.split(subtitleList, 200);
+    log.info("stringListEnGroup size: {}", stringListEnGroup.size());
+    for (List<String> stringListEn : stringListEnGroup) {
+      String text = stringListEn.stream().map(String::valueOf)
+        .collect(Collectors.joining("\r\n"));
+      stringListCn.addAll(TranslatorTextUtil.translatorText(text));
+      ThreadUtil.sleep(2000);
+      log.info("TranslatorTextUtil.translatorText(text) size: {}",
+        stringListCn.size());
+    }
+
+    List<String> newList = new ArrayList<>();
+    List<String> newListEnCn = new ArrayList<>();
+    List<String> lrcListEnCn = new ArrayList<>();
+    SubtitleEntity SubtitleEntity;
+    String timeStr;
+    String lrc;
+    for (int i = 0; i < stringListCn.size(); i++) {
+      String temp = stringListCn.get(i);
+      String[] arr = temp.split("\r\n");
+      // 检查大小
+      if (arr.length != SubtitleEntityList.size()) {
+        System.out.println("###");
+        break;
+      }
+      for (int j = 0; j < arr.length; j++) {
+        // 优化翻译
+        upgradeTranslate(arr, j, subtitleList);
+
+        System.out.println(arr[j]);
+        SubtitleEntity = SubtitleEntityList.get(j);
+        newList.add(SubtitleEntity.getSubIndex() + "");
+        newList.add(SubtitleEntity.getTimeStr());
+        newList.add(arr[j]);
+        newList.add("");
+
+        newListEnCn.add(SubtitleEntity.getSubIndex() + "");
+        newListEnCn.add(SubtitleEntity.getTimeStr());
+        newListEnCn.add(subtitleList.get(j) + "\r" + arr[j]);
+        newListEnCn.add("");
+        timeStr = SubtitleEntity.getTimeStr();
+        timeStr = timeStr.substring(3, 11);
+        timeStr = timeStr.replaceAll(",", ".");
+        lrc = "[" + timeStr + "]" + subtitleList.get(j) + "|" + arr[j];
+        lrcListEnCn.add(lrc);
+      }
+    }
+
+//    String srcFileNameCn = folderName + fileName + ".chn" + ".srt";
+    if (CollectionUtil.isNotEmpty(newList)) {
+      // 写中文翻译文本
+      CdFileUtil.writeToFile(srcFileNameChn, newList);
+
+    } else {
+      System.out.println("newList is empty!");
+    }
+  }
+
+  public static void translateSrcWithGemini(String srcFileNameEng,
+    String srcFileNameChn) {
+    long startTime = System.currentTimeMillis(); // 记录开始时间
+    List<SubtitleEntity> responseList = new ArrayList<>();
+    List<SubtitleEntity> enSubtitleEntityList = CdFileUtil.readSrcFileContent(
+      srcFileNameEng);
+
+    List<String> subtitleList = enSubtitleEntityList.stream()
+      .map(SubtitleEntity::getSubtitle)
+      .toList();
+    List<List<String>> stringListEnGroup = ListUtil.split(subtitleList, 200);
+    for (List<String> stringListEn : stringListEnGroup) {
+      StringBuilder text = new StringBuilder(CdConstants.SRC_TRANSLATE_PREFIX);
+      text.append(stringListEn.stream().map(String::valueOf)
+        .collect(Collectors.joining("\r\n")));
+      text.append(" ");  // 添加空格分隔不同的文本块，避免一次性发送过多内容导致请求失败
+      responseList.addAll(retryGetResponseList(stringListEn, text));
+    }
+
+    SubtitleEntity enSubtitleEntity;
+    List<String> chnSrtStringList = new ArrayList<>();
+    if (CollectionUtil.isNotEmpty(responseList)
+      && responseList.size() == enSubtitleEntityList.size()) {
+      log.info("相等 size: {}",
+        responseList.size());
+      for (int i = 0; i < enSubtitleEntityList.size(); i++) {
+        enSubtitleEntity = enSubtitleEntityList.get(i);
+        chnSrtStringList.add(enSubtitleEntity.getSubIndex() + "");
+        chnSrtStringList.add(enSubtitleEntity.getTimeStr());
+        chnSrtStringList.add(responseList.get(i).getSubtitleSecond());
+        chnSrtStringList.add("");
+      }
+    } else {
+      log.error("返回结果: {}, 期待结果: {}",
+        responseList.size(), enSubtitleEntityList.size());
+    }
+
+    if (CollectionUtil.isNotEmpty(chnSrtStringList)) {
+      // 写中文翻译文本
+      CdFileUtil.writeToFile(srcFileNameChn, chnSrtStringList);
+      long elapsedTime = System.currentTimeMillis() - startTime; // 计算耗时
+      log.info("写入完成，文件路径: {}，共计耗时：{}", srcFileNameChn,
+        CdTimeUtil.formatDuration(elapsedTime));
+    } else {
+      System.out.println("newList is empty!");
+    }
+  }
+
+  private static @NotNull List<SubtitleEntity> retryGetResponseList(
+    List<String> stringListEn,
+    StringBuilder text) {
+    int retryTimes = 10;
+    List<SubtitleEntity> responseList = getResponseList(stringListEn, text);
+    if (CollectionUtil.isEmpty(responseList)) {
+      for (int i = 0; i < retryTimes; i++) {
+        log.info("开始重试第{}次", i + 1);
+        responseList = getResponseList(stringListEn, text);
+        if (CollectionUtil.isNotEmpty(responseList)) {
+          log.info("重试成功，第{}次", i + 1);
+          break;
+        }
+      }
+    }
+    return responseList;
+  }
+
+  private static @NotNull List<SubtitleEntity> getResponseList(
+    List<String> stringListEn, StringBuilder text) {
+    String response = GeminiApiClient.generateContent(text.toString());
+    // 将两个回车换行替换成一个
+    response = response.replaceAll("\n\n", "\n");
+    // 解析成字符串数组，并以行为单位拆分字符串数组
+    List<String> responseList = new ArrayList<>(
+      Arrays.asList(response.split("\n")));
+    List<SubtitleEntity> subtitleEntityList = CdFileUtil.getSubtitleEntityListNoIndexAndTimeStr(
+      responseList);
+    if (stringListEn.size() != subtitleEntityList.size()) {
+      log.error("返回结果不一致，期待值：{}，实际值：{}, \r\n，返回内容为：{}",
+        stringListEn.size(),
+        subtitleEntityList.size(), response);
+    } else {
+      log.error("返回结果一致，期待值：{}，实际值：{}, \r\n，返回内容为：{}",
+        stringListEn.size(),
+        subtitleEntityList.size(), response);
+      ThreadUtil.sleep(50);
+    }
+    return subtitleEntityList;
   }
 
   /**

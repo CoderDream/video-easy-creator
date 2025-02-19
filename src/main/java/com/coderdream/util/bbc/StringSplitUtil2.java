@@ -36,7 +36,7 @@ public class StringSplitUtil2 {
         }
         result.add(item);
       }
-      log.info("字符串分割成功， 分割后的字符串列表为：{}", result);
+//      log.info("字符串分割成功， 分割后的字符串列表为：{}", result);
       return result;
     } catch (Exception e) {
       log.error("字符串分割失败", e);
@@ -45,7 +45,7 @@ public class StringSplitUtil2 {
       long endTime = System.currentTimeMillis();  // 记录结束时间
       long elapsedTime = endTime - startTime;  // 计算耗时
       String formattedTime = formatElapsedTime(elapsedTime);
-      log.info("splitStringWithComma 方法耗时：{}", formattedTime);
+//      log.info("splitStringWithComma 方法耗时：{}", formattedTime);
     }
   }
 

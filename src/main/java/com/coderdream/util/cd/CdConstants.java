@@ -122,7 +122,8 @@ public class CdConstants {
   public static String SPEECH_KEY_EAST_US = System.getenv("SPEECH_KEY_EAST_US");
 
 
-  public static String SPEECH_KEY_EASTASIA = System.getenv("SPEECH_KEY_EASTASIA");
+  public static String SPEECH_KEY_EASTASIA = System.getenv(
+    "SPEECH_KEY_EASTASIA");
 
   /**
    * 东亚 eastasia
@@ -191,6 +192,11 @@ public class CdConstants {
     + "请根据规则补齐空行，按文本文件格式返回给我，不要任何标记，移除空行；"
     + "后面的5组也是按一样方式处理；以下是6组词汇：";
 
+  public static final String SRC_TRANSLATE_PREFIX = "帮我把英文字幕翻译成中文字幕，返回英中文双语字幕；"
+    + "尽量通顺，前后文一致；"
+    + "你返回内容一定要和我给你的匹配，给你100行，返回200行，英文放在上面，中文放在下面，一行英文，一行中文；"
+    + "以下是英文字幕：";
+
 
   public static final String VOC_EN_PREFIX = "帮我实现如下功能：输入是是6组英文词汇，6行为1组；第1行英文单词或词组，第2行是英文释义，第1行和第2行不要处理，按原始文本返回，第3行是对第1行的中文简明翻译，翻译结果尽量少于20个字符串，第4行是对第2行的中文翻译，第5行是用第1行进行英文造句，我是要考雅思的考生，请优先选用《柯林斯英汉双解大词典》或《牛津双语词典》中的较难的例句，第6行时对第5行进行中文翻译；请根据规则补齐空行，按文本文件格式返回给我，不要任何标记，移除空行，后面的5组也是按一样方式处理；以下是6组词汇：";
 
@@ -228,5 +234,6 @@ public class CdConstants {
   public static final String KEYWORD_LINUX1 = "linux";
   public static final String KEYWORD_LINUX2 = "unix";
 
-  public static final String POSTS_FOLDER = OperatingSystem.getHexoFolder() + "source" + File.separator + "_posts";
+  public static final String POSTS_FOLDER =
+    OperatingSystem.getHexoFolder() + "source" + File.separator + "_posts";
 }

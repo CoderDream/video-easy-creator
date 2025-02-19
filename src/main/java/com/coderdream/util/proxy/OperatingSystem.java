@@ -32,7 +32,7 @@ public class OperatingSystem {
     public static String getSixMinutesBaseFolder() {
 //        Integer proxyPort = null;
         String osType = OperatingSystem.getOS();
-        System.out.println("操作系统类型: " + osType);
+//        System.out.println("操作系统类型: " + osType);
 
         String folderPath = "";
         switch (osType) {
@@ -51,7 +51,7 @@ public class OperatingSystem {
     public static Integer getProxyPort() {
         Integer proxyPort = null;
         String osType = OperatingSystem.getOS();
-        System.out.println("操作系统类型: " + osType);
+//        System.out.println("操作系统类型: " + osType);
 
         // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
         switch (osType) {
@@ -68,7 +68,7 @@ public class OperatingSystem {
      */
     public static String getFolderPath(String bookName) {
         String osType = OperatingSystem.getOS();
-        System.out.println("操作系统类型: " + osType);
+//        System.out.println("操作系统类型: " + osType);
 
         String folderPath = "";
         // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
@@ -83,7 +83,7 @@ public class OperatingSystem {
 
     public static String getBaseGitHubFolder() {
         String osType = OperatingSystem.getOS();
-        System.out.println("操作系统类型: " + osType);
+//        System.out.println("操作系统类型: " + osType);
 
         String folderPath = "";
         // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
@@ -102,7 +102,7 @@ public class OperatingSystem {
      */
     public static String getHexoFolder() {
         String osType = OperatingSystem.getOS();
-        System.out.println("操作系统类型: " + osType);
+//        System.out.println("操作系统类型: " + osType);
 
         String folderPath = ""; // "04_GitHub/hexo-project/Hexo-BlueLake-Blog/
         // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
@@ -117,7 +117,7 @@ public class OperatingSystem {
 
     public static String getBaseFolder() {
         String osType = OperatingSystem.getOS();
-        System.out.println("操作系统类型: " + osType);
+//        System.out.println("操作系统类型: " + osType);
 
         String folderPath = "";
         // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
@@ -133,7 +133,7 @@ public class OperatingSystem {
     public static String getVideoBaseFolder() {
 //        Integer proxyPort = null;
         String osType = OperatingSystem.getOS();
-        System.out.println("操作系统类型: " + osType);
+//        System.out.println("操作系统类型: " + osType);
 
         String folderPath = "";
         // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
@@ -153,7 +153,7 @@ public class OperatingSystem {
     public static String getBaseFolderWav(String waveName) {
 //        Integer proxyPort = null;
         String osType = OperatingSystem.getOS();
-        System.out.println("操作系统类型: " + osType);
+//        System.out.println("操作系统类型: " + osType);
 
         String wavePath = "";
         // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080

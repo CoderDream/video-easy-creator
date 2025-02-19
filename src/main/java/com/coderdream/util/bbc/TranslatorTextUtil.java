@@ -10,6 +10,7 @@ import com.google.gson.JsonPrimitive;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -120,6 +121,30 @@ public class TranslatorTextUtil {
     List<String> result = new ArrayList<>();
     try {
       TranslatorTextUtil translatorTextUtil = new TranslatorTextUtil();
+
+//      text = text.replace("\n", " ");
+      // 双引号替换成单引号
+      text = text.replace("\"", "'");
+      String response = translatorTextUtil.process(text);
+      if (response.contains("error")) {
+        log.error("错误信息： {}", prettify(response));
+      }
+
+      List<String> contextList = parserTrans(response);
+      result.addAll(contextList);
+    } catch (Exception e) {
+      log.error("异常信息： {}", e.getMessage(), e);
+    }
+
+    return result;
+  }
+
+  public static List<String> translatorText(List<String> textList) {
+    List<String> result = new ArrayList<>();
+    try {
+      TranslatorTextUtil translatorTextUtil = new TranslatorTextUtil();
+      String text = textList.stream().map(String::valueOf)
+        .collect(Collectors.joining("\n"));
 
 //      text = text.replace("\n", " ");
       // 双引号替换成单引号

@@ -37,7 +37,6 @@ public class TranslationUtil {
         return GeminiApiClient.generateContent(text);
     }
 
-
     /**
      * 处理词汇信息，将其翻译后写入文件。
      *

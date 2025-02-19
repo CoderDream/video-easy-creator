@@ -230,35 +230,5 @@ public class PreparePublishUtil {
         log.info("----- 4.测试 generateContent 方法结束");
     }
 
-    public static void generateDescription(String srtFileName) {
-        // 2. 生成描述
-        log.info("----- 4.测试 generateContent 方法开始");
-        String prompt = FileUtil.readString(
-                CdFileUtil.getResourceRealPath() + File.separator + "youtube" + File.separator + "description_prompt.txt",
-                StandardCharsets.UTF_8);
-        prompt += "字幕如下：";
-        prompt += FileUtil.readString(
-                srtFileName,
-                StandardCharsets.UTF_8);
-        // 生成文本内容（阻塞式）
-        GeneratedContent generatedContent = null;
-        try {
-            generatedContent = GeminiApiUtil.generateContent(prompt);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            throw new RuntimeException(e);
-        }
-
-        File file = new File(
-                Objects.requireNonNull(
-                        CdFileUtil.changeExtension(srtFileName, "md")));
-        try {
-            FileUtils.writeStringToFile(file, generatedContent.text(), "UTF-8");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        log.info("4. Generated content: {}", generatedContent);
-
-        log.info("----- 4.测试 generateContent 方法结束");
-    }
 
 }

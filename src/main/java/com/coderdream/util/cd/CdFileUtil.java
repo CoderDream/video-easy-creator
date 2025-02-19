@@ -21,9 +21,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.util.ResourceUtils;
 
 /**
@@ -382,7 +384,7 @@ public class CdFileUtil {
 
     Path newFilePath = filePath.resolveSibling(newFileName);
 
-    log.info("新的文件名已生成，但文件未被修改: {}", filePath.toAbsolutePath());
+    //log.info("新的文件名已生成，但文件未被修改: {}", newFilePath.toAbsolutePath());
     return newFilePath.toAbsolutePath().toString(); // 返回新的绝对路径，但不做实际重命名
 
   }
@@ -441,6 +443,14 @@ public class CdFileUtil {
       throw new RuntimeException(e);
     }
 
+    List<SubtitleEntity> result = getSubtitleEntityList(
+      stringList);
+
+    return result;
+  }
+
+  public static @NotNull List<SubtitleEntity> getSubtitleEntityList(
+    List<String> stringList) {
     List<SubtitleEntity> result = new ArrayList<>();
     int firstSpaceIndex = 0;
     String subIndexStr = "";
@@ -479,7 +489,42 @@ public class CdFileUtil {
         }
       }
     }
+    return result;
+  }
 
+  public static @NotNull List<SubtitleEntity> getSubtitleEntityListNoIndexAndTimeStr(
+    List<String> stringList) {
+    List<SubtitleEntity> result = new ArrayList<>();
+    int firstSpaceIndex = 0;
+//    String subIndexStr = "";
+    String subIndexStr = "";
+//    String subIndexStr = "";
+    SubtitleEntity subtitleBaseEntity;
+//    // 如果最后一个字符串不为空，则补一个空字符串到列表中，以便处理最后一个字幕条目
+//    if (StrUtil.isNotEmpty(stringList.get(stringList.size() - 1))) {
+//      stringList.add("");
+//    }
+    // 移除stringList 的空行
+    stringList = stringList.stream().filter(s -> !StrUtil.isBlankIfStr(s))
+      .collect(Collectors.toList());
+
+    if (CollectionUtils.isNotEmpty(stringList)) {
+      int size = stringList.size();
+      // 如果字符串的个数不是3的倍数，则直接返回空列表
+      if (size % 2 != 0) {
+        log.warn("字符串的个数不是3的倍数，则直接返回空列表，{}", size);
+        return result;
+      }
+
+      for (int i = 0; i < stringList.size(); i += 2) {
+        subtitleBaseEntity = new SubtitleEntity();
+        subtitleBaseEntity.setSubtitle(
+          processStr(stringList.get(i)));
+        subtitleBaseEntity.setSubtitleSecond(
+          processStr(stringList.get(i + 1)));
+        result.add(subtitleBaseEntity);
+      }
+    }
     return result;
   }
 
@@ -488,7 +533,7 @@ public class CdFileUtil {
 
   public static String processStr(String string) {
     if (string.startsWith(UTF8_BOM)) {
-      return string = string.substring(1);
+      return string.substring(1);
     }
     return string;
   }
@@ -533,7 +578,6 @@ public class CdFileUtil {
 //    String newFilePath2 = CdFileUtil.addPostfixToFileName(filePath2, "_part01");
 //    System.out.println("原始文件路径2: " + filePath2);
 //    System.out.println("修改后的文件路径2: " + newFilePath2);
-
 
     String inputFilePath = "D:\\0000\\EnBook002\\Chapter007\\Chapter007_temp.txt"; // 替换为你的输入文件路径
     String outputFilePath = CdFileUtil.generateOutputFilePath(inputFilePath);
