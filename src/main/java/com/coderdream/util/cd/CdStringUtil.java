@@ -349,6 +349,8 @@ public class CdStringUtil {
 
   /**
    * 将字符串列表按照空行分割成多个字符串列表
+   * 将字符串列表按空行分割成字符串列表的列表。
+   * 空行被定义为 null 或者 经过 trim() 后为空的字符串。
    *
    * @param inputList 待分割的字符串列表
    * @return 分割后的字符串列表的列表
@@ -358,26 +360,35 @@ public class CdStringUtil {
       return new ArrayList<>(); // 返回空列表
     }
 
+    // 用于存储结果的列表，其中每个元素都是一个字符串列表
     List<List<String>> result = new ArrayList<>();
+    // 用于临时存储当前子列表的列表
     List<String> currentList = new ArrayList<>();
 
+    // 遍历输入列表中的每一行
     for (String line : inputList) {
+      // 检查当前行是否是空行 (null 或 trim() 后为空)
       if (line == null || line.trim().isEmpty()) {
-        // 如果是空行，则将当前列表添加到结果列表，并创建一个新的列表
-        if (!currentList.isEmpty()) { // 避免添加空列表
+        // 如果当前子列表不为空，则将其添加到结果列表中
+        if (!currentList.isEmpty()) {
           result.add(currentList);
         }
+        // 创建一个新的空列表，开始构建下一个子列表
         currentList = new ArrayList<>();
       } else {
-        // 如果不是空行，则添加到当前列表
+        // 如果当前行不是空行，则将其添加到当前子列表中
         currentList.add(line);
       }
     }
-    // 添加最后一个列表
+
+    // 处理输入列表末尾没有空行的情况，确保最后一个子列表也被添加到结果中
     if (!currentList.isEmpty()) {
       result.add(currentList);
     }
+
+    // 返回分割后的字符串列表的列表
     return result;
+
   }
 
   /**
@@ -520,4 +531,5 @@ public class CdStringUtil {
       chineseSentence);
     System.out.println(sentencePairTemp);
   }
+
 }

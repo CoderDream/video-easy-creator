@@ -1,7 +1,6 @@
 package com.coderdream.util.subtitle;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.DurationEntity;
@@ -26,7 +25,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -109,7 +107,7 @@ public class SubtitleUtil {
       subtitleEntity = new SubtitleEntity();
       subtitleEntity.setSubIndex(1);
       subtitleEntity.setTimeStr("00:00");
-      subtitleEntity.setSubtitleSecond(sentenceVO.getEnglish());
+      subtitleEntity.setSecondSubtitle(sentenceVO.getEnglish());
       subtitleEntity.setSubtitle(sentenceVO.getChinese());
       subtitleEntities.add(subtitleEntity);
 //      log.info("subtitleEntity:{}", subtitleEntity);
@@ -359,7 +357,7 @@ public class SubtitleUtil {
       contents.add(subtitleEntity.getTimeStr());
       contents.add(subtitleEntity.getSubtitle());
       // 如果不为空就添加第二行字幕
-      if (StrUtil.isNotEmpty(subtitleEntity.getSubtitleSecond())) {
+      if (StrUtil.isNotEmpty(subtitleEntity.getSecondSubtitle())) {
         contents.add(subtitleEntity.getTimeStr());
       }
       contents.add("");

@@ -14,6 +14,7 @@ import com.coderdream.util.cd.CdMP3SplitterUtil;
 import com.coderdream.util.cd.TextProcessor;
 import com.coderdream.util.gemini.TranslationUtil;
 import com.coderdream.util.ppt.GetSixMinutesPpt;
+import com.coderdream.util.ppt.PptToImageConverter;
 import com.coderdream.util.subtitle.SubtitleUtil;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -233,9 +234,9 @@ public class SixMinutesStepByStep {
     }
     // python -m aeneas.tools.execute_task audio5.mp3 script_dialog_new.txt "task_language=eng|os_task_file_format=srt|is_text_type=plain" eng.srt
 
+    // 6. 生成字幕文件 chn.srt
     String srcFileNameCn = CommonUtil.getFullPathFileName(folderName, "chn",
       ".srt");
-
     if (CdFileUtil.isFileEmpty(srcFileNameCn)) {
       TranslateUtil.translateEngSrc(folderName);
     } else {
@@ -267,12 +268,25 @@ public class SixMinutesStepByStep {
     }
 
     // 生成pptx的图片
-//    if (!CdFileUtil.isFileEmpty(pptxFileName)) {
-//      GetSixMinutesPpt.process(folderName);
-//    } else {
-//      log.info("文件不存在: {}", pptxFileName);
-//    }
-    TranslationUtil.genDescription(folderName);
+    String pptPicDir =
+      new File(pptxFileName).getParent() + File.separator + folderName
+        + File.separator;
+    if (!new File(pptPicDir).exists()) {
+      PptToImageConverter.convertPptToImages(pptxFileName, pptPicDir, "snapshot");
+    } else {
+      log.info("ppt图片文件夹已存在: {}", pptPicDir);
+    }
+
+    String descriptionFileName = CdFileUtil.changeExtension(pptxFileName, "md");
+    descriptionFileName = CdFileUtil.addPostfixToFileName(descriptionFileName,
+      "_description");
+    if (CdFileUtil.isFileEmpty(descriptionFileName)) {
+      TranslationUtil.genDescription(scriptDialogMergeFileName,
+        descriptionFileName);
+    } else {
+      log.info("Md 文件已存在: {}", descriptionFileName);
+    }
+
   }
 
 }

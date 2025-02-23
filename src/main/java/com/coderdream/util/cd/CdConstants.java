@@ -236,4 +236,20 @@ public class CdConstants {
 
   public static final String POSTS_FOLDER =
     OperatingSystem.getHexoFolder() + "source" + File.separator + "_posts";
+
+  public static final String TRANSLATE_PLATFORM_GEMINI = "gemini";
+
+  public static final String TRANSLATE_PLATFORM_MSTTS = "mstts";
+
+  public static final String SUBTITLE_EN = "en";
+
+  public static final String SUBTITLE_ZH_CN = "zh-CN";
+
+  public static final String SUBTITLE_ZH_TW = "zh-TW";
+
+  public static final String SUBTITLE_EN_ZH_CN = "en-zh-CN";
+  public static final String SUBTITLE_EN_ZH_TW = "en-zh-TW";
+
+
+
 }

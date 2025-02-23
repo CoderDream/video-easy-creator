@@ -134,7 +134,7 @@ public class GenSrtUtil {
     // 写文件
     String newFileName = CommonUtil.getFullPathFileName(folderName, fileName,
       "_new.txt");
-    if(!CdFileUtil.isFileEmpty(newFileName)) {
+    if (!CdFileUtil.isFileEmpty(newFileName)) {
       log.info("初剪脚本文件已经存在： {} ", newFileName);
       return new ArrayList<>();
     }
@@ -164,9 +164,12 @@ public class GenSrtUtil {
       for (DialogSingleEntity line : stringList2) {
         String contentEn = line.getContentEn();
         // Welcome to 6 Minute English, I'm Neil.
-        contentEn = contentEn.replace("Welcome to 6 Minute English, I", "Welcome to 6 Minute English. I");
+        contentEn = contentEn.replace("Welcome to 6 Minute English, I",
+          "Welcome to 6 Minute English. I");
         // Hello and welcome to 6 Minute English, I
-        contentEn = contentEn.replace("Hello and welcome to 6 Minute English, I", "Hello and welcome to 6 Minute English. I");
+        contentEn = contentEn.replace(
+          "Hello and welcome to 6 Minute English, I",
+          "Hello and welcome to 6 Minute English. I");
         contentEn = contentEn.replace("a: ", "a) ");
         contentEn = contentEn.replace("b: ", "b) ");
         contentEn = contentEn.replace("c: ", "c) ");
@@ -192,7 +195,6 @@ public class GenSrtUtil {
       e.printStackTrace();
     }
 
-
     // 6 Minute English
     //from bbc learningenglish.com
     scriptList.add("6 Minute English from bbc learningenglish.com");
@@ -212,12 +214,13 @@ public class GenSrtUtil {
   /**
    * @return
    */
-  public static File genScriptDialogNewV2(String newFileName,  String fileName) {
+  public static File genScriptDialogNewV2(String newFileName, String fileName) {
 
     List<String> scriptList = new ArrayList<>();
 
     try {
-      List<String> stringList2 = FileUtil.readLines(fileName, StandardCharsets.UTF_8);
+      List<String> stringList2 = FileUtil.readLines(fileName,
+        StandardCharsets.UTF_8);
 
       assert stringList2 != null;
       List<String> enSentences = null;
@@ -246,7 +249,6 @@ public class GenSrtUtil {
       e.printStackTrace();
     }
 
-
     // 6 Minute English
     //from bbc learningenglish.com
     scriptList.add("6 Minute English from bbc learningenglish.com");
@@ -264,7 +266,7 @@ public class GenSrtUtil {
 
   /**
    * @param folderName 如：2201
-   * @return  如：2201_script_dialog.txt
+   * @return 如：2201_script_dialog.txt
    */
   public static File genScriptDialogNew(String folderName, String newFileName) {
     String fileName = "script_dialog";
@@ -274,10 +276,17 @@ public class GenSrtUtil {
 
     if (folderName.startsWith("22") || folderName.startsWith("21")
       || folderName.startsWith("20") || folderName.startsWith("19")
-      || folderName.startsWith("18")) {
+      || folderName.startsWith("18") || folderName.startsWith("17")
+      || folderName.startsWith("16") || folderName.startsWith("15")
+      || folderName.startsWith("14")) {
       scriptList.add("This is a download from bbc learning English.");
       scriptList.add("To find out more, visit our website.");
     }
+
+    // this is a download from BBC Learning English
+    //to find out more visit our website
+    //6 Minute English from bbclearningenglish.com
+    //hello and welcome to 6 Minute English I'm Neil
 
     scriptList.add("6 Minute English from bbc learningenglish.com");
     try {
@@ -290,9 +299,12 @@ public class GenSrtUtil {
       for (DialogSingleEntity line : stringList2) {
         String contentEn = line.getContentEn();
         // Welcome to 6 Minute English, I'm Neil.
-        contentEn = contentEn.replace("Welcome to 6 Minute English, I", "Welcome to 6 Minute English. I");
+        contentEn = contentEn.replace("Welcome to 6 Minute English, I",
+          "Welcome to 6 Minute English. I");
         // Hello and welcome to 6 Minute English, I
-        contentEn = contentEn.replace("Hello and welcome to 6 Minute English, I", "Hello and welcome to 6 Minute English. I");
+        contentEn = contentEn.replace(
+          "Hello and welcome to 6 Minute English, I",
+          "Hello and welcome to 6 Minute English. I");
         contentEn = contentEn.replace("a: ", "a) ");
         contentEn = contentEn.replace("b: ", "b) ");
         contentEn = contentEn.replace("c: ", "c) ");
@@ -317,7 +329,6 @@ public class GenSrtUtil {
     } catch (Exception e) {
       e.printStackTrace();
     }
-
 
     // 6 Minute English
     //from bbc learningenglish.com

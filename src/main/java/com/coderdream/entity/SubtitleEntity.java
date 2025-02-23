@@ -27,6 +27,6 @@ public class SubtitleEntity implements Serializable {
     /**
      * 第二字幕内容
      */
-    private String subtitleSecond;
+    private String secondSubtitle;
 
 }

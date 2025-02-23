@@ -421,8 +421,8 @@ public class HttpUtil {
       String responseBody = response.body();
 
       // 打印日志，避免直接输出敏感数据
-      log.info("httpPost请求地址: {} 参数: {} 返回结果: {}", url, jsonForm,
-        responseBody);
+//      log.info("httpPost请求地址: {} 参数: {} 返回结果: {}", url, jsonForm,
+//        responseBody);
 
       return responseBody;
     } catch (Exception e) {
@@ -456,8 +456,8 @@ public class HttpUtil {
       String responseBody = response.body();
 
       // 打印日志，避免直接输出敏感数据
-      log.info("httpPost请求地址: {} 参数: {} 返回结果: {}", url, jsonForm,
-        responseBody);
+//      log.info("httpPost请求地址: {} 参数: {} 返回结果: {}", url, jsonForm,
+//        responseBody);
 
       return responseBody;
     } catch (Exception e) {
@@ -492,8 +492,8 @@ public class HttpUtil {
       String responseBody = response.body();
 
       // 打印日志，避免直接输出敏感数据
-      log.info("httpPost请求地址: {} 参数: {} 返回结果: {}", url, jsonStr,
-        responseBody);
+//      log.info("httpPost请求地址: {} 参数: {} 返回结果: {}", url, jsonStr,
+//        responseBody);
 
       return responseBody;
     } catch (Exception e) {

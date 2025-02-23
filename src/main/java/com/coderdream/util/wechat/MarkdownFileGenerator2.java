@@ -1,6 +1,7 @@
 package com.coderdream.util.wechat;
 
 import com.coderdream.util.CommonUtil;
+import com.coderdream.util.proxy.OperatingSystem;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -17,7 +18,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MarkdownFileGenerator2 {
 
-  private static final String POSTS_FOLDER = "D:\\04_GitHub\\hexo-project\\Hexo-BlueLake-Blog\\source\\_posts";
+  private static final String POSTS_FOLDER =
+    OperatingSystem.getHexoFolder() + "source" + File.separator + "_posts";
   private static final Pattern IMAGE_NAME_PATTERN = Pattern.compile(
     "幻灯片(\\d+)\\.(png|jpg|jpeg|gif)", Pattern.CASE_INSENSITIVE);
 

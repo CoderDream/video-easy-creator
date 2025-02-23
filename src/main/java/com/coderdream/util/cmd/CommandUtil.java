@@ -34,10 +34,10 @@ public class CommandUtil {
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
-            log.info("命令执行完成: {}", command);
+//            log.info("命令执行完成: {}", command);
             Duration duration = Duration.between(startTime, LocalDateTime.now());// 计算执行时长
             String formattedTime = formatDuration(duration);// 格式化时长为时分秒
-            log.info("命令 {} 执行耗时：{}", command, formattedTime); // 记录执行耗时
+            log.info("命令执行完成，执行耗时：{}", formattedTime); // 记录执行耗时
         } catch (IOException e) {
             log.error("执行命令时发生IO异常: {}", e.getMessage(), e);
         }

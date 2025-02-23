@@ -21,7 +21,7 @@ import swiss.ameri.gemini.api.GenAi.GeneratedContent;
 public class DailyUtil {
 
   public static void process(String folderName, String title) {
-    TranslationUtil.genDescription(folderName);
+//    TranslationUtil.genDescription(folderName);
 
 //     String folderName = "123456";
 //     String title = "【BBC六分钟英语】哪些人会购买高端相机？";

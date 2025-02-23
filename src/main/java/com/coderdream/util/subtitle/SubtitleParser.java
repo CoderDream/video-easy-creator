@@ -1,14 +1,12 @@
 package com.coderdream.util.subtitle;
 
 import com.coderdream.entity.SubtitleEntity;
-import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -52,7 +50,7 @@ public class SubtitleParser {
                         subtitleEntity.setSubIndex(subIndex);
                         subtitleEntity.setTimeStr(timeStr);
                         subtitleEntity.setSubtitle(subtitle);
-                        subtitleEntity.setSubtitleSecond(subtitleSecond);
+                        subtitleEntity.setSecondSubtitle(subtitleSecond);
                         subtitleList.add(subtitleEntity);
 //                        logger.info("解析字幕段落: {}", subtitleEntity);
                     }
@@ -89,7 +87,7 @@ public class SubtitleParser {
                 subtitleEntity.setSubIndex(subIndex);
                 subtitleEntity.setTimeStr(timeStr);
                 subtitleEntity.setSubtitle(subtitle);
-                subtitleEntity.setSubtitleSecond(subtitleSecond);
+                subtitleEntity.setSecondSubtitle(subtitleSecond);
                 subtitleList.add(subtitleEntity);
 //                logger.info("解析字幕段落: {}", subtitleEntity);
             }

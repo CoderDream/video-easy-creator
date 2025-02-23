@@ -125,6 +125,81 @@ public class PptToImageConverter {
       CdTimeUtil.formatDuration(durationMillis));
   }
 
+  public static void convertPptToImages(String pptFilePath, String picFileDir,
+    String prefix) {
+    int width = 1920;
+    int height = 1080;
+    convertPptToImages(pptFilePath, picFileDir, prefix, width, height);
+  }
+
+  /**
+   * 将 PPT/PPTX 文件转换为图片
+   *
+   * @param pptFilePath PPT/PPTX 文件路径
+   */
+  public static void convertPptToImages(String pptFilePath, String picFileDir,
+    String prefix, int width, int height) {
+    long startTime = System.currentTimeMillis();
+    // 检查输出目录是否存在，如果不存在则创建
+    File outDir = new File(picFileDir);
+    if (!outDir.exists()) {
+      boolean mkdir = outDir.mkdirs();
+      if (mkdir) {
+        log.info("封面图创建目录成功，路径：{}", picFileDir);
+      } else {
+        log.error("封面图创建目录失败，路径：{}", picFileDir);
+        return;
+      }
+    }
+    String imageFormat = "png";
+    LicenseUtil.loadLicense(MicrosoftConstants.PPTX_TO_OTHER);
+
+    Presentation presentation; // 声明在 try 外面
+    try {
+      presentation = new Presentation(pptFilePath);
+
+      // 获取幻灯片数量
+      ISlideCollection slides = presentation.getSlides();
+      int slideCount = slides.size();
+      for (int i = 0; i < slideCount; i++) {
+
+        // 遍历每一张幻灯片
+        ISlide slide = slides.get_Item(i);
+
+        // 获取幻灯片的缩略图（可以自定义尺寸）
+        // 方式一： 快速，简单
+//                BufferedImage image = slide.getThumbnail(1f, 1f); // 缩放比例
+
+//                // 方式二：可以自定义图片大小
+//                Dimension2D dimension = presentation.getSlideSize().getSize();
+//                BufferedImage image = slide.getThumbnail(new Dimension((int) dimension.getWidth(), (int) dimension.getHeight()));
+        BufferedImage image = slide.getThumbnail(new Dimension(width, height));
+
+//        String indexStr = String.format("%03d", i + 1);
+        // 构建输出文件名
+        String outputFileName = String.format("%s%s_%03d.%s", picFileDir,
+          prefix, i + 1, imageFormat);
+//        String outputFileName =
+        // 构建输出文件名
+        File outputFile = new File(outputFileName);
+        // 保存图片
+        try {
+          ImageIO.write(image, imageFormat, outputFile);
+        } catch (IOException e) {
+          log.error("Error writing image:{} ", outputFile.getAbsolutePath());
+        }
+      }
+      long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
+      long durationMillis = endTime - startTime; // 计算耗时（毫秒）
+      log.info("PPT转图片成功，路径：{}，共计{}张图片，耗时: {}", pptFilePath,
+        slideCount,
+        CdTimeUtil.formatDuration(durationMillis));
+    } catch (Exception e) {
+      log.error("Error converting PPT to images: {} ", pptFilePath);
+    }
+
+  }
+
   /**
    * 将 PPT/PPTX 文件转换为图片
    *

@@ -70,6 +70,6 @@ class PreparePublishUtilTest {
     @Test
     void process03() {
         String srtFileName = "D:\\0000\\【中英雙語】2025川普就職演講\\【中英雙語】2025川普就職演講.srt";
-        PreparePublishUtil.generateDescription(srtFileName);
+//        PreparePublishUtil.generateDescription(srtFileName);
     }
 }

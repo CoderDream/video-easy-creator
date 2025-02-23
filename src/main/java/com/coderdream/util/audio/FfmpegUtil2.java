@@ -78,10 +78,10 @@ public class FfmpegUtil2 {
       // 异步读取 FFmpeg 输出，防止阻塞
       new Thread(() -> {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-//          String line;
-//          while ((line = reader.readLine()) != null) {
-//            log.info("FFmpeg: {}", line);
-//          }
+          String line;
+          while ((line = reader.readLine()) != null) {
+            log.info("FFmpeg: {}", line);
+          }
         } catch (IOException e) {
           log.error("读取 FFmpeg 输出失败: {}", e.getMessage());
         }

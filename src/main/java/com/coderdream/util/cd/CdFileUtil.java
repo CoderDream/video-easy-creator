@@ -21,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -443,8 +442,7 @@ public class CdFileUtil {
       throw new RuntimeException(e);
     }
 
-    List<SubtitleEntity> result = getSubtitleEntityList(
-      stringList);
+    List<SubtitleEntity> result = getSubtitleEntityList(stringList);
 
     return result;
   }
@@ -492,8 +490,8 @@ public class CdFileUtil {
     return result;
   }
 
-  public static @NotNull List<SubtitleEntity> getSubtitleEntityListNoIndexAndTimeStr(
-    List<String> stringList) {
+  public static @NotNull List<SubtitleEntity> genSubtitleEntityList(
+    List<String> stringList, String platformName ) {
     List<SubtitleEntity> result = new ArrayList<>();
     int firstSpaceIndex = 0;
 //    String subIndexStr = "";
@@ -510,24 +508,42 @@ public class CdFileUtil {
 
     if (CollectionUtils.isNotEmpty(stringList)) {
       int size = stringList.size();
-      // 如果字符串的个数不是3的倍数，则直接返回空列表
-      if (size % 2 != 0) {
-        log.warn("字符串的个数不是3的倍数，则直接返回空列表，{}", size);
-        return result;
+      switch (platformName) {
+        case CdConstants.TRANSLATE_PLATFORM_GEMINI:
+          // 如果字符串的个数不是3的倍数，则直接返回空列表
+          if (size % 2 != 0) {
+            log.warn("字符串的个数不是2的倍数，则直接返回空列表，{}", size);
+            return result;
+          }
+
+          for (int i = 0; i < stringList.size(); i += 2) {
+            subtitleBaseEntity = new SubtitleEntity();
+            subtitleBaseEntity.setSubtitle(
+              processStr(stringList.get(i)));
+            subtitleBaseEntity.setSecondSubtitle(
+              processStr(stringList.get(i + 1)));
+            result.add(subtitleBaseEntity);
+          }
+          break;
+        case CdConstants.TRANSLATE_PLATFORM_MSTTS:
+          for (int i = 0; i < stringList.size(); i++) {
+            subtitleBaseEntity = new SubtitleEntity();
+            subtitleBaseEntity.setSubtitle(
+              processStr(stringList.get(i)));
+            result.add(subtitleBaseEntity);
+          }
+          break;
+        default:
+          // 如果最后一个字符串不为空，则补一个空字符串到列表中，以便处理最后一个字幕条目
+          if (StrUtil.isNotEmpty(stringList.get(size - 1))) {
+            stringList.add("");
+          }
       }
 
-      for (int i = 0; i < stringList.size(); i += 2) {
-        subtitleBaseEntity = new SubtitleEntity();
-        subtitleBaseEntity.setSubtitle(
-          processStr(stringList.get(i)));
-        subtitleBaseEntity.setSubtitleSecond(
-          processStr(stringList.get(i + 1)));
-        result.add(subtitleBaseEntity);
-      }
+
     }
     return result;
   }
-
 
   public static final String UTF8_BOM = "\uFEFF";
 
