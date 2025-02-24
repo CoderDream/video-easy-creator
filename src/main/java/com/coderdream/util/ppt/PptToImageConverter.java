@@ -139,6 +139,17 @@ public class PptToImageConverter {
    */
   public static void convertPptToImages(String pptFilePath, String picFileDir,
     String prefix, int width, int height) {
+    String imageFormat = "png";
+    convertPptToImages(pptFilePath, picFileDir, prefix, width, height, imageFormat);
+  }
+
+  /**
+   * 将 PPT/PPTX 文件转换为图片
+   *
+   * @param pptFilePath PPT/PPTX 文件路径
+   */
+  public static void convertPptToImages(String pptFilePath, String picFileDir,
+    String prefix, int width, int height, String imageFormat) {
     long startTime = System.currentTimeMillis();
     // 检查输出目录是否存在，如果不存在则创建
     File outDir = new File(picFileDir);
@@ -151,7 +162,7 @@ public class PptToImageConverter {
         return;
       }
     }
-    String imageFormat = "png";
+//    String imageFormat = "png";
     LicenseUtil.loadLicense(MicrosoftConstants.PPTX_TO_OTHER);
 
     Presentation presentation; // 声明在 try 外面
@@ -197,7 +208,6 @@ public class PptToImageConverter {
     } catch (Exception e) {
       log.error("Error converting PPT to images: {} ", pptFilePath);
     }
-
   }
 
   /**
