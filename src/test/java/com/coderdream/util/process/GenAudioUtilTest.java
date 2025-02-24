@@ -58,7 +58,7 @@ class GenAudioUtilTest {
     String folderPath = OperatingSystem.getFolderPath(bookName);
 
     List<String> subFolders = new ArrayList<>();
-    int end = 51;
+    int end = 14; // 假定总共50章 51
     for (int i = 11; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);

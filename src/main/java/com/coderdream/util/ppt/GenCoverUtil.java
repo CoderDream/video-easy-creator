@@ -25,11 +25,13 @@ public class GenCoverUtil {
     String presentationName = "D:\\0000\\ppt\\商务英语.pptx";
     String folderPath = "D:\\0000\\ppt\\";
     String chapterFileName = "900_cht_name.txt";
-    GenCoverUtil.process(folderPath, chapterFileName, presentationName);
+
+    String imageFormat = "png";
+    GenCoverUtil.process(folderPath, chapterFileName, presentationName,imageFormat);
   }
 
   public static void process(String folderPath, String chapterFileName,
-    String presentationName) {
+    String presentationName,     String imageFormat) {
 
     String resourcesPath = ResourcesSourcePathUtil.getResourcesSourceAbsolutePath();
     List<String> contentList = CdFileUtil.readFileContent(
@@ -51,13 +53,13 @@ public class GenCoverUtil {
         // 随机整数0~4
         int i = new Random().nextInt(slogans.size());
         extracted(folderPath, split[1], split[2], slogans.get(i),
-          presentationName);
+          presentationName, imageFormat);
       }
     }
   }
 
   private static void extracted(String folderPath, String ep, String topic,
-    String slogan, String presentationName) {
+    String slogan, String presentationName, String imageFormat) {
 
     // 实例化Presentation类
     Presentation pres = new Presentation(presentationName);
@@ -128,13 +130,14 @@ public class GenCoverUtil {
           return;
         }
       }
-      String outputFileName = coverPath + "Chapter0" + ep + ".png";
+//      String imageFormat = "png";
+      String outputFileName = coverPath + "Chapter0" + ep + "." + imageFormat;
       if (!CdFileUtil.isFileEmpty(outputFileName)) {
         log.info("封面图已存在，路径：{}", outputFileName);
       } else {
 //        log.info("封面图不存在，开始生成，路径：{}", outputFileName);
         PptToImageConverter.convertFirstSlideToImage(newPptName,
-          outputFileName);
+          outputFileName, imageFormat);
       }
     } finally {
       pres.dispose();

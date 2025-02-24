@@ -125,8 +125,8 @@ class GenVideoUtilTest {
     String folderPath = OperatingSystem.getFolderPath(bookName);
 
     List<String> subFolders = new ArrayList<>();
-    int end = 51;
-    for (int i = 17; i < end; i++) {
+    int end = 14; // 假定你想要处理的章节数
+    for (int i = 11; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);
     }

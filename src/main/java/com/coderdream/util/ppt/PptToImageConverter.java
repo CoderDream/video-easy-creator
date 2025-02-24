@@ -248,8 +248,13 @@ public class PptToImageConverter {
    * @param pptFileDir PPT/PPTX 文件路径
    */
   public static void convertFirstSlideToImage(String pptFileDir,
-    String outputFileName) {
+    String outputFileName, String imageFormat) {
     convertPptToImages(pptFileDir, 0, outputFileName, 1920, 1080);
+  }
+
+  public static void convertFirstSlideToImage(String pptFileDir,
+                                              String outputFileName) {
+    convertPptToImages(pptFileDir, 0, outputFileName, 1920, 1080, "png");
   }
 
   /**
