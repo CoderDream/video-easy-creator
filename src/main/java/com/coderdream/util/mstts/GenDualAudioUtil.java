@@ -5,6 +5,7 @@ import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.util.sentence.SentenceParser;
+import com.coderdream.util.string.SceneMatcherUtil;
 import com.coderdream.vo.SentenceVO;
 import com.microsoft.cognitiveservices.speech.AudioDataStream;
 import com.microsoft.cognitiveservices.speech.ResultReason;
@@ -236,8 +237,15 @@ public class GenDualAudioUtil {
     List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFile(
       fullFileName);
     int number = 0;
+//     SceneMatcherUtil.addCommaBeforeSpace("testString");
     // 遍历句子列表，生成音频
     for (SentenceVO sentenceVO : sentenceVOs) {
+      // 特殊处理，在 Scene XXX 后添加逗号和句号，以便在音频中停顿更明显
+      sentenceVO.setChinese(
+        SceneMatcherUtil.addCommaBeforeSpace(sentenceVO.getChinese()));
+      sentenceVO.setEnglish(
+        SceneMatcherUtil.addCommaBeforeSpace(sentenceVO.getEnglish()));
+
       number++;
       // 构建中文音频文件名
       String cnFileName =

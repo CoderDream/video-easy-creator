@@ -72,7 +72,7 @@ class GenVideoUtilTest {
   void processV4_02() {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    String subFolder = "Chapter008";
+    String subFolder = "Chapter010";
     GenVideoUtil.processV4(folderPath, subFolder);
     // assert that the process completes without any error
     assertTrue(true);
