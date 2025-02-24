@@ -68,11 +68,11 @@ public class AzureSpeechService {
 
         // Azure 配置信息
         String speechKey1 =  CdConstants.SPEECH_KEY_EAST_US;
-        String region1 = "eastus2";
+        String region1 = CdConstants.SPEECH_REGION_EASTUS;
 // Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.
 //        List<String> textList = List.of("Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.");
 
-        List<String> textList = List.of(" I usually go to bed at ten, but last night I went to bed at eleven.");
+        List<String> textList = List.of("Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.");
         String fileName1 = "eng1234.wav";
         content2wav(textList, "en-US-JennyNeural", "default", "default", "default", fileName1, speechKey1, region1);
 

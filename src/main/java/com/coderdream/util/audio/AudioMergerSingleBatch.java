@@ -44,6 +44,8 @@ public class AudioMergerSingleBatch {
       return null;
     }
 
+    //
+
     File file = new File(outputFilePath);
     if (!file.exists()) {
       boolean mkdir = file.mkdirs();
@@ -114,6 +116,62 @@ public class AudioMergerSingleBatch {
   }
 
   /**
+   * 合并指定目录下中英文wav文件，并输出到指定目录
+   *
+   * @param inputDir      中文wav文件目录
+   * @param outputFileDir 输出文件路径
+   */
+  public static File mergeWavFile(String inputDir, String outputFileDir,
+    String outputFileName) {
+    long startTime = System.currentTimeMillis(); // 记录方法开始时间
+    log.info("开始合并WAV文件，输入目录：{}, , 输出目录：{}",
+      inputDir, outputFileDir);
+
+    List<String> wavFiles = listWavFiles(inputDir); // 获取中文音频文件列表
+    if (wavFiles.isEmpty()) {
+      log.warn("中文目录{}下没有找到wav文件", inputDir);
+      return null;
+    }
+
+    File file = new File(outputFileDir);
+    if (!file.exists()) {
+      boolean mkdir = file.mkdirs();
+      log.info("文件夹创建成功 {}", mkdir);
+    } else {
+      log.info("文件夹已存在");
+    }
+    // 创建 ffmpeg 需要的 list 文件
+    String fileListFileName = createListFile(wavFiles, outputFileDir);
+
+    long taskStartTime = System.currentTimeMillis();
+    String outputFileNameStr = outputFileDir + outputFileName;
+    File outputFile = new File(outputFileNameStr);
+    if (!outputFile.exists() && outputFile.length() == 0) {
+      try {
+        FfmpegUtil2.executeFfmpegMerge(fileListFileName,
+          outputFileNameStr);
+        log.info("合并 {} 完成, 耗时: {} ms", outputFileNameStr,
+          (System.currentTimeMillis() - taskStartTime));
+      } catch (IOException e) {
+        log.error("合并文件 {} 失败: {}", outputFileNameStr,
+          e.getMessage());
+      }
+    } else {
+      log.info("待合并文件 {} 已经存在，跳过合并",
+        outputFileNameStr);
+    }
+//    boolean delete = new File(fileListFileName).delete();
+//    log.info("删除临时文件 {} 成功: {}", fileListFileName, delete);
+
+    long endTime = System.currentTimeMillis();
+    long duration = endTime - startTime;
+    String formattedTime = formatDuration(duration);
+    log.info("合并WAV文件任务完成，输出路径为: {}，总耗时: {}", outputFileDir,
+      formattedTime);
+    return file;
+  }
+
+  /**
    * 格式化耗时为时分秒毫秒
    *
    * @param duration 耗时，单位毫秒
@@ -145,11 +203,15 @@ public class AudioMergerSingleBatch {
       return new ArrayList<>();
     }
 
-    return Arrays.stream(files)
+    List<String> collect = Arrays.stream(files)
       .filter(
         file -> file.isFile() && file.getName().toLowerCase().endsWith(".wav"))
       .map(File::getAbsolutePath)
       .collect(Collectors.toList());
+
+    collect= collect.stream().sorted().collect(Collectors.toList());
+    log.info("找到 {} 个 .wav 文件", collect.size());
+    return collect;
   }
 
   /**
@@ -165,7 +227,8 @@ public class AudioMergerSingleBatch {
     List<String> listFiles = new ArrayList<>();
     // 如果两个列表大小不一致则立即退出
     if (wavFilesCn.size() != wavFilesEn.size()) {
-      log.error("两个列表大小不一致，无法合并，中文音频大小：{}；英文音频大小：{}", wavFilesCn.size(), wavFilesEn.size());
+      log.error("两个列表大小不一致，无法合并，中文音频大小：{}；英文音频大小：{}",
+        wavFilesCn.size(), wavFilesEn.size());
       return listFiles;
     }
     int size = wavFilesCn.size();
@@ -180,7 +243,8 @@ public class AudioMergerSingleBatch {
       try (BufferedWriter writer = new BufferedWriter(
         new FileWriter(listFilePath))) {
         // 增加翻页间隔，此处仅为示例
-        writer.write("file '" + OperatingSystem.getBaseFolderWav("page.wav") + "'");
+        writer.write(
+          "file '" + OperatingSystem.getBaseFolderWav("page.wav") + "'");
         writer.newLine();
         writer.write("file '" + wavFileNameEn + "'");
         writer.newLine();
@@ -199,6 +263,33 @@ public class AudioMergerSingleBatch {
     }
 
     return listFiles;
+  }
+
+  /**
+   * 创建 ffmpeg 需要的 list.txt 文件
+   *
+   * @param wavFiles      中文wav文件列表
+   * @param outputFileDir 输出路径
+   * @return list文件路径列表
+   */
+  private static String createListFile(List<String> wavFiles,
+    String outputFileDir) {
+    wavFiles = wavFiles.stream().sorted().collect(Collectors.toList());
+    int size = wavFiles.size();
+    String wavFileName;
+    String listFilePath = outputFileDir + "list_file.txt";
+    try (BufferedWriter writer = new BufferedWriter(
+      new FileWriter(listFilePath))) {
+      for (int i = 0; i < size; i++) {
+        wavFileName = wavFiles.get(i);
+        writer.write("file '" + wavFileName + "'");
+        writer.newLine();
+      }
+    } catch (IOException e) {
+      log.error("创建文件 {} 失败: {}", listFilePath, e.getMessage());
+    }
+
+    return listFilePath;
   }
 
 

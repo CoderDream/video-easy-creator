@@ -36,7 +36,6 @@ public class GenAudioUtil {
     int size = 0;
     if (CollectionUtil.isEmpty(contentList) || contentList.size() % 3 != 0) {
       log.warn("文件行数不是3的倍数，大小: {}", contentList.size());
-//            return ;
     } else {
       size = contentList.size() / 3;
     }

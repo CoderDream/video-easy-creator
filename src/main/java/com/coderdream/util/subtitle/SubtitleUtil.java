@@ -198,7 +198,6 @@ public class SubtitleUtil {
     } else {
       System.out.println("newList is empty!");
     }
-
   }
 
   /**

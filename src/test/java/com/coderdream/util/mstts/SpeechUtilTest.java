@@ -1,6 +1,9 @@
 package com.coderdream.util.mstts;
 
 import com.coderdream.util.cd.CdTimeUtil;
+import java.io.File;
+import java.text.MessageFormat;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -149,7 +152,7 @@ class SpeechUtilTest {
   }
 
   @Test
-  void genDialog2CnAudio_01() {
+  void genDialog2CnAudio_03() {
     long startTime = System.currentTimeMillis(); // 开始时间
     String folderName = "D:\\0000\\EnBook001\\900\\ch01\\";
     String fileName = "dialog_single_cn";
@@ -174,6 +177,23 @@ class SpeechUtilTest {
 //    SpeechUtil.content2wav(textList, "zh-CN-XiaoxiaoNeural", "medium", "medium", "medium", fileName);
 //  }
 
+  @Test
+  void genDialog2CnAudio_01() {
 
+//    // 构建中文音频文件名
+//    String cnFile =
+//      outputDirCn + File.separator + fileName + "_" + MessageFormat.format(
+//        "{0,number,000}", number) + "_cn." + audioType;
+//    // 构建英文音频文件名
+//    String enFile =
+//      outputDirEn + File.separator + fileName + "_" + MessageFormat.format(
+//        "{0,number,000}", number) + "_en." + audioType;
+//
+//    // 调用 content2Audio 生成中文和英文音频
+//    content2Audio(List.of(sentenceVO.getChinese()), "zh-CN-XiaochenNeural",
+//      "medium", "medium", "medium", cnFile, audioType, "zh-cn");
+//    content2Audio(List.of(sentenceVO.getEnglish()), "en-US-JennyNeural",
+//      "default", "default", "default", enFile, audioType, "en-us");
+  }
 
 }

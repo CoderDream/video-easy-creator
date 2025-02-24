@@ -222,7 +222,7 @@ public class Mp4MergeUtil {
             inputDir = Paths.get(inputDirStr);
             outputDirStr =
                     folderPath + File.separator + subFolder + File.separator + "video_cht_"
-                            + count + 1;
+                            + (count + 1);
             // 确保输出目录存在
             dir = new File(outputDirStr);
             if (!dir.exists() && dir.mkdirs()) {
@@ -271,7 +271,8 @@ public class Mp4MergeUtil {
 //
 //      count++;
 //    }.
-        String folderPath = OperatingSystem.getBaseFolder() + File.separator + "EnBook002";
+        String bookName = "EnBook002";
+        String folderPath = OperatingSystem.getBaseFolder() + bookName;
         String subFolder = "Chapter050";
         Mp4MergeUtil.processMerge(folderPath, subFolder);
     }

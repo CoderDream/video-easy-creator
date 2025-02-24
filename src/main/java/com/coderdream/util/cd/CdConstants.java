@@ -113,14 +113,13 @@ public class CdConstants {
   /**
    * 美国西部
    */
-  public static String SPEECH_REGION_EASTUS = "eastus";
+  public static String SPEECH_REGION_EASTUS = "eastus2";
 
   // Azure 配置信息
   /**
    * 美国西部
    */
   public static String SPEECH_KEY_EAST_US = System.getenv("SPEECH_KEY_EAST_US");
-
 
   public static String SPEECH_KEY_EASTASIA = System.getenv(
     "SPEECH_KEY_EASTASIA");

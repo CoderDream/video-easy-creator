@@ -27,6 +27,8 @@
 
 - [x] 生成封面图片（先根据模板生成ppt，然后再生成图片）
   - GenCoverUtil.process(folderPath, chapterFileName, presentationName);
+- [x] 测试是否能正常生成中英文音频
+  - AzureSpeechService;
 
 
 
@@ -34,8 +36,8 @@
 
 - [x] 生成total、basic文本
   - BeforeGenerateUtil.processGenDialogTxt(folderPath, subFolder);
-
-
+- [x] 批量生成引导视频（head.wav，名称为000.mp4）,
+  - GenVideoUtil.genHeadVideo(folderPath);
 
 
 ## 20250116

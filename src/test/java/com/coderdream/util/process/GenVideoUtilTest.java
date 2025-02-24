@@ -120,7 +120,7 @@ class GenVideoUtilTest {
   }
 
   @Test
-  void processBatch02() throws InterruptedException {
+  void processBatch02()  {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
 

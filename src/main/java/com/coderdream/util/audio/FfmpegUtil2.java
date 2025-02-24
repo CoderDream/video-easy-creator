@@ -54,7 +54,6 @@ public class FfmpegUtil2 {
           "FFmpeg command failed with exit code: " + exitCode + ", error: "
             + errorMessage);
       }
-
     } catch (InterruptedException e) {
       log.error("执行 FFmpeg 命令时发生错误: {}", e.getMessage());
       Thread.currentThread().interrupt();

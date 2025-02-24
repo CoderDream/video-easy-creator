@@ -1,12 +1,15 @@
-package com.coderdream.util.audio;
+package com.coderdream.util.audio.demo01;
 
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 使用FFmpeg合并两个WAV文件的工具类 (特定目录和文件名, 内部处理异常, 使用Slf4j)
@@ -24,7 +27,7 @@ public class WavMergeUtil {
    * @return 合并后的WAV文件, 如果合并失败则返回null
    */
   public static File mergeWavFiles(String directory, String engName,
-    String chnName, String mergedName) {
+                                    String chnName, String mergedName) {
     Instant start = Instant.now();
 
     // 构建文件对象
@@ -39,15 +42,17 @@ public class WavMergeUtil {
       return null; // 文件不存在，返回null
     }
 
-    // 构建FFmpeg命令行 (eng.wav 在前, chn.wav 在后)
-    ProcessBuilder processBuilder = new ProcessBuilder(
-      "ffmpeg",
-      "-i",
-      "-y",
-      "concat:" + engFile.getAbsolutePath() + "|" + chnFile.getAbsolutePath(),
-      "-acodec", "copy",
-      mergedFile.getAbsolutePath()
-    );
+    // 构建FFmpeg命令行
+    List<String> command = new ArrayList<>();
+    command.add("ffmpeg");
+    command.add("-i");
+    command.add("-y");
+    command.add("concat:" + engFile.getAbsolutePath() + "|" + chnFile.getAbsolutePath());
+    command.add("-acodec");
+    command.add("copy");
+    command.add(mergedFile.getAbsolutePath());
+
+    ProcessBuilder processBuilder = new ProcessBuilder(command);
     processBuilder.redirectErrorStream(true); // 合并错误输出流
 
     try {
@@ -58,9 +63,11 @@ public class WavMergeUtil {
       try (InputStream inputStream = process.getInputStream()) {
         byte[] buffer = new byte[1024];
         int bytesRead;
+        StringBuilder output = new StringBuilder();
         while ((bytesRead = inputStream.read(buffer)) != -1) {
-          log.info(new String(buffer, 0, bytesRead));
+          output.append(new String(buffer, 0, bytesRead, StandardCharsets.UTF_8));
         }
+        log.info("FFmpeg 输出: {}", output.toString());
       }
 
       // 等待FFmpeg进程执行完毕
@@ -100,9 +107,8 @@ public class WavMergeUtil {
     String chnName = "chn";
     String mergedName = "head";
 
-    // 调用合并方法y
-    File mergedFile = WavMergeUtil.mergeWavFiles(directory, engName, chnName,
-      mergedName);
+    // 调用合并方法
+    File mergedFile = WavMergeUtil.mergeWavFiles(directory, engName, chnName, mergedName);
     if (mergedFile != null) {
       log.info("合并后的文件路径：{}", mergedFile.getAbsolutePath());
     } else {
