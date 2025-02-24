@@ -20,7 +20,7 @@ public class PptToImageConverter {
    * @param outputDir  输出目录
    */
   public static void convertPptToImages(String pptFileDir, String outputDir,
-    int width, int height) {
+    int width, int height, String imageFormat) {
     // 检查输出目录是否存在，如果不存在则创建
     File outDir = new File(outputDir);
     if (!outDir.exists()) {
@@ -32,7 +32,7 @@ public class PptToImageConverter {
         return;
       }
     }
-    String imageFormat = "png";
+//    String imageFormat = "png";
     LicenseUtil.loadLicense(MicrosoftConstants.PPTX_TO_OTHER);
 
     Presentation presentation; // 声明在 try 外面
@@ -77,11 +77,34 @@ public class PptToImageConverter {
    * 将 PPT/PPTX 文件转换为图片
    *
    * @param pptFileDir PPT/PPTX 文件路径
+   * @param outputDir  输出目录
+   */
+  public static void convertPptToImages(String pptFileDir, String outputDir,
+    int width, int height) {
+    String imageFormat = "png";
+    convertPptToImages(pptFileDir, outputDir, width, height, imageFormat);
+  }
+
+  /**
+   * 将 PPT/PPTX 文件转换为图片
+   *
+   * @param pptFileDir PPT/PPTX 文件路径
    */
   public static void convertPptToImages(String pptFileDir, int i,
     String outputFileName, int width, int height) {
-    long startTime = System.currentTimeMillis();
     String imageFormat = "png";
+    convertPptToImages(pptFileDir, i, outputFileName, width, height,
+      imageFormat);
+  }
+
+  /**
+   * 将 PPT/PPTX 文件转换为图片
+   *
+   * @param pptFileDir PPT/PPTX 文件路径
+   */
+  public static void convertPptToImages(String pptFileDir, int i,
+    String outputFileName, int width, int height, String imageFormat) {
+    long startTime = System.currentTimeMillis();
     LicenseUtil.loadLicense(MicrosoftConstants.PPTX_TO_OTHER);
 
     Presentation presentation; // 声明在 try 外面
@@ -162,7 +185,6 @@ public class PptToImageConverter {
         return;
       }
     }
-//    String imageFormat = "png";
     LicenseUtil.loadLicense(MicrosoftConstants.PPTX_TO_OTHER);
 
     Presentation presentation; // 声明在 try 外面
