@@ -17,6 +17,11 @@
 
 
 
+## 20250225
+
+- [x] 合并视频
+  - GenSubtitleUtil.process(filePath, maxLineLength);
+
 ## 20250219
 
 - [x] 一条龙生成字幕与简介，包含英文、中文、双语字幕和视频简介

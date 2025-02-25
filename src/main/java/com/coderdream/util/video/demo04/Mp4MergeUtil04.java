@@ -1,11 +1,7 @@
 package com.coderdream.util.video.demo04;
 
-import static com.coderdream.util.cd.CdConstants.OS_MAC;
-import static com.coderdream.util.cd.CdConstants.OS_WINDOWS;
-
 import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.cd.CdFileUtil;
-import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,7 +19,7 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Mp4MergeUtil {
+public class Mp4MergeUtil04 {
 
   /**
    * 合并指定文件夹中的所有MP4文件，每10个文件为一组合并，最后剩余的文件继续合并
@@ -123,72 +119,31 @@ public class Mp4MergeUtil {
   private static void mergeFileGroup(File inputListFile, Path output)
     throws IOException {
     // 拼接FFmpeg命令，进行重新编码以避免音画不同步
-//        String command = String.format(
-//                "ffmpeg -y -f concat -safe 0 -i %s -c:v libx264 -c:a aac -strict experimental %s",
-//                inputListFile.getAbsolutePath(), output.toString());
+    String command = String.format(
+      "ffmpeg -y -f concat -safe 0 -i %s -c:v libx264 -c:a aac -strict experimental %s",
+      inputListFile.getAbsolutePath(), output.toString());
 
-    long startTime = System.currentTimeMillis();
-    List<String> command = new ArrayList<>();
-    command.add("ffmpeg");
-    command.add("-y");
-    command.add("-f");
-    command.add("concat");
-    command.add("-safe");
-    command.add("0");
-    command.add("-i");
-    command.add(inputListFile.getAbsolutePath());
-    String os = OperatingSystem.getOS();
-    if (OS_WINDOWS.equals(os)) {
-      command.add("-c:v");
-      command.add("h264_nvenc");
-    } else if (OS_MAC.equals(os)) {
-      command.add("-c:v");
-      command.add("h264_videotoolbox");
-    } else {
-      command.add("-c:v");
-      command.add("libx264");
-    }
+    log.info("执行FFmpeg命令：{}", command);
 
-    command.add("-c:a");
-    command.add("aac");
-    command.add("-strict");
-    command.add("experimental");
-    command.add(output.toString());
-
-    log.error("执行 FFmpeg 命令: {}", String.join(" ", command));
-
-    ProcessBuilder processBuilder = new ProcessBuilder(command);
-    processBuilder.redirectErrorStream(true);
-
-    Process process = null;
+    // 执行FFmpeg命令
     try {
-      process = processBuilder.start();
+      Process process = new ProcessBuilder(command.split(" "))
+        .redirectErrorStream(true)
+        .start();
 
       try (BufferedReader reader = new BufferedReader(
         new InputStreamReader(process.getInputStream()))) {
         String line;
         while ((line = reader.readLine()) != null) {
-          log.trace("{}", line);
+          log.info("FFmpeg输出：{}", line);
         }
       }
-
-//            try (BufferedReader reader = new BufferedReader(
-//                    new InputStreamReader(process.getInputStream()))) {
-//                String line;
-//                while ((line = reader.readLine()) != null) {
-//                    log.info("FFmpeg输出：{}", line);
-//                }
-//            }
 
       int exitCode = process.waitFor();
       if (exitCode != 0) {
         log.error("FFmpeg命令执行失败，退出码：{}", exitCode);
       } else {
         log.info("MP4文件组合并成功：{}", output);
-        long endTime = System.currentTimeMillis();
-        log.info("MP4文件组合并成功: {}, 耗时: {}", output,
-          CdTimeUtil.formatDuration(endTime - startTime));
-
       }
 
     } catch (InterruptedException e) {
@@ -295,16 +250,14 @@ public class Mp4MergeUtil {
 
       count++;
     }
-    String destinationDirectory =
-      folderPath + File.separator + subFolder + File.separator + "video";
 
-    String destinationFileName =
-      destinationDirectory + File.separator + subFolder + ".mp4";
     // 拷贝 outputDir 到最终的文件夹中
-    if (files.size() == 1 && CdFileUtil.isFileEmpty(destinationFileName)) {
+    if (files.size() == 1) {
       // 将视频拷贝到最终的文件夹中
       log.info("已完成合并，无需进一步操作");
       String sourceFile = files.get(0).getAbsolutePath(); // 替换成你的源文件路径
+      String destinationDirectory =
+        folderPath + File.separator + subFolder + File.separator + "video";
       // 确保输出目录存在
       File destinationDir = new File(destinationDirectory);
       if (!destinationDir.exists() && destinationDir.mkdirs()) {
@@ -312,23 +265,18 @@ public class Mp4MergeUtil {
       }
       try {
         Path copiedFile = FileCopyUtils.copyFileToDirectory(sourceFile,
-          destinationFileName,
           destinationDirectory, true); // 需要替换现有文件就设置为 true
         log.info("文件拷贝成功到: {}", copiedFile);
       } catch (IOException e) {
         log.error("拷贝文件出错: {}", e.getMessage(), e); // 打印完整的堆栈信息
       }
     }
-//        else {
-//            // 将视频拷贝到最终的文件夹中
-//            log.info("已完成合并，无需进一步操作");
-//        }
   }
 
   public static void main(String[] args) {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getBaseFolder() + bookName;
-    String subFolder = "Chapter011";
-    Mp4MergeUtil.processMerge(folderPath, subFolder);
+    String subFolder = "Chapter012";
+    Mp4MergeUtil04.processMerge(folderPath, subFolder);
   }
 }

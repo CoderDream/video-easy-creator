@@ -2,6 +2,7 @@ package com.coderdream.util.process;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.coderdream.util.video.demo04.Mp4MergeUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +73,7 @@ class GenVideoUtilTest {
   void processV4_02() {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    String subFolder = "Chapter011";
+    String subFolder = "Chapter012";
     GenVideoUtil.processV4(folderPath, subFolder);
     // assert that the process completes without any error
     assertTrue(true);
@@ -101,22 +102,32 @@ class GenVideoUtilTest {
 
   }
 
-
+  /**
+   * 未实现
+   */
   @Test
   void process02_Merge() {
 //    String bookFolderName = "EnBook002";
 //    String folderPath = "D:\\0000\\" + bookFolderName + "\\";
 
+//    String bookFolderName = "EnBook002";
+//    String folderPath = OperatingSystem.getFolderPath(bookFolderName);
+//
+//    String subFolder = "Chapter009";
+//    String bookName = "一輩子夠用的英語口語大全集";
+//    String chapterName = "book02_name.txt";
+//    String shortSubFolder = subFolder.substring(8);
+//    GenVideoUtil.processVideoMerger(folderPath, subFolder, shortSubFolder,
+//      bookFolderName, bookName,
+//      chapterName);
+  }
+
+  @Test
+  void process02_Merge_0201() {
     String bookFolderName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookFolderName);
-
-    String subFolder = "Chapter009";
-    String bookName = "一輩子夠用的英語口語大全集";
-    String chapterName = "book02_name.txt";
-    String shortSubFolder = subFolder.substring(8);
-    GenVideoUtil.processVideoMerger(folderPath, subFolder, shortSubFolder,
-      bookFolderName, bookName,
-      chapterName);
+    String subFolder = "Chapter012";
+    Mp4MergeUtil.processMerge(folderPath, subFolder);
   }
 
   @Test

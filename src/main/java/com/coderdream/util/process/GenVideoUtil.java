@@ -107,6 +107,15 @@ public class GenVideoUtil {
     creator.processVideos();
   }
 
+  /**
+   * 生成视频合并
+   * @param folderPath  文件夹路径
+   * @param subFolder 子文件夹
+   * @param shortSubFolder  短子文件夹
+   * @param bookFolderName  书籍文件夹名称
+   * @param bookName  书籍名称
+   * @param chapterFileName   章节文件名称
+   */
   public static void processVideoMerger(String folderPath, String subFolder,
     String shortSubFolder, String bookFolderName,
     String bookName, String chapterFileName) {

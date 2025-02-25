@@ -1,0 +1,103 @@
+<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts"
+    xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="zh-CN">
+    <voice name="zh-CN-XiaoxiaoNeural">
+        <mstts:express-as style="lyrical"><prosody rate="+3.00%">且说</prosody>宝玉<prosody rate="+3.00%">正和</prosody>宝钗玩笑，<prosody
+            rate="+5.00%">忽见</prosody>人说-
+            <prosody pitch="+5.00%">史</prosody>
+            <prosody rate="+4.00%">大</prosody>姑娘<prosody pitch="+5.00%">来</prosody>了。宝钗<prosody rate="+4.00%">
+                笑道</prosody>：
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaohanNeural">
+        <mstts:express-as style="cheerful">”等着，咱们两个一起走，
+            <prosody rate="+5.00%" pitch="+6.00%">瞧瞧</prosody>
+            <prosody contour="(49%, -11%)">他</prosody>
+            <prosody rate="+6.00%">
+                <phoneme alphabet="sapi" ph="qu 5">去</phoneme>
+            </prosody>
+            。”
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoNeural">
+        <mstts:express-as style="lyrical">说着，下了炕，和宝玉<mstts:ttsbreak strength="none"/>来至贾母这边。
+            <prosody rate="+5.00%">只</prosody>
+            <prosody rate="+7.00%">见</prosody>史湘云<prosody rate="+4.00%">大说大笑的</prosody>，见了他两个，忙站<prosody
+                rate="+5.00%">起来</prosody>问好。<prosody rate="+5.00%">正值</prosody>黛玉在旁，因问宝玉：
+        </mstts:express-as>
+        <mstts:express-as style="gentle">“
+            <prosody rate="+5.00%">打</prosody>
+            <prosody pitch="+3.00%">哪里</prosody>来？”
+        </mstts:express-as>
+        <mstts:express-as style="lyrical">宝玉
+            <prosody rate="+4.00%">便</prosody>
+            <prosody pitch="+7.00%">说</prosody>：
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-YunxiNeural">
+        <mstts:express-as style="Calm">“
+            <phoneme alphabet="sapi" ph="da 3">打</phoneme>
+            <prosody pitch="+5.00%">
+                <phoneme alphabet="sapi" ph="bao 2">宝</phoneme>
+            </prosody>
+            姐姐<prosody rate="+3.00%">那里</prosody>来。”
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoNeural">
+        <mstts:express-as style="lyrical">黛玉冷笑道：</mstts:express-as>
+        <mstts:express-as style="disgruntled" styledegree="1.5">“我<prosody contour="(49%, -11%)">
+            说</prosody>呢，亏了绊<prosody rate="+5.00%">住</prosody>，不然-<prosody contour="(60%, +19%)">
+            早</prosody>就<prosody contour="(60%, -11%)">飞</prosody>了来了。”
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-YunxiNeural">
+        <mstts:express-as style="Embarrassed">
+            <prosody rate="+3.00%">“只许</prosody>
+            <mstts:ttsbreak strength="none"/>
+            <prosody rate="+3.00%">和你玩，替你解闷</prosody>，不过<prosody pitch="+5.00%">偶然</prosody>到他那里，就说这些闲话。”
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoNeural">
+        <mstts:express-as style="angry" styledegree="1.3">
+            <prosody volume="+50.00%">“好没意思的</prosody>
+            <prosody rate="-4.00%" volume="+50.00%">话</prosody>
+            <prosody volume="+50.00%">！去不去,</prosody>
+            <prosody rate="+4.00%" volume="+50.00%">关</prosody>
+            <prosody rate="+4.00%" volume="+50.00%" contour="(60%, +21%)">我</prosody>
+            <prosody rate="+4.00%" volume="+50.00%">什么</prosody>
+            <prosody rate="+4.00%" volume="+50.00%" contour="(60%, -14%)">事儿</prosody>
+            <prosody volume="+50.00%">？</prosody>
+            <prosody rate="+4.00%" volume="+50.00%">又没叫你</prosody>
+            <prosody rate="+5.00%" volume="+50.00%">替</prosody>
+            <prosody rate="+5.00%" volume="+50.00%" contour="(59%, +29%)">我</prosody>
+            <prosody volume="+50.00%">解闷儿，还</prosody>
+            <prosody rate="+4.00%" volume="+50.00%">许你</prosody>
+            <mstts:ttsbreak strength="none"/>
+            <prosody volume="+50.00%" pitch="+5.00%">从此</prosody>
+            <prosody volume="+50.00%">不</prosody>
+            <prosody volume="+50.00%" contour="(60%, +41%)">理</prosody>
+            <prosody volume="+50.00%" contour="(60%, +32%)">我</prosody>
+            <prosody volume="+50.00%">呢！”</prosody>
+        </mstts:express-as>
+        <mstts:express-as style="lyrical"><prosody rate="+4.00%">说着</prosody>，<prosody rate="+4.00%">便</prosody>赌气
+            <mstts:ttsbreak strength="none"/>回房<prosody rate="+4.00%">去了</prosody>。宝玉忙跟了来，问道：
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-YunxiNeural">
+        <mstts:express-as style="Calm">“好好的<prosody pitch="+4.00%">又</prosody>生气了！就是我说错了，你到底也还<prosody
+            pitch="+5.00%">坐</prosody>一会，合别人<prosody pitch="+5.00%">说笑</prosody>一会<phoneme alphabet="sapi"
+            ph="zi 5">子</phoneme>呀？”
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoNeural">
+        <mstts:express-as style="angry" styledegree="1.4">
+            <prosody volume="+50.00%">“</prosody>
+            <prosody rate="+4.00%" volume="+50.00%">你</prosody>
+            <prosody rate="+4.00%" volume="+50.00%" pitch="+5.00%" contour="(60%, +33%)">
+                <phoneme alphabet="sapi" ph="guan 2">管</phoneme>
+            </prosody>
+            <prosody rate="+6.00%" volume="+50.00%" contour="(60%, +24%)">我</prosody>
+            <prosody rate="+3.00%" volume="+50.00%">呢</prosody>
+            <prosody volume="+50.00%">！”</prosody>
+        </mstts:express-as>
+    </voice>
+</speak>
