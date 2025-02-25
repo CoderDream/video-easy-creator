@@ -82,6 +82,19 @@ class GenSubtitleUtilTest {
     GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
   }
 
+
+  @Test
+  void processSrtAndGenDescription_0601() {
+    //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
+    String folderName = "0001";
+    String mp4FilePath =
+      OperatingSystem.getBaseFolder() + "0006_KK" + File.separator
+        + folderName + File.separator + folderName
+        + ".mp4";
+
+    GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
+  }
+
   @Test
   void processRawSrtFile_03() {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
