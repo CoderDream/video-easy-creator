@@ -39,7 +39,7 @@ public class FFmpegOneByOne {
         if (CollectionUtil.isEmpty(imagePathNameList) || CollectionUtil.isEmpty(
                 audioPathNameList)
                 || imagePathNameList.size() != audioPathNameList.size()) {
-            log.error("图片列表数量和音频列表数量不一致");
+            log.error("图片列表数量和音频列表数量不一致: ({}, {})", imagePathNameList.size(), audioPathNameList.size());
             return;
         } else {
             imagePathNameList.sort(String::compareTo);

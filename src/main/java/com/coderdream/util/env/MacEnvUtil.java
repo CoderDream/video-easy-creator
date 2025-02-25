@@ -159,8 +159,8 @@ public class MacEnvUtil {
 
     public static void main(String[] args) {
         // 示例用法
-        String varName = "MY_TEST_VAR";
-        String varValue = "Hello from MacEnvUtil!";
+        String varName = "SPEECH_KEY_EASTASIA";
+        String varValue = "XXX";
 
         // 设置环境变量
         if (MacEnvUtil.setEnvVar(varName, varValue)) {
