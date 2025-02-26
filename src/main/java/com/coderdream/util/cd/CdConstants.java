@@ -113,7 +113,7 @@ public class CdConstants {
   /**
    * 美国西部
    */
-  public static String SPEECH_REGION_EASTUS = "eastus2";
+  public static String SPEECH_REGION_EASTUS = "eastus"; // eastus2
 
   // Azure 配置信息
   /**

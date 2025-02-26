@@ -41,7 +41,7 @@ class GenVideoUtilTest {
   void process02() throws InterruptedException {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    String subFolder = "Chapter013";
+    String subFolder = "Chapter011";
     GenVideoUtil.process(folderPath, subFolder);
     // assert that the process completes without any error
     assertTrue(true);
@@ -73,7 +73,7 @@ class GenVideoUtilTest {
   void processV4_02() {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
-    String subFolder = "Chapter012";
+    String subFolder = "Chapter011";
     GenVideoUtil.processV4(folderPath, subFolder);
     // assert that the process completes without any error
     assertTrue(true);
@@ -122,6 +122,26 @@ class GenVideoUtilTest {
 //      chapterName);
   }
 
+
+  @Test
+  void processBatch02()  {
+    String bookName = "EnBook002";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 51; // 假定你想要处理的章节数 51
+    for (int i = 11; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenVideoUtil.processV4(folderPath, subFolder);
+    }
+  }
+
+
+
   @Test
   void process02_Merge_0201() {
     String bookFolderName = "EnBook002";
@@ -131,19 +151,19 @@ class GenVideoUtilTest {
   }
 
   @Test
-  void processBatch02()  {
+  void processBatch_Merge_0201()  {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
 
     List<String> subFolders = new ArrayList<>();
-    int end = 14; // 假定你想要处理的章节数
-    for (int i = 11; i < end; i++) {
+    int end = 51; // 假定你想要处理的章节数
+    for (int i = 10; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);
     }
 
     for (String subFolder : subFolders) {
-      GenVideoUtil.processV4(folderPath, subFolder);
+      Mp4MergeUtil.processMerge(folderPath, subFolder);
     }
   }
 }

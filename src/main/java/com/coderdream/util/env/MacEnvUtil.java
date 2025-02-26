@@ -159,15 +159,15 @@ public class MacEnvUtil {
 
     public static void main(String[] args) {
         // 示例用法
-        String varName = "SPEECH_KEY_EASTASIA";
-        String varValue = "XXX";
+        String varName = "SPEECH_KEY_EAST_US";
+//        String varValue = "CYy4pk7VTJ4IhnhWaZMZseRTgOFYsAjy7MLmiGrhAlFnxXQZLpZzJQQJ99BBACYeBjFXJ3w3AAAYACOG31QZ";
 
         // 设置环境变量
-        if (MacEnvUtil.setEnvVar(varName, varValue)) {
-            System.out.println(varName + " 已成功设置。");
-        } else {
-            System.err.println(varName + " 设置失败。");
-        }
+//        if (MacEnvUtil.setEnvVar(varName, varValue)) {
+//            System.out.println(varName + " 已成功设置。");
+//        } else {
+//            System.err.println(varName + " 设置失败。");
+//        }
 
         // 读取环境变量
         String value = MacEnvUtil.readEnvVar(varName);
