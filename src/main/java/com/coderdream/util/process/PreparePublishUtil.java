@@ -188,14 +188,30 @@ public class PreparePublishUtil {
     }
 
     lang = "eng";
+    String srtFileNameInSubtitleFolder =
+      folderPath + subFolder + File.separator + "subtitle" + File.separator
+        + subFolder
+        + ".srt";
+
     String srtFileName =
       folderPath + subFolder + File.separator + "video" + File.separator
         + subFolder
         + ".srt";
+
     if (CdFileUtil.isFileEmpty(srtFileName)) {
-      log.info("srt文件不存在, {}", srtFileName);
-      SubtitleUtil.genSrtByExecuteCommand(mp3FileName, subtitleRawFileName,
-        srtFileName, lang);
+
+      if (!CdFileUtil.isFileEmpty(srtFileNameInSubtitleFolder)) {
+        log.info("subtitle中的srt文件存在，直接拷贝： {}",
+          srtFileNameInSubtitleFolder);
+        FileUtil.copy(Paths.get(srtFileNameInSubtitleFolder),
+          Paths.get(srtFileName),
+          StandardCopyOption.REPLACE_EXISTING);
+      } else {
+        log.info("srt文件不存在, {}", srtFileName);
+
+        SubtitleUtil.genSrtByExecuteCommand(mp3FileName, subtitleRawFileName,
+          srtFileName, lang);
+      }
     }
 
     String mdFileName = Objects.requireNonNull(
