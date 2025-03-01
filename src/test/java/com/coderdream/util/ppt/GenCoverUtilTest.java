@@ -23,12 +23,12 @@ class GenCoverUtilTest {
 
     @Test
     void process_0102() {
-        String presentationName = "D:\\0000\\ppt\\Book02\\Book02模板.pptx";
+        String presentationName = OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book02" + File.separator + "Book02模板.pptx";
         String chapterFileName = "book02_name.txt";
         String bookName = "EnBook002";
         String folderPath = OperatingSystem.getFolderPath(bookName);
         String imageFormat = "png";
-        GenCoverUtil.process(folderPath, chapterFileName, presentationName,          imageFormat, 1280, 720);
+        GenCoverUtil.process(folderPath, chapterFileName, presentationName, imageFormat, 1280, 720);
     }
 
     @Test
@@ -66,20 +66,20 @@ class GenCoverUtilTest {
 
     void process_0201() {
         String presentationName =
-          OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book02"
-            + File.separator + "Book02模板.pptx";
+                OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book02"
+                        + File.separator + "Book02模板.pptx";
         String chapterFileName = "book02_name.txt";
         String bookName = "EnBook002";
         String folderPath = OperatingSystem.getFolderPath(bookName);
         String imageFormat = "png";
         GenCoverUtil.process(folderPath, chapterFileName, presentationName,
-          imageFormat);
+                imageFormat);
 
         // 示例用法
 //    String inputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 PNG 文件的目录
 //    String outputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 JPG 文件的目录
         String inputDirectory =
-          folderPath + bookName + File.separator + "cover"; // 存放 PNG 文件的目录
+                folderPath + bookName + File.separator + "cover"; // 存放 PNG 文件的目录
         String outputDirectory = inputDirectory; // 存放 JPG 文件的目录
         float jpgQuality = 1.0f;// 0.8f; // JPG 图像质量
 
@@ -93,7 +93,7 @@ class GenCoverUtilTest {
 //        }
 
         PngToJpgConverter.batchConvertPngToJpg(inputDirectory, outputDirectory,
-          jpgQuality);
+                jpgQuality);
     }
 
 

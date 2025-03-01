@@ -11,11 +11,8 @@ import com.aspose.slides.SaveFormat;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.resource.ResourcesSourcePathUtil;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -68,9 +65,13 @@ public class GenCoverUtil {
   private static void extracted(String folderPath, String ep, String topic,
     String slogan, String presentationName, String imageFormat, int width,
     int height) {
+    Locale locale = new Locale("zh", "cn");
+    Locale.setDefault(locale);
 
     // 实例化Presentation类
     Presentation pres = new Presentation(presentationName);
+//    pres.getDocumentProperty().setLanguage("zh-CN"); // 使用标准的简体中文代码
+//    pres.getDocument().getProperties().setLanguage("zh-CN");
     try {
       // 将演示文稿保存到磁盘
       String newPptName = CdFileUtil.addPostfixToFileName(presentationName,
