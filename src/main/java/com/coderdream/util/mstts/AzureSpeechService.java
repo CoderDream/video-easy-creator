@@ -64,18 +64,21 @@ public class AzureSpeechService {
         return ssmlBuilder.toString();
     }
 
-    public static void main(String[] args) {
-
+    public static void testEn() {
         // Azure 配置信息
-        String speechKey1 = CdConstants.SPEECH_KEY_EAST_US;
-        String region1 = CdConstants.SPEECH_REGION_EASTUS; // "eastus";//
-// Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.
-//        List<String> textList = List.of("Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.");
-
+        String speechKey1 = "CYy4pk7VTJ4IhnhWaZMZseRTgOFYsAjy7MLmiGrhAlFnxXQZLpZzJQQJ99BBACYeBjFXJ3w3AAAYACOG31QZ";// "CFWk2q2sSLvSzIQ3TOnIBAsea1cN8psM5jTrmTy2AAg5lI9gSAEEJQQJ99BBACYeBjFXJ3w3AAAYACOGOcUN" ;//CdConstants.SPEECH_KEY_EAST_US;
+        String region1 = "eastus";// CdConstants.SPEECH_REGION_EASTUS;
         List<String> textList = List.of("Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.");
         String fileName1 = "eng1234.wav";
         content2wav(textList, "en-US-JennyNeural", "default", "default", "default", fileName1, speechKey1, region1);
+    }
 
+    public static void main(String[] args) {
+        testEn();
+//        testCn();
+    }
+
+    public static void testCn() {
         List<String> textList2 = List.of("英文加中文配音，每次半小時，增强你的英文听力。");
         String fileName2 = "chn123.wav";
         String speechKey2 = CdConstants.SPEECH_KEY_EASTASIA;
@@ -83,4 +86,5 @@ public class AzureSpeechService {
         String voiceName2 = CdConstants.SPEECH_VOICE_ZH_CN_XIAOCHEN;
         content2wav(textList2, voiceName2, "default", "default", "default", fileName2, speechKey2, region2);
     }
+
 }

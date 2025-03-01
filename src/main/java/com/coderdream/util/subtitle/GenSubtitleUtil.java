@@ -393,9 +393,9 @@ public class GenSubtitleUtil {
           newSrtStringList.add(indexInt + "");
           newSrtStringList.add(timeStr);
           if (StrUtil.isNotBlank(subtitleSecond)) {
-            newSrtStringList.add(mergeContent);
+            newSrtStringList.add(GenSubtitleUtil.filterContent(mergeContent));
           } else {
-            newSrtStringList.add(subtitle);
+            newSrtStringList.add(GenSubtitleUtil.filterContent(subtitle));
           }
           newSrtStringList.add("");
         } else {
@@ -424,6 +424,30 @@ public class GenSubtitleUtil {
     if (content.startsWith("i ")) {
       log.warn("替换为大写: {}", content);
       content = "I " + content.substring(2);
+    }
+
+    // 以【i 】，替换为大写【I 】
+    if (content.startsWith("i'm ")) {
+      log.warn("替换为大写: {}", content);
+      content = "I'm " + content.substring(2);
+    }
+
+    // 以【i 】，替换为大写【I 】
+    if (content.contains(" i ")) {
+      log.warn("替换为大写: {}", content);
+      content = content.replace(" i ", " I ");
+    }
+
+    // 以【i 】，替换为大写【I 】
+    if (content.contains(" i'm ")) {
+      log.warn("替换为大写: {}", content);
+      content = content.replace(" i ", " I'm ");
+    }
+
+    // 以【i 】，替换为大写【I 】
+    if (content.contains(" i'll ")) {
+      log.warn("替换为大写: {}", content);
+      content = content.replace(" i ", " I'll ");
     }
 
     return content;

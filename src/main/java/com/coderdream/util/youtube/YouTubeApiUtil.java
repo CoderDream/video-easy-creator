@@ -64,7 +64,7 @@ public class YouTubeApiUtil {
         }
     }
 
-    private static void enableProxy() {
+    public static void enableProxy() {
         System.setProperty("http.proxyHost", PROXY_HOST);
         System.setProperty("http.proxyPort", OperatingSystem.getProxyPort() + "");
         System.setProperty("https.proxyHost", PROXY_HOST);

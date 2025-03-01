@@ -101,7 +101,7 @@ public class TextProcessor {
         timePeriod = 800;
       }
       updatedTime = addTimePeriod(originalTime, timePeriod);
-      if (!nextLine.toLowerCase().startsWith("bye")) {
+      if (!nextLine.toLowerCase().startsWith("bye")) { // Bye
         updatedTime = endTime;
       }
 

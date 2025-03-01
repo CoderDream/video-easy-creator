@@ -52,7 +52,35 @@ class DailyUtilTest {
 
   @Test
   void process_180927() {
-    String folderName = "170105";
+    String folderName = "170119";
+//    String folderName = "250213";
+    String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
+      folderName);// "【BBC六分钟英语】泰国50年老汤真的能吃吗？";
+    DailyUtil.process(folderName, title);
+
+    String baseHexoFolder = OperatingSystem.getHexoFolder();
+
+    List<String> commandList = Arrays.asList(
+      "cd " + baseHexoFolder + " && hexo g",
+      "cd " + baseHexoFolder + " && hexo d");
+    for (String command : commandList) {
+      CommandUtil.executeCommand(command);
+    }
+  }
+
+  @Test
+  void process_deploy() {
+    String baseHexoFolder = OperatingSystem.getHexoFolder();
+    List<String> commandList = Arrays.asList(
+      "cd " + baseHexoFolder + " && hexo g",
+      "cd " + baseHexoFolder + " && hexo d");
+    for (String command : commandList) {
+      CommandUtil.executeCommand(command);
+    }
+  }
+
+  void process_todo() {
+    String folderName = "170119";
 //    String folderName = "250213";
     String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
       folderName);// "【BBC六分钟英语】泰国50年老汤真的能吃吗？";
@@ -84,13 +112,13 @@ class DailyUtilTest {
   @Test
   void processBatch() {
     // D:\04_GitHub\video-easy-creator\src\main\resources\data\bbc\todo.txt
-//    for (String num : NUMBER_LIST) {
-//      String folderName = "" + num;
-//      String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
-//        folderName);
-//      DailyUtil.process(folderName, title);
+    for (String num : NUMBER_LIST) {
+      String folderName = "" + num;
+      String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
+        folderName);
+      DailyUtil.process(folderName, title);
 //      TranslationUtil.genDescription(folderName);
-//    }
+    }
 
     String baseHexoFolder = OperatingSystem.getHexoFolder();
     List<String> commandList = Arrays.asList(

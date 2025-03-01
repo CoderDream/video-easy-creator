@@ -510,7 +510,7 @@ public class CdFileUtil {
       int size = stringList.size();
       switch (platformName) {
         case CdConstants.TRANSLATE_PLATFORM_GEMINI:
-          // 如果字符串的个数不是3的倍数，则直接返回空列表
+          // 如果字符串的个数不是2的倍数，则直接返回空列表
           if (size % 2 != 0) {
             log.warn("字符串的个数不是2的倍数，则直接返回空列表，{}", size);
             return result;

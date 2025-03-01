@@ -348,9 +348,8 @@ public class CdStringUtil {
 
 
   /**
-   * 将字符串列表按照空行分割成多个字符串列表
-   * 将字符串列表按空行分割成字符串列表的列表。
-   * 空行被定义为 null 或者 经过 trim() 后为空的字符串。
+   * 将字符串列表按照空行分割成多个字符串列表 将字符串列表按空行分割成字符串列表的列表。 空行被定义为 null 或者 经过 trim()
+   * 后为空的字符串。
    *
    * @param inputList 待分割的字符串列表
    * @return 分割后的字符串列表的列表
@@ -398,7 +397,8 @@ public class CdStringUtil {
    * @return 如果找到，返回索引；否则返回 -1
    */
   public static int findFirstEnglishLetterIndex(String text) {
-    Pattern pattern = Pattern.compile("[A-Za-z]"); // 或者 Pattern.compile("[a-zA-Z]");
+    Pattern pattern = Pattern.compile(
+      "[A-Za-z]"); // 或者 Pattern.compile("[a-zA-Z]");
     Matcher matcher = pattern.matcher(text);
     if (matcher.find()) {
       return matcher.start();
@@ -532,4 +532,117 @@ public class CdStringUtil {
     System.out.println(sentencePairTemp);
   }
 
+  // 中文标点符号正则 (包含句号、逗号、问号、感叹号、分号、冒号等常见符号)
+  private static final Pattern CHINESE_PUNCTUATION_PATTERN = Pattern.compile(
+    "[，。！？；：]$");
+
+  /**
+   * 判断字符串是否以中文标点符号结尾，如果不是，补上中文句号。
+   *
+   * @param input 输入字符串
+   * @return 处理后的字符串
+   */
+  public static String ensureEndsWithChinesePunctuation(String input) {
+    if (input == null || input.isEmpty()) {
+      return "。";
+    }
+    // 如果已以中文标点符号结尾，直接返回
+    if (CHINESE_PUNCTUATION_PATTERN.matcher(input).find()) {
+      return input;
+    }
+    // 否则追加中文句号
+    return input + "。";
+  }
+
+  /**
+   * 将超过80个字符的字符串按逗号分割，如果仍然超过80个字符，继续递归分割。
+   *
+   * @param input 输入字符串
+   * @return 分割后的字符串列表
+   */
+  public static List<String> splitLongSentence(String input) {
+    List<String> result = new ArrayList<>();
+    if (input == null || input.isEmpty()) {
+      result.add("");
+      return result;
+    }
+
+    if (input.length() <= 20) {
+      result.add(input);
+      return result;
+    }
+
+    int mid = input.length() / 2;
+    int commaIndex = input.lastIndexOf("，", mid);
+
+    if (commaIndex == -1) {
+      // 如果没有逗号，则直接硬切
+      result.add(input);
+    } else {
+      // 按逗号分割
+      result.addAll(splitLongSentence(input.substring(0, commaIndex + 1)));
+      result.addAll(splitLongSentence(input.substring(commaIndex + 1)));
+    }
+
+    return result;
+  }
+
+  /**
+   * 将超过80个字符的字符串按逗号分割，如果仍然超过80个字符，继续递归分割。
+   *
+   * @param input 输入字符串
+   * @return 分割后的字符串列表
+   */
+  public static List<String> splitLongSentence(String input, int maxLength) {
+    List<String> result = new ArrayList<>();
+    if (input == null || input.isEmpty()) {
+      result.add("");
+      return result;
+    }
+
+    if (input.length() <= maxLength) {
+      result.add(input);
+      return result;
+    }
+
+    int mid = input.length() / 2;
+    int commaIndex = input.lastIndexOf("，", mid);
+
+    if (commaIndex == -1) {
+      // 如果没有逗号，则直接硬切
+      result.add(input);
+    } else {
+      // 按逗号分割
+      result.addAll(splitLongSentence(input.substring(0, commaIndex + 1), maxLength));
+      result.addAll(splitLongSentence(input.substring(commaIndex + 1), maxLength));
+    }
+
+    return result;
+  }
+
+  private static final String CHINESE_COMMA = "，";
+  private static final String SPLIT_MARKER = "；";
+
+
+  /**
+   * 将超过80个字符的字符串按逗号分割，如果仍然超过80个字符，继续递归分割。
+   *
+   * @param input 输入字符串
+   * @return 分割后的字符串列表
+   */
+  public static List<String> splitLongSentenceWithComma(String input) {
+    List<String> result = new ArrayList<>();
+    List<String> resultTemp = new ArrayList<>();
+
+    String[] split = input.split(CHINESE_COMMA);
+    for (String s : split) {
+      if (s.length() > 80) {
+        resultTemp.addAll(splitLongSentenceWithComma(s));
+      } else {
+        resultTemp.add(s);
+      }
+    }
+
+    return result;
+  }
 }

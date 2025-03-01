@@ -49,12 +49,8 @@ public class DailyUtil {
       srtFileName,
       StandardCharsets.UTF_8);
     // 生成文本内容（阻塞式）
-    GeneratedContent generatedContent;
-    try {
-      generatedContent = GeminiApiUtil.generateContent(prompt);
-    } catch (InterruptedException | ExecutionException | TimeoutException e) {
-      throw new RuntimeException(e);
-    }
+    GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+
 
     File fileChn = new File(srtFileNameChn);
     File fileCht = new File(srtFileNameCht);

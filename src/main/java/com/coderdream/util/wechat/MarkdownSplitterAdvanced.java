@@ -10,6 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -235,11 +238,23 @@ public class MarkdownSplitterAdvanced {
 //      processMarkdown(DateUtil.offsetDay(startDate, dayNumber), dayNumber,
 //        tags);
 //    }
+    // Date beginDate, Date endDate, boolean isReset, List<String> tags
 
     List<String> tags = List.of("百词斩", "单词", "学习");
-    String startDateStr = "2025-01-23";
+    DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
+    String startDateStr = "2024-11-25";//"2025-01-23";
+    String endDateStr = "2025-03-14";
     int startIndex = 59;
-    int totalDay = 60; // "2025-01-14"  - 60
+    int totalDay = 0;
+    try {
+      totalDay = Long.valueOf(
+        DateUtil.betweenDay(dateParser.parse(startDateStr),
+          dateParser.parse(endDateStr), false)
+      ).intValue();
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
+    }
+    ; // "2025-03-14"  - 60 80
     Date startDate = DateUtil.parseDate(startDateStr);
     for (int dayNumber = startIndex; dayNumber <= totalDay; dayNumber++) {
       processMarkdown(DateUtil.offsetDay(startDate, dayNumber), dayNumber,

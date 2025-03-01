@@ -3,7 +3,9 @@ package com.coderdream.util.subtitle;
 
 import com.coderdream.entity.SubtitleEntity;
 import com.coderdream.util.bbc.TranslateUtil;
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
+import com.coderdream.util.proxy.OperatingSystem;
 import java.io.File;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -105,4 +107,31 @@ class SubtitleUtilTest {
   @Test
   void writeToSubtitleFile() {
   }
+
+  @Test
+  void modifySubtitleFile_01() {
+    String folderName = "20250227"; // D:\0000\0007_Trump\20250227
+    String filePath =
+      OperatingSystem.getBaseFolder() + "0007_Trump" + File.separator
+        + folderName + File.separator + folderName
+        + ".mp4";
+    String srcFileNameEn = CdFileUtil.changeExtension(filePath, "srt");
+    srcFileNameEn = CdFileUtil.addPostfixToFileName(srcFileNameEn,
+      "." + CdConstants.SUBTITLE_EN);
+    SubtitleUtil.modifySubtitleFile(srcFileNameEn);
+  }
+
+  @Test
+  void modifySubtitleFile_02() {
+    String folderName = "20250227"; // D:\0000\0007_Trump\20250227
+    String filePath =
+      OperatingSystem.getBaseFolder() + "0007_Trump" + File.separator
+        + folderName + File.separator + folderName
+        + ".mp4";
+    String srcFileNameZhTw = CdFileUtil.changeExtension(filePath, "srt");
+    srcFileNameZhTw = CdFileUtil.addPostfixToFileName(srcFileNameZhTw,
+      "." + CdConstants.SUBTITLE_ZH_TW);
+    SubtitleUtil.modifySubtitleFile(srcFileNameZhTw);
+  }
+
 }

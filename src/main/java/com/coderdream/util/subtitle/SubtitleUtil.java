@@ -12,6 +12,7 @@ import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.util.cmd.CommandUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.sentence.SentenceParser;
+import com.coderdream.util.string.StringChecker;
 import com.coderdream.util.video.BatchCreateVideoCommonUtil;
 import com.coderdream.vo.SentenceDurationVO;
 import com.coderdream.vo.SentenceVO;
@@ -198,6 +199,47 @@ public class SubtitleUtil {
     } else {
       System.out.println("newList is empty!");
     }
+  }
+
+  /**
+   * @param srcFileName 英文字幕文件
+   */
+  public static void modifySubtitleFile(String srcFileName) {
+    long startTime = System.currentTimeMillis(); // 记录开始时间
+    List<SubtitleEntity> subtitleEntityList = CdFileUtil.readSrcFileContent(
+      srcFileName);
+
+    SubtitleEntity subtitleEntity;
+    List<String> srtStringList = new ArrayList<>();
+    if (CollectionUtil.isNotEmpty(subtitleEntityList)) {
+      log.info("中英文字幕相等 size: {}", subtitleEntityList.size());
+      for (int i = 0; i < subtitleEntityList.size(); i++) {
+        subtitleEntity = subtitleEntityList.get(i);
+        srtStringList.add(subtitleEntity.getSubIndex() + "");
+        srtStringList.add(subtitleEntity.getTimeStr());
+        String subtitle = subtitleEntity.getSubtitle();
+        if (!StringChecker.onlyContainsChineseCharactersAndPunctuation(
+          subtitle)) {
+          log.error("index:{}, : {}", subtitleEntity.getSubIndex(),
+            subtitle);
+        }
+        srtStringList.add(subtitleEntity.getSubtitle());
+        srtStringList.add("");
+      }
+    } else {
+      log.error("中英文字幕不相等 英文字幕大小: {}",
+        subtitleEntityList.size());
+    }
+
+//    if (CollectionUtil.isNotEmpty(srtStringList)) {
+//      // 写中文翻译文本
+//      CdFileUtil.writeToFile(srcFileName, srtStringList);
+//      long elapsedTime = System.currentTimeMillis() - startTime; // 计算耗时
+//      log.info("写入完成，文件路径: {}，共计耗时：{}", srcFileName,
+//        CdTimeUtil.formatDuration(elapsedTime));
+//    } else {
+//      System.out.println("newList is empty!");
+//    }
   }
 
   /**
