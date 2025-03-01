@@ -27,11 +27,18 @@ public class GenCoverUtil {
     String chapterFileName = "900_cht_name.txt";
 
     String imageFormat = "png";
-    GenCoverUtil.process(folderPath, chapterFileName, presentationName,imageFormat);
+    GenCoverUtil.process(folderPath, chapterFileName, presentationName,
+      imageFormat, 1920, 1080);
   }
 
   public static void process(String folderPath, String chapterFileName,
-    String presentationName,     String imageFormat) {
+    String presentationName, String imageFormat) {
+    process(folderPath, chapterFileName, presentationName, imageFormat,
+      1920, 1080);
+  }
+
+  public static void process(String folderPath, String chapterFileName,
+    String presentationName, String imageFormat, int width, int height) {
 
     String resourcesPath = ResourcesSourcePathUtil.getResourcesSourceAbsolutePath();
     List<String> contentList = CdFileUtil.readFileContent(
@@ -53,13 +60,14 @@ public class GenCoverUtil {
         // 随机整数0~4
         int i = new Random().nextInt(slogans.size());
         extracted(folderPath, split[1], split[2], slogans.get(i),
-          presentationName, imageFormat);
+          presentationName, imageFormat, width, height);
       }
     }
   }
 
   private static void extracted(String folderPath, String ep, String topic,
-    String slogan, String presentationName, String imageFormat) {
+    String slogan, String presentationName, String imageFormat, int width,
+    int height) {
 
     // 实例化Presentation类
     Presentation pres = new Presentation(presentationName);
@@ -76,7 +84,7 @@ public class GenCoverUtil {
         props.put("slogan", slogan);
 
         ISlide sld = pres.getSlides().get_Item(0);
-        System.out.println("##$$## " + 1);
+//        System.out.println("##$$## " + 1);
         // 遍历形状以查找占位符
         for (IShape shp : sld.getShapes()) {
           if (shp.getPlaceholder() != null) {
@@ -89,14 +97,14 @@ public class GenCoverUtil {
 //            System.out.println("## \t " + type);
             switch (type) {
               case 1:
-                System.out.println(
-                  "## \t " + shp.getPlaceholder().getType() + "这是占位符");
+//                System.out.println(
+//                  "## \t " + shp.getPlaceholder().getType() + "这是占位符");
                 // 更改每个占位符中的文本
 //                ((IAutoShape) shp).getTextFrame().setText("这是占位符");
-                System.out.println(((IAutoShape) shp).getTextFrame().getText());
+//                System.out.println(((IAutoShape) shp).getTextFrame().getText());
                 String text = ((IAutoShape) shp).getTextFrame().getText();
                 String newText = props.get(text);
-                log.info("## \t {} \t {}", text, newText);
+//                log.info("## \t {} \t {}", text, newText);
                 if (StrUtil.isNotEmpty(newText)) {
                   ((IAutoShape) shp).getTextFrame().setText(newText);
                 }
@@ -131,13 +139,14 @@ public class GenCoverUtil {
         }
       }
 //      String imageFormat = "png";
-      String outputFileName = coverPath + "Chapter0" + ep + "." + imageFormat;
+      String outputFileName =
+        coverPath + "Chapter0" + ep + "_" + height + "p." + imageFormat;
       if (!CdFileUtil.isFileEmpty(outputFileName)) {
         log.info("封面图已存在，路径：{}", outputFileName);
       } else {
 //        log.info("封面图不存在，开始生成，路径：{}", outputFileName);
         PptToImageConverter.convertFirstSlideToImage(newPptName,
-          outputFileName, imageFormat);
+          outputFileName, width, height, imageFormat);
       }
     } finally {
       pres.dispose();
