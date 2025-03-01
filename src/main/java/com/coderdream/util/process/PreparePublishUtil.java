@@ -13,6 +13,8 @@ import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -139,22 +141,11 @@ public class PreparePublishUtil {
     // 1. 生成字幕
     String lang = "cmn";
 
-//        Map<String, String> chapterNameMap = new HashMap<>();
-//        List<String> stringList = FileUtil.readLines(chapterFileName,
-//                StandardCharsets.UTF_8);
-//        for (String line : stringList) {
-//            String[] split = line.split(" ");
-//            chapterNameMap.put(split[1], split[2]);
-//        }
-////    String shortSubFolder = subFolder.substring(8);
-//        String chapterName = chapterNameMap.get(shortSubFolder);
     String mp4FileName =
       folderPath + subFolder + File.separator + "video" + File.separator
         + subFolder
         + ".mp4";
     String mp3FileName = CdFileUtil.changeExtension(mp4FileName, "mp3");
-
-    // "/Users/coderdream/Documents/EnBook002/一輩子夠用的英語口語大全集-EP-10-情緒 "
 
     if (CdFileUtil.isFileEmpty(mp3FileName)) {
       log.info("mp3文件不存在，先生成： {}", mp3FileName);
@@ -196,34 +187,9 @@ public class PreparePublishUtil {
       log.info("文件已存在，不再生成: {}", subtitleRawFileName);
     }
 
-//        String srtFileName = CdFileUtil.changeExtension(mp3FileName, "srt");
-//        // D:\0000\EnBook001\900\ch003\ch003_total.txt
-//        String subtitleFileName =
-//                OperatingSystem.getBaseFolder() + bookFolderName + File.separator + subFolder + File.separator + subFolder +
-//                        "_total.txt";
-//        File totalFile = new File(subtitleFileName);
-//        if (!totalFile.exists() || totalFile.length() == 0) {
-//            log.info("subtitleFileName文件不存在, {}", subtitleFileName);
-//            return;
-//        }
-//
-//        List<String> textList = new ArrayList<>(List.of(
-//                "Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.",
-//                "英文加中文配音，每次半小時，增强你的英文听力。"));
-//        List<String> srtList = FileUtil.readLines(subtitleFileName,
-//                StandardCharsets.UTF_8);
-//        for (String srtLine : srtList) {
-//            textList.add(ZhConverterUtil.toTraditional(srtLine));
-//        }
-////    textList.addAll(srtList);
-//        String newSubtitleFileName = CdFileUtil.addPostfixToFileName(
-//                subtitleFileName,
-//                "_cht");// "D:\\0000\\EnBook001\\900\\ch003\\ch003_total_new.txt";
-//        CdFileUtil.writeToFile(newSubtitleFileName, textList);
-//
     lang = "eng";
     String srtFileName =
-      folderPath + subFolder + File.separator + "subtitle" + File.separator
+      folderPath + subFolder + File.separator + "video" + File.separator
         + subFolder
         + ".srt";
     if (CdFileUtil.isFileEmpty(srtFileName)) {
@@ -266,6 +232,35 @@ public class PreparePublishUtil {
     }
 
     log.info("----- 4.测试 generateContent 方法结束");
+
+    // 复制封面文件到视频文件夹
+    // 生成封面图
+    String coverPath = folderPath + "cover" + File.separator;
+    File coverPathFile = new File(coverPath);
+    if (!coverPathFile.exists()) {
+      boolean mkdir = coverPathFile.mkdirs();
+      if (mkdir) {
+        log.info("封面图创建目录成功，路径：{}", coverPath);
+      } else {
+        log.error("封面图创建目录失败，路径：{}", coverPath);
+        return;
+      }
+    }
+    String imageFormat = "png";
+    String coverFileName =
+      coverPath + subFolder + "_" + "720p." + imageFormat;
+    String destinationCoverFileName =
+      folderPath + subFolder + File.separator + "video" + File.separator
+        + subFolder + "_" + "720p." + imageFormat;
+    if (CdFileUtil.isFileEmpty(coverFileName)) {
+      log.error("封面图不存在，先生成： {}", coverFileName);
+      return;
+    }
+    if (CdFileUtil.isFileEmpty(destinationCoverFileName)) {
+      FileUtil.copy(Paths.get(coverFileName),
+        Paths.get(destinationCoverFileName),
+        StandardCopyOption.REPLACE_EXISTING);
+    }
   }
 
   public static void makeSrcRawFile(String totalFileName, String srtFileName,
