@@ -141,6 +141,22 @@ class GenVideoUtilTest {
   }
 
 
+  @Test
+  void processBatch_Merge_0101()  {
+    String bookName = "EnBook001";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 21; // 假定你想要处理的章节数
+    for (int i = 16; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("ch" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      Mp4MergeUtil.processMerge(folderPath, subFolder);
+    }
+  }
 
   @Test
   void process02_Merge_0201() {

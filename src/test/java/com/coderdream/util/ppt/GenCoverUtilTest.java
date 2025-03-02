@@ -15,17 +15,7 @@ class GenCoverUtilTest {
         String bookName1 = "Book01";
 //        String folderPath = OperatingSystem.getFolderPath(bookName1);
 
-        String presentationName = OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book01" + File.separator + "商务英语.pptx";
-
-//        String presentationName = "D:\\0000\\ppt\\商务英语oli78u  东方宾馆.pptx";
-//        String folderPath = "D:\\0000\\ppt\\";
-//        String chapterFileName = "900_cht_name.txt";
-//
-//        String imageFormat = "png";
-//        GenCoverUtil.process(folderPath, chapterFileName, presentationName,
-//          imageFormat, 1920, 1080);
-
-//        String presentationName = OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book02" + File.separator + "Book02模板.pptx";
+        String presentationName = OperatingSystem.getBaseFolder() + "ppt" + File.separator + bookName1 + File.separator + "商务英语.pptx";
         String chapterFileName = "900_cht_name.txt";
         String bookName = "EnBook001";
         String folderPath = OperatingSystem.getFolderPath(bookName);

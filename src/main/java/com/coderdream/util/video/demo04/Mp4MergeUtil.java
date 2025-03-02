@@ -252,10 +252,10 @@ public class Mp4MergeUtil {
 
     int count = 1;
     String inputDirStr =
-      folderPath + File.separator + subFolder + File.separator + "video_cht";
+      folderPath + subFolder + File.separator + "video_cht";
     Path inputDir = Paths.get(inputDirStr);
     String outputDirStr =
-      folderPath + File.separator + subFolder + File.separator + "video_cht_"
+      folderPath + subFolder + File.separator + "video_cht_"
         + count;
     // 确保输出目录存在
     File dir = new File(outputDirStr);
