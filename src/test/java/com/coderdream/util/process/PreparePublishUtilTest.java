@@ -23,8 +23,7 @@ class PreparePublishUtilTest {
     String chapterName = "900_cht_name.txt";
     String shortSubFolder = subFolder.substring(3);
     PreparePublishUtil.process(folderPath, subFolder, shortSubFolder,
-      bookFolderName, bookName,
-      chapterName);
+      bookFolderName, bookName, chapterName);
   }
 
   @Test
@@ -87,14 +86,15 @@ class PreparePublishUtilTest {
     String folderPath =
       OperatingSystem.getBaseFolder() + bookFolderName + File.separator;
     List<String> subFolders = new ArrayList<>();
-    int end = 51;
-    for (int i = 11; i < end; i++) {
+    int end = 19; // 51章
+    for (int i = 18; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);
     }
 
+    String chapterName = "book02_name2.txt";
     for (String subFolder : subFolders) {
-      PreparePublishUtil.process(folderPath, subFolder);
+      PreparePublishUtil.process(folderPath, subFolder, chapterName);
     }
   }
 }

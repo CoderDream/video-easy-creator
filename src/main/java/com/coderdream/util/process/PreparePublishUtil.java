@@ -133,8 +133,9 @@ public class PreparePublishUtil {
 //
 //    log.info("----- 4.测试 generateContent 方法结束");
 //
-//  }
-  public static void process(String folderPath, String subFolder) {
+//  } chapterName
+  public static void process(String folderPath, String subFolder,
+    String chapterFileName) {
     // TODO
     //Prox
 
@@ -214,6 +215,16 @@ public class PreparePublishUtil {
       }
     }
 
+    Map<String, String> chapterNameMap = new HashMap<>();
+    List<String> stringList = FileUtil.readLines(chapterFileName,
+      StandardCharsets.UTF_8);
+    for (String line : stringList) {
+      String[] split = line.split(" ");
+      chapterNameMap.put(split[1], split[2]);
+    }
+    String shortSubFolder = subFolder.substring(8);
+    String chapterName = chapterNameMap.get(shortSubFolder);
+
     String mdFileName = Objects.requireNonNull(
       CdFileUtil.changeExtension(srtFileName, "md"));
     String chnMdFileName = CdFileUtil.addPostfixToFileName(mdFileName,
@@ -238,11 +249,33 @@ public class PreparePublishUtil {
       // 生成文本内容（阻塞式）
       GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
 
-      CdFileUtil.writeToFile(chtMdFileName, Collections.singletonList(
-        ZhConverterUtil.toTraditional(generatedContent.text())));
+      // 商務英語 EP 18 餐館英語|🎧30分鐘英文聽力訓練|中英雙語配音，效果加倍|雙語沉浸式學習|英文聽力大提升，附帶中文翻譯|每日英文聽力|讓你的耳朵更靈敏|生活化英文會話|輕鬆掌握實用口語
+      String title = "商務英語 EP " + shortSubFolder + " " + chapterName
+        + "商務英語 EP 18 餐館英語|\uD83C\uDFA730分鐘英文聽力訓練|中英雙語配音，效果加倍|雙語沉浸式學習|英文聽力大提升，附帶中文翻譯|每日英文聽力|讓你的耳朵更靈敏|生活化英文會話|輕鬆掌握實用口語";
+//      String text = generatedContent.text();
+//      text = title + "\n\n" + text;
 
-      CdFileUtil.writeToFile(chnMdFileName, Collections.singletonList(
-        ZhConverterUtil.toSimple(generatedContent.text())));
+      try {
+//      if (CdFileUtil.isFileEmpty(chnMdFileName) || CdFileUtil.isFileEmpty(
+//        chtMdFileName)) {
+        String text = generatedContent.text();
+        text = title + "\n\n" + text;
+        FileUtils.writeStringToFile(new File(chtMdFileName),
+          ZhConverterUtil.toTraditional(text), "UTF-8");
+        FileUtils.writeStringToFile(new File(chnMdFileName),
+          ZhConverterUtil.toSimple(text), "UTF-8");
+//      } else {
+//        log.info("md文件已存在, {}", chnMdFileName);
+//      }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+
+//      CdFileUtil.writeToFile(chtMdFileName, Collections.singletonList(
+//        ZhConverterUtil.toTraditional(generatedContent.text())));
+//
+//      CdFileUtil.writeToFile(chnMdFileName, Collections.singletonList(
+//        ZhConverterUtil.toSimple(generatedContent.text())));
 
       log.info("4. Generated content: {}", generatedContent);
     }
@@ -277,6 +310,11 @@ public class PreparePublishUtil {
         Paths.get(destinationCoverFileName),
         StandardCopyOption.REPLACE_EXISTING);
     }
+  }
+
+  public static void process(String folderPath, String subFolder) {
+    String chapterName = "900_cht_name.txt";
+    process(folderPath, subFolder, chapterName);
   }
 
   public static void makeSrcRawFile(String totalFileName, String srtFileName,
@@ -364,9 +402,8 @@ public class PreparePublishUtil {
 
     lang = "eng";
 
-    File srtFile = new File(srtFileName);
-    if (!srtFile.exists() || srtFile.length() == 0) {
-      log.info("srt文件不存在, {}", srtFileName);
+    if (CdFileUtil.isFileEmpty(srtFileName)) {
+      log.info("srtFile 文件不存在, {}", srtFileName);
       SubtitleUtil.genSrtByExecuteCommand(mp3FileName, newSubtitleFileName,
         srtFileName, lang);
     }
@@ -387,16 +424,27 @@ public class PreparePublishUtil {
     String mdFileName = CdFileUtil.changeExtension(srtFileName, "md");
     String chnMdFileName = CdFileUtil.addPostfixToFileName(mdFileName, "_chn");
     String chtMdFileName = CdFileUtil.addPostfixToFileName(mdFileName, "_cht");
+
+    // 商務英語 EP 18 餐館英語|🎧30分鐘英文聽力訓練|中英雙語配音，效果加倍|雙語沉浸式學習|英文聽力大提升，附帶中文翻譯|每日英文聽力|讓你的耳朵更靈敏|生活化英文會話|輕鬆掌握實用口語
+    String title = "商務英語 EP " + shortSubFolder + " " + chapterName
+      + "商務英語 EP 18 餐館英語|\uD83C\uDFA730分鐘英文聽力訓練|中英雙語配音，效果加倍|雙語沉浸式學習|英文聽力大提升，附帶中文翻譯|每日英文聽力|讓你的耳朵更靈敏|生活化英文會話|輕鬆掌握實用口語";
+
     try {
-      FileUtils.writeStringToFile(
-        new File(chtMdFileName),
-        generatedContent.text(), "UTF-8");
-      FileUtils.writeStringToFile(
-        new File(chnMdFileName),
-        ZhConverterUtil.toSimple(generatedContent.text()), "UTF-8");
+//      if (CdFileUtil.isFileEmpty(chnMdFileName) || CdFileUtil.isFileEmpty(
+//        chtMdFileName)) {
+      String text = generatedContent.text();
+      text = title + "\n\n" + text;
+      FileUtils.writeStringToFile(new File(chtMdFileName),
+        ZhConverterUtil.toTraditional(text), "UTF-8");
+      FileUtils.writeStringToFile(new File(chnMdFileName),
+        ZhConverterUtil.toSimple(text), "UTF-8");
+//      } else {
+//        log.info("md文件已存在, {}", chnMdFileName);
+//      }
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+
     log.info("4. Generated content: {}", generatedContent);
 
     log.info("----- 4.测试 generateContent 方法结束");
