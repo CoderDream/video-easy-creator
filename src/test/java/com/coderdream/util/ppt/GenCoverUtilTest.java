@@ -10,6 +10,30 @@ import org.junit.jupiter.api.Test;
 class GenCoverUtilTest {
 
     @Test
+    void process0101() {
+        // D:\0000\ppt\Book01 D:\0000\ppt\Book01\商务英语.pptx
+        String bookName1 = "Book01";
+//        String folderPath = OperatingSystem.getFolderPath(bookName1);
+
+        String presentationName = OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book01" + File.separator + "商务英语.pptx";
+
+//        String presentationName = "D:\\0000\\ppt\\商务英语oli78u  东方宾馆.pptx";
+//        String folderPath = "D:\\0000\\ppt\\";
+//        String chapterFileName = "900_cht_name.txt";
+//
+//        String imageFormat = "png";
+//        GenCoverUtil.process(folderPath, chapterFileName, presentationName,
+//          imageFormat, 1920, 1080);
+
+//        String presentationName = OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book02" + File.separator + "Book02模板.pptx";
+        String chapterFileName = "900_cht_name.txt";
+        String bookName = "EnBook001";
+        String folderPath = OperatingSystem.getFolderPath(bookName);
+        String imageFormat = "png";
+        GenCoverUtil.process(folderPath, chapterFileName, presentationName, imageFormat, 1280, 720);
+    }
+
+    @Test
     void process() {
         String presentationName = "D:\\0000\\ppt\\Book02\\Book02模板.pptx";
         String chapterFileName = "book02_name.txt";
@@ -17,7 +41,7 @@ class GenCoverUtilTest {
         String folderPath = OperatingSystem.getFolderPath(bookName);
         String imageFormat = "png";
         GenCoverUtil.process(folderPath, chapterFileName, presentationName,
-                imageFormat);
+          imageFormat);
     }
 
 

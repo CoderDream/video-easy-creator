@@ -1,5 +1,6 @@
 package com.coderdream.util.cmd;
 
+import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -344,13 +345,11 @@ public class CommandUtil {
      *
      * @param command 要执行的命令字符串
      */
-    @Deprecated
     public static void executeCommand(String command) {
-        executeCommand(Arrays.asList(command));
+        executeCommand(Collections.singletonList(command));
     }
 
-    @Deprecated
     private static BufferedReader getCommandReader(String command) throws IOException {
-        return getCommandReader(Arrays.asList(command));
+        return getCommandReader(Collections.singletonList(command));
     }
 }

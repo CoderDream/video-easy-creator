@@ -1,10 +1,13 @@
 package com.coderdream.util.youtube.demo02;
 
+import com.coderdream.util.youtube.YouTubeApiUtil;
 import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -111,10 +113,11 @@ public class CommandUtil {
     /**
      * 使用 yt-dlp 下载最佳 720p 视频。
      *
-     * @param videoLink   视频链接
-     * @param outputFileName  目标 MP4 文件名 (包含路径)
+     * @param videoLink      视频链接
+     * @param outputFileName 目标 MP4 文件名 (包含路径)
      */
     public static void downloadBest720p(String videoLink, String outputFileName) {
+        YouTubeApiUtil.enableProxy();
         String listFormatsCommand = "yt-dlp -F \"" + videoLink + "\"";
         List<String> formats = listFormats(listFormatsCommand);
 
@@ -159,6 +162,7 @@ public class CommandUtil {
 
     /**
      * 从格式信息中提取格式 ID
+     *
      * @param format 格式信息字符串
      * @return 格式 ID
      */
@@ -184,6 +188,7 @@ public class CommandUtil {
 
     /**
      * 从格式信息中提取音频比特率
+     *
      * @param format 格式信息字符串
      * @return 音频比特率
      */
@@ -199,6 +204,7 @@ public class CommandUtil {
 
     /**
      * 列出可用格式，返回格式列表。
+     *
      * @param listFormatsCommand 列表命令
      * @return
      */
@@ -222,7 +228,7 @@ public class CommandUtil {
         return formats;
     }
 
-   /**
+    /**
      * 使用 FFmpeg 提取 MP4 文件的左声道到指定的 MP3 文件。
      *
      * @param inputMp4  输入 MP4 文件的完整路径
@@ -284,26 +290,52 @@ public class CommandUtil {
         }
     }
 
+    /**
+     * 从视频文件中提取纯视频文件.
+     *
+     * @param inputVideo  输入视频文件的完整路径
+     * @param outputVideo 输出纯视频文件的完整路径
+     */
+    public static void extractPureVideo(String inputVideo, String outputVideo) {
+        List<String> command = new ArrayList<>();
+        command.add("ffmpeg");
+        command.add("-i");
+        command.add(inputVideo);
+        command.add("-an"); // 移除音频
+        command.add("-c:v");
+        command.add("copy"); // 视频流直接复制，不重新编码
+        command.add(outputVideo);
+
+        executeCommand(command);
+
+        log.info("成功提取纯视频到: {}", outputVideo);
+    }
+
     public static void main(String[] args) {
 
         // 示例用法：
-//        String videoLink = "https://www.youtube.com/watch?v=aayJ6wlyfII"; // 替换为实际的视频链接
-//        String outputFileName = "c:\\abcd.mp4"; // 替换为期望的输出路径和文件名
-//        downloadBest720p(videoLink, outputFileName);
+        String videoLink = "https://www.youtube.com/watch?v=aayJ6wlyfII"; // 替换为实际的视频链接
+        String outputFileName = "c:\\abcd.mp4"; // 替换为期望的输出路径和文件名
+        downloadBest720p(videoLink, outputFileName);
 
-        String inputMp4 = "D:\\0000\\0007_Trump\\20250227\\20250227.mp4"; // 替换为实际的 MP4 文件路径
-        String outputMp3 = "D:\\0000\\0007_Trump\\20250227\\left_channel.mp3"; // 替换为期望的 MP3 文件路径
+//        String inputMp4 = "D:\\0000\\0007_Trump\\20250227\\20250227.mp4"; // 替换为实际的 MP4 文件路径
+//        String outputMp3 = "D:\\0000\\0007_Trump\\20250227\\left_channel.mp3"; // 替换为期望的 MP3 文件路径
+//
+//        if (hasAudioStream(inputMp4)) {
+//            extractLeftChannel(inputMp4, outputMp3);
+//        } else {
+//            log.warn("文件 {} 不包含音频流，无法提取左声道。", inputMp4);
+//        }
 
-        if (hasAudioStream(inputMp4)) {
-            extractLeftChannel(inputMp4, outputMp3);
-        } else {
-            log.warn("文件 {} 不包含音频流，无法提取左声道。", inputMp4);
-        }
+        String inputVideo = "c:\\abcd.mp4"; // 替换为实际的视频文件路径
+        String outputVideo = "c:\\abcd_no_audio.mp4"; // 替换为期望的纯视频文件路径
+        extractPureVideo(inputVideo, outputVideo);
     }
 
     /**
      * 修改了executeCommand的入参类型为List<String>
      * 为了兼容
+     *
      * @param command 要执行的命令字符串
      */
     @Deprecated
