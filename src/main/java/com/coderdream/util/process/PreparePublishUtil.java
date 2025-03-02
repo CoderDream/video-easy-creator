@@ -282,7 +282,7 @@ public class PreparePublishUtil {
       log.info("4. Generated content: {}", generatedContent);
     } else {
       log.info("md文件已存在, {}", chnMdFileName);
-      String title = "商務英語 EP " + shortSubFolder + " " + chapterName
+      String title = "一輩子夠用的英語口語大全集 EP " + shortSubFolder + " " + chapterName
               + " | \uD83C\uDFA730分鐘英文聽力訓練|中英雙語配音，效果加倍|雙語沉浸式學習|英文聽力大提升，附帶中文翻譯|每日英文聽力|讓你的耳朵更靈敏|生活化英文會話|輕鬆掌握實用口語";
 
       String text = FileUtil.readString(chnMdFileName,StandardCharsets.UTF_8);
