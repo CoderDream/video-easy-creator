@@ -219,8 +219,10 @@ public class PreparePublishUtil {
     List<String> stringList = FileUtil.readLines(chapterFileName,
       StandardCharsets.UTF_8);
     for (String line : stringList) {
-      String[] split = line.split(" ");
-      chapterNameMap.put(split[1], split[2]);
+      String[] split = line.split("-");
+      if (split.length == 4) {
+        chapterNameMap.put(split[2], split[3]);
+      }
     }
     String shortSubFolder = subFolder.substring(8);
     String chapterName = chapterNameMap.get(shortSubFolder);
@@ -278,6 +280,21 @@ public class PreparePublishUtil {
 //        ZhConverterUtil.toSimple(generatedContent.text())));
 
       log.info("4. Generated content: {}", generatedContent);
+    } else {
+      log.info("md文件已存在, {}", chnMdFileName);
+      String title = "商務英語 EP " + shortSubFolder + " " + chapterName
+              + " | \uD83C\uDFA730分鐘英文聽力訓練|中英雙語配音，效果加倍|雙語沉浸式學習|英文聽力大提升，附帶中文翻譯|每日英文聽力|讓你的耳朵更靈敏|生活化英文會話|輕鬆掌握實用口語";
+
+      String text = FileUtil.readString(chnMdFileName,StandardCharsets.UTF_8);
+      text = title + "\n\n" + text;
+        try {
+            FileUtils.writeStringToFile(new File(chtMdFileName),
+                    ZhConverterUtil.toTraditional(text), "UTF-8");
+          FileUtils.writeStringToFile(new File(chnMdFileName),
+                  ZhConverterUtil.toSimple(text), "UTF-8");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     log.info("----- 4.测试 generateContent 方法结束");
