@@ -192,6 +192,9 @@ public class GenSubtitleUtil {
         srcFileNameEnZhTw);
     }
 
+    // 看看翻译质量 TODO
+
+
     // 生成Markdown文件
     String mdFileName = Objects.requireNonNull(
       CdFileUtil.changeExtension(filePath, "md"));

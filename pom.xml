@@ -28,6 +28,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <!--            <version>${spring-boot.version}</version>-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -294,11 +300,11 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.19</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.freemarker</groupId>-->
+<!--            <artifactId>freemarker</artifactId>-->
+<!--            <version>2.3.19</version>-->
+<!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.xhtmlrenderer/flying-saucer-pdf -->
         <dependency>
@@ -455,20 +461,20 @@
         <dependency>
             <groupId>swiss.ameri</groupId>
             <artifactId>gemini</artifactId>
-            <version>1beta.0.2.6</version>
+            <version>1beta.0.2.7</version>
             <type>pom</type>
         </dependency>
         <!-- https://mvnrepository.com/artifact/swiss.ameri/gemini-api -->
         <dependency>
             <groupId>swiss.ameri</groupId>
             <artifactId>gemini-api</artifactId>
-            <version>1beta.0.2.6</version>
+            <version>1beta.0.2.7</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/swiss.ameri/gemini-gson -->
         <dependency>
             <groupId>swiss.ameri</groupId>
             <artifactId>gemini-gson</artifactId>
-            <version>1beta.0.2.6</version>
+            <version>1beta.0.2.7</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/nl.siegmann.epublib/epublib-core -->
@@ -626,8 +632,20 @@
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
-            <version>5.2</version>
+            <version>5.4.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.34</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.freemarker</groupId>-->
+<!--            <artifactId>freemarker-jsp-taglib</artifactId>-->
+<!--            <version>版本号</version>-->
+<!--        </dependency>-->
+
 
     </dependencies>
 

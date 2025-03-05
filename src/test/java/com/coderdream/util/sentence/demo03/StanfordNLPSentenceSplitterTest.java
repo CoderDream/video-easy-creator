@@ -80,4 +80,27 @@ class StanfordNLPSentenceSplitterTest {
       log.info("文件已存在，不再写入");
     }
   }
+
+  @Test
+  void splitIntoShortSentencesFromFile_0003() {
+    String bookFolderName = "ReadBook_0003";
+    String bookName = "ReadBook_000301";
+    String filePath = "D:\\0000\\ReadBook\\";
+    String bookNameWithPath =
+      filePath + bookFolderName + File.separator + bookName + ".txt";
+    String bookNameWithPathSrtRaw =
+      filePath + bookFolderName + File.separator + bookName + "_srt_raw.txt";
+
+    List<String> sentences = StanfordNLPSentenceSplitter.splitIntoShortSentencesFromFile(
+      bookNameWithPath);
+    for (String sentence : sentences) {
+      log.info(sentence);
+      assertNotNull(sentence);
+    }
+    if (CdFileUtil.isFileEmpty(bookNameWithPathSrtRaw)) {
+      CdFileUtil.writeToFile(bookNameWithPathSrtRaw, sentences);
+    } else {
+      log.info("文件已存在，不再写入");
+    }
+  }
 }

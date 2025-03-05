@@ -111,7 +111,57 @@ public class CommandUtil {
     }
 
     /**
-     * 使用 yt-dlp 下载最佳 720p 视频。
+     * 使用 yt-dlp 下载最佳 1080p 视频。
+     *
+     * @param videoLink      视频链接
+     * @param outputFileName 目标 MP4 文件名 (包含路径)
+     */
+    public static void downloadBest1080p(String videoLink, String outputFileName) {
+        YouTubeApiUtil.enableProxy();
+        String listFormatsCommand = "yt-dlp -F \"" + videoLink + "\"";
+        List<String> formats = listFormats(listFormatsCommand);
+
+        String bestVideoFormat = null;
+        String bestAudioFormat = null;
+
+        for (String format : formats) {
+            if (format.contains("1920x1080") && format.contains("video only")) {
+                if (bestVideoFormat == null || getBitrate(format) > getBitrate(bestVideoFormat)) {
+                    bestVideoFormat = format;
+                }
+            }
+
+            if (format.contains("audio only")) {
+                if (bestAudioFormat == null || getAudioBitrate(format) > getAudioBitrate(bestAudioFormat)) {
+                    bestAudioFormat = format;
+                }
+            }
+        }
+
+        if (bestVideoFormat != null && bestAudioFormat != null) {
+            String videoId = extractFormatId(bestVideoFormat);
+            String audioId = extractFormatId(bestAudioFormat);
+
+            List<String> downloadCommand = new ArrayList<>();
+            downloadCommand.add("yt-dlp");
+            downloadCommand.add("-f");
+            downloadCommand.add(videoId + "+" + audioId);
+            downloadCommand.add("--merge-output-format");
+            downloadCommand.add("mp4");
+            downloadCommand.add("-o");
+            downloadCommand.add(outputFileName);
+            downloadCommand.add(videoLink);
+
+            executeCommand(downloadCommand);
+
+            log.info("成功下载最佳1080p视频到：{}", outputFileName);
+        } else {
+            log.error("未找到最佳1080p视频或音频格式.");
+        }
+    }
+
+    /**
+     * 使用 yt-dlp 下载最佳 720p 视频。 https://www.youtube.com/watch?v=6Jy7_25opFo
      *
      * @param videoLink      视频链接
      * @param outputFileName 目标 MP4 文件名 (包含路径)
@@ -159,6 +209,7 @@ public class CommandUtil {
             log.error("未找到最佳720p视频或音频格式.");
         }
     }
+
 
     /**
      * 从格式信息中提取格式 ID
@@ -291,7 +342,7 @@ public class CommandUtil {
     }
 
     /**
-     * 从视频文件中提取纯视频文件.
+     * 从视频文件中提取纯视频文件. 纯视频
      *
      * @param inputVideo  输入视频文件的完整路径
      * @param outputVideo 输出纯视频文件的完整路径

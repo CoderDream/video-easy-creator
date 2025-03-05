@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -388,7 +389,7 @@ public class CdFileUtil {
 
   }
 
-  private static String getFileNameWithoutExtension(String fileName) {
+  public static String getFileNameWithoutExtension(String fileName) {
     int lastDotIndex = fileName.lastIndexOf('.');
     if (lastDotIndex == -1) {
       return fileName;
@@ -491,7 +492,7 @@ public class CdFileUtil {
   }
 
   public static @NotNull List<SubtitleEntity> genSubtitleEntityList(
-    List<String> stringList, String platformName ) {
+    List<String> stringList, String platformName) {
     List<SubtitleEntity> result = new ArrayList<>();
     int firstSpaceIndex = 0;
 //    String subIndexStr = "";
@@ -581,6 +582,39 @@ public class CdFileUtil {
     } else {
       return newFileName; // 如果没有父目录，直接返回文件名
     }
+  }
+
+  /**
+   * 获取指定目录下第一层文件夹列表
+   *
+   * @param directoryPath 目录路径
+   * @return 第一层文件夹列表，如果目录不存在或为空，则返回null
+   */
+  public static List<File> getFirstLevelDirectories(String directoryPath) {
+    File directory = new File(directoryPath);
+
+    // 检查目录是否存在并且是目录
+    if (!directory.exists() || !directory.isDirectory()) {
+      System.out.println("指定的路径不存在或不是一个目录。");
+      return null;
+    }
+
+    // 使用 FileUtil.ls(String) 获取所有文件和文件夹，然后过滤出文件夹
+    File[] filesArray = FileUtil.ls(directoryPath);  // 使用 String 路径，返回 File[]
+
+    // 修复空目录的校验逻辑
+    if (filesArray == null || filesArray.length == 0) {
+      System.out.println("该目录为空。");
+      return null;
+    }
+
+    // 将 File[] 转换为 List<File>
+    List<File> files = Arrays.asList(filesArray);
+
+    // 过滤出文件夹
+    return files.stream()
+      .filter(File::isDirectory)
+      .collect(Collectors.toList());
   }
 
   public static void main(String[] args) {

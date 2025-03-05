@@ -17,13 +17,13 @@ import java.time.Instant;
 @Slf4j
 public class GeminiApiClient {
 
-  private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
+  private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
   private static final String API_KEY = CdConstants.GEMINI_API_KEY;
   private static final String PROXY_HOST = CdConstants.PROXY_HOST;
 //  private static final int PROXY_PORT = CdConstants.PROXY_PORT;
 
   public static String URL =
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="
       + CdConstants.GEMINI_API_KEY;
 
   /**
@@ -46,11 +46,12 @@ public class GeminiApiClient {
       GeminiApiResponse response = resultObject.toBean(GeminiApiResponse.class);
 
       // 打印结果验证
-//            log.info("模型版本号: {} ", response.getModelVersion());
-//            log.info("候选结果数量: {} ", response.getCandidates().size());
-//            log.info("第一条内容: {} ",
-//                    response.getCandidates().get(0).getContent().getParts().get(0)
-//                            .getText());
+      log.info("响应内容: {} ", response.toString());
+      log.info("模型版本号: {} ", response.getModelVersion());
+      log.info("候选结果数量: {} ", response.getCandidates().size());
+      log.info("第一条内容: {} ",
+        response.getCandidates().get(0).getContent().getParts().get(0)
+          .getText());
       result = response.getCandidates().get(0).getContent().getParts().get(0)
         .getText();
       Instant endTime = Instant.now();
@@ -92,7 +93,6 @@ public class GeminiApiClient {
    */
   private static String extractResult(JSONObject jsonObject) {
     try {
-
       return jsonObject.getJSONArray("contents").getJSONObject(0)
         .getJSONArray("parts").getJSONObject(0).getStr("text");
     } catch (Exception e) {

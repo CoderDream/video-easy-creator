@@ -1,4 +1,4 @@
-package com.coderdream.util.video.demo03;
+package com.coderdream.util.video;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,10 +1,13 @@
 package com.coderdream.util.daily;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cmd.CommandUtil;
 import com.coderdream.util.gemini.TranslationUtil;
 
+import com.coderdream.util.process.GenVideoUtil;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +55,7 @@ class DailyUtilTest {
 
   @Test
   void process_180927() {
-    String folderName = "170119";
+    String folderName = "170330";
 //    String folderName = "250213";
     String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
       folderName);// "【BBC六分钟英语】泰国50年老汤真的能吃吗？";
@@ -80,7 +83,7 @@ class DailyUtilTest {
   }
 
   void process_todo() {
-    String folderName = "170119";
+    String folderName = "170330";
 //    String folderName = "250213";
     String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
       folderName);// "【BBC六分钟英语】泰国50年老汤真的能吃吗？";
@@ -129,4 +132,22 @@ class DailyUtilTest {
       CommandUtil.executeCommand(command);
     }
   }
+
+  //
+
+  @Test
+  void syncFilesToQuark() {
+    String year = "2017";
+    DailyUtil.syncFilesToQuark(year);
+  }
+
+  @Test
+  void syncFilesToQuarkBatch() {
+    List<String> years = Arrays.asList("2017", "2025");
+    for (String year : years) {
+      DailyUtil.syncFilesToQuark(year);
+    }
+  }
+
+
 }

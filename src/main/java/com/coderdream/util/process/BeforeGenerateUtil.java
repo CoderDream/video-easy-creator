@@ -191,6 +191,42 @@ public class BeforeGenerateUtil {
 
   public static void process(String folderPath, String subFolder) {
     // 1. 生成章节文本
+    String fileNameTotal =
+      folderPath + subFolder + File.separator + subFolder + ".txt";
+    if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+      File fileTotal = DialogSingleEntityUtil.genTotalFile(folderPath,
+        subFolder);
+      log.info("文件不存在或为空，已生成新文件: {}",
+        fileTotal.getAbsolutePath());
+    } else {
+      log.info("文件已存在: {}", fileNameTotal);
+    }
+
+    // 生成带音标的文件
+    // 生成带音标的文件
+    String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+    if (CdFileUtil.isFileEmpty(aiFileName)) {
+      File file = TranslationUtil.genAiFile(fileNameTotal);
+      assert file != null;
+      log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
+    } else {
+      log.info("AI文件已存在: {}", aiFileName);
+    }
+
+    // 2. 生成
+    String phoneticsFileName =
+      folderPath + File.separator + subFolder + File.separator + subFolder
+        + "_phonetics.txt";
+    if (CdFileUtil.isFileEmpty(phoneticsFileName)) {
+      File file = TranslationUtil.genPhonetics(fileNameTotal, aiFileName);
+      log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
+    } else {
+      log.info("带音标文件已存在: {}", phoneticsFileName);
+    }
+  }
+
+  public static void processBook01(String folderPath, String subFolder) {
+    // 1. 生成章节文本
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";
 //    String subFolder = "ch004"; ❸
 
@@ -235,6 +271,7 @@ public class BeforeGenerateUtil {
       log.info("带音标文件已存在: {}", phoneticsFileName);
     }
   }
+
 
   public static void processBook02(String folderPath, String subFolder) {
     // 1. 生成章节文本

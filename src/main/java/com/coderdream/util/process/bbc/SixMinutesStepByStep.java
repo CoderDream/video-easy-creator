@@ -261,6 +261,7 @@ public class SixMinutesStepByStep {
 
     String pptxFileName = CommonUtil.getFullPathFileName(
       folderName, folderName, ".pptx");
+    GetSixMinutesPpt.process(folderName);
     if (CdFileUtil.isFileEmpty(pptxFileName)) {
       GetSixMinutesPpt.process(folderName);
     } else {
@@ -271,6 +272,7 @@ public class SixMinutesStepByStep {
     String pptPicDir =
       new File(pptxFileName).getParent() + File.separator + folderName
         + File.separator;
+    PptToImageConverter.convertPptToImages(pptxFileName, pptPicDir, "snapshot");
     if (!new File(pptPicDir).exists()) {
       PptToImageConverter.convertPptToImages(pptxFileName, pptPicDir, "snapshot");
     } else {

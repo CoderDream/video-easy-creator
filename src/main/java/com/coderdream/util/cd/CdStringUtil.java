@@ -613,8 +613,10 @@ public class CdStringUtil {
       result.add(input);
     } else {
       // 按逗号分割
-      result.addAll(splitLongSentence(input.substring(0, commaIndex + 1), maxLength));
-      result.addAll(splitLongSentence(input.substring(commaIndex + 1), maxLength));
+      result.addAll(
+        splitLongSentence(input.substring(0, commaIndex + 1), maxLength));
+      result.addAll(
+        splitLongSentence(input.substring(commaIndex + 1), maxLength));
     }
 
     return result;
@@ -644,5 +646,67 @@ public class CdStringUtil {
     }
 
     return result;
+  }
+
+  /**
+   * 处理字符串列表，将字符串中间的斜线替换为空格，然后把多个空格替换为单个空格，保留首尾斜线。
+   *
+   * @param inputList 输入的字符串列表
+   * @return 处理后的字符串列表
+   */
+  public static List<String> processStringList(List<String> inputList) {
+    if (inputList == null || inputList.isEmpty()) {
+      return new ArrayList<>();
+    }
+
+    List<String> resultList = new ArrayList<>();
+    for (String str : inputList) {
+      String processedString = processString(str);
+      resultList.add(processedString);
+    }
+
+    return resultList;
+  }
+
+  /**
+   * 处理单个字符串，将字符串中间的斜线替换为空格，然后把多个空格替换为单个空格，保留首尾斜线。
+   *
+   * @param str 输入的字符串
+   * @return 处理后的字符串
+   */
+  public static String processString(String str) {
+    if (str == null) {
+      return null;
+    }
+
+    // 1. 处理首尾斜线: 保存首尾斜线，并从字符串中移除
+    boolean startsWithSlash = str.startsWith("/");
+    boolean endsWithSlash = str.endsWith("/");
+    String tempStr = str;
+
+    if (startsWithSlash) {
+      tempStr = tempStr.substring(1);
+    }
+    if (endsWithSlash) {
+      tempStr = tempStr.substring(0, tempStr.length() - 1);
+    }
+
+    // 2. 将字符串中间的斜线替换为空格
+    String replacedString = tempStr.replace("/", " ");
+
+    // 3. 将多个空格替换为单个空格 (使用正则表达式)
+    Pattern pattern = Pattern.compile("\\s+"); // \s+ 表示一个或多个空白字符
+    Matcher matcher = pattern.matcher(replacedString);
+    String singleSpacedString = matcher.replaceAll(" ");
+
+    // 4.  恢复首尾斜线
+    if (startsWithSlash) {
+      singleSpacedString = "/" + singleSpacedString;
+    }
+    if (endsWithSlash) {
+      singleSpacedString = singleSpacedString + "/";
+    }
+
+    return singleSpacedString;
   }
 }

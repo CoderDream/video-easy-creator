@@ -8,7 +8,6 @@ import com.coderdream.util.CommonUtil;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTextUtil;
-import com.coderdream.util.ppt.GetSixMinutesPpt;
 import com.coderdream.util.process.ListSplitterStream;
 import com.coderdream.util.sentence.demo1.SentenceParser;
 import com.coderdream.vo.SentenceVO;
@@ -24,8 +23,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -123,11 +124,11 @@ public class TranslationUtil {
       if (!jsonFilePart.exists() || jsonFilePart.length() == 0
         || FileUtil.readLines(jsonFilePart, StandardCharsets.UTF_8).size()
         != sentencesList.size()) {
-        String text = CdConstants.GEN_PHONETICS_TEXT;
+        String text = CdConstants.GEN_PHONETICS_TEXT_V2;
         String content = String.join("\n", sentencesList);
         text += content;
         List<String> translateList = getStringsFromGemini(text,
-          sentencesList.size());
+          sentencesList);
 
         if (CollectionUtil.isNotEmpty(translateList)
           && translateList.size() == sentencesList.size()) {
@@ -202,33 +203,26 @@ public class TranslationUtil {
   /**
    * 从 Gemini 获取字符串列表。
    *
-   * @param text 输入文本
-   * @param size 期望的列表大小
+   * @param text          输入文本
+   * @param sentencesList 句子列表，用于确定期望的翻译大小
    * @return 翻译后的字符串列表
    */
   private static @NotNull List<String> getStringsFromGemini(String text,
-    int size) {
-    return getStringsFromGeminiWithRetry(text, size, MAX_RETRY_ATTEMPTS);
+    List<String> sentencesList) {
+    return getStringsFromGeminiWithRetry(text, sentencesList,
+      MAX_RETRY_ATTEMPTS);
   }
 
   /**
    * 从 Gemini 获取字符串列表（带重试机制）。
    *
    * @param text              输入文本
-   * @param size              期望的列表大小
-   * @param remainingAttempts 剩余重试次数
-   * @return 翻译后的字符串列表。如果多次重试后仍无法获得期望大小的列表，则返回空列表。
-   */
-  /**
-   * 从 Gemini 获取字符串列表（带重试机制）。
-   *
-   * @param text              输入文本
-   * @param size              期望的列表大小
+   * @param sentencesList     句子列表，用于确定期望的翻译大小
    * @param remainingAttempts 剩余重试次数
    * @return 翻译后的字符串列表。如果多次重试后仍无法获得期望大小的列表，则返回空列表。
    */
   private static @NotNull List<String> getStringsFromGeminiWithRetry(
-    String text, int size, int remainingAttempts) {
+    String text, List<String> sentencesList, int remainingAttempts) {
     // 如果重试次数用尽，返回空列表
     if (remainingAttempts <= 0) {
       // 可以选择抛出异常，或者返回空列表，具体取决于需求
@@ -241,24 +235,65 @@ public class TranslationUtil {
     String translate = GeminiApiClient.generateContent(text);
     // 解析句子
     List<SentenceVO> sentenceVOList = SentenceParser.parseSentences(translate);
-    // 提取音标
-    List<String> translateList = new ArrayList<>();
-    for (SentenceVO sentenceVO : sentenceVOList) {
-      translateList.add(sentenceVO.getPhonetics());
+
+    // 构造英文句子Map
+//    Map<Integer, String> englishSentenceMap = new LinkedHashMap<>();
+//    for (int i = 0; i < sentencesList.size(); i++) {
+//      englishSentenceMap.put(i, sentencesList.get(i));
+//    }
+//
+//    // 提取音标
+//    List<SentenceVO> translateList = new ArrayList<>();
+//    SentenceVO newSentenceVO;
+//    for (int i = 0; i < sentenceVOList.size(); i++) {
+//      newSentenceVO = new SentenceVO();
+//      SentenceVO sentenceVO = sentenceVOList.get(i);
+//      String english = sentenceVO.getEnglish();
+//      String phonetics = sentenceVO.getPhonetics();
+//      String oldEnglish = englishSentenceMap.get(i);
+//      // 如果英文句子不相同，但是以英文句子开头，则合并两个
+//      if (!oldEnglish.equals(english) ) {
+//        if(oldEnglish.startsWith(english)) {
+//          if (i < sentenceVOList.size() - 1) {
+//            String nextEnglish = sentenceVOList.get(i + 1).getEnglish();
+//            String nextPhonetics = sentenceVOList.get(i + 1).getPhonetics();
+//            String newEnglish = english + " " + nextEnglish;
+//            String newPhonetics = phonetics + " " + nextPhonetics;
+//            if (!newEnglish.equals(oldEnglish)) {
+//              newSentenceVO.setEnglish(newEnglish);
+//              newSentenceVO.setPhonetics(newPhonetics);
+//            }
+//            translateList.add(newSentenceVO);
+//          }
+//        }
+//      } else {
+//        newSentenceVO.setEnglish(english);
+//        newSentenceVO.setPhonetics(phonetics);
+//        translateList.add(newSentenceVO);
+//      }
+//    }
+
+    List<String> phoneticsList = SentenceParser.getPhoneticsList(
+      sentenceVOList);
+    if (CollectionUtil.isEmpty(phoneticsList)) {
+      log.error("phoneticsList is empty");
+      return getStringsFromGeminiWithRetry(text, sentencesList,
+        remainingAttempts - 1);
     }
 
     // 如果列表大小不符合预期，则进行重试
-    if (translateList.size() != size) {
+    if (phoneticsList.size() != sentencesList.size()) {
       // 使用 log.error 记录错误信息，而不是 System.err.println
       log.error(
         "翻译结果大小不匹配。期望: {}, 实际: {}, 正在重试... (剩余 {} 次尝试)",
-        size, translateList.size(), remainingAttempts - 1);
+        sentencesList.size(), phoneticsList.size(), remainingAttempts - 1);
       // 递归调用，减少剩余重试次数
-      return getStringsFromGeminiWithRetry(text, size, remainingAttempts - 1);
+      return getStringsFromGeminiWithRetry(text, sentencesList,
+        remainingAttempts - 1);
     }
 
     // 返回翻译结果
-    return translateList;
+    return phoneticsList;
   }
 
   private static File writePhoneticsToFile(String totalFileName,
@@ -372,7 +407,85 @@ public class TranslationUtil {
       log.error("写入文件 {} 发生异常：{}", descriptionFileName, e.getMessage(),
         e);
     }
-
   }
 
+
+  /**
+   * 生成文章描述
+   *
+   * @param bookFileName           对话脚本文件名
+   * @param readBookScriptFileName 描述文件名
+   */
+  public static void genReadBookScript(String bookFileName,
+    String bookFileNameWithPath,
+    String readBookScriptFileName) {
+//    String folderPath = CommonUtil.getFullPath(folderName);
+//    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
+    String prompt = genReadBookScriptPromptPrefix(bookFileName);
+    prompt += FileUtil.readString(
+      bookFileNameWithPath,
+      StandardCharsets.UTF_8);
+    log.info("prompt: {}", prompt);
+    String translate = GeminiApiClient.generateContent(prompt);
+    log.info("translate: {}", translate);
+
+    try (BufferedWriter writer = Files.newBufferedWriter(
+      Path.of(readBookScriptFileName),
+      StandardCharsets.UTF_8)) {
+      for (String line : translate.split("\n")) {
+        if (StrUtil.isNotEmpty(line)) {
+          // 以斜线\ 分割字符串，然后逐个写入文件 斜线 \\\\ 反斜线  /
+          writer.write(line);
+          writer.newLine();
+        }
+      }
+      log.info("对话信息已成功写入到文件: {}", readBookScriptFileName);
+    } catch (IOException e) {
+      log.error("写入文件 {} 发生异常：{}", readBookScriptFileName,
+        e.getMessage(),
+        e);
+    }
+  }
+
+  private static String genReadBookScriptPromptPrefix(String bookFileName) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("你是一位精品书的书评的内容创作者，");
+    sb.append("现在需要为《").append(bookFileName)
+      .append("》制作一个“十分钟精读”文本，");
+    sb.append("目标是简洁全面地总结书籍内容，");
+    sb.append("帮助读者快速理解书中内容的科学意义和实用建议。以下是具体要求：");
+    sb.append("1. 长度与结构：");
+    sb.append("文本长度控制在8000-9500字，适合阅读或朗读。");
+    sb.append("开头介绍书名、作者背景和核心问题，");
+    sb.append("接着分多个部分解读，最后以总结和推荐收尾。");
+    sb.append("2. 语气与风格：");
+    sb.append("使用轻松、自然的叙述语气，像与朋友聊天，");
+    sb.append("偶尔加入幽默或生活化的比喻，");
+    sb.append("但保持科学性和可信度。");
+    sb.append("避免晦涩术语，");
+    sb.append("用通俗语言解释专业概念，");
+    sb.append("保留科普书的启发性。");
+    sb.append("3. 内容要求：");
+    sb.append("各部分内容及解析");
+    sb.append("融入书中趣闻或金句，结尾呼吁重视书中提到的核心内容并推荐原书。");
+    sb.append("4. 输入素材：");
+    sb.append("以下是《").append(bookFileName)
+      .append("》电子书的全文（或摘录）：[电子书文本在后面]。");
+    sb.append("请基于这些内容生成文本，");
+    sb.append("若素材不足，");
+    sb.append("可凭对书的理解补充，");
+    sb.append("但需符合原著精神。");
+    sb.append("5. 输出格式：");
+    sb.append("以文本格式输出，");
+    sb.append("标题为《").append(bookFileName).append("》，");
+    sb.append("包含小标题分段。");
+    sb.append("不要包含任何markdown标记。");
+    sb.append("序号不要用阿拉伯数字，用中文一、二、三、四、等等。");
+    sb.append("内容不要出现括号。");
+    sb.append("每句话都要有标点符号，即使是标题也加上句号。");
+    sb.append("字数一定要符合，如果字数不达标就重新生成。");
+    sb.append("请根据以上要求生成文本。电子书原版内容如下：");
+
+    return sb.toString();
+  }
 }

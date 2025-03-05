@@ -8,10 +8,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+@Slf4j
 class BeforeGenerateUtilTest {
 
   @BeforeEach
@@ -258,4 +260,51 @@ class BeforeGenerateUtilTest {
     }
   }
 
+  @Test
+  void processBook00402() {
+    String bookName = "EnBook004";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    List<String> subFolders = new ArrayList<>();
+    int end = 101;
+    for (int i = 1; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      BeforeGenerateUtil.process(folderPath, subFolder);
+    }
+
+    assertTrue(true);
+    System.out.println("done");
+  }
+
+  @Test
+  void processBook00501() {
+    String bookName = "EnBook005";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    String subFolder = "Chapter001";
+    BeforeGenerateUtil.process(folderPath, subFolder);
+    assertTrue(true);
+    System.out.println("done");
+  }
+
+  @Test
+  void processBook00502() {
+    String bookName = "EnBook005";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    List<String> subFolders = new ArrayList<>();
+    int end = 101;
+    for (int i = 1; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      BeforeGenerateUtil.process(folderPath, subFolder);
+    }
+
+    assertTrue(true);
+    System.out.println("done");
+  }
 }

@@ -106,6 +106,30 @@ class GenSubtitleUtilTest {
   }
 
   @Test
+  void processSrtAndGenDescription_0703() {
+    //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
+    String folderName = "20250303"; // D:\0000\0007_Trump\20250227
+    String mp4FilePath =
+      OperatingSystem.getBaseFolder() + "0007_Trump" + File.separator
+        + folderName + File.separator + folderName
+        + ".mp4";
+
+    GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
+  }
+
+  @Test
+  void processSrtAndGenDescription_000801() {
+    //  D:\0000\0008_DailyNews\2025030401  String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
+    String folderName = "2025030401"; // D:\0000\0007_Trump\20250227
+    String mp4FilePath =
+      OperatingSystem.getBaseFolder() + "0008_DailyNews" + File.separator
+        + folderName + File.separator + folderName
+        + ".mp4";
+
+    GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
+  }
+
+  @Test
   void processRawSrtFile_03() {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
     String folderName = "250219";

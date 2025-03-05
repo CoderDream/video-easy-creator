@@ -54,7 +54,6 @@ public class GeminiTest {
     }
   }
 
-
   /**
    * 测试列出可用模型的功能。
    */
@@ -70,7 +69,6 @@ public class GeminiTest {
       getDuration(startTime, endTime));
   }
 
-
   /**
    * 测试获取指定模型信息的功能。
    */
@@ -81,6 +79,18 @@ public class GeminiTest {
     LocalDateTime startTime = LocalDateTime.now();
     // 调用 getModel 方法获取指定模型的信息
     log.info(genAi.getModel(ModelVariant.GEMINI_1_5_PRO).toString());
+    LocalDateTime endTime = LocalDateTime.now();
+    log.info("----- 测试 getModel 方法结束, 耗时: {}",
+      getDuration(startTime, endTime));
+  }
+
+  @Test
+  @Order(21)
+  void testGetModel_02() {
+    log.info("----- 测试 getModel 方法开始");
+    LocalDateTime startTime = LocalDateTime.now();
+    // 调用 getModel 方法获取指定模型的信息
+    log.info(genAi.getModel("gemini-2.0-flash").toString());
     LocalDateTime endTime = LocalDateTime.now();
     log.info("----- 测试 getModel 方法结束, 耗时: {}",
       getDuration(startTime, endTime));

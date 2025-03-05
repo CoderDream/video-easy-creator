@@ -1,7 +1,12 @@
 package com.coderdream.util.gemini;
 
 import cn.hutool.core.io.FileUtil;
+import com.coderdream.util.CommonUtil;
+import com.coderdream.util.proxy.OperatingSystem;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -103,4 +108,31 @@ class TranslationUtilTest {
     File file = TranslationUtil.genAiFile(fileName);
   }
 
+
+  @Test
+  void genReadBookScript_01() {
+//    String folderName = "180913"; // 250102
+//    List<String> folderNames = List.of("180906", "180920");
+//    String todoFileName = "D:\\04_GitHub\\java-architect-util\\free-apps\\src\\main\\resources\\data\\bbc\\todo.txt";
+//    List<String> folderNameList = FileUtil.readLines(todoFileName, "UTF-8");
+//    for (String folderName : folderNameList) {
+//      TranslationUtil.genReadBookScript(folderName);
+//    }
+    String folderName = "ReadBook_0003";
+    String bookFileName = "高难度沟通";
+    String bookFileNameWithPath =
+      OperatingSystem.getBaseFolder() + "ReadBook" + File.separator + folderName
+        + File.separator + bookFileName + ".txt";
+    DateFormat dateFormat = new SimpleDateFormat("yyMMddHHmm");
+    String readBookScriptFileName =
+      OperatingSystem.getBaseFolder() + "ReadBook" + File.separator + folderName
+        + File.separator + folderName + "_" + dateFormat.format(new Date())
+        + ".txt";
+
+//    String folderPath = CommonUtil.getFullPath(folderName);
+//    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
+    TranslationUtil.genReadBookScript(folderName, bookFileNameWithPath,
+      readBookScriptFileName);
+//    log.info("translate: {}", translate);
+  }
 }

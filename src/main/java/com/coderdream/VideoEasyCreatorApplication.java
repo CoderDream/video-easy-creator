@@ -15,7 +15,9 @@ public class VideoEasyCreatorApplication {
 //        System.setProperty("http.proxyPort","7890");
 //        System.setProperty("https://api.chatanywhere.tech","127.0.0.1");
 //        System.setProperty("https.proxyPort","7890");
-        Document document = new Document(PageSize.A4);
+//        Document document = new Document(PageSize.A4);
+        org.apache.hc.client5.http.ssl.TlsSocketStrategy tlsSocketStrategy = null;
+//        freemarker.ext.jakarta.jsp.TaglibFactory taglibFactory = null;
         SpringApplication.run(VideoEasyCreatorApplication.class, args);
     }
 
