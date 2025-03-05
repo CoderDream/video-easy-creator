@@ -148,7 +148,7 @@ class GenVideoUtilTest {
 
     List<String> subFolders = new ArrayList<>();
     int end = 21; // 假定你想要处理的章节数
-    for (int i = 16; i < end; i++) {
+    for (int i = 2; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("ch" + dayNumberString);
     }
@@ -162,7 +162,7 @@ class GenVideoUtilTest {
   void process02_Merge_0201() {
     String bookFolderName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookFolderName);
-    String subFolder = "Chapter012";
+    String subFolder = "Chapter001";
     Mp4MergeUtil.processMerge(folderPath, subFolder);
   }
 
@@ -173,7 +173,7 @@ class GenVideoUtilTest {
 
     List<String> subFolders = new ArrayList<>();
     int end = 51; // 假定你想要处理的章节数
-    for (int i = 10; i < end; i++) {
+    for (int i = 1; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);
     }

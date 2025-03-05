@@ -16,10 +16,10 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -43,10 +43,13 @@ public class Mp4MergeUtil {
       }
 
       // 获取文件夹中所有的MP4文件
-      List<Path> mp4Files = Files.walk(inputDir)
-        .filter(file -> file.toString().endsWith(".mp4"))
-        .sorted(Comparator.comparing(Path::getFileName))
-        .collect(Collectors.toList());
+      List<Path> mp4Files;
+      try (Stream<Path> pathStream = Files.walk(inputDir)) {  // 使用 try-with-resources
+        mp4Files = pathStream
+                .filter(file -> file.toString().endsWith(".mp4"))
+                .sorted(Comparator.comparing(Path::getFileName))
+                .collect(Collectors.toList());
+      }
 
       log.info("找到{}个MP4文件进行合并", mp4Files.size());
 
@@ -76,7 +79,6 @@ public class Mp4MergeUtil {
         File inputListFile = createInputListFile(group, listDir, count);
         if (!CdFileUtil.isFileEmpty(groupOutputFile.toString())) {
           log.info("文件已存在，跳过合并: {}", outputFileName);
-          continue;
         } else {
           log.info("开始合并文件: {}", outputFileName);
           // 合并文件
@@ -160,7 +162,7 @@ public class Mp4MergeUtil {
     ProcessBuilder processBuilder = new ProcessBuilder(command);
     processBuilder.redirectErrorStream(true);
 
-    Process process = null;
+    Process process;
     try {
       process = processBuilder.start();
 
@@ -249,14 +251,34 @@ public class Mp4MergeUtil {
   public static void processMerge(String folderPath, String subFolder) {
     // 测试示例
 //    Path inputDir = Paths.get("D:/0000/EnBook002/Chapter015/video_cht");
-
+    String destinationDirectory =
+            folderPath + File.separator + subFolder + File.separator + "video";
     int count = 1;
     String inputDirStr =
-      folderPath + subFolder + File.separator + "video_cht";
+            folderPath + subFolder + File.separator + "video_cht";
     Path inputDir = Paths.get(inputDirStr);
     String outputDirStr =
-      folderPath + subFolder + File.separator + "video_cht_"
-        + count;
+            folderPath + subFolder + File.separator + "video_cht_"
+                    + count;
+    String destinationFileName =
+            destinationDirectory + File.separator + subFolder + ".mp4";
+    if (!CdFileUtil.isFileEmpty(destinationFileName)) {
+      log.info("文件已存在，无需合并: {}", destinationFileName);
+      // 删除旧的合并文件
+      for (int index = 1; index < 6; index++) {
+        String outputDirStr2 =
+                folderPath + subFolder + File.separator + "video_cht_"
+                        + index;
+        boolean del = FileUtil.del(outputDirStr2);
+        if (del) {
+          log.info("临时文件夹删除成功: {}", outputDirStr2);
+        } else {
+          log.info("临时文件夹删除失败: {}", outputDirStr2);
+        }
+      }
+      return;
+    }
+
     // 确保输出目录存在
     File dir = new File(outputDirStr);
     if (!dir.exists() && dir.mkdirs()) {
@@ -295,11 +317,7 @@ public class Mp4MergeUtil {
 
       count++;
     }
-    String destinationDirectory =
-      folderPath + File.separator + subFolder + File.separator + "video";
 
-    String destinationFileName =
-      destinationDirectory + File.separator + subFolder + ".mp4";
     // 拷贝 outputDir 到最终的文件夹中
     if (files.size() == 1 && CdFileUtil.isFileEmpty(destinationFileName)) {
       // 将视频拷贝到最终的文件夹中
@@ -323,6 +341,17 @@ public class Mp4MergeUtil {
 //            // 将视频拷贝到最终的文件夹中
 //            log.info("已完成合并，无需进一步操作");
 //        }
+//    // 删除临时文件夹
+//    if(!CdFileUtil.isFileEmpty(destinationFileName)) {
+//      for (String tempOutputDir : fileSet) {
+//        boolean del = FileUtil.del(tempOutputDir);
+//        if (del) {
+//          log.info("临时文件夹删除成功: {}", tempOutputDir);
+//        }
+//      }
+//    } else {
+//      log.info("最终文件不为空，不删除临时文件夹");
+//    }
   }
 
   public static void main(String[] args) {
