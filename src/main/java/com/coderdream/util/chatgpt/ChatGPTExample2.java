@@ -1,17 +1,21 @@
-package com.coderdream.util;
+package com.coderdream.util.chatgpt;
 
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.Proxy;
 import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Random;
 
-public class ChatGPTExample {
+public class ChatGPTExample2 {
 
     public static void main(String[] args) {
         try {
@@ -23,25 +27,12 @@ public class ChatGPTExample {
                 return;
             }
 
-            String validApiKey = null;
-
-            // 遍历所有API密钥并检查其有效性
-            for (String apiKey : apiKeys) {
-                if (isApiKeyValid(apiKey)) {
-                    validApiKey = apiKey;
-                    System.out.println("找到有效的API密钥: " + apiKey);
-                    break;  // 找到第一个有效的密钥后可以跳出循环
-                }
-            }
-
-            if (validApiKey == null) {
-                System.out.println("没有找到有效的API密钥！");
-                return;
-            }
+            // 随机选择一个API密钥
+            String apiKey = apiKeys.get(new Random().nextInt(apiKeys.size()));
+            System.out.println("使用的API密钥: " + apiKey);
 
             // 设置 ChatGPT API URL
-//            String urlString = "https://api.openai.com/v1/chat/completions";
-            String urlString = "https://openkey.cloud/v1/chat/completions";
+            String urlString = "https://api.openai.com/v1/chat/completions";
             URL url = new URL(urlString);
 
             // 创建请求体内容（使用 Hutool 的 JSONObject 和 set 方法）
@@ -62,7 +53,7 @@ public class ChatGPTExample {
             connection.setRequestMethod("POST");
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Authorization", "Bearer " + validApiKey);
+            connection.setRequestProperty("Authorization", "Bearer " + apiKey);
 
             // 写入请求体内容
             try (OutputStream os = connection.getOutputStream()) {
@@ -106,38 +97,5 @@ public class ChatGPTExample {
     // 从文件中读取API密钥
     private static List<String> readApiKeysFromFile(String filePath) throws IOException {
         return Files.readAllLines(Paths.get(filePath));
-    }
-
-    // 检查API密钥是否有效
-    private static boolean isApiKeyValid(String apiKey) {
-        try {
-            // 设置代理对象
-            Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 7890)); // 本地代理
-
-            // 设置一个简单的请求URL来验证密钥的有效性（例如列出模型）
-            String urlString = "https://api.openai.com/v1/models";
-            URL url = new URL(urlString);
-
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy); // 使用代理
-            connection.setRequestMethod("GET");
-            connection.setRequestProperty("Authorization", "Bearer " + apiKey);
-
-            int statusCode = connection.getResponseCode();
-            if (statusCode == HttpURLConnection.HTTP_OK) {
-                // 如果状态码是 200，表示密钥有效
-                return true;
-            } else if (statusCode == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                // 如果是 401 Unauthorized，表示密钥无效
-                System.out.println("无效的API密钥: " + apiKey);
-                return false;
-            } else {
-                // 如果其他错误，打印错误信息
-                System.out.println("API请求失败，状态码: " + statusCode);
-                return false;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 }

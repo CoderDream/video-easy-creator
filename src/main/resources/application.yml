@@ -4,26 +4,26 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-#  ai:
-#    openai:
-#      #      api-key: ${spring.ai.openai.api-key}
-#     # api-key:  sk-F7HULAHnwwcfm8bzoa3ZLAPwZNXbf9GpM0rAsXyLHSH3IHjE # sess-zhIyLnEPonNQLUqpfBfFF2CvBrU5si0Ih2rR8o25 # sk-F7HULAHnwwcfm8bzoa3ZLAPwZNXbf9GpM0rAsXyLHSH3IHjE
-#     # base-url: https://api.chatanywhere.tech # ${spring.ai.openai.base-url} # https://api.chatanywhere.tech/v1 #
-#      api-key: ${OPENAI_API_KEY}
-#      chat:
-#        options:
-#          model: gpt-3.5-turbo-0125 # gpt-3.5-turbo
-#          temperature: 0.3F
-#    ollama:
-#      # ollama API Server 地址
-#      base-url: http://localhost:11434
-#      chat:
-#        enabled: true
-#        # 使用的模型名称
-#        model:
-#          llama3.1:8b
-#        options:
-#          temperature: 0.7
+  ai:
+    openai:
+      #      api-key: ${spring.ai.openai.api-key}
+     # api-key:  sk-F7HULAHnwwcfm8bzoa3ZLAPwZNXbf9GpM0rAsXyLHSH3IHjE # sess-zhIyLnEPonNQLUqpfBfFF2CvBrU5si0Ih2rR8o25 # sk-F7HULAHnwwcfm8bzoa3ZLAPwZNXbf9GpM0rAsXyLHSH3IHjE
+     # base-url: https://api.chatanywhere.tech # ${spring.ai.openai.base-url} # https://api.chatanywhere.tech/v1 #
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-3.5-turbo-0125 # gpt-3.5-turbo
+          temperature: 0.3F
+    ollama:
+      # ollama API Server 地址
+      base-url: http://localhost:11434
+      chat:
+        enabled: true
+        # 使用的模型名称
+        model:
+          deepseek-coder-v2:latest #llama3.2:8b
+        options:
+          temperature: 0.7
 
 mybatis-plus:
 #  mapper-locations: classpath*:mapper/*.xml

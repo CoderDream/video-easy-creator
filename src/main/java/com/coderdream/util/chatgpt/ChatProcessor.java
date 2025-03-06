@@ -1,4 +1,4 @@
-package com.coderdream.util;
+package com.coderdream.util.chatgpt;
 
 import com.coderdream.entity.SentencePair;
 import com.coderdream.util.cd.CdStringUtil;

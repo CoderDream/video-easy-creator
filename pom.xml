@@ -646,7 +646,11 @@
 <!--            <version>版本号</version>-->
 <!--        </dependency>-->
 
-
+        <dependency>
+            <groupId>com.unfbx</groupId>
+            <artifactId>chatgpt-java</artifactId>
+            <version>1.0.6</version> <!-- 请查看最新的版本号 -->
+        </dependency>
     </dependencies>
 
     <!--    <dependencyManagement>-->

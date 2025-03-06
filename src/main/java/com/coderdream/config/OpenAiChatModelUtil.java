@@ -1,5 +1,6 @@
 package com.coderdream.config;
 
+import com.coderdream.util.youtube.YouTubeApiUtil;
 import org.apache.logging.log4j.util.PropertiesUtil;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.api.OpenAiApi;
@@ -7,8 +8,10 @@ import org.springframework.ai.openai.api.OpenAiApi;
 public class OpenAiChatModelUtil {
 
     public static OpenAiChatModel getInstance() {
-        System.setProperty("https.proxyHost", "127.0.0.1");
-        System.setProperty("https.proxyPort", "7890");
+//        System.setProperty("https.proxyHost", "127.0.0.1");
+//        System.setProperty("https.proxyPort", "7890");
+        YouTubeApiUtil.enableProxy();
+
         // 读取yaml配置文件中的OpenAI API密钥
         PropertiesUtil propertiesUtil = new PropertiesUtil("");
 //        OpenAiConfig openAiConfig = new OpenAiConfig();

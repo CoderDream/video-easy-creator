@@ -3,7 +3,7 @@ package com.coderdream.util.cd;
 import com.coderdream.config.OpenAiChatModelUtil;
 import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.SentencePair;
-import com.coderdream.util.ChatProcessor;
+import com.coderdream.util.chatgpt.ChatProcessor;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
