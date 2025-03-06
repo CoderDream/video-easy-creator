@@ -245,6 +245,8 @@ public class CdConstants {
 
   public static final String TRANSLATE_PLATFORM_GEMINI = "gemini";
 
+  public static final String TRANSLATE_PLATFORM_DEEP_SEEK = "deep_seek";
+
   public static final String TRANSLATE_PLATFORM_MSTTS = "mstts";
 
   public static final String SUBTITLE_EN = "en";

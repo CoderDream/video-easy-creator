@@ -16,21 +16,19 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * OllamaApiUtil 类：封装了与 Ollama API 交互的工具方法，包含重试机制
+ * OllamaApiUtil 类：封装了与 Ollama API 交互的工具方法
  */
 @Slf4j
-public class OllamaApiUtil {
+public class OllamaApiUtil02 {
 
     private static final String OLLAMA_BASE_URL;  // Ollama API 的基本 URL
     private static final String OLLAMA_MODEL;    // 要使用的模型名称
     private static final double OLLAMA_TEMPERATURE; // 温度参数，影响生成文本的随机性
-    private static final int MAX_RETRIES = 10; // 最大重试次数
-    private static final long RETRY_DELAY_MS = 1000; // 重试延迟，毫秒
 
     static {
         // Load configuration from properties file.  加载配置文件
         Properties prop = new Properties();
-        try (InputStream input = OllamaApiUtil.class.getClassLoader().getResourceAsStream("application.properties")) { // try-with-resources statement
+        try (InputStream input = OllamaApiUtil02.class.getClassLoader().getResourceAsStream("application.properties")) { // try-with-resources statement
             if (input == null) {
                 System.out.println("Sorry, 无法找到 application.properties 文件");
                 throw new RuntimeException("缺少 application.properties 文件，请检查是否存在.");  // 关键！找不到配置文件就抛出异常
@@ -60,62 +58,14 @@ public class OllamaApiUtil {
 
 
     /**
-     * 调用 Ollama API 生成文本，包含重试机制
+     * 调用 Ollama API 生成文本
      *
      * @param request   Ollama 请求对象，包含 prompt 和 message
      * @return Ollama 响应对象，包含结果、错误信息和请求耗时
-     * @throws RuntimeException 如果所有重试都失败，则抛出异常
      */
     public static OllamaResponse generate(OllamaRequest request) {
-        return generateWithRetry(request, OLLAMA_BASE_URL, OLLAMA_MODEL, MAX_RETRIES);
+        return generate(request, OLLAMA_BASE_URL, OLLAMA_MODEL);
     }
-
-
-    /**
-     * 调用 Ollama API 生成文本，包含重试机制
-     *
-     * @param request    Ollama 请求对象，包含 prompt 和 message
-     * @param baseUrl    Ollama API 的基本 URL
-     * @param model      模型名称
-     * @param maxRetries 最大重试次数
-     * @return Ollama 响应对象，包含结果、错误信息和请求耗时
-     * @throws RuntimeException 如果所有重试都失败，则抛出异常
-     */
-    private static OllamaResponse generateWithRetry(OllamaRequest request, String baseUrl, String model, int maxRetries) {
-        OllamaResponse ollamaResponse = null;
-        int retryCount = 0;
-
-        while (retryCount < maxRetries) {
-            try {
-                ollamaResponse = generate(request, baseUrl, model);
-                if (ollamaResponse.isSuccess()) {
-                    return ollamaResponse; // 成功，直接返回
-                } else {
-                    log.warn("Ollama API 调用失败，正在进行第 {} 次重试， 错误信息: {}", retryCount + 1, ollamaResponse.getError());
-                    retryCount++;
-                    Thread.sleep(RETRY_DELAY_MS); // 等待一段时间后重试
-                }
-            } catch (InterruptedException e) {
-                log.error("重试等待被中断", e);
-                Thread.currentThread().interrupt(); // 恢复中断状态
-                break; // 中断重试
-            } catch (Exception e) {
-                log.error("Ollama API 调用过程中发生未预期的错误", e);
-                throw new RuntimeException("Ollama API 调用过程中发生未预期的错误", e);
-            }
-        }
-
-
-        // 如果所有重试都失败
-        String errorMessage = String.format("Ollama API 调用失败，经过 %d 次重试后仍然失败", maxRetries);
-        log.error(errorMessage);
-        if (ollamaResponse != null && ollamaResponse.getError() != null) {
-            throw new RuntimeException(errorMessage + "，最后一次错误信息: " + ollamaResponse.getError());
-        } else {
-            throw new RuntimeException(errorMessage + "，没有具体的错误信息");
-        }
-    }
-
 
     /**
      * 调用 Ollama API 生成文本
@@ -125,7 +75,7 @@ public class OllamaApiUtil {
      * @param model     模型名称
      * @return Ollama 响应对象，包含结果、错误信息和请求耗时
      */
-    private static OllamaResponse generate(OllamaRequest request, String baseUrl, String model) {
+    public static OllamaResponse generate(OllamaRequest request, String baseUrl, String model) {
         OllamaResponse ollamaResponse = new OllamaResponse();
         Instant start = Instant.now();  // 记录开始时间
 

@@ -1,50 +1,31 @@
 package com.coderdream.util.ollama;
 
 import cn.hutool.core.collection.ListUtil;
-import com.coderdream.util.chatgpt.SubtitleConverter;
+import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.json.JSONUtil;
+import com.coderdream.util.bbc.TranslateUtil;
+import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdFileUtil;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
- * OllamaApiUtilTest 类：用于测试 OllamaApiUtil 类的功能
+ * OllamaApiUtil 类：封装了与 Ollama API 交互的工具方法，包含重试机制
  */
 @Slf4j
-public class OllamaApiUtilTest {
+public class OllamaTranslateUtil {
 
-    /**
-     * 测试 Ollama Chat 模型
-     */
-    @Test
-    public void testOllamaChatModel_01() {
-        String prompt = "你是一个精通中文和英文的翻译大师。如果我给你英文就翻译成中文，给你中文就翻译成英文。";  // prompt：描述模型的任务
-        String message = "Ollama now supports tool calling with popular models such as Llama 3.1."; // 消息内容：要翻译的文本
-
-        OllamaApiUtil.OllamaRequest ollamaRequest = new OllamaApiUtil.OllamaRequest();
-        ollamaRequest.setPrompt(prompt);
-        ollamaRequest.setMessage(message);
-
-        OllamaApiUtil.OllamaResponse ollamaResponse = OllamaApiUtil.generate(ollamaRequest);
-
-        assertNotNull(ollamaResponse, "OllamaResponse 对象不应为 null");
-        assertTrue(ollamaResponse.isSuccess(), "Ollama API 调用应该成功");
-        assertNotNull(ollamaResponse.getResponse(), "翻译后的文本不应为 null");
-        assertFalse(ollamaResponse.getResponse().isEmpty(), "翻译后的文本不应为空");
-
-        log.info("翻译后的文本: {}", ollamaResponse.getResponse());
-        log.info("API 调用耗时: {}", ollamaResponse.getDuration());
-    }
-
-    /**
-     * 测试 Ollama Chat 模型
-     */
-    @Test
-    public void testOllamaChatModel_02() {
+    public List<String> translateList(List<String> sourceList) {
         String prompt = "你是一个精通中文和英文的翻译大师。如果我给你英文就翻译成中文，给你中文就翻译成英文。";  // prompt：描述模型的任务
         String message = "Ollama now supports tool calling with popular models such as Llama 3.1."; // 消息内容：要翻译的文本
 
@@ -188,7 +169,7 @@ public class OllamaApiUtilTest {
                 "President Trump level set \n" +
                 "with the American people on the economy \n" +
                 "and exposed how badly Joe Biden screwed it up \n" +
-                "by causing the worst inflation crisis in four decades \n"  +
+                "by causing the worst inflation crisis in four decades \n" +
                 "President Trump was honest about where we are \n" +
                 "while making clear that help is on the way \n" +
                 "as the president declared last night \n" +
@@ -252,37 +233,80 @@ public class OllamaApiUtilTest {
                 "Mohammed confessed to his crimes related to Abu Gheit \n" +
                 "and other attacks in Russia \n" +
                 "and Iran as well to the Pakistanis \n" +
-                "and U S"
-                ;
+                "and U S";
 
-        List<String> subtitleList = new ArrayList<>();
-        String[] lines = englishSubtitles.split("\n"); // Split the string by newline character
-        int index = 1;
-        for (String line : lines) {
-            String indexStr = String.format("%03d", index++);
-            subtitleList.add(indexStr + ": " + line.trim());
-        }
+//        List<String> subtitleList = new ArrayList<>();
+//        String[] lines = englishSubtitles.split("\n"); // Split the string by newline character
+//        int index = 1;
+//        for (String line : lines) {
+//            String indexStr = String.format("%03d", index++);
+//            subtitleList.add(indexStr + ": " + line.trim());
+//        }
+//
+//        //按每100个一组分割
+//        List<List<String>> parts = ListUtil.partition(subtitleList, 30);
+//        for (List<String> part : parts) {
+//            String text = String.join(" \n", part);
+//            System.out.println("待翻译的英文字幕列表： \n" + text);
+//            message = text;
+//
+//            OllamaApiUtil.OllamaRequest ollamaRequest = new OllamaApiUtil.OllamaRequest();
+//            ollamaRequest.setPrompt(prompt);
+//            ollamaRequest.setMessage(message);
+//
+//            OllamaApiUtil.OllamaResponse ollamaResponse = OllamaApiUtil.generate(ollamaRequest);
+//
+//            log.info("翻译后的文本: {}", ollamaResponse.getResponse());
+//            log.info("API 调用耗时: {}", ollamaResponse.getDuration());
+//        }
+        //  通过微软服务翻译
+//        int retryTime = 0;
+//        while ((CdFileUtil.isFileEmpty(srcFileNameZhCn) || CdFileUtil.isFileEmpty(
+//                srcFileNameZhCn)) && retryTime < 10) {
+//            if (retryTime > 0) {
+//                log.info(CdConstants.TRANSLATE_PLATFORM_MSTTS + " 重试次数: {}",
+//                        retryTime);
+//            }
+//            TranslateUtil.translateSrcWithPlatform(srcFileNameEn, srcFileNameZhCn,
+//                    srcFileNameZhTw,
+//                    CdConstants.TRANSLATE_PLATFORM_MSTTS);
+//            retryTime++;
+//            ThreadUtil.sleep(3000L);
+//        }
 
-        //按每100个一组分割
-        List<List<String>> parts = ListUtil.partition(subtitleList, 30);
-        for (List<String> part : parts) {
-            String text = String.join(" \n", part);
-            System.out.println("待翻译的英文字幕列表： \n" + text);
-            message = text;
-
-            OllamaApiUtil.OllamaRequest ollamaRequest = new OllamaApiUtil.OllamaRequest();
-            ollamaRequest.setPrompt(prompt);
-            ollamaRequest.setMessage(message);
-
-            OllamaApiUtil.OllamaResponse ollamaResponse = OllamaApiUtil.generate(ollamaRequest);
-
-            assertNotNull(ollamaResponse, "OllamaResponse 对象不应为 null");
-            assertTrue(ollamaResponse.isSuccess(), "Ollama API 调用应该成功");
-            assertNotNull(ollamaResponse.getResponse(), "翻译后的文本不应为 null");
-            assertFalse(ollamaResponse.getResponse().isEmpty(), "翻译后的文本不应为空");
-
-            log.info("翻译后的文本: {}", ollamaResponse.getResponse());
-            log.info("API 调用耗时: {}", ollamaResponse.getDuration());
-        }
+        return null;
     }
+
+    public static String translateText(String text) {
+        String prompt = "你是一个精通中文和英文的翻译大师。如果我给你英文就翻译成中文，给你中文就翻译成英文。";  // prompt：描述模型的任务
+        OllamaApiUtil.OllamaRequest ollamaRequest = new OllamaApiUtil.OllamaRequest();
+        ollamaRequest.setPrompt(prompt);
+        ollamaRequest.setMessage(text);
+        OllamaApiUtil.OllamaResponse ollamaResponse = OllamaApiUtil.generate(ollamaRequest);
+        log.info("翻译后的文本: {}", ollamaResponse.getResponse());
+        log.info("API 调用耗时: {}", ollamaResponse.getDuration());
+        return ollamaResponse.getResponse();
+    }
+
+//    public static String translateTextRaw(String text) {
+//        List<String> subtitleList = Collections.addAll(new ArrayList<>(), text.split("\n")); // Split the string by newline character
+//        //  通过微软服务翻译
+//        List<String> subtitleList = new ArrayList<>();
+//        int retryTime = 0;
+//        while ((CdFileUtil.isFileEmpty(srcFileNameZhCn) || CdFileUtil.isFileEmpty(
+//                srcFileNameZhCn)) && retryTime < 10) {
+//            if (retryTime > 0) {
+//                log.info(CdConstants.TRANSLATE_PLATFORM_MSTTS + " 重试次数: {}",
+//                        retryTime);
+//            }
+//            TranslateUtil.translateSrcWithPlatform(srcFileNameEn, srcFileNameZhCn,
+//                    srcFileNameZhTw,
+//                    CdConstants.TRANSLATE_PLATFORM_MSTTS);
+//            retryTime++;
+//            ThreadUtil.sleep(3000L);
+//        }
+//        return ollamaResponse.getResponse();
+//    }
+
+
 }

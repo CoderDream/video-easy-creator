@@ -118,7 +118,7 @@ public class SubtitleConverter {
   public static List<String> convertToSubtitleList(String text) {
     List<String> subtitleList = new ArrayList<>();
     String[] lines = text.split("\n"); // Split the string by newline character
-    int index = 0;
+    int index = 1;
     for (String line : lines) {
       String indexStr = String.format("%03d", index++);
       subtitleList.add(indexStr + ": " + line.trim());
