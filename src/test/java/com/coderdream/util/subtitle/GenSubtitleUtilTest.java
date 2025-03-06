@@ -12,12 +12,12 @@ class GenSubtitleUtilTest {
   @Test
   void process() {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
-    String folderName = "250225";
+    String folderName = "250305";
     String filePath =
       OperatingSystem.getBaseFolder() + "0003_PressBriefings" + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
-    int maxLineLength = 80;
+    int maxLineLength = 80; // 生成mp3
     GenSubtitleUtil.process(filePath, maxLineLength);
   }
 
@@ -61,7 +61,7 @@ class GenSubtitleUtilTest {
   @Test
   void processSrtAndGenDescription_02() {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
-    String folderName = "250225";
+    String folderName = "250305";
     String mp4FilePath =
       OperatingSystem.getBaseFolder() + "0003_PressBriefings" + File.separator
         + folderName + File.separator + folderName

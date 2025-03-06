@@ -30,6 +30,24 @@ class CommandUtilTest {
     CommandUtil.downloadBest1080p(videoLink, outputFileName);
   }
 
+  //
+  @Test
+  void downloadBest720p_() {
+
+    // D:\0000\0005_VP\vance_0002 D:\0000\0003_PressBriefings\250305
+
+    String bookFolderName = "0003_PressBriefings";
+    String subFolder = "250305";
+    String folderPath =
+      OperatingSystem.getBaseFolder() + bookFolderName + File.separator;
+
+    String videoLink = "https://www.youtube.com/watch?v=mQMKP2cSdIk";// "https://www.youtube.com/watch?v=dCY0b1wWX9A"; // 替换为实际的视频链接
+    String outputFileName = folderPath + subFolder + File.separator + subFolder
+      + ".mp4"; // 替换为期望的输出路径和文件名
+    CommandUtil.downloadBest720p(videoLink, outputFileName);
+  }
+
+
   @Test
   void downloadBest720p() {
 

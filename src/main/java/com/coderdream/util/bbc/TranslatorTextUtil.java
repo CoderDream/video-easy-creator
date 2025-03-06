@@ -1,5 +1,6 @@
 package com.coderdream.util.bbc;
 
+import com.coderdream.util.youtube.YouTubeApiUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -125,6 +126,7 @@ public class TranslatorTextUtil {
 //      text = text.replace("\n", " ");
       // 双引号替换成单引号
       text = text.replace("\"", "'");
+      log.info("请求内容为：{}", text);
       String response = translatorTextUtil.process(text);
       if (response.contains("error")) {
         log.error("错误信息： {}", prettify(response));
@@ -165,6 +167,7 @@ public class TranslatorTextUtil {
 
   public static void main(String[] args) {
     String content = "Hello, friend! What did you do today? How are you? I am fine.";
+    YouTubeApiUtil.enableProxy();
     List<String> stringList = translatorText(content);
     for (String str : stringList) {
       System.out.println(str);

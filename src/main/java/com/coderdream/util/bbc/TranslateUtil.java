@@ -905,6 +905,7 @@ public class TranslateUtil {
           .map(String::valueOf)
           .collect(Collectors.joining("\r\n"))
           + " ";  // 添加空格分隔不同的文本块，避免一次性发送过多内容导致请求失败
+        log.info("请求内容为：{}", text);
         String response = GeminiApiClient.generateContent(text);
         // 将两个回车换行替换成一个
         response = response.replaceAll("\n\n", "\n");

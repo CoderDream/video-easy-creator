@@ -8,7 +8,7 @@ class PrepareForMakeVideoUtilTest {
 
   @Test
   void processForSixMinutes() {
-    String folderName = "170309";
+    String folderName = "170302";
     PrepareForMakeVideoUtil.processForSixMinutes(folderName);
   }
 
