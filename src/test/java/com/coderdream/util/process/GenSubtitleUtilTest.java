@@ -1,7 +1,9 @@
-package com.coderdream.util.subtitle;
+package com.coderdream.util.process;
 
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.proxy.OperatingSystem;
+import com.coderdream.util.subtitle.GenSubtitleUtil;
+import com.coderdream.util.subtitle.SubtitleUtil;
 import java.io.File;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;

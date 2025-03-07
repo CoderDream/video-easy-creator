@@ -2,6 +2,7 @@ package com.coderdream.util.bbc;
 
 import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.cd.CdFileUtil;
+import com.coderdream.util.translate.TranslateUtil;
 import java.io.File;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

@@ -30,7 +30,7 @@ public class GenAudioUtil {
 
     String phoneticsFileName =
       folderPath + File.separator + subFolder + File.separator + subFolder
-        + "_total_phonetics.txt";
+        + "_phonetics.txt";
     List<String> contentList = CdFileUtil.readFileContent(phoneticsFileName);
     assert contentList != null;
     int size = 0;

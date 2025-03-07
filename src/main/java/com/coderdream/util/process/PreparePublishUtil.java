@@ -159,8 +159,10 @@ public class PreparePublishUtil {
             }
         }
 
+//        String totalFileNameTotal =
+//          folderPath + subFolder + File.separator + subFolder + "_total.txt";
         String totalFileNameTotal =
-                folderPath + subFolder + File.separator + subFolder + "_total.txt";
+                folderPath + subFolder + File.separator + subFolder + ".txt";
         if (CdFileUtil.isFileEmpty(totalFileNameTotal)) {
             log.info("文件不存在或为空，已生成新文件: {}",
                     totalFileNameTotal);
@@ -193,7 +195,6 @@ public class PreparePublishUtil {
                         + ".srt";
 
         if (CdFileUtil.isFileEmpty(srtFileName)) {
-
             if (!CdFileUtil.isFileEmpty(srtFileNameInSubtitleFolder)) {
                 log.info("subtitle中的srt文件存在，直接拷贝： {}",
                         srtFileNameInSubtitleFolder);
@@ -202,7 +203,6 @@ public class PreparePublishUtil {
                         StandardCopyOption.REPLACE_EXISTING);
             } else {
                 log.info("srt文件不存在, {}", srtFileName);
-
                 SubtitleUtil.genSrtByExecuteCommand(mp3FileName, subtitleRawFileName,
                         srtFileName, lang);
             }

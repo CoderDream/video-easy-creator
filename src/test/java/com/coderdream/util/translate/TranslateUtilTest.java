@@ -1,4 +1,4 @@
-package com.coderdream.util.bbc;
+package com.coderdream.util.translate;
 
 import cn.hutool.core.thread.ThreadUtil;
 import com.coderdream.util.cd.CdConstants;
@@ -32,7 +32,7 @@ class TranslateUtilTest {
                 "." + CdConstants.SUBTITLE_ZH_TW);
 
         //  通过DeepSeek服务翻译
-        Integer subListSize = 20;
+        Integer subListSize = 10;
         int retryTime = 0;
         while ((CdFileUtil.isFileEmpty(srcFileNameZhCn) || CdFileUtil.isFileEmpty(
                 srcFileNameZhCn)) && retryTime < 10) {

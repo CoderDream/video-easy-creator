@@ -1,5 +1,6 @@
-package com.coderdream.util.bbc;
+package com.coderdream.util.translate;
 
+import com.coderdream.util.bbc.TextTranslatorConstant;
 import com.coderdream.util.youtube.YouTubeApiUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

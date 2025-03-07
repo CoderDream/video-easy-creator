@@ -14,7 +14,7 @@ class PrepareForMakeVideoUtilTest {
 
   @Test
   void processForSixMinutesFromTodo() {
-    String folderName = "250227";
+    String folderName = "250306";
     PrepareForMakeVideoUtil.processForSixMinutes(folderName);
   }
 }

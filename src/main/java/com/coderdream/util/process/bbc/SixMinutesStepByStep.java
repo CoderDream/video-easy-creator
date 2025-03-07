@@ -8,7 +8,7 @@ import com.coderdream.util.CommonUtil;
 import com.coderdream.util.DictUtil;
 import com.coderdream.util.bbc.GenSrtUtil;
 import com.coderdream.util.bbc.ProcessScriptUtil;
-import com.coderdream.util.bbc.TranslateUtil;
+import com.coderdream.util.translate.TranslateUtil;
 import com.coderdream.util.bbc.WordCountUtil;
 import com.coderdream.util.cd.CdMP3SplitterUtil;
 import com.coderdream.util.cd.TextProcessor;

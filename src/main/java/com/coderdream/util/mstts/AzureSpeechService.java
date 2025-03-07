@@ -66,7 +66,7 @@ public class AzureSpeechService {
 
     public static void testEn() {
         // Azure 配置信息
-        String speechKey1 = "CYy4pk7VTJ4IhnhWaZMZseRTgOFYsAjy7MLmiGrhAlFnxXQZLpZzJQQJ99BBACYeBjFXJ3w3AAAYACOG31QZ";// "CFWk2q2sSLvSzIQ3TOnIBAsea1cN8psM5jTrmTy2AAg5lI9gSAEEJQQJ99BBACYeBjFXJ3w3AAAYACOGOcUN" ;//CdConstants.SPEECH_KEY_EAST_US;
+        String speechKey1 =   CdConstants.SPEECH_KEY_EAST_US;//  "CYy4pk7VTJ4IhnhWaZMZseRTgOFYsAjy7MLmiGrhAlFnxXQZLpZzJQQJ99BBACYeBjFXJ3w3AAAYACOG31QZ";// "CFWk2q2sSLvSzIQ3TOnIBAsea1cN8psM5jTrmTy2AAg5lI9gSAEEJQQJ99BBACYeBjFXJ3w3AAAYACOGOcUN" ;//CdConstants.SPEECH_KEY_EAST_US;
         String region1 = "eastus";// CdConstants.SPEECH_REGION_EASTUS;
         List<String> textList = List.of("Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.");
         String fileName1 = "eng1234.wav";

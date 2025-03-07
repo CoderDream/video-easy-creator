@@ -1,4 +1,4 @@
-package com.coderdream.util.bbc;
+package com.coderdream.util.translate;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.collection.ListUtil;

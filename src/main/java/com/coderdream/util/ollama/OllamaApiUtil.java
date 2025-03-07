@@ -138,7 +138,7 @@ public class OllamaApiUtil {
 
             String requestBody = JSONUtil.toJsonStr(requestBodyMap);
 
-            log.info("Ollama API 请求体: {}", requestBody);
+//            log.info("Ollama API 请求体: {}", requestBody);
 
             // Make the API call using Hutool 使用 Hutool 发起 API 调用
             HttpResponse response = HttpRequest.post(baseUrl + "/api/generate")
@@ -148,7 +148,7 @@ public class OllamaApiUtil {
 
             String responseBody = response.body();
 
-            log.info("Ollama API 响应: {}", responseBody);
+//            log.info("Ollama API 响应: {}", responseBody);
 
             if (response.isOk()) { // 检查 HTTP 状态码是否为 200 OK
                 try {

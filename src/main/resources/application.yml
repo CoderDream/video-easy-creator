@@ -16,7 +16,7 @@ spring:
           temperature: 0.3F
     ollama:
       # ollama API Server 地址
-      base-url: http://localhost:11434
+      base-url: http://192.168.3.165:11434
       chat:
         enabled: true
         # 使用的模型名称

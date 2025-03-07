@@ -37,7 +37,6 @@ public class GenCoverUtil {
 
     public static void process(String folderPath, String chapterFileName,
                                String presentationName, String imageFormat, int width, int height) {
-
         String resourcesPath = ResourcesSourcePathUtil.getResourcesSourceAbsolutePath();
         List<String> contentList = CdFileUtil.readFileContent(
                 resourcesPath + File.separator + chapterFileName);
@@ -53,11 +52,11 @@ public class GenCoverUtil {
                 "越聽越上癮",
                 "越聽越開闊");
         for (String content : contentList) {
-            String[] split = content.split(" ");
-            if (split.length == 3) {
+            String[] split = content.split("-");
+            if (split.length == 4) {
                 // 随机整数0~4
                 int i = new Random().nextInt(slogans.size());
-                extracted(folderPath, split[1], split[2], slogans.get(i),
+                extracted(folderPath, split[2], split[3], slogans.get(i),
                         presentationName, imageFormat, width, height);
             }
         }
@@ -142,6 +141,10 @@ public class GenCoverUtil {
             }
 //      String imageFormat = "png";
             String prefix = "Chapter0"; // ch0
+            if(ep.length() == 3) {
+                prefix = "Chapter"; // ch0
+            }
+
 //            String prefix = "ch0"; // ch0
             String outputFileName =
                     coverPath + prefix + ep + "_" + height + "p." + imageFormat;

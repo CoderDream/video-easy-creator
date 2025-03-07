@@ -89,6 +89,15 @@ class GenVideoUtilTest {
   }
 
   @Test
+  void genHeadVideo_EnBook005_01() {
+    String bookName = "EnBook005";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    GenVideoUtil.genHeadVideo(folderPath);
+    // assert that the process completes without any error
+    assertTrue(true);
+  }
+
+  @Test
   void process03() throws InterruptedException {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
@@ -140,6 +149,25 @@ class GenVideoUtilTest {
     }
   }
 
+  @Test
+  void processBatchEnBook_0005() {
+    String bookName = "EnBook005";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 3; // 假定总共50章 51
+    for (int i = 1; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenVideoUtil.processV4(folderPath, subFolder);
+    }
+  }
+
+  // ******************************************************************* //
+
 
   @Test
   void processBatch_Merge_0101()  {
@@ -173,6 +201,24 @@ class GenVideoUtilTest {
 
     List<String> subFolders = new ArrayList<>();
     int end = 51; // 假定你想要处理的章节数
+    for (int i = 1; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      Mp4MergeUtil.processMerge(folderPath, subFolder);
+    }
+  }
+
+
+  @Test
+  void processMerge_EnBook_0005() {
+    String bookName = "EnBook005";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 3; // 假定总共50章 51
     for (int i = 1; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);
