@@ -262,22 +262,7 @@ public class Mp4MergeUtil {
                     + count;
     String destinationFileName =
             destinationDirectory + File.separator + subFolder + ".mp4";
-    if (!CdFileUtil.isFileEmpty(destinationFileName)) {
-      log.info("文件已存在，无需合并: {}", destinationFileName);
-      // 删除旧的合并文件
-      for (int index = 1; index < 6; index++) {
-        String outputDirStr2 =
-                folderPath + subFolder + File.separator + "video_cht_"
-                        + index;
-        boolean del = FileUtil.del(outputDirStr2);
-        if (del) {
-          log.info("临时文件夹删除成功: {}", outputDirStr2);
-        } else {
-          log.info("临时文件夹删除失败: {}", outputDirStr2);
-        }
-      }
-      return;
-    }
+
 
     // 确保输出目录存在
     File dir = new File(outputDirStr);
@@ -352,6 +337,24 @@ public class Mp4MergeUtil {
 //    } else {
 //      log.info("最终文件不为空，不删除临时文件夹");
 //    }
+
+    // 如果最终文件不为空，则不删除临时文件夹
+    if (!CdFileUtil.isFileEmpty(destinationFileName)) {
+      log.info("文件已存在，无需合并: {}", destinationFileName);
+      // 删除旧的合并文件
+      for (int index = 1; index < 6; index++) {
+        String outputDirStr2 =
+          folderPath + subFolder + File.separator + "video_cht_"
+            + index;
+        boolean del = FileUtil.del(outputDirStr2);
+        if (del) {
+          log.info("临时文件夹删除成功: {}", outputDirStr2);
+        } else {
+          log.info("临时文件夹删除失败: {}", outputDirStr2);
+        }
+      }
+      return;
+    }
   }
 
   public static void main(String[] args) {

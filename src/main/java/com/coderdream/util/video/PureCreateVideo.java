@@ -80,7 +80,7 @@ public class PureCreateVideo {
         command.add("-shortest");
         command.add(videoFilePath);
 
-        log.debug("执行 FFmpeg 命令: {}", String.join(" ", command));
+        log.error("执行 FFmpeg 命令: {}", String.join(" ", command));
 
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
@@ -92,7 +92,7 @@ public class PureCreateVideo {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-//                    log.trace("{}", line);
+                    log.trace("{}", line);
                 }
             }
 

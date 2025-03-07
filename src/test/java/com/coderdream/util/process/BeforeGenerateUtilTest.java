@@ -294,7 +294,7 @@ class BeforeGenerateUtilTest {
     String bookName = "EnBook005";
     String folderPath = OperatingSystem.getFolderPath(bookName);
     List<String> subFolders = new ArrayList<>();
-    int end = 101;
+    int end = 2;// 101;
     for (int i = 1; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);

@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class GenHeadVideo {
 
   public static void process(String folderPath, String imagePath,
-    String audioPath) {
+    String audioNameWithPath) {
     long startTime = System.currentTimeMillis();
 
     // D:\0000\ppt\Book02\cover Book02模板_41.png
@@ -28,13 +28,14 @@ public class GenHeadVideo {
     } else {
       imagePathNameList.sort(String::compareTo);
     }
-    String audioFileName = audioPath + File.separator + "head.wav";
+
     // 为每个 FFmpeg 命令创建一个任务 (Callable 可以获取返回值)
     for (int i = 0; i < imagePathNameList.size(); i++) {
       String imagePathName = imagePath + imagePathNameList.get(i);
       String pureFileName = CdFileUtil.getPureFileNameWithoutExtensionWithPath(
         imagePathName);
-
+      String part = pureFileName.substring(pureFileName.lastIndexOf("_") );
+      pureFileName = CdFileUtil.removePostfixToFileName(pureFileName, part);
       String videoPath =
         folderPath + pureFileName + File.separator + "video_cht"
           + File.separator;
@@ -54,8 +55,8 @@ public class GenHeadVideo {
       }
       // 计算AUDIO时长
       double duration = FfmpegUtil.getAudioDuration(
-        new File(audioFileName));
-      PureCreateVideo.createVideoCore(imagePathName, audioFileName, videoFileName,
+        new File(audioNameWithPath));
+      PureCreateVideo.createVideoCore(imagePathName, audioNameWithPath, videoFileName,
         duration);
     }
 
@@ -64,4 +65,5 @@ public class GenHeadVideo {
     log.info("批量生成视频成功，共： {} 个文件, 耗时: {}",
       imagePathNameList.size(), CdTimeUtil.formatDuration(durationMillis));
   }
+
 }

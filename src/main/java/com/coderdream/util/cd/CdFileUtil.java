@@ -370,6 +370,52 @@ public class CdFileUtil {
     return newPath.toString();
   }
 
+  /**
+   * 在文件名后添加指定的字符串，保留文件路径和扩展名
+   *
+   * @param filePath 原始文件路径
+   * @param part     要添加的字符串
+   * @return 修改后的文件路径
+   */
+  public static String removePostfixToFileName(String filePath, String part) {
+    // 将文件路径字符串转换为Path对象
+    Path path = Paths.get(filePath);
+
+    // 获取文件名
+    Path fileName = path.getFileName();
+    if (fileName == null) {
+      return filePath;  // 如果没有文件名，则直接返回原始路径
+    }
+
+    String fileNameStr = fileName.toString();
+    // 分割文件名和扩展名
+    int dotIndex = fileNameStr.lastIndexOf('.');
+    String baseName, extension = "";
+
+    if (dotIndex > 0) {
+      baseName = fileNameStr.substring(0, dotIndex);
+      extension = fileNameStr.substring(dotIndex);
+    } else {
+      baseName = fileNameStr; // 没有扩展名
+    }
+
+    // 构建新的文件名
+    if(baseName.endsWith(part)){
+      baseName = baseName.substring(0, baseName.length() - part.length());
+    }
+
+    String newFileName = baseName + extension;
+
+    // 获取文件所在的目录
+    Path parent = path.getParent();
+
+    // 构建新的文件路径，如果parent为空，则保持原路径不变
+    Path newPath =
+      (parent != null) ? parent.resolve(newFileName) : Paths.get(newFileName);
+
+    return newPath.toString();
+  }
+
   public static String changeExtension(String filePathString,
     String newExtension) {
     Path filePath = Paths.get(filePathString);

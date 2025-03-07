@@ -65,14 +65,17 @@ public class GenVideoUtil {
       videoPath);
   }
 
-  public static void genHeadVideo(String folderPath) {
+  public static void genHeadVideo(String bookName) {
+
+    String folderPath = OperatingSystem.getFolderPath(bookName);
     long startTime = System.currentTimeMillis();
     // D:\0000\ppt\Book02\cover
     String imagePath =
       folderPath + "cover" + File.separator;
-    String audioPath =
-      OperatingSystem.getBaseFolder() + "bgmusic" + File.separator;
-    GenHeadVideo.process(folderPath, imagePath, audioPath);
+    String audioNameWithPath =
+      OperatingSystem.getBaseFolder() + bookName + File.separator + "head"
+        + File.separator + bookName + "_head.wav";
+    GenHeadVideo.process(folderPath, imagePath, audioNameWithPath);
     long endTime = System.currentTimeMillis();
     long durationMillis = endTime - startTime;
     log.info("批量生成开场视频成功: {} , 耗时: {}", folderPath,
@@ -109,12 +112,13 @@ public class GenVideoUtil {
 
   /**
    * 生成视频合并
-   * @param folderPath  文件夹路径
-   * @param subFolder 子文件夹
+   *
+   * @param folderPath      文件夹路径
+   * @param subFolder       子文件夹
    * @param shortSubFolder  短子文件夹
    * @param bookFolderName  书籍文件夹名称
-   * @param bookName  书籍名称
-   * @param chapterFileName   章节文件名称
+   * @param bookName        书籍名称
+   * @param chapterFileName 章节文件名称
    */
   public static void processVideoMerger(String folderPath, String subFolder,
     String shortSubFolder, String bookFolderName,

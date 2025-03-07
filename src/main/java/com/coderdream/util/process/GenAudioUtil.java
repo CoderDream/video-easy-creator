@@ -2,6 +2,7 @@ package com.coderdream.util.process;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.coderdream.util.audio.AudioMergerSingleBatch;
+import com.coderdream.util.audio.WavMerger;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.mstts.GenDualAudioUtil;
@@ -45,7 +46,8 @@ public class GenAudioUtil {
     String pureFileNamePhonetics = CdFileUtil.getPureFileNameWithoutExtensionWithPath(
       phoneticsFileName);
     String audioType = "wav";
-    GenDualAudioUtil.genDialog2Audio900(folderPath, subFolder, pureFileNamePhonetics,
+    GenDualAudioUtil.genDialog2Audio900(folderPath, subFolder,
+      pureFileNamePhonetics,
       audioType);
 
     // 确保所有任务执行完毕后关闭线程池
@@ -72,8 +74,8 @@ public class GenAudioUtil {
       if (wavFilesCn.isEmpty()) {
         log.warn("中文目录{}下没有找到wav文件", inputDirCn);
         SpeechUtil.genDialog2Audio900(folderPath, subFolder,
-                pureFileNamePhonetics,
-                audioType);
+          pureFileNamePhonetics,
+          audioType);
       }
 
       List<String> wavFilesEn = AudioMergerSingleBatch.listWavFiles(
@@ -81,8 +83,8 @@ public class GenAudioUtil {
       if (wavFilesEn.isEmpty()) {
         log.warn("英文目录{}下没有找到wav文件", inputDirEn);
         SpeechUtil.genDialog2Audio900(folderPath, subFolder,
-                pureFileNamePhonetics,
-                audioType);
+          pureFileNamePhonetics,
+          audioType);
       }
 
       // 如果两个列表大小不一致则立即退出
@@ -93,8 +95,7 @@ public class GenAudioUtil {
         SpeechUtil.genDialog2Audio900(folderPath, subFolder,
           pureFileNamePhonetics,
           audioType);
-      }
-      else {
+      } else {
         break;
       }
     }
@@ -117,5 +118,37 @@ public class GenAudioUtil {
       CdFileUtil.getPureFileNameWithoutExtensionWithPath(phoneticsFileName),
       language);
     return true;
+  }
+
+  public static void genHeadAudio() {
+    GenDualAudioUtil.genHeadAudio();
+    // 示例用法
+    List<String> bookNameList = List.of(
+      "EnBook001",
+      "EnBook002",
+      "EnBook003",
+      "EnBook004",
+      "EnBook005"
+    );
+    String baseFolder = OperatingSystem.getBaseFolder();
+    for (String bookName : bookNameList) {
+      // 示例用法
+      List<String> wavFilePaths = List.of(
+        baseFolder + File.separator + bookName + File.separator + "head"
+          + File.separator + bookName + "_en.wav",
+        baseFolder + File.separator + bookName + File.separator + "head"
+          + File.separator + bookName + "_cn.wav"
+      );
+      String outputFilePath =
+        baseFolder + File.separator + bookName + File.separator + "head"
+          + File.separator + bookName + "_head.wav";
+
+      if (CdFileUtil.isFileEmpty(outputFilePath)) {
+        String duration = WavMerger.mergeWavFiles(wavFilePaths, outputFilePath);
+        System.out.println("合并完成，耗时: " + duration);
+      }
+    }
+
+
   }
 }

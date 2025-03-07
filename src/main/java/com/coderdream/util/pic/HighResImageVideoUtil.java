@@ -8,6 +8,7 @@ import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.util.sentence.SentenceParser;
 import com.coderdream.util.video.BatchCreateVideoCommonUtil;
 import com.coderdream.vo.SentenceVO;
+import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
@@ -73,7 +74,7 @@ public class HighResImageVideoUtil {
    * @return 图片文件列表
    */
   public static List<File> generateImages(String backgroundImageName,
-    String filePath,    String contentFileName) {
+    String filePath, String contentFileName) {
     return generateImages(backgroundImageName, contentFileName,
       filePath, null);
   }
@@ -122,7 +123,7 @@ public class HighResImageVideoUtil {
     try {
       templateImage = ImageIO.read(new File(imagePath));
     } catch (IOException e) {
-      log.error("加载背景图片失败: {} {}", imagePath, e.getMessage(),e);
+      log.error("加载背景图片失败: {} {}", imagePath, e.getMessage(), e);
       throw new RuntimeException(e);
     }
 
@@ -149,7 +150,7 @@ public class HighResImageVideoUtil {
       File outputFile = new File(
         outputDir + File.separator + fileName + "_" + MessageFormat.format(
           "{0,number,000}", number) + ".png");
-      if(outputFile.exists() || outputFile.length() > 0) {
+      if (outputFile.exists() || outputFile.length() > 0) {
         log.info("图片文件已存在，跳过: {}", outputFile.getAbsolutePath());
         continue;
       }
@@ -175,11 +176,14 @@ public class HighResImageVideoUtil {
       currentY = drawWrappedText(g2d, phoneticsFont, new Color(251, 197, 49),
         sentenceVO.getPhonetics(), currentY + LINE_SPACING, width, false);
 
-      drawWrappedText(g2d, chineseFont, Color.WHITE,
+      currentY = drawWrappedText(g2d, chineseFont, Color.WHITE,
         sentenceVO.getChinese(), currentY + LINE_SPACING, width, true);
 
-      g2d.dispose();
+      drawWrappedText(g2d, chineseFont, Color.WHITE,
+        ZhConverterUtil.toSimple(sentenceVO.getChinese()),
+        currentY + LINE_SPACING, width, true);
 
+      g2d.dispose();
 
       try {
         ImageIO.write(bufferedImage, "png", outputFile);

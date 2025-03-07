@@ -1,9 +1,12 @@
 package com.coderdream.util.mstts;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
+import com.coderdream.util.proxy.OperatingSystem;
+import com.coderdream.util.resource.ResourcesSourcePathUtil;
 import com.coderdream.util.sentence.SentenceParser;
 import com.coderdream.util.string.SceneMatcherUtil;
 import com.coderdream.vo.SentenceVO;
@@ -275,6 +278,113 @@ public class GenDualAudioUtil {
 
   /**
    * 将对话文本文件转换为音频文件（中英文）。
+   */
+  public static void genHeadAudio() {
+    String headContentFileName = "head_content.txt";
+    String audioType = "wav";
+    genHeadAudio(headContentFileName, audioType);
+  }
+
+  /**
+   * 将对话文本文件转换为音频文件（中英文）。
+   *
+   * @param audioType 音频类型，如 wav 或 mp3
+   */
+  public static void genHeadAudio(
+    String headContentFileName, String audioType) {
+
+    String resourcesPath = ResourcesSourcePathUtil.getResourcesSourceAbsolutePath();
+    List<String> contentList = CdFileUtil.readFileContent(
+      resourcesPath + File.separator + headContentFileName);
+    if (CollectionUtil.isEmpty(contentList)) {
+      log.error("{} 文件内容为空", headContentFileName);
+      return;
+    }
+
+    for (String content : contentList) {
+      String[] split = content.split("\\|");
+      if (split.length == 3) {
+        // 随机整数0~4
+        String bookName = split[0].trim();
+        String enContent = split[1].trim();
+        String cnContent = split[2].trim();
+
+        String folderPath =
+          OperatingSystem.getFolderPath(bookName) + "head";
+        File dirCn = new File(folderPath);
+        if (!dirCn.exists() && dirCn.mkdirs()) {
+          log.info("Head音频目录创建成功: {}", dirCn.getAbsolutePath());
+        }
+
+        // 构建中文音频文件名
+        String cnFileName =
+          folderPath + File.separator + bookName + "_cn." + audioType;
+        // 构建英文音频文件名
+        String enFileName =
+          folderPath + File.separator + bookName + "_en." + audioType;
+
+        // 调用 content2Audio 生成中文和英文音频
+        if (CdFileUtil.isFileEmpty(cnFileName)) {
+          content2Audio(List.of(cnContent),
+            "zh-CN-XiaochenNeural",
+            "medium", "medium", "medium", cnFileName, audioType, "zh-cn");
+        } else {
+          log.warn("中文音频文件已存在，跳过生成: {}", cnFileName);
+        }
+
+        if (CdFileUtil.isFileEmpty(enFileName)) {
+          content2Audio(List.of(enContent), "en-US-JennyNeural",
+            "default", "default", "default", enFileName, audioType, "en-us");
+        } else {
+          log.warn("英文音频文件已存在，跳过生成: {}", enFileName);
+        }
+      }
+    }
+
+//    String fullFileName =
+//      folderName + subFolder + File.separator + fileName
+//        + ".txt";
+//    log.info("开始解析脚本文件: {}", fullFileName);
+//
+//    // 设置输出目录
+//    String outputDirCn =
+//      folderName + subFolder + File.separator
+//        + CdConstants.AUDIO_FOLDER + File.separator
+//        + CdConstants.LANG_CN; // 中文音频输出目录
+//    String outputDirEn =
+//      folderName + subFolder + File.separator
+//        + CdConstants.AUDIO_FOLDER + File.separator
+//        + CdConstants.LANG_EN; // 英文音频输出目录
+//    // 创建目录
+//    File dirCn = new File(outputDirCn);
+//    if (!dirCn.exists() && dirCn.mkdirs()) {
+//      log.info("中文音频目录创建成功: {}", dirCn.getAbsolutePath());
+//    }
+//    File dirEn = new File(outputDirEn);
+//    if (!dirEn.exists() && dirEn.mkdirs()) {
+//      log.info("英文音频目录创建成功: {}", dirEn.getAbsolutePath());
+//    }
+//
+//    // 解析文本文件
+//    List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFile(
+//      fullFileName);
+//    int number = 0;
+////     SceneMatcherUtil.addCommaBeforeSpace("testString");
+//    // 遍历句子列表，生成音频
+//    for (SentenceVO sentenceVO : sentenceVOs) {
+//      // 特殊处理，在 Scene XXX 后添加逗号和句号，以便在音频中停顿更明显
+//      sentenceVO.setChinese(
+//        SceneMatcherUtil.addCommaBeforeSpace(sentenceVO.getChinese()));
+//      sentenceVO.setEnglish(
+//        SceneMatcherUtil.addCommaBeforeSpace(sentenceVO.getEnglish()));
+//
+//      number++;
+//
+//    }
+  }
+
+  /**
+   * 将对话文本文件转换为音频文件（中英文）。
    *
    * @param folderName 文件所在文件夹路径
    * @param fileName   文件名（不包含扩展名）
@@ -312,7 +422,6 @@ public class GenDualAudioUtil {
         "medium", "medium", "medium", cnFile, audioType, "zh-cn");
     }
   }
-
 
   /**
    * 生成英文音频文件。
@@ -371,7 +480,6 @@ public class GenDualAudioUtil {
   public static void genDialog2Audio(String fileName, String audioType) {
     genDialog2Audio(CdConstants.RESOURCES_BASE_PATH, fileName, audioType);
   }
-
 
   /**
    * 记录重试日志。
