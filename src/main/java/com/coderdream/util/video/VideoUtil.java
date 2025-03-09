@@ -132,8 +132,6 @@ public class VideoUtil {
         videoFiles.addAll(videoCnFileNames);
         videoFiles.addAll(videoEnFileNames);
 
-
-
         // 查询视频的帧率并保存到文本文件
         queryAndSaveFps(videoFiles);
     }

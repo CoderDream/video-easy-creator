@@ -7,6 +7,7 @@ import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
+import com.coderdream.util.video.demo06.VideoEncoder;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -44,11 +45,12 @@ public class Mp4MergeUtil {
 
       // 获取文件夹中所有的MP4文件
       List<Path> mp4Files;
-      try (Stream<Path> pathStream = Files.walk(inputDir)) {  // 使用 try-with-resources
+      try (Stream<Path> pathStream = Files.walk(
+        inputDir)) {  // 使用 try-with-resources
         mp4Files = pathStream
-                .filter(file -> file.toString().endsWith(".mp4"))
-                .sorted(Comparator.comparing(Path::getFileName))
-                .collect(Collectors.toList());
+          .filter(file -> file.toString().endsWith(".mp4"))
+          .sorted(Comparator.comparing(Path::getFileName))
+          .collect(Collectors.toList());
       }
 
       log.info("找到{}个MP4文件进行合并", mp4Files.size());
@@ -252,17 +254,16 @@ public class Mp4MergeUtil {
     // 测试示例
 //    Path inputDir = Paths.get("D:/0000/EnBook002/Chapter015/video_cht");
     String destinationDirectory =
-            folderPath + File.separator + subFolder + File.separator + "video";
+      folderPath + File.separator + subFolder + File.separator + "video";
     int count = 1;
     String inputDirStr =
-            folderPath + subFolder + File.separator + "video_cht";
+      folderPath + subFolder + File.separator + "video_cht";
     Path inputDir = Paths.get(inputDirStr);
     String outputDirStr =
-            folderPath + subFolder + File.separator + "video_cht_"
-                    + count;
+      folderPath + subFolder + File.separator + "video_cht_"
+        + count;
     String destinationFileName =
-            destinationDirectory + File.separator + subFolder + ".mp4";
-
+      destinationDirectory + File.separator + subFolder + ".mp4";
 
     // 确保输出目录存在
     File dir = new File(outputDirStr);
@@ -353,14 +354,17 @@ public class Mp4MergeUtil {
           log.info("临时文件夹删除失败: {}", outputDirStr2);
         }
       }
-      return;
     }
-  }
 
-  public static void main(String[] args) {
-    String bookName = "EnBook002";
-    String folderPath = OperatingSystem.getBaseFolder() + bookName;
-    String subFolder = "Chapter011";
-    Mp4MergeUtil.processMerge(folderPath, subFolder);
+    // 重编码视频文件，用于B站发布
+    String outputFilePath = CdFileUtil.addPostfixToFileName(destinationFileName,
+      "_new");
+    if (CdFileUtil.isFileEmpty(outputFilePath) && !CdFileUtil.isFileEmpty(
+      destinationFileName)) {
+      String encodedVideo = VideoEncoder.encodeVideo(destinationFileName,
+        outputFilePath);
+      log.info("视频编码完成: {}", encodedVideo);
+    }
+
   }
 }

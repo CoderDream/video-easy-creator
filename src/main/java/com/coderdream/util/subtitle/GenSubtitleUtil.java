@@ -112,9 +112,11 @@ public class GenSubtitleUtil {
 
   public static void processSrtAndGenDescription(String filePath) {
     // 生成英文SRT文件
-    String srcFileNameEn = CdFileUtil.changeExtension(filePath, "srt");
-    srcFileNameEn = CdFileUtil.addPostfixToFileName(srcFileNameEn,
+    String srcFileName = CdFileUtil.changeExtension(filePath, "srt");
+    String srcFileNameEn = CdFileUtil.addPostfixToFileName(srcFileName,
       "." + CdConstants.SUBTITLE_EN);
+
+    // 如果 XXX.en.srt 不存在， 生成英文SRT文件
 
     // 过滤内容文件
     GenSubtitleUtil.filterContentFile(srcFileNameEn, srcFileNameEn);
@@ -193,7 +195,6 @@ public class GenSubtitleUtil {
     }
 
     // 看看翻译质量 TODO
-
 
     // 生成Markdown文件
     String mdFileName = Objects.requireNonNull(
