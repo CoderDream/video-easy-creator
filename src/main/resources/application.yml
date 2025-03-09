@@ -21,7 +21,7 @@ spring:
         enabled: true
         # 使用的模型名称
         model:
-          deepseek-coder-v2:latest #llama3.2:8b
+          SiliconBasedWorld/Qwen2.5-7B-Instruct-1M:latest #llama3.2:8b
         options:
           temperature: 0.7
 

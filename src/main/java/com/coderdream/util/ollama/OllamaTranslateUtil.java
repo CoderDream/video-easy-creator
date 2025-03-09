@@ -14,7 +14,11 @@ import java.util.concurrent.*;
 @Slf4j
 public class OllamaTranslateUtil {
 
-  private static final String TRANSLATE_PROMPT = "你是一个精通中文和英文的翻译大师。如果我给你英文就翻译成中文，给你中文就翻译成英文。";
+//  private static final String TRANSLATE_PROMPT = "你是一个精通中文和英文的翻译大师。如果我给你英文就翻译成中文，给你中文就翻译成英文。";
+
+  //"what the fucking fuck"翻译为中文，只给我文本的翻译，别添加其他的内容，因为我要做字幕，谢谢
+
+  private static final String TRANSLATE_PROMPT = "将英文翻译为中文，只给我文本的翻译，别添加其他的内容，因为我要做字幕，谢谢。";
 
   /**
    * 辅助类，用于记录字幕的序号、原文和翻译状态

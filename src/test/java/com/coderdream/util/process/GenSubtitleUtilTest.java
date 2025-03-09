@@ -98,7 +98,7 @@ class GenSubtitleUtilTest {
   @Test
   void processSrtAndGenDescription_0701() {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
-    String folderName = "20250228"; // D:\0000\0007_Trump\20250227
+    String folderName = "20250307"; // D:\0000\0007_Trump\20250227
     String mp4FilePath =
       OperatingSystem.getBaseFolder() + "0007_Trump" + File.separator
         + folderName + File.separator + folderName

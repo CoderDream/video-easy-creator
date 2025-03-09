@@ -1,7 +1,7 @@
-package com.coderdream.util;
+package com.coderdream.util.cd;
 
 import com.coderdream.entity.VocInfo;
-import com.coderdream.util.cd.CdVocInfoUtil;
+import com.coderdream.util.CommonUtil;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

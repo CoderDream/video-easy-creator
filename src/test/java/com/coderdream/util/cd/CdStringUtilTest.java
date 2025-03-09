@@ -26,4 +26,26 @@ class CdStringUtilTest {
     log.info("findFirstChineseCharIndex firstIndex: {}", firstIndex);
     log.info("findFirstChineseCharIndex firstIndex: {}", str.substring(firstIndex));
   }
+
+  @Test
+  void replaceImagesLinks() {
+    String originalString = "![luoxiang](/images/Image00002.jpg)";
+    String result =
+      CdStringUtil.replaceImagesLinks(originalString);
+    log.info("result: {}", result);
+  }
+
+  // replaceImagesFirstLinks
+
+  @Test
+  void replaceImagesFirstLinks() {
+    String originalString = "![luoxiang](/images/Image00002.jpg)";
+    String result =
+      CdStringUtil.replaceImagesFirstLinks(originalString);
+    log.info("replaceImagesFirstLinks result: {}", result);
+  }
+
+  @Test
+  void leftImagesLinks() {
+  }
 }

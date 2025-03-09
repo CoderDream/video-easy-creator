@@ -1,14 +1,12 @@
-package com.coderdream.util.video.demo04;
+package com.coderdream.util.video;
 
-import com.coderdream.util.process.GenVideoUtil;
 import com.coderdream.util.proxy.OperatingSystem;
+import com.coderdream.util.video.demo04.Mp4MergeUtil;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class Mp4MergeUtilTest {
 

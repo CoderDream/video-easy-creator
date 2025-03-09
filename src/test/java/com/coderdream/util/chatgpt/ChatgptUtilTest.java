@@ -1,4 +1,4 @@
-package com.coderdream.util;
+package com.coderdream.util.chatgpt;
 
 import static org.junit.jupiter.api.Assertions.*;
 

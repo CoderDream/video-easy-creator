@@ -1,11 +1,9 @@
-package com.coderdream.util;
+package com.coderdream.util.cd;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.coderdream.entity.DictionaryEntity;
 import com.coderdream.entity.WordDetail;
-import com.coderdream.util.cd.CdConstants;
-import com.coderdream.util.cd.CdDictionaryUtil;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

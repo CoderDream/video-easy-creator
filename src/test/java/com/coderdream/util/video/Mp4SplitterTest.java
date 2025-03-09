@@ -1,8 +1,7 @@
-package com.coderdream.util.video.demo03;
+package com.coderdream.util.video;
 
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.proxy.OperatingSystem;
-import com.coderdream.util.video.Mp4Splitter;
 import java.io.File;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -39,6 +38,38 @@ class Mp4SplitterTest {
       log.error("视频分割失败!");
     }
   }
+
+
+  @Test
+  void splitVideo0007_Trump() {
+// D:\0000\0007_Trump\20250307
+    String folderName = "20250307";
+    String folderPath =
+      OperatingSystem.getBaseFolder() + "0007_Trump" + File.separator
+        + folderName + File.separator;
+    String inputFilePath = folderPath + folderName + ".mp4";
+
+    // 示例用法
+//    String inputFilePath = "D:\\0000\\0003_PressBriefings\\250128\\250128.mp4";
+    String timeStr = "00:00:10,000 --> 00:33:51,000";// 00:00:45,560 --> 00:00:49,960
+
+//        00:00:10,000 --> 00:00:53,640
+    String[] times = timeStr.split(" --> ");
+    String startTime = times[0];//"00:00:03,400";
+    String endTime = times[1];//"00:00:13,680";
+    String outputFilePath = CdFileUtil.addPostfixToFileName(inputFilePath,
+      "_part");
+
+    String splitFile = Mp4Splitter.splitVideo(inputFilePath, startTime,
+      endTime, outputFilePath);
+
+    if (splitFile != null) {
+      log.info("视频分割成功，文件保存在: {}", splitFile);
+    } else {
+      log.error("视频分割失败!");
+    }
+  }
+
 
 
   @Test
