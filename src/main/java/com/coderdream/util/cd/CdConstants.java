@@ -121,8 +121,7 @@ public class CdConstants {
    */
   public static String SPEECH_KEY_EAST_US = System.getenv("SPEECH_KEY_EAST_US");
 
-  public static String SPEECH_KEY_EASTASIA = System.getenv(
-    "SPEECH_KEY_EASTASIA");
+  public static String SPEECH_KEY_EASTASIA = "5DMz134hNCG84o9RED7eRzNnKrxJQjeITI3qqg90FGf1BucMpvQPJQQJ99BCAC3pKaRXJ3w3AAAYACOGBL1z";//System.getenv(    "SPEECH_KEY_EASTASIA");
 
   /**
    * 东亚 eastasia

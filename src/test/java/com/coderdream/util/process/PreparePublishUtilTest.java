@@ -70,17 +70,17 @@ class PreparePublishUtilTest {
   @Test
   void process000601() {
     String bookFolderName = "EnBook001";
-    String folderPath =
-            OperatingSystem.getBaseFolder() + bookFolderName + File.separator;
+//    String folderPath =
+//            OperatingSystem.getBaseFolder() + bookFolderName + File.separator;
     List<String> subFolders = new ArrayList<>();
     int end = 21;
-    for (int i = 14; i < end; i++) {
+    for (int i = 19; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
-      subFolders.add("ch" + dayNumberString);
+      subFolders.add("Chapter" + dayNumberString);
     }
 
     for (String subFolder : subFolders) {
-      PreparePublishUtil.process(folderPath, subFolder);
+      PreparePublishUtil.process(bookFolderName, subFolder);
     }
   }
 
@@ -101,7 +101,7 @@ class PreparePublishUtilTest {
     String bookFolderName = "EnBook005";
 
     List<String> subFolders = new ArrayList<>();
-    int end = 2; // 51章
+    int end = 101; // 51章
     for (int i = 1; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);

@@ -89,6 +89,14 @@ class GenVideoUtilTest {
 //  }
 
   @Test
+  void genHeadVideo_EnBook001_01() {
+    String bookName = "EnBook001";
+    GenVideoUtil.genHeadVideo(bookName);
+    // assert that the process completes without any error
+    assertTrue(true);
+  }
+
+  @Test
   void genHeadVideo_EnBook005_01() {
     String bookName = "EnBook005";
     GenVideoUtil.genHeadVideo(bookName);
@@ -130,6 +138,22 @@ class GenVideoUtilTest {
 //      chapterName);
   }
 
+  @Test
+  void processBatch01()  {
+    String bookName = "EnBook001";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 21; // 假定你想要处理的章节数 51
+    for (int i = 19; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenVideoUtil.processV4(folderPath, subFolder);
+    }
+  }
 
   @Test
   void processBatch02()  {
@@ -194,6 +218,23 @@ class GenVideoUtilTest {
   }
 
   @Test
+  void processBatch_Merge_EnBook00101()  {
+    String bookName = "EnBook001";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 21; // 假定你想要处理的章节数
+    for (int i = 19; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      Mp4MergeUtil.processMerge(folderPath, subFolder);
+    }
+  }
+
+  @Test
   void processBatch_Merge_0201()  {
     String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
@@ -234,8 +275,8 @@ class GenVideoUtilTest {
     String folderPath = OperatingSystem.getFolderPath(bookName);
 
     List<String> subFolders = new ArrayList<>();
-    int end = 2; // 假定总共50章 51
-    for (int i = 1; i < end; i++) {
+    int end = 101; // 假定总共50章 51
+    for (int i = 3; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);
     }
