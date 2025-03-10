@@ -277,31 +277,35 @@ public class Mp4MergeUtil {
     if (files.size() <= 1) {
       return;
     } else {
-      mergeMp4Files(folderPath, subFolder, inputDir, outputDir);
-    }
-    files = FileUtil.loopFiles(outputDir,
-      file -> !file.isDirectory());
-    while (files.size() > 1) {
-      inputDirStr =
-        folderPath + File.separator + subFolder + File.separator + "video_cht_"
-          + count;
-      inputDir = Paths.get(inputDirStr);
-      outputDirStr =
-        folderPath + File.separator + subFolder + File.separator + "video_cht_"
-          + (count + 1);
-      // 确保输出目录存在
-      dir = new File(outputDirStr);
-      if (!dir.exists() && dir.mkdirs()) {
-        log.info("目录创建成功: {}", dir.getAbsolutePath());
+      // 如果video文件夹下的ChapterXXX.mp4已经存在，则不再处理
+      if(CdFileUtil.isFileEmpty(destinationFileName)) {
+        mergeMp4Files(folderPath, subFolder, inputDir, outputDir);
+
+        files = FileUtil.loopFiles(outputDir,
+                file -> !file.isDirectory());
+        while (files.size() > 1) {
+          inputDirStr =
+                  folderPath + File.separator + subFolder + File.separator + "video_cht_"
+                          + count;
+          inputDir = Paths.get(inputDirStr);
+          outputDirStr =
+                  folderPath + File.separator + subFolder + File.separator + "video_cht_"
+                          + (count + 1);
+          // 确保输出目录存在
+          dir = new File(outputDirStr);
+          if (!dir.exists() && dir.mkdirs()) {
+            log.info("目录创建成功: {}", dir.getAbsolutePath());
+          }
+          outputDir = Paths.get(outputDirStr);
+
+          mergeMp4Files(folderPath, subFolder, inputDir, outputDir);
+
+          // 获取文件夹中的所有文件（不包括子文件夹中的文件）
+          files = FileUtil.loopFiles(outputDir, file -> !file.isDirectory());
+
+          count++;
+        }
       }
-      outputDir = Paths.get(outputDirStr);
-
-      mergeMp4Files(folderPath, subFolder, inputDir, outputDir);
-
-      // 获取文件夹中的所有文件（不包括子文件夹中的文件）
-      files = FileUtil.loopFiles(outputDir, file -> !file.isDirectory());
-
-      count++;
     }
 
     // 拷贝 outputDir 到最终的文件夹中

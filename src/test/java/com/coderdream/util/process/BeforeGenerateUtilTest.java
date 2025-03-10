@@ -294,14 +294,34 @@ class BeforeGenerateUtilTest {
     String bookName = "EnBook005";
     String folderPath = OperatingSystem.getFolderPath(bookName);
     List<String> subFolders = new ArrayList<>();
-    int end = 2;// 101;
-    for (int i = 1; i < end; i++) {
+    int end = 101;// 101;
+    for (int i = 3; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);
     }
 
     for (String subFolder : subFolders) {
       BeforeGenerateUtil.process(folderPath, subFolder);
+    }
+
+    assertTrue(true);
+    System.out.println("done");
+  }
+
+  //
+  @Test
+  void deleteFolder_Book00502() {
+    String bookName = "EnBook005";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    List<String> subFolders = new ArrayList<>();
+    int end = 101;// 101;
+    for (int i = 3; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+     // BeforeGenerateUtil.deleteFolder(folderPath, subFolder);
     }
 
     assertTrue(true);
