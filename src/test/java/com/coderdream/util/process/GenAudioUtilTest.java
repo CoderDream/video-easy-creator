@@ -70,6 +70,25 @@ class GenAudioUtilTest {
   }
 
   @Test
+  void processBatchEnBook_0004() {
+    String bookName = "EnBook004";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 101; // 假定总共101章 51
+
+
+    for (int i = 1; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenAudioUtil.process(folderPath, subFolder);
+    }
+  }
+
+  @Test
   void processBatchEnBook_0005() {
     String bookName = "EnBook005";
     String folderPath = OperatingSystem.getFolderPath(bookName);

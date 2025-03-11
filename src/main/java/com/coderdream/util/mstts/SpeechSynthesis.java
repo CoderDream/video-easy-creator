@@ -9,8 +9,8 @@ import java.util.concurrent.ExecutionException;
 
 public class SpeechSynthesis {
     // This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
-    private static String speechKey =  CdConstants.SPEECH_KEY_EAST_US;// System.getenv("SPEECH_KEY");
-    private static String speechRegion =  "eastus2" ;// "eastasia";// System.getenv("SPEECH_REGION");
+    private static String speechKey = "50vWNO4RVL41CEjbkm4aT5c8VPBjO1XNQOMWEYgX3IrrKQn37XTTJQQJ99BCACYeBjFXJ3w3AAAYACOGjmML";//  CdConstants.SPEECH_KEY_EAST_US;// System.getenv("SPEECH_KEY");
+    private static String speechRegion =  "eastus" ;// "eastasia";// System.getenv("SPEECH_REGION");
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey, speechRegion);
@@ -18,7 +18,7 @@ public class SpeechSynthesis {
         speechConfig.setSpeechSynthesisVoiceName("en-US-AvaMultilingualNeural"); // zh-CN-XiaochenNeural
 
 //        speechConfig.setSpeechSynthesisVoiceName("zh-CN-XiaochenNeural"); //
-
+//        50vWNO4RVL41CEjbkm4aT5c8VPBjO1XNQOMWEYgX3IrrKQn37XTTJQQJ99BCACYeBjFXJ3w3AAAYACOGjmML
         SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer(speechConfig);
 
         // Get text from the console and synthesize to the default speaker.

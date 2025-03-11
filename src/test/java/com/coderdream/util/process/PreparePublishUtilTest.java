@@ -115,6 +115,24 @@ class PreparePublishUtilTest {
   }
 
   @Test
+  void process000402() {
+    String bookFolderName = "EnBook004";
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 101; // 51章
+    for (int i = 1; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    String chapterName = "book04_name.txt";
+    String headContentFileName = "head_content.txt";
+    for (String subFolder : subFolders) {
+      PreparePublishUtil.process(bookFolderName, subFolder, chapterName, headContentFileName);
+    }
+  }
+
+  @Test
   void process000502() {
     String bookFolderName = "EnBook005";
 
