@@ -15,184 +15,194 @@ import static com.coderdream.util.cd.CdConstants.OS_WINDOWS;
 public class OperatingSystem {
 
 
-    public static String getOS() {
-        String osName = System.getProperty("os.name").toLowerCase();
+  public static String getOS() {
+    String osName = System.getProperty("os.name").toLowerCase();
 
-        if (osName.contains(KEYWORD_WINDOWS)) {
-            return OS_WINDOWS;
-        } else if (osName.contains(KEYWORD_MAC1) || osName.contains(KEYWORD_MAC2)) {
-            return OS_MAC;
-        } else if (osName.contains(KEYWORD_LINUX1) || osName.contains(KEYWORD_LINUX2)) {
-            return OS_LINUX;
-        } else {
-            return OS_UNKNOWN;
-        }
+    if (osName.contains(KEYWORD_WINDOWS)) {
+      return OS_WINDOWS;
+    } else if (osName.contains(KEYWORD_MAC1) || osName.contains(KEYWORD_MAC2)) {
+      return OS_MAC;
+    } else if (osName.contains(KEYWORD_LINUX1) || osName.contains(
+      KEYWORD_LINUX2)) {
+      return OS_LINUX;
+    } else {
+      return OS_UNKNOWN;
     }
+  }
 
-    public static String getSixMinutesBaseFolder() {
+  public static String getSixMinutesBaseFolder() {
 //        Integer proxyPort = null;
-        String osType = OperatingSystem.getOS();
+    String osType = OperatingSystem.getOS();
 //        System.out.println("操作系统类型: " + osType);
 
-        String folderPath = "";
-        switch (osType) {
-            case OS_WINDOWS -> folderPath = "D:\\14_LearnEnglish\\6MinuteEnglish" + File.separator; // "D:\\14_LearnEnglish\\6MinuteEnglish\\";
-            case OS_MAC -> folderPath = "/Volumes/System/0001" + File.separator;
-            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-            default -> System.out.println("无法识别的操作系统。");
-        }
-        return folderPath;
+    String folderPath = "";
+    switch (osType) {
+      case OS_WINDOWS -> folderPath = "D:\\14_LearnEnglish\\6MinuteEnglish"
+        + File.separator; // "D:\\14_LearnEnglish\\6MinuteEnglish\\";
+      case OS_MAC -> folderPath = "/Volumes/System/0001" + File.separator;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
     }
+    return folderPath;
+  }
 
 
-    /**
-     * @return
-     */
-    public static Integer getProxyPort() {
-        Integer proxyPort = null;
-        String osType = OperatingSystem.getOS();
+  /**
+   * @return
+   */
+  public static Integer getProxyPort() {
+    Integer proxyPort = null;
+    String osType = OperatingSystem.getOS();
 //        System.out.println("操作系统类型: " + osType);
 
-        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
-        switch (osType) {
-            case OS_WINDOWS -> proxyPort = 7890;
-            case OS_MAC -> proxyPort = 1087;
-            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-            default -> System.out.println("无法识别的操作系统。");
-        }
-        return proxyPort;
+    // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+    switch (osType) {
+      case OS_WINDOWS -> proxyPort = 7890;
+      case OS_MAC -> proxyPort = 1087;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
     }
+    return proxyPort;
+  }
 
-    /**
-     * @return
-     */
-    public static String getFolderPath(String bookName) {
-        String osType = OperatingSystem.getOS();
+  /**
+   * @return
+   */
+  public static String getFolderPath(String bookName) {
+    String osType = OperatingSystem.getOS();
 //        System.out.println("操作系统类型: " + osType);
 
-        String folderPath = "";
-        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
-        switch (osType) {
-            case OS_WINDOWS -> folderPath = "D:\\0000\\" + bookName + "\\";
-            case OS_MAC -> folderPath = "/Volumes/System/0000/" + bookName + File.separator;
-            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-            default -> System.out.println("无法识别的操作系统。");
-        }
-        return folderPath;
+    String folderPath = "";
+    // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+    switch (osType) {
+      case OS_WINDOWS -> folderPath =
+        "D:" + File.separator + "0000" + File.separator + bookName
+          + File.separator;
+      case OS_MAC -> folderPath =
+        File.separator + "Volumes" + File.separator + "System" + File.separator
+          + "0000" + File.separator + bookName + File.separator;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
     }
+    return folderPath;
+  }
 
-    public static String getBaseGitHubFolder() {
-        String osType = OperatingSystem.getOS();
+  public static String getBaseGitHubFolder() {
+    String osType = OperatingSystem.getOS();
 //        System.out.println("操作系统类型: " + osType);
 
-        String folderPath = "";
-        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
-        switch (osType) {
-            case OS_WINDOWS -> folderPath = "D:" + File.separator;
-            case OS_MAC -> folderPath = "/Volumes/System" + File.separator;
-            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-            default -> System.out.println("无法识别的操作系统。");
-        }
-        return folderPath;
+    String folderPath = "";
+    // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+    switch (osType) {
+      case OS_WINDOWS -> folderPath = "D:" + File.separator;
+      case OS_MAC -> folderPath = "/Volumes/System" + File.separator;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
     }
+    return folderPath;
+  }
 
-    /**
-     * 获取Hexo项目地址
-     * @return
-     */
-    public static String getHexoFolder() {
-        String osType = OperatingSystem.getOS();
+  /**
+   * 获取Hexo项目地址
+   *
+   * @return
+   */
+  public static String getHexoFolder() {
+    String osType = OperatingSystem.getOS();
 //        System.out.println("操作系统类型: " + osType);
 
-        String folderPath = ""; // "04_GitHub/hexo-project/Hexo-BlueLake-Blog/
-        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
-        switch (osType) {
-            case OS_WINDOWS -> folderPath = "D:\\04_GitHub\\hexo-project\\Hexo-BlueLake-Blog\\";
-            case OS_MAC -> folderPath = "/Volumes/System/04_GitHub/Hexo-BlueLake-Blog/";
-            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-            default -> System.out.println("无法识别的操作系统。");
-        }
-        return folderPath;
+    String folderPath = ""; // "04_GitHub/hexo-project/Hexo-BlueLake-Blog/
+    // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+    switch (osType) {
+      case OS_WINDOWS -> folderPath =
+        "D:\\04_GitHub\\hexo-project\\Hexo-BlueLake-Blog" + File.separator;
+      case OS_MAC -> folderPath =
+        "/Volumes/System/04_GitHub/Hexo-BlueLake-Blog" + File.separator;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
     }
+    return folderPath;
+  }
 
-    public static String getBaseFolder() {
-        String osType = OperatingSystem.getOS();
+  public static String getBaseFolder() {
+    String osType = OperatingSystem.getOS();
 //        System.out.println("操作系统类型: " + osType);
 
-        String folderPath = "";
-        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
-        switch (osType) {
-            case OS_WINDOWS -> folderPath = "D:\\0000" + File.separator;
-            case OS_MAC -> folderPath = "/Volumes/System/0000" + File.separator;
-            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-            default -> System.out.println("无法识别的操作系统。");
-        }
-        return folderPath;
+    String folderPath = "";
+    // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+    switch (osType) {
+      case OS_WINDOWS -> folderPath = "D:\\0000" + File.separator;
+      case OS_MAC -> folderPath = "/Volumes/System/0000" + File.separator;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
     }
+    return folderPath;
+  }
 
-    public static String getVideoBaseFolder() {
+  public static String getVideoBaseFolder() {
 //        Integer proxyPort = null;
-        String osType = OperatingSystem.getOS();
+    String osType = OperatingSystem.getOS();
 //        System.out.println("操作系统类型: " + osType);
 
-        String folderPath = "";
-        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
-        switch (osType) {
-            case OS_WINDOWS -> folderPath = "D:\\0000\\video" + File.separator;
-            case OS_MAC -> folderPath = "/Users/coderdream/Documents" + File.separator;
-            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-            default -> System.out.println("无法识别的操作系统。");
-        }
-        return folderPath;
+    String folderPath = "";
+    // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+    switch (osType) {
+      case OS_WINDOWS -> folderPath = "D:\\0000\\video" + File.separator;
+      case OS_MAC ->
+        folderPath = "/Users/coderdream/Documents" + File.separator;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
     }
+    return folderPath;
+  }
 
+  // "D:\\0000\\bgmusic\\page.wav";
 
-
-    // "D:\\0000\\bgmusic\\page.wav";
-
-    public static String getBaseFolderWav(String waveName) {
+  public static String getBaseFolderWav(String waveName) {
 //        Integer proxyPort = null;
-        String osType = OperatingSystem.getOS();
+    String osType = OperatingSystem.getOS();
 //        System.out.println("操作系统类型: " + osType);
 
-        String wavePath = "";
-        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
-        switch (osType) {
-            case OS_WINDOWS -> wavePath = "D:\\0000\\bgmusic" + File.separator + waveName;
-            case OS_MAC -> wavePath = "/Volumes/System/0000/bgmusic" + File.separator + waveName;
-            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-            default -> System.out.println("无法识别的操作系统。");
-        }
-        return wavePath;
+    String wavePath = "";
+    // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+    switch (osType) {
+      case OS_WINDOWS ->
+        wavePath = "D:\\0000\\bgmusic" + File.separator + waveName;
+      case OS_MAC ->
+        wavePath = "/Volumes/System/0000/bgmusic" + File.separator + waveName;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
     }
+    return wavePath;
+  }
 
-    public static String getPythonEnv() {
+  public static String getPythonEnv() {
 //        Integer proxyPort = null;
-        String osType = OperatingSystem.getOS();
-        System.out.println("操作系统类型: " + osType);
+    String osType = OperatingSystem.getOS();
+    System.out.println("操作系统类型: " + osType);
 
-        String python = "python";
-        // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
-        switch (osType) {
-            case OS_WINDOWS -> python = "python";
-            case OS_MAC -> python = "python3" ;
-            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-            default -> System.out.println("无法识别的操作系统。");
-        }
-        return python;
+    String python = "python";
+    // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+    switch (osType) {
+      case OS_WINDOWS -> python = "python";
+      case OS_MAC -> python = "python3";
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
     }
+    return python;
+  }
 
 
-    public static void main(String[] args) {
-        String osType = OperatingSystem.getOS();
-        System.out.println("操作系统类型: " + osType);
+  public static void main(String[] args) {
+    String osType = OperatingSystem.getOS();
+    System.out.println("操作系统类型: " + osType);
 
-        // 可以根据操作系统类型执行不同的逻辑
-        switch (osType) {
-            case OS_WINDOWS -> System.out.println("执行 Windows 相关的操作...");
-            case OS_MAC -> System.out.println("执行 Mac 相关的操作...");
-            case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
-            default -> System.out.println("无法识别的操作系统。");
-        }
+    // 可以根据操作系统类型执行不同的逻辑
+    switch (osType) {
+      case OS_WINDOWS -> System.out.println("执行 Windows 相关的操作...");
+      case OS_MAC -> System.out.println("执行 Mac 相关的操作...");
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
     }
+  }
 }

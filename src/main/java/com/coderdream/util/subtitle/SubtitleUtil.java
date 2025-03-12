@@ -12,6 +12,7 @@ import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.util.cmd.CommandUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.sentence.SentenceParser;
+import com.coderdream.util.sentence.StanfordSentenceSplitter;
 import com.coderdream.util.string.StringChecker;
 import com.coderdream.util.video.BatchCreateVideoCommonUtil;
 import com.coderdream.vo.SentenceDurationVO;
@@ -19,13 +20,16 @@ import com.coderdream.vo.SentenceVO;
 
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -293,6 +297,81 @@ public class SubtitleUtil {
       srtFileName, lang);
   }
 
+  /**
+   * @param fileName 英文字幕文件路径，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+   *                 生成文本文件，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+   */
+  public static String transferSubtitleToSentenceTextFile(String fileName) {
+    String textFileName = CdFileUtil.changeExtension(fileName, "txt");
+    List<SubtitleEntity> sentenceVOList = CdFileUtil.readSrcFileContent(
+      fileName);
+    StringBuilder text = new StringBuilder();
+    for (SubtitleEntity sentenceVO : sentenceVOList) {
+//      log.info("SubtitleEntity:{}", sentenceVO);
+      text.append(sentenceVO.getSubtitle().trim()).append(" ");
+    }
+
+    List<String> sentenceList = StanfordSentenceSplitter.splitSentences(
+      text.toString());
+    List<String> pureSentenceList = new ArrayList<>();
+    for (String sentence : sentenceList) {
+      String pureSentence = filterContent(sentence);
+      if(pureSentence.length() > 150){
+        log.info("sentence length:{},  {}", pureSentence.length(), pureSentence);
+      }
+      pureSentenceList.add(pureSentence);
+    }
+    CdFileUtil.writeToFile(textFileName, pureSentenceList);
+//    if (CdFileUtil.isFileEmpty(textFileName)) {
+//      CdFileUtil.writeToFile(textFileName, pureSentenceList);
+//    } else {
+//      log.info("文件已存在，不重复生成:{}", textFileName);
+//    }
+    return textFileName;
+  }
+
+  /**
+   * @param sentence 英文字幕文件路径，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+   *                 生成文本文件，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+   */
+  public static String filterContent(String sentence) {
+    List<String> filteredContent = Arrays.asList("(Applause.)", "(Laughter.)");
+
+    StringBuilder sb = new StringBuilder(sentence);
+
+    for (String filter : filteredContent) {
+      int index = sb.indexOf(filter);
+      while (index != -1) {
+        sb.delete(index, index + filter.length());
+        index = sb.indexOf(filter);  // 继续查找下一个匹配项
+      }
+    }
+
+    return sb.toString().trim();
+  }
+
+  /**
+   * @param sentence 英文字幕文件路径，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+   *                 生成文本文件，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+   */
+  public static String filterContentWithRegex(String sentence) {
+    List<String> filteredContent = Arrays.asList("(Applause.)", "(Laughter.)");
+
+    // 使用正则表达式，将所有要过滤的字符串用 | 连接起来
+    String regex = String.join("|", filteredContent);
+
+    // 使用 replaceAll 替换所有匹配的字符串为空字符串
+    String result = sentence.replaceAll(Pattern.quote(regex), "");
+
+    return result.trim();
+  }
+
+  /**
+   * @param audioFileName
+   * @param subtitleFileName
+   * @param srtFileName
+   * @param lang
+   */
   public static void genSrtByExecuteCommand(String audioFileName,
     String subtitleFileName, String srtFileName, String lang) {
     String python = OperatingSystem.getPythonEnv();

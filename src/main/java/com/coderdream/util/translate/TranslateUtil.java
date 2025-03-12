@@ -53,7 +53,7 @@ public class TranslateUtil {
 
   /**
    * @param str 输入字符串
-   * @return  去除英文括号内内容，例如：大括号外面的内容（Michael Collins）的内容（Michael Collins）
+   * @return 去除英文括号内内容，例如：大括号外面的内容（Michael Collins）的内容（Michael Collins）
    */
   @NotNull
   private static String removeEnContent(String str) {
@@ -806,55 +806,26 @@ public class TranslateUtil {
   }
 
   public static void translateSrcWithPlatform(String srcFileNameEng,
-                                              String srcFileNameZhCn, String srcFileNameZhTw, String platformName, Integer subListSize) {
+    String srcFileNameZhCn, String srcFileNameZhTw, String platformName,
+    Integer subListSize) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
-    List<SubtitleEntity> responseList = new ArrayList<>();
+    List<SubtitleEntity> subtitleEntityList = new ArrayList<>();
     List<SubtitleEntity> enSubtitleEntityList = CdFileUtil.readSrcFileContent(
-            srcFileNameEng);
+      srcFileNameEng);
 
     List<String> subtitleList = enSubtitleEntityList.stream()
-            .map(SubtitleEntity::getSubtitle)
-            .toList();
-    List<List<String>> stringListEnGroup = ListUtil.split(subtitleList, subListSize);
-    int count = 0;
-    for (List<String> stringListEn : stringListEnGroup) {
-      count++;
-      String number = String.format("%03d", count);
-      List<SubtitleEntity> responseListTemp;
-      String fileName = CdFileUtil.addPostfixToFileName(srcFileNameZhCn,
-              "_" + platformName + "_" + number);
-      if (!CdFileUtil.isFileEmpty(fileName)) {
-        responseListTemp = CdFileUtil.genSubtitleEntityList(
-                CdFileUtil.readFileContent(fileName), platformName);
-      } else {
-        responseListTemp = retryGetResponseList(stringListEn,
-                platformName);
-      }
-      if (CollectionUtil.isEmpty(responseListTemp)
-              || responseListTemp.size() != stringListEn.size()) {
-        log.error(
-                "返回数组大小: {} != 返回数组大小: {}",
-                responseListTemp.size(), stringListEn.size());
-      } else {
-        log.info("请求正常，返回数组大小: {}",
-                responseListTemp.size());
-        List<String> tempList = new ArrayList<>();
-        for (SubtitleEntity subtitleEntity : responseListTemp) {
-          tempList.add(subtitleEntity.getSubtitle());
-          tempList.add(subtitleEntity.getSecondSubtitle());
-        }
-        CdFileUtil.writeToFile(fileName, tempList);
-        responseList.addAll(responseListTemp);
-      }
-    }
+      .map(SubtitleEntity::getSubtitle)
+      .toList();
+    subtitleEntityList = writeTempSrtFiles(srcFileNameZhCn, platformName,
+      subListSize, subtitleList);
 
     SubtitleEntity enSubtitleEntity;
     List<String> zhCnSrtStringList = new ArrayList<>();
     List<String> zhTwSrtStringList = new ArrayList<>();
-    if (CollectionUtil.isNotEmpty(responseList)
-            && responseList.size() == enSubtitleEntityList.size()) {
+    if (CollectionUtil.isNotEmpty(subtitleEntityList)
+      && subtitleEntityList.size() == enSubtitleEntityList.size()) {
       log.info("相等 size: {}",
-              responseList.size());
+        subtitleEntityList.size());
       for (int i = 0; i < enSubtitleEntityList.size(); i++) {
         enSubtitleEntity = enSubtitleEntityList.get(i);
         zhCnSrtStringList.add(enSubtitleEntity.getSubIndex() + "");
@@ -863,14 +834,16 @@ public class TranslateUtil {
         zhTwSrtStringList.add(enSubtitleEntity.getTimeStr());
         switch (platformName) {
           case CdConstants.TRANSLATE_PLATFORM_GEMINI:
-            zhCnSrtStringList.add(responseList.get(i).getSecondSubtitle());
+            zhCnSrtStringList.add(
+              subtitleEntityList.get(i).getSecondSubtitle());
             zhTwSrtStringList.add(ZhConverterUtil.toTraditional(
-                    responseList.get(i).getSecondSubtitle()));
+              subtitleEntityList.get(i).getSecondSubtitle()));
             break;
           case CdConstants.TRANSLATE_PLATFORM_MSTTS:
-            zhCnSrtStringList.add(responseList.get(i).getSubtitle());
+            zhCnSrtStringList.add(subtitleEntityList.get(i).getSubtitle());
             zhTwSrtStringList.add(
-                    ZhConverterUtil.toTraditional(responseList.get(i).getSubtitle()));
+              ZhConverterUtil.toTraditional(
+                subtitleEntityList.get(i).getSubtitle()));
             break;
           default:
             log.error("平台名称不正确: {}", platformName);
@@ -881,7 +854,7 @@ public class TranslateUtil {
       }
     } else {
       log.error("返回结果: {}, 期待结果: {}",
-              responseList.size(), enSubtitleEntityList.size());
+        subtitleEntityList.size(), enSubtitleEntityList.size());
     }
 
     if (CollectionUtil.isNotEmpty(zhCnSrtStringList)) {
@@ -890,10 +863,50 @@ public class TranslateUtil {
       CdFileUtil.writeToFile(srcFileNameZhTw, zhTwSrtStringList);
       long elapsedTime = System.currentTimeMillis() - startTime; // 计算耗时
       log.info("写入完成，文件路径: {}，共计耗时：{}", srcFileNameZhCn,
-              CdTimeUtil.formatDuration(elapsedTime));
+        CdTimeUtil.formatDuration(elapsedTime));
     } else {
       log.info("newList is empty!");
     }
+  }
+
+  public static List<SubtitleEntity> writeTempSrtFiles(String srcFileNameZhCn,
+    String platformName, Integer subListSize, List<String> subtitleList) {
+    List<SubtitleEntity> subtitleEntityList = new ArrayList<>();
+    List<List<String>> stringListEnGroup = ListUtil.split(subtitleList,
+      subListSize);
+    int count = 0;
+    for (List<String> stringListEn : stringListEnGroup) {
+      count++;
+      String number = String.format("%03d", count);
+      List<SubtitleEntity> responseListTemp;
+      String fileName = CdFileUtil.addPostfixToFileName(srcFileNameZhCn,
+        "_" + platformName + "_" + number);
+      if (!CdFileUtil.isFileEmpty(fileName)) {
+        responseListTemp = CdFileUtil.genSubtitleEntityList(
+          CdFileUtil.readFileContent(fileName), platformName);
+      } else {
+        responseListTemp = retryGetResponseList(stringListEn,
+          platformName);
+      }
+      if (CollectionUtil.isEmpty(responseListTemp)
+        || responseListTemp.size() != stringListEn.size()) {
+        log.error(
+          "返回数组大小: {} != 返回数组大小: {}",
+          responseListTemp.size(), stringListEn.size());
+      } else {
+        log.info("请求正常，返回数组大小: {}",
+          responseListTemp.size());
+        List<String> tempList = new ArrayList<>();
+        for (SubtitleEntity subtitleEntity : responseListTemp) {
+          tempList.add(subtitleEntity.getSubtitle());
+          tempList.add(subtitleEntity.getSecondSubtitle());
+        }
+        CdFileUtil.writeToFile(fileName, tempList);
+        subtitleEntityList.addAll(responseListTemp);
+      }
+    }
+
+    return subtitleEntityList;
   }
 
   public static void translateSrcWithPlatform(String srcFileNameEng,
@@ -933,25 +946,25 @@ public class TranslateUtil {
         break;
       case CdConstants.TRANSLATE_PLATFORM_DEEP_SEEK:
         text = stringListEn.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining("\r\n"))
-                + " ";  // 添加空格分隔不同的文本块，避免一次性发送过多内容导致请求失败
+          .map(String::valueOf)
+          .collect(Collectors.joining("\r\n"))
+          + " ";  // 添加空格分隔不同的文本块，避免一次性发送过多内容导致请求失败
         log.info("请求内容为：{}", text);
         response = OllamaTranslateUtil.translateText(text);
         // 将两个回车换行替换成一个
         response = response.replaceAll("\n\n", "\n");
         // 解析成字符串数组，并以行为单位拆分字符串数组
         responseList = new ArrayList<>(
-                Arrays.asList(response.split("\n")));
+          Arrays.asList(response.split("\n")));
         subtitleEntityList = CdFileUtil.genSubtitleEntityList(
-                responseList, platformName);
+          responseList, platformName);
         if (stringListEn.size() != subtitleEntityList.size()) {
           log.error("返回结果不一致，期待值：{}，实际值：{}, \r\n，返回内容为：{}",
-                  stringListEn.size(),
-                  subtitleEntityList.size(), response);
+            stringListEn.size(),
+            subtitleEntityList.size(), response);
         } else {
           log.info("返回结果一致，期待值：{}，实际值：{}", stringListEn.size(),
-                  subtitleEntityList.size());
+            subtitleEntityList.size());
         }
         break;
       case CdConstants.TRANSLATE_PLATFORM_MSTTS:

@@ -311,8 +311,7 @@ public class GenSrtUtil {
 
         //  - 替换为句号
         contentEn = contentEn.replace(" -", ".");
-        enSentences = StanfordSentenceSplitter.splitSentences(
-          contentEn);
+        enSentences = StanfordSentenceSplitter.splitSentences(contentEn);
         splitSentence = new ArrayList<>();
         for (String sentence1 : enSentences) {
           // 分号和减号分割

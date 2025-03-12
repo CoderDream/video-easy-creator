@@ -168,6 +168,7 @@ public class CommandUtil {
      */
     public static void downloadBest720p(String videoLink, String outputFileName) {
         YouTubeApiUtil.enableProxy();
+        // yt-dlp -f bestvideo+bestaudio --proxy http://127.0.0.1:8080 https://www.youtube.com/watch?v=example
         String listFormatsCommand = "yt-dlp -F \"" + videoLink + "\"";
         List<String> formats = listFormats(listFormatsCommand);
 

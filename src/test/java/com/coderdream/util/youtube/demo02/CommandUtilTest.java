@@ -37,11 +37,11 @@ class CommandUtilTest {
     // D:\0000\0005_VP\vance_0002 D:\0000\0003_PressBriefings\250305
 
     String bookFolderName = "0003_PressBriefings";
-    String subFolder = "250305";
+    String subFolder = "250311";
     String folderPath =
       OperatingSystem.getBaseFolder() + bookFolderName + File.separator;
 
-    String videoLink = "https://www.youtube.com/watch?v=mQMKP2cSdIk";// "https://www.youtube.com/watch?v=dCY0b1wWX9A"; // 替换为实际的视频链接
+    String videoLink = "https://www.youtube.com/watch?v=5_6R9nmcvMM";// "https://www.youtube.com/watch?v=dCY0b1wWX9A"; // 替换为实际的视频链接
     String outputFileName = folderPath + subFolder + File.separator + subFolder
       + ".mp4"; // 替换为期望的输出路径和文件名
     CommandUtil.downloadBest720p(videoLink, outputFileName);
@@ -68,11 +68,8 @@ class CommandUtilTest {
 
   @Test
   void downloadBest720p_02() {
-
-    // D:\0000\0007_Trump\20250227
-
     String bookFolderName = "0007_Trump";
-    String subFolder = "20250306";
+    String subFolder = "20250302";
     String folderPath =
       OperatingSystem.getBaseFolder() + bookFolderName + File.separator;
     if (!new File(folderPath + subFolder).exists()) {
@@ -80,7 +77,7 @@ class CommandUtilTest {
       log.info("mkdir: {}", mkdir);
     }
 
-    String videoLink = "https://www.youtube.com/watch?v=0Mlk-by6WWw"; // 替换为实际的视频链接
+    String videoLink = "https://www.youtube.com/watch?v=QhHTYWiBC44"; // 替换为实际的视频链接
     String outputFileName = folderPath + subFolder + File.separator + subFolder
       + ".mp4"; // 替换为期望的输出路径和文件名
     CommandUtil.downloadBest720p(videoLink, outputFileName);
@@ -132,7 +129,7 @@ class CommandUtilTest {
     // D:\0000\0007_Trump\20250227
 
     String bookFolderName = "0007_Trump";
-    String subFolder = "20250304";
+    String subFolder = "20250308";
     String folderPath =
       OperatingSystem.getBaseFolder() + bookFolderName + File.separator;
     if (!new File(folderPath + subFolder).exists()) {
@@ -140,7 +137,7 @@ class CommandUtilTest {
       log.info("mkdir: {}", mkdir);
     }
 
-    String videoLink = "https://www.youtube.com/watch?v=-ooIQ1R99nQ"; // 替换为实际的视频链接
+    String videoLink = "https://www.youtube.com/watch?v=omP3GPxaVog"; // 替换为实际的视频链接
     String outputFileName = folderPath + subFolder + File.separator + subFolder
       + ".mp4"; // 替换为期望的输出路径和文件名
     CommandUtil.downloadBest1080p(videoLink, outputFileName);

@@ -165,6 +165,7 @@ public class CdConstants {
 
 
   public static final String GEMINI_API_KEY = System.getenv("GEMINI_API_KEY");
+  public static final String GROK_API_KEY = System.getenv("GROK_API_KEY");
 
   // proxy-host 127.0.0.1
   public static final String PROXY_HOST = "127.0.0.1";

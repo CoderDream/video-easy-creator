@@ -134,4 +134,16 @@ class SubtitleUtilTest {
     SubtitleUtil.modifySubtitleFile(srcFileNameZhTw);
   }
 
+  @Test
+  void transferSubtitleToSentenceTextFile_02() {
+    String folderName = "20250302"; // D:\0000\0007_Trump\20250227
+    String filePath =
+      OperatingSystem.getBaseFolder() + "0007_Trump" + File.separator
+        + folderName + File.separator + folderName
+        + ".mp4";
+    String srcFileName = CdFileUtil.changeExtension(filePath, "srt");
+    SubtitleUtil.transferSubtitleToSentenceTextFile(srcFileName);
+  }
+
+
 }

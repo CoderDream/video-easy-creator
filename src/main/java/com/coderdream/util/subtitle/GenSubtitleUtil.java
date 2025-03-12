@@ -8,6 +8,8 @@ import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.SubtitleEntity;
 import com.coderdream.util.audio.FfmpegUtil2;
 import com.coderdream.util.bbc.StringSplitter4;
+import com.coderdream.util.sentence.StanfordSentenceSplitter;
+import com.coderdream.util.sentence.demo05.SentenceSplitWithComma;
 import com.coderdream.util.translate.TranslateUtil;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
@@ -19,6 +21,7 @@ import com.coderdream.util.sentence.demo03.StanfordNLPSentenceSplitter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -115,8 +118,48 @@ public class GenSubtitleUtil {
     String srcFileName = CdFileUtil.changeExtension(filePath, "srt");
     String srcFileNameEn = CdFileUtil.addPostfixToFileName(srcFileName,
       "." + CdConstants.SUBTITLE_EN);
+    String srcRawFileName = CdFileUtil.addPostfixToFileName(srcFileName,
+      "_raw");
 
     // 如果 XXX.en.srt 不存在， 生成英文SRT文件
+    if (CdFileUtil.isFileEmpty(srcFileNameEn)) {
+      if (!CdFileUtil.isFileEmpty(srcFileName)) {
+        List<SubtitleEntity> subtitleEntities = CdFileUtil.readSrcFileContent(
+          srcFileName);
+        // 原始字符串取英文字幕内容，生成英文SRT文件
+        String srcContent = subtitleEntities.stream().map(
+          SubtitleEntity::getSubtitle).collect(Collectors.joining(" "));
+        log.info("生成英文SRT文件: {}", srcFileNameEn);
+        List<String> srtRawList = StanfordSentenceSplitter.splitSentences(
+          srcContent);
+
+        List<String> srtTxtList = new ArrayList<>();
+
+        for (String srtRaw : srtRawList) {
+          srtTxtList.addAll(StringSplitter4.splitString(srtRaw, 100));
+        }
+        CdFileUtil.writeToFile(srcRawFileName, srtTxtList);
+        // 生成新的字幕文件
+
+//        String rawContent = String.join(" ", srtTxtList);
+        // 检查 mp3 文件是否存在，不存在则先生成
+        String mp3FileName = CdFileUtil.changeExtension(srcFileName, "mp3");
+        if (CdFileUtil.isFileEmpty(mp3FileName)) {
+          String mp4FileName = CdFileUtil.changeExtension(srcFileName, "mp4");
+          FfmpegUtil2.extractAudioFromMp4(mp4FileName, mp3FileName);
+        }
+
+        if (!CdFileUtil.isFileEmpty(mp3FileName)) {
+          // 生成新的字幕文件
+          SubtitleUtil.genSrtByExecuteCommand(mp3FileName, srcRawFileName,
+            srcFileNameEn, "eng");
+        } else {
+          log.warn("mp3 文件不存在，无法生成字幕文件: {}", mp3FileName);
+        }
+      } else {
+        log.info("srtFilePath 文件已存在: {} ", srcFileName);
+      }
+    }
 
     // 过滤内容文件
     GenSubtitleUtil.filterContentFile(srcFileNameEn, srcFileNameEn);
