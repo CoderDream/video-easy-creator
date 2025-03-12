@@ -287,6 +287,25 @@ class GenVideoUtilTest {
     }
   }
 
+
+  @Test
+  void processBatchAndMergeEnBook_0004() {
+    String bookName = "EnBook004";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 101; // 假定总共100章 101
+    for (int i = 1; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenVideoUtil.processV4(bookName, folderPath, subFolder);
+      Mp4MergeUtil.processMerge(folderPath, subFolder);
+    }
+  }
+
   @Test
   void processBatchAndMergeEnBook_0005() {
     String bookName = "EnBook005";
