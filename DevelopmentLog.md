@@ -18,6 +18,14 @@
 
 
 
+## 20250309
+
+- [x] 根据ppt模板批量生成封面
+  - GenCoverUtil.process(folderPath, chapterFileName, presentationName
+
+
+
+
 ## 20250302
 
 - [x] 获取油管视频截图

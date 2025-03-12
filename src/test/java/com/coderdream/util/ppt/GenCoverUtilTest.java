@@ -52,6 +52,19 @@ class GenCoverUtilTest {
   }
 
   @Test
+  void process_EnBook004_0102() {
+    String bookName = "EnBook004";
+    String presentationName =
+      OperatingSystem.getBaseFolder() + "ppt" + File.separator + bookName
+        + File.separator + bookName + "模板.pptx";
+    String chapterFileName = "book04_name.txt";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    String imageFormat = "png";
+    GenCoverUtil.process(folderPath, chapterFileName, presentationName,
+      imageFormat, 1280, 720);
+  }
+
+  @Test
   void process_EnBook005_0102() {
     String bookName = "EnBook005";
     String presentationName =
