@@ -21,7 +21,7 @@ public class ProxyTest {
             int port = 0;
             // 可以根据操作系统类型执行不同的逻辑
             switch (osType) {
-                case OS_WINDOWS -> port = 7890;
+                case OS_WINDOWS -> port = 1080;//7890; TODO singbox 为1080，看bat文件可以获取端口 clash 为7890
                 case OS_MAC -> port = 1087;
                 case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
                 default -> System.out.println("无法识别的操作系统。");

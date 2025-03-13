@@ -96,6 +96,20 @@ class GenSubtitleUtilTest {
   }
 
   @Test
+  void processSrtAndGenDescription_0003_20230311() {
+    //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
+    // 专辑名称
+    String albumName = "0003_PressBriefings";
+    String folderName = "20250311"; // D:\0000\0007_Trump\20250227
+    String mp4FilePath =
+      OperatingSystem.getBaseFolder() + albumName + File.separator
+        + folderName + File.separator + folderName
+        + ".mp4";
+
+    GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
+  }
+
+  @Test
   void processSrtAndGenDescription_0701() {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
     String folderName = "20250307"; // D:\0000\0007_Trump\20250227

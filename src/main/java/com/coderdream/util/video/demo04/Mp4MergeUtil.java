@@ -364,10 +364,10 @@ public class Mp4MergeUtil {
     String outputFilePath = CdFileUtil.addPostfixToFileName(destinationFileName,
       "_new");
     if (CdFileUtil.isFileEmpty(outputFilePath) && !CdFileUtil.isFileEmpty(
-      destinationFileName)) {
-      String encodedVideo = VideoEncoder.encodeVideo(destinationFileName,
-        outputFilePath);
+      destinationFileName)) {      String encodedVideo = VideoEncoder.encodeVideo(destinationFileName,
+      outputFilePath);
       log.info("视频编码完成: {}", encodedVideo);
+
     }
 
   }

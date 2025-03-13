@@ -136,7 +136,7 @@ public class GenSubtitleUtil {
         List<String> srtTxtList = new ArrayList<>();
 
         for (String srtRaw : srtRawList) {
-          srtTxtList.addAll(StringSplitter4.splitString(srtRaw, 100));
+          srtTxtList.addAll(StringSplitter4.splitString(srtRaw, 200));
         }
         CdFileUtil.writeToFile(srcRawFileName, srtTxtList);
         // 生成新的字幕文件

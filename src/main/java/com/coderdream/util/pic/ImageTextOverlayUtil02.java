@@ -1,15 +1,19 @@
 package com.coderdream.util.pic;
 
 import com.coderdream.util.cd.CdTimeUtil;
-import lombok.extern.slf4j.Slf4j;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 图片文字叠加工具类
@@ -18,7 +22,7 @@ import java.io.IOException;
  * </p>
  */
 @Slf4j
-public class ImageTextOverlayUtil {
+public class ImageTextOverlayUtil02 {
 
   private static final Color MAIN_TITLE_COLOR = new Color(255, 247,
     149); // 主标题颜色
@@ -36,33 +40,33 @@ public class ImageTextOverlayUtil {
    * @param outputImagePath     输出文件地址
    * @param mainTitle           主标题字符串
    * @param bottomTitle         底部大标题字符串
+   * @throws IOException 如果图片读取或写入失败
    */
   public static void addTextOverlay(String backgroundImagePath,
     String outputImagePath,
-    String mainTitle, String bottomTitle) {
+    String mainTitle, String bottomTitle) throws IOException {
     long startTime = System.currentTimeMillis(); // 记录方法开始时间
     log.info(
       "开始处理图片文字叠加，背景图片: {}, 输出图片: {}, 主标题: {}, 底部标题: {}",
       backgroundImagePath, outputImagePath, mainTitle, bottomTitle);
 
-    BufferedImage image; // 初始化 image 变量
-    Graphics2D g2d = null; // 初始化 g2d 变量
+    // 加载背景图
+    BufferedImage image;
     try {
-      // 加载背景图
-      try {
-        image = ImageIO.read(new File(backgroundImagePath));
-        if (image == null) {
-          log.error("无法加载背景图片: {}", backgroundImagePath);
-          return; // 方法结束
-        }
-      } catch (IOException e) {
-        log.error("读取背景图片失败: {}", e.getMessage(), e);
-        return; // 方法结束
+      image = ImageIO.read(new File(backgroundImagePath));
+      if (image == null) {
+        log.error("无法加载背景图片: {}", backgroundImagePath);
+        throw new IOException("无法加载背景图片: " + backgroundImagePath);
       }
+    } catch (IOException e) {
+      log.error("读取背景图片失败: {}", e.getMessage(), e);
+      throw e;
+    }
 
-      // 创建 Graphics2D 对象
-      g2d = image.createGraphics();
+    // 创建 Graphics2D 对象
+    Graphics2D g2d = image.createGraphics();
 
+    try {
       // 开启抗锯齿，提升文字平滑度
       g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
@@ -138,9 +142,8 @@ public class ImageTextOverlayUtil {
         log.info("图片保存成功: {}", outputImagePath);
       } catch (IOException e) {
         log.error("保存图片失败: {}", e.getMessage(), e);
-        return; // 方法结束
+        throw e;
       }
-
     } finally {
       // 手动释放 Graphics2D 资源
       if (g2d != null) {
@@ -152,7 +155,7 @@ public class ImageTextOverlayUtil {
     // 计算并记录耗时
     long endTime = System.currentTimeMillis(); // 记录方法结束时间
     long durationMillis = endTime - startTime; // 计算耗时（毫秒）
-    log.info("图片文字叠加处理完成，耗时: {}",
+    log.info("图片文字叠加处理成功，耗时: {}",
       CdTimeUtil.formatDuration(durationMillis));
   }
 
@@ -214,13 +217,18 @@ public class ImageTextOverlayUtil {
    * 示例调用
    */
   public static void main(String[] args) {
-    String backgroundImagePath = "D:\\0000\\0007_Trump\\20250303\\cover_002.jpg";
-    String outputImagePath = "D:\\0000\\0007_Trump\\20250303\\cover_008.jpg";
-    String mainTitle = "新主标题示例";
-    String bottomTitle = "新底部标题示例";
+    try {
+      String backgroundImagePath = "D:\\0000\\0007_Trump\\20250303\\cover_002.jpg";
+      String outputImagePath = "D:\\0000\\0007_Trump\\20250303\\cover_008.jpg";
+      String mainTitle = "新主标题示例";
+      String bottomTitle = "新底部标题示例";
 
-    addTextOverlay(backgroundImagePath, outputImagePath, mainTitle,
-      bottomTitle);
-    System.out.println("Image processing completed!");
+      addTextOverlay(backgroundImagePath, outputImagePath, mainTitle,
+        bottomTitle);
+      System.out.println("Image processing completed successfully!");
+    } catch (IOException e) {
+      log.error("处理图片失败: {}", e.getMessage(), e);
+      System.out.println("Error processing image: " + e.getMessage());
+    }
   }
 }
