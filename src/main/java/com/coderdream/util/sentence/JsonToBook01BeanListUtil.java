@@ -479,7 +479,7 @@ public class JsonToBook01BeanListUtil {
 //    String filename = "D:\\0000\\EnBook001\\900\\900V1_ch01_v3.txt_逐字稿V2.txt";
 //    File file = new File(filename);
 //
-//    List<String> stringList = FileUtil.readLines(file, StandardCharsets.UTF_8);
+//    List<String> stringList = CdFileUtil.readLines(file, StandardCharsets.UTF_8);
 //    process(stringList);
   }
 
@@ -487,7 +487,7 @@ public class JsonToBook01BeanListUtil {
 //    String filename = "D:\\0000\\EnBook001\\900\\900V1_ch01.txt_逐字稿V1.txt";
 //    File file = new File(filename);
 //
-//    String jsonString = FileUtil.readString(file, StandardCharsets.UTF_8);
+//    String jsonString = CdFileUtil.readString(file, StandardCharsets.UTF_8);
 
     Integer[] rangeIndexes = new Integer[]{0, 12, 16, 18, 12, 20, 8};
     String chapterInfoFileName = "D:\\0000\\EnBook001\\900\\chapter_info_v00.txt";
@@ -514,7 +514,7 @@ public class JsonToBook01BeanListUtil {
 //    String filename = "D:\\0000\\EnBook001\\900\\900V1_ch01.txt_逐字稿V1.txt";
 //    File file = new File(filename);
 //
-//    String jsonString = FileUtil.readString(file, StandardCharsets.UTF_8);
+//    String jsonString = CdFileUtil.readString(file, StandardCharsets.UTF_8);
 
     List<ConversationItem> conversationItems = convertJsonToBeanList(
       jsonString);

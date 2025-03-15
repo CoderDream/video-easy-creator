@@ -2,23 +2,16 @@ package com.coderdream.util.daily;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
-import com.coderdream.util.CommonUtil;
-import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.file.PdfFileFinder;
 import com.coderdream.util.gemini.GeminiApiUtil;
-import com.coderdream.util.gemini.TranslationUtil;
 import com.coderdream.util.wechat.MarkdownFileGenerator;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import swiss.ameri.gemini.api.GenAi.GeneratedContent;
@@ -47,7 +40,7 @@ public class DailyUtil {
     long startTime = System.currentTimeMillis(); // 记录开始时间
     // 2. 生成描述
     String prompt = FileUtil.readString(
-      CdFileUtil.getResourceRealPath() + File.separator + "youtube"
+      com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + File.separator + "youtube"
         + File.separator + "description_prompt.txt",
       StandardCharsets.UTF_8);
     prompt += "字幕如下：";
@@ -76,7 +69,7 @@ public class DailyUtil {
   public static void syncFilesToQuark(String year) {
     String yearPath = "D:\\14_LearnEnglish\\6MinuteEnglish\\" + year;
 
-    List<File> files = CdFileUtil.getFirstLevelDirectories(yearPath);
+    List<File> files = com.coderdream.util.cd.CdFileUtil.getFirstLevelDirectories(yearPath);
     if (CollectionUtil.isEmpty(files)) {
       log.error("图片文件夹为空，退出处理流程；{}", yearPath);
     }
@@ -103,29 +96,29 @@ public class DailyUtil {
         folderName + "_核心词汇表.xlsx";
       String fileNameF =
         folderName + "_高级词汇表.xlsx";
-      if (!CdFileUtil.isFileEmpty(folderPath + File.separator + fileNameC)
-        && CdFileUtil.isFileEmpty(newFolderPath + File.separator + fileNameC)) {
+      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(folderPath + File.separator + fileNameC)
+        && com.coderdream.util.cd.CdFileUtil.isFileEmpty(newFolderPath + File.separator + fileNameC)) {
         FileUtil.copyFile(folderPath + File.separator + fileNameC,
           newFolderPath + File.separator + fileNameC,
           StandardCopyOption.REPLACE_EXISTING);
       }
 
-      if (!CdFileUtil.isFileEmpty(folderPath + File.separator + fileNameD)
-        && CdFileUtil.isFileEmpty(newFolderPath + File.separator + fileNameD)) {
+      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(folderPath + File.separator + fileNameD)
+        && com.coderdream.util.cd.CdFileUtil.isFileEmpty(newFolderPath + File.separator + fileNameD)) {
         FileUtil.copyFile(folderPath + File.separator + fileNameD,
           newFolderPath + File.separator + fileNameD,
           StandardCopyOption.REPLACE_EXISTING);
       }
 
-      if (!CdFileUtil.isFileEmpty(folderPath + File.separator + fileNameE)
-        && CdFileUtil.isFileEmpty(newFolderPath + File.separator + fileNameE)) {
+      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(folderPath + File.separator + fileNameE)
+        && com.coderdream.util.cd.CdFileUtil.isFileEmpty(newFolderPath + File.separator + fileNameE)) {
         FileUtil.copyFile(folderPath + File.separator + fileNameE,
           newFolderPath + File.separator + fileNameE,
           StandardCopyOption.REPLACE_EXISTING);
       }
 
-      if (!CdFileUtil.isFileEmpty(folderPath + File.separator + fileNameF)
-        && CdFileUtil.isFileEmpty(newFolderPath + File.separator + fileNameF)) {
+      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(folderPath + File.separator + fileNameF)
+        && com.coderdream.util.cd.CdFileUtil.isFileEmpty(newFolderPath + File.separator + fileNameF)) {
         FileUtil.copyFile(folderPath + File.separator + fileNameF,
           newFolderPath + File.separator + fileNameF,
           StandardCopyOption.REPLACE_EXISTING);
@@ -133,19 +126,19 @@ public class DailyUtil {
 
       // 找pdf和mp3
       String pdfFileName = PdfFileFinder.findPdfFileName(folderName);
-      if (!CdFileUtil.isFileEmpty(folderPath + File.separator + pdfFileName)
-        && CdFileUtil.isFileEmpty(
+      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(folderPath + File.separator + pdfFileName)
+        && com.coderdream.util.cd.CdFileUtil.isFileEmpty(
         newFolderPath + File.separator + pdfFileName)) {
         FileUtil.copyFile(folderPath + File.separator + pdfFileName,
           newFolderPath + File.separator + pdfFileName,
           StandardCopyOption.REPLACE_EXISTING);
       }
 
-      if (!CdFileUtil.isFileEmpty(folderPath + File.separator + pdfFileName)) {
+      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(folderPath + File.separator + pdfFileName)) {
         String mp3FileName =
-          CdFileUtil.getFileNameWithoutExtension(pdfFileName) + ".mp3";
-        if (!CdFileUtil.isFileEmpty(folderPath + File.separator + mp3FileName)
-          && CdFileUtil.isFileEmpty(
+          com.coderdream.util.cd.CdFileUtil.getFileNameWithoutExtension(pdfFileName) + ".mp3";
+        if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(folderPath + File.separator + mp3FileName)
+          && com.coderdream.util.cd.CdFileUtil.isFileEmpty(
           newFolderPath + File.separator + mp3FileName)) {
           FileUtil.copyFile(folderPath + File.separator + mp3FileName,
             newFolderPath + File.separator + mp3FileName,
@@ -162,19 +155,19 @@ public class DailyUtil {
 
       // 1. 图片
 //        String imageFolderName = "D:\\14_LearnEnglish\\6MinuteEnglish\\quark_share" + File.separator;
-//        FileUtil.copy(Paths.get(imageFolderName), Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
+//        CdFileUtil.copy(Paths.get(imageFolderName), Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
 
     }
 
 //    String folderPath = CommonUtil.getFullPath(folderName);
 //    String distFolderName = "D:\\14_LearnEnglish\\6MinuteEnglish\\quark_share";
 //    // 0. 清理文件夹
-////    boolean del = FileUtil.del(distFolderName);
+////    boolean del = CdFileUtil.del(distFolderName);
 ////    log.info("删除文件夹结果：{}", del);
 //
 //    // 1. 图片 文件夹拷贝
 //    String imageFolderName = folderPath + folderName;
-//    List<File> files = FileUtil.loopFiles(imageFolderName);
+//    List<File> files = CdFileUtil.loopFiles(imageFolderName);
 //    if (CollectionUtil.isEmpty(files)) {
 //      log.error("图片文件夹为空，退出处理流程；{}", imageFolderName);
 //      return;
@@ -182,7 +175,7 @@ public class DailyUtil {
 //    for (File file : files) {
 //      if (file.isFile()) {
 //        String fileName = file.getName();
-//        FileUtil.copyFile(file.getAbsolutePath(),
+//        CdFileUtil.copyFile(file.getAbsolutePath(),
 //          distFolderName + fileName,
 //          StandardCopyOption.REPLACE_EXISTING);
 //      }
@@ -190,14 +183,14 @@ public class DailyUtil {
 //    // 2. 音频
 //    String audioFileName = folderPath +  "audio5.mp3";
 //    String destinationAudioFileName = distFolderName + "audio.mp3";
-//    FileUtil.copy(Paths.get(audioFileName),
+//    CdFileUtil.copy(Paths.get(audioFileName),
 //      Paths.get(destinationAudioFileName), StandardCopyOption.REPLACE_EXISTING);
 //
 //    // 3. 字幕
 //    String subtitleFileNameEng = folderPath + "eng.srt";
-//    FileUtil.copy(subtitleFileNameEng, distFolderName, true);
+//    CdFileUtil.copy(subtitleFileNameEng, distFolderName, true);
 //    String subtitleFileNameChn = folderPath + "chn.srt";
-//    FileUtil.copy(subtitleFileNameChn, distFolderName, true);
+//    CdFileUtil.copy(subtitleFileNameChn, distFolderName, true);
 
     // 4. 封面
   }

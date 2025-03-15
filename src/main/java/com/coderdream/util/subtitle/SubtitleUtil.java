@@ -6,7 +6,6 @@ import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.DurationEntity;
 import com.coderdream.entity.SubtitleEntity;
 import com.coderdream.util.cd.CdConstants;
-import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.util.cmd.CommandUtil;
@@ -20,7 +19,6 @@ import com.coderdream.vo.SentenceVO;
 
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -169,9 +167,9 @@ public class SubtitleUtil {
   public static void mergeSubtitleFile(String srcFileNameEng,
     String srcFileNameChn, String srcFileName) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
-    List<SubtitleEntity> engSubtitleEntityList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> engSubtitleEntityList = com.coderdream.util.cd.CdFileUtil.readSrcFileContent(
       srcFileNameEng);
-    List<SubtitleEntity> chnSubtitleEntityList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> chnSubtitleEntityList = com.coderdream.util.cd.CdFileUtil.readSrcFileContent(
       srcFileNameChn);
 
     SubtitleEntity enSubtitleEntity;
@@ -196,7 +194,7 @@ public class SubtitleUtil {
 
     if (CollectionUtil.isNotEmpty(srtStringList)) {
       // 写中文翻译文本
-      CdFileUtil.writeToFile(srcFileName, srtStringList);
+      com.coderdream.util.cd.CdFileUtil.writeToFile(srcFileName, srtStringList);
       long elapsedTime = System.currentTimeMillis() - startTime; // 计算耗时
       log.info("写入完成，文件路径: {}，共计耗时：{}", srcFileName,
         CdTimeUtil.formatDuration(elapsedTime));
@@ -210,7 +208,7 @@ public class SubtitleUtil {
    */
   public static void modifySubtitleFile(String srcFileName) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
-    List<SubtitleEntity> subtitleEntityList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> subtitleEntityList = com.coderdream.util.cd.CdFileUtil.readSrcFileContent(
       srcFileName);
 
     SubtitleEntity subtitleEntity;
@@ -250,7 +248,7 @@ public class SubtitleUtil {
    * @param
    */
   public static void genSubtitleRaw(String fileName) {
-//    String translate = FileUtil.readString(new File(fileName),
+//    String translate = CdFileUtil.readString(new File(fileName),
 //      StandardCharsets.UTF_8);// GeminiApiClient.generateContent(text);
 //    log.info("translate: {}", translate);
 
@@ -271,9 +269,9 @@ public class SubtitleUtil {
       sentenceList.add(sentenceVO.getChinese());
       sentenceList.add(sentenceVO.getEnglish());
     }
-    String srtRawFileName = CdFileUtil.addPostfixToFileName(fileName, "_raw");
+    String srtRawFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileName, "_raw");
 //    log.info("srtRawFileName:{}", srtRawFileName);
-    CdFileUtil.writeToFile(srtRawFileName, sentenceList);
+    com.coderdream.util.cd.CdFileUtil.writeToFile(srtRawFileName, sentenceList);
 
     // 生成字幕文件，调用 python 命令
     File file = new File(srtRawFileName);
@@ -282,7 +280,7 @@ public class SubtitleUtil {
     // D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics\audio\ch01_mix.wav
     String audioFileName =
       path + File.separator
-        + CdFileUtil.getPureFileNameWithoutExtensionWithPath(fileName)
+        + com.coderdream.util.cd.CdFileUtil.getPureFileNameWithoutExtensionWithPath(fileName)
         + File.separator + "audio\\" + "ch01_mix.wav";
     File audioFile = new File(audioFileName);
     if (!audioFile.exists()) {
@@ -290,7 +288,7 @@ public class SubtitleUtil {
       return;
     }
 
-    String srtFileName = CdFileUtil.changeExtension(audioFileName, "srt");
+    String srtFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(audioFileName, "srt");
     String lang = "eng"; //  String lang = "cmn";
     log.info("audioFileName:{}", audioFileName);
     SubtitleUtil.genSrtByExecuteCommand(audioFileName, srtRawFileName,
@@ -302,8 +300,8 @@ public class SubtitleUtil {
    *                 生成文本文件，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
    */
   public static String transferSubtitleToSentenceTextFile(String fileName) {
-    String textFileName = CdFileUtil.changeExtension(fileName, "txt");
-    List<SubtitleEntity> sentenceVOList = CdFileUtil.readSrcFileContent(
+    String textFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(fileName, "txt");
+    List<SubtitleEntity> sentenceVOList = com.coderdream.util.cd.CdFileUtil.readSrcFileContent(
       fileName);
     StringBuilder text = new StringBuilder();
     for (SubtitleEntity sentenceVO : sentenceVOList) {
@@ -321,7 +319,7 @@ public class SubtitleUtil {
       }
       pureSentenceList.add(pureSentence);
     }
-    CdFileUtil.writeToFile(textFileName, pureSentenceList);
+    com.coderdream.util.cd.CdFileUtil.writeToFile(textFileName, pureSentenceList);
 //    if (CdFileUtil.isFileEmpty(textFileName)) {
 //      CdFileUtil.writeToFile(textFileName, pureSentenceList);
 //    } else {
@@ -367,10 +365,11 @@ public class SubtitleUtil {
   }
 
   /**
-   * @param audioFileName
-   * @param subtitleFileName
-   * @param srtFileName
-   * @param lang
+   * 生成字幕文件，调用 python 命令
+   * @param audioFileName 音频文件路径，例如：D:\0000\EnBook001\900\ch01\audio\ch01_mix.wav
+   * @param subtitleFileName  字幕文件路径，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+   * @param srtFileName 字幕文件路径，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+   * @param lang  语言，例如：eng, cmn
    */
   public static void genSrtByExecuteCommand(String audioFileName,
     String subtitleFileName, String srtFileName, String lang) {

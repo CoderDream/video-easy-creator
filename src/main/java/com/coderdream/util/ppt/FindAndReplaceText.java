@@ -17,7 +17,6 @@ import com.coderdream.entity.VocInfo;
 import com.coderdream.entity.WordInfo;
 import com.coderdream.entity.WordInfoEntity;
 import com.coderdream.util.cd.CdConstants;
-import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.CommonUtil;
 import com.coderdream.util.excel.CdExcelUtil;
 import java.awt.image.BufferedImage;
@@ -66,7 +65,7 @@ public class FindAndReplaceText {
     //      if (pres != null) {
     //        pres.dispose();
     //      }
-    //    }  MP3_INFO_LIST = FileUtil.readLines(folderPath + "mp3.txt", "UTF-8");
+    //    }  MP3_INFO_LIST = CdFileUtil.readLines(folderPath + "mp3.txt", "UTF-8");
     //ExEnd:FontFamily
     LicenseUtil.loadLicense(MicrosoftConstants.PPTX_TO_OTHER);
     Presentation pres = null;
@@ -100,7 +99,7 @@ public class FindAndReplaceText {
       Map<String, String> props = new HashMap<>(); // 末日滚动：我们为什么喜欢末日滚动？
       props.put("folderName", folderName); // getArticleTitle
       props.put("title",
-        CdFileUtil.getArticleTitle(folderName)); // getArticleTitle
+        com.coderdream.util.cd.CdFileUtil.getArticleTitle(folderName)); // getArticleTitle
       List<VocInfo> vocInfoList = DictUtils.getVocInfoList(folderName);
       int i = 1;
       String sampleSentenceEn;

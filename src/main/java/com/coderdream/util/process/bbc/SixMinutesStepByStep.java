@@ -8,6 +8,7 @@ import com.coderdream.util.CommonUtil;
 import com.coderdream.util.DictUtil;
 import com.coderdream.util.bbc.GenSrtUtil;
 import com.coderdream.util.bbc.ProcessScriptUtil;
+import com.coderdream.util.process.PreparePublishUtil;
 import com.coderdream.util.translate.TranslateUtil;
 import com.coderdream.util.bbc.WordCountUtil;
 import com.coderdream.util.cd.CdMP3SplitterUtil;
@@ -189,14 +190,16 @@ public class SixMinutesStepByStep {
       CdFileUtil.getResourceRealPath() + File.separatorChar + "data"
         + File.separatorChar + "bbc"
         + File.separatorChar + "mp3.txt";
-    if (CdFileUtil.isFileEmpty(srtEngRawFileName)) {
-      // 写中文翻译文本
-      File file = FileUtil.writeLines(timeList, mp3InfoFileName,
-        StandardCharsets.UTF_8);
-      log.info("文件不存在或为空，已生成新文件: {}", file.getAbsolutePath());
-    } else {
-      log.info("文件已存在: {}", mp3InfoFileName);
+//    if (CdFileUtil.isFileEmpty(srtEngRawFileName)) {
+    // 写中文翻译文本
+    File mp3InfoFile = FileUtil.writeLines(timeList, mp3InfoFileName,
+      StandardCharsets.UTF_8);
+    if (CdFileUtil.isFileEmpty(mp3InfoFileName)) {
+      log.info("已生成新的Mp3 Info 文件: {}", mp3InfoFile.getAbsolutePath());
     }
+//    } else {
+//      log.info("文件已存在: {}", mp3InfoFileName);
+//    }
 
     // 以tab分隔符，得到数组
     String[] split = timeList.get(0).split("\\s+");
@@ -216,6 +219,7 @@ public class SixMinutesStepByStep {
     if (CdFileUtil.isFileEmpty(mp3FileNameFullNew)) {
       String startTime = split[1];
       String endTime = split[2];
+      // 写入临时文件，用于切割音频
       CdMP3SplitterUtil.splitMP3(mp3FileNameFull, mp3FileNameFullNew, startTime,
         endTime);
     } else {
@@ -259,13 +263,17 @@ public class SixMinutesStepByStep {
       log.info("文件已存在: {}", excelAdvancedFileName);
     }
 
+    // 查询章节名称
+    String chapterName = GetSixMinutesPpt.queryChapterNameForSixMinutes(
+      folderName);
+
+    // 生成pptx文件
     String pptxFileName = CommonUtil.getFullPathFileName(
       folderName, folderName, ".pptx");
-    GetSixMinutesPpt.process(folderName);
     if (CdFileUtil.isFileEmpty(pptxFileName)) {
-      GetSixMinutesPpt.process(folderName);
+      GetSixMinutesPpt.process(folderName, chapterName);
     } else {
-      log.info("文件已存在: {}", pptxFileName);
+      log.info("ppt文件已存在: {}", pptxFileName);
     }
 
     // 生成pptx的图片
@@ -274,11 +282,13 @@ public class SixMinutesStepByStep {
         + File.separator;
     PptToImageConverter.convertPptToImages(pptxFileName, pptPicDir, "snapshot");
     if (!new File(pptPicDir).exists()) {
-      PptToImageConverter.convertPptToImages(pptxFileName, pptPicDir, "snapshot");
+      PptToImageConverter.convertPptToImages(pptxFileName, pptPicDir,
+        "snapshot");
     } else {
       log.info("ppt图片文件夹已存在: {}", pptPicDir);
     }
 
+    // 生成国内平台描述文件
     String descriptionFileName = CdFileUtil.changeExtension(pptxFileName, "md");
     descriptionFileName = CdFileUtil.addPostfixToFileName(descriptionFileName,
       "_description");
@@ -288,6 +298,22 @@ public class SixMinutesStepByStep {
     } else {
       log.info("Md 文件已存在: {}", descriptionFileName);
     }
+
+    // 生成油管平台描述文件
+    String descriptionFileNameYT = CdFileUtil.changeExtension(pptxFileName,
+      "md");
+    descriptionFileName = CdFileUtil.addPostfixToFileName(descriptionFileName,
+      "_description");
+    if (CdFileUtil.isFileEmpty(descriptionFileName)) {
+      TranslationUtil.genDescription(scriptDialogMergeFileName,
+        descriptionFileName);
+    } else {
+      log.info("Md 文件已存在: {}", descriptionFileName);
+    }
+
+    // 2. 生成描述
+    PreparePublishUtil.genDescriptionForYT(folderPath, folderName, "", "", "6",
+      srtFileName, chapterName);
 
   }
 

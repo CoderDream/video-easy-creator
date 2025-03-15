@@ -38,7 +38,7 @@ public class GetFirstLevelDirectories {
             return null;
         }
 
-        // 使用 FileUtil.ls(String) 获取所有文件和文件夹，然后过滤出文件夹
+        // 使用 CdFileUtil.ls(String) 获取所有文件和文件夹，然后过滤出文件夹
         File[] filesArray = FileUtil.ls(directoryPath);  // 使用 String 路径，返回 File[]
 
         // 修复空目录的校验逻辑

@@ -137,7 +137,7 @@ class Mdict4jDemo2Test {
       // 定义UTF-16 Little Endian编码
       Charset utf16Le = StandardCharsets.UTF_16LE;
       // 读取文件内容到列表
-//            return FileUtil.readLines(file, "UTF-8");
+//            return CdFileUtil.readLines(file, "UTF-8");
       List<String> lines = FileUtil.readLines(file, utf16Le);
       // 移除每行首尾空格，并过滤掉空行
       return lines.stream()

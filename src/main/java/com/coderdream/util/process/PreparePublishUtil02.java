@@ -1,7 +1,6 @@
 package com.coderdream.util.process;
 
 import cn.hutool.core.io.FileUtil;
-import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.gemini.GeminiApiUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.subtitle.SubtitleUtil;
@@ -14,8 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import swiss.ameri.gemini.api.GenAi.GeneratedContent;
@@ -40,7 +37,7 @@ public class PreparePublishUtil02 {
 //    String lang = "cmn";
 //
 //    Map<String, String> chapterNameMap = new HashMap<>();
-//    List<String> stringList = FileUtil.readLines(B_E_900_CHAPTER_NAME,
+//    List<String> stringList = CdFileUtil.readLines(B_E_900_CHAPTER_NAME,
 //      StandardCharsets.UTF_8);
 //    for (String line : stringList) {
 //      String[] split = line.split(" ");
@@ -71,7 +68,7 @@ public class PreparePublishUtil02 {
 //    List<String> textList = new ArrayList<>(List.of(
 //      "Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing.",
 //      "英文加中文配音，每次半小時，增强你的英文听力。"));
-//    List<String> srtList = FileUtil.readLines(subtitleFileName,
+//    List<String> srtList = CdFileUtil.readLines(subtitleFileName,
 //      StandardCharsets.UTF_8);
 //    for (String srtLine : srtList) {
 //      textList.add(ZhConverterUtil.toTraditional(srtLine));
@@ -96,12 +93,12 @@ public class PreparePublishUtil02 {
 //    // 2. 生成描述
 //
 //    log.info("----- 4.测试 generateContent 方法开始");
-//    String prompt = FileUtil.readString(
+//    String prompt = CdFileUtil.readString(
 //      CdFileUtil.getResourceRealPath() + "\\youtube\\description_prompt.txt",
 //      StandardCharsets.UTF_8);
 //    ;
 //    prompt += "字幕如下：";
-//    prompt += FileUtil.readString(
+//    prompt += CdFileUtil.readString(
 //      srtFileName,
 //      StandardCharsets.UTF_8);
 //    // 生成文本内容（阻塞式）
@@ -158,7 +155,7 @@ public class PreparePublishUtil02 {
             log.info("mp3文件不存在, {}", mp3FileName);
             return;
         }
-        String srtFileName = CdFileUtil.changeExtension(mp3FileName, "srt");
+        String srtFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(mp3FileName, "srt");
         // D:\0000\EnBook001\900\ch003\ch003_total.txt
         String subtitleFileName =
                 OperatingSystem.getBaseFolder() + bookFolderName + File.separator + subFolder + File.separator + subFolder +
@@ -178,10 +175,10 @@ public class PreparePublishUtil02 {
             textList.add(ZhConverterUtil.toTraditional(srtLine));
         }
 //    textList.addAll(srtList);
-        String newSubtitleFileName = CdFileUtil.addPostfixToFileName(
+        String newSubtitleFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
                 subtitleFileName,
                 "_cht");// "D:\\0000\\EnBook001\\900\\ch003\\ch003_total_new.txt";
-        CdFileUtil.writeToFile(newSubtitleFileName, textList);
+        com.coderdream.util.cd.CdFileUtil.writeToFile(newSubtitleFileName, textList);
 
         lang = "eng";
 
@@ -195,7 +192,7 @@ public class PreparePublishUtil02 {
         // 2. 生成描述
         log.info("----- 4.测试 generateContent 方法开始");
         String prompt = FileUtil.readString(
-                CdFileUtil.getResourceRealPath() + File.separator + "youtube" + File.separator + "description_prompt.txt",
+                com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + File.separator + "youtube" + File.separator + "description_prompt.txt",
                 StandardCharsets.UTF_8);
         prompt += "字幕如下：";
         prompt += FileUtil.readString(
@@ -206,9 +203,9 @@ public class PreparePublishUtil02 {
 
 
         String mdFileName = Objects.requireNonNull(
-                CdFileUtil.changeExtension(srtFileName, "md"));
-        String chnMdFileName = CdFileUtil.addPostfixToFileName(mdFileName, "_chn");
-        String chtMdFileName = CdFileUtil.addPostfixToFileName(mdFileName, "_cht");
+                com.coderdream.util.cd.CdFileUtil.changeExtension(srtFileName, "md"));
+        String chnMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(mdFileName, "_chn");
+        String chtMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(mdFileName, "_cht");
         try {
             FileUtils.writeStringToFile(
                     new File(chtMdFileName),

@@ -46,7 +46,7 @@ public class ProcessScriptUtil {
 //
 //    String srcFileName = CommonUtil.getFullPathFileName(folderName, fileName,
 //      ".txt");
-//    List<String> stringList = FileUtil.readLines(srcFileName,
+//    List<String> stringList = CdFileUtil.readLines(srcFileName,
 //      StandardCharsets.UTF_8);
 //
 ////    Map<Integer, String> stringListWithIndex = new HashMap<>();

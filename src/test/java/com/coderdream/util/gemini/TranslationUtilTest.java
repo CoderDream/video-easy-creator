@@ -114,7 +114,7 @@ class TranslationUtilTest {
 //    String folderName = "180913"; // 250102
 //    List<String> folderNames = List.of("180906", "180920");
 //    String todoFileName = "D:\\04_GitHub\\java-architect-util\\free-apps\\src\\main\\resources\\data\\bbc\\todo.txt";
-//    List<String> folderNameList = FileUtil.readLines(todoFileName, "UTF-8");
+//    List<String> folderNameList = CdFileUtil.readLines(todoFileName, "UTF-8");
 //    for (String folderName : folderNameList) {
 //      TranslationUtil.genReadBookScript(folderName);
 //    }

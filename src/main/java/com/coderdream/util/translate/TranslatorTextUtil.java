@@ -168,8 +168,9 @@ public class TranslatorTextUtil {
 
   public static void main(String[] args) {
     String content = "Hello, friend! What did you do today? How are you? I am fine.";
-    YouTubeApiUtil.enableProxy();
-    List<String> stringList = translatorText(content);
+    content = "Should we eat less rice?";
+//    YouTubeApiUtil.enableProxy();
+    List<String> stringList = TranslatorTextUtil.translatorText(content);
     for (String str : stringList) {
       System.out.println(str);
     }

@@ -9,7 +9,6 @@ import com.coderdream.entity.Book002SceneEntity;
 import com.coderdream.entity.DialogSingleEntity;
 import com.coderdream.entity.SentencePair;
 import com.coderdream.util.cd.CdConstants;
-import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdStringUtil;
 import com.coderdream.util.gemini.TranslationUtil;
 import com.coderdream.util.sentence.DialogSingleEntityUtil;
@@ -51,7 +50,7 @@ public class BeforeGenerateUtil {
         // 生成初剪文本
         String rawTxtPath = targetFolderPath + subFolder + "_raw.txt";
         String txtPath = targetFolderPath + subFolder + ".txt";
-        if (CdFileUtil.isFileEmpty(rawTxtPath)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(rawTxtPath)) {
             String elapsedTime = TextFileUtil.filterTextFile(sourcePath, rawTxtPath);
             String elapsedTime2 = TextFileUtil.filterTextFile(sourcePath, txtPath);
             log.info("耗时：{}：{}", elapsedTime, elapsedTime2);
@@ -86,8 +85,9 @@ public class BeforeGenerateUtil {
                 folderPath + subFolder + File.separator + subFolder + "_dialog.txt";
         String totalPath =
                 folderPath + subFolder + File.separator + subFolder + "_total.txt";
-        if (CdFileUtil.isFileEmpty(dialogPath) || CdFileUtil.isFileEmpty(basicPath)
-                || CdFileUtil.isFileEmpty(totalPath) || replaceFlag) {
+        if (
+          com.coderdream.util.cd.CdFileUtil.isFileEmpty(dialogPath) || com.coderdream.util.cd.CdFileUtil.isFileEmpty(basicPath)
+                || com.coderdream.util.cd.CdFileUtil.isFileEmpty(totalPath) || replaceFlag) {
 
             Map<Integer, DialogSingleEntity> dialogSingleEntityListSceneMap = getSceneMap(
                     folderPath);
@@ -170,7 +170,7 @@ public class BeforeGenerateUtil {
 
         String fileNameTotal =
                 folderPath + subFolder + File.separator + subFolder + "_total.txt";
-        if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             File fileTotal = DialogSingleEntityUtil.genTotalFile(folderPath,
                     subFolder);
             log.info("文件不存在或为空，已生成新文件: {}",
@@ -181,8 +181,8 @@ public class BeforeGenerateUtil {
 
         // 生成带音标的文件
         // 生成带音标的文件
-        String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
-        if (CdFileUtil.isFileEmpty(aiFileName)) {
+        String aiFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(aiFileName)) {
             File file = TranslationUtil.genAiFile(fileNameTotal);
             assert file != null;
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
@@ -196,7 +196,7 @@ public class BeforeGenerateUtil {
         // 1. 生成章节文本
         String fileNameTotal =
                 folderPath + subFolder + File.separator + subFolder + ".txt";
-        if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             File fileTotal = DialogSingleEntityUtil.genTotalFile(folderPath,
                     subFolder);
             log.info("文件不存在或为空，已生成新文件: {}",
@@ -207,8 +207,8 @@ public class BeforeGenerateUtil {
 
         // 生成带音标的文件
         // 生成带音标的文件
-        String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
-        if (CdFileUtil.isFileEmpty(aiFileName)) {
+        String aiFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(aiFileName)) {
             File file = TranslationUtil.genAiFile(fileNameTotal);
             assert file != null;
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
@@ -220,7 +220,7 @@ public class BeforeGenerateUtil {
         String phoneticsFileName =
                 folderPath + File.separator + subFolder + File.separator + subFolder
                         + "_phonetics.txt";
-        if (CdFileUtil.isFileEmpty(phoneticsFileName)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(phoneticsFileName)) {
             File file = TranslationUtil.genPhonetics(fileNameTotal, aiFileName);
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
         } else {
@@ -258,7 +258,7 @@ public class BeforeGenerateUtil {
 
         String fileNameTotal =
                 folderPath + subFolder + File.separator + subFolder + "_total.txt";
-        if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             File fileTotal = DialogSingleEntityUtil.genTotalFile(folderPath,
                     subFolder);
             log.info("文件不存在或为空，已生成新文件: {}",
@@ -269,8 +269,8 @@ public class BeforeGenerateUtil {
 
         // 生成带音标的文件
         // 生成带音标的文件
-        String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
-        if (CdFileUtil.isFileEmpty(aiFileName)) {
+        String aiFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(aiFileName)) {
             File file = TranslationUtil.genAiFile(fileNameTotal);
             assert file != null;
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
@@ -282,7 +282,7 @@ public class BeforeGenerateUtil {
         String phoneticsFileName =
                 folderPath + File.separator + subFolder + File.separator + subFolder
                         + "_total_phonetics.txt";
-        if (CdFileUtil.isFileEmpty(phoneticsFileName)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(phoneticsFileName)) {
             File file = TranslationUtil.genPhonetics(fileNameTotal, aiFileName);
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
         } else {
@@ -471,7 +471,7 @@ public class BeforeGenerateUtil {
 
         String fileNameTotal =
                 folderPath + subFolder + File.separator + subFolder + "_total.txt";
-        if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             File fileTotal = FileUtil.writeLines(totalList, fileNameTotal,
                     StandardCharsets.UTF_8);
             log.info("文件不存在或为空，已生成新文件: {}",
@@ -481,8 +481,8 @@ public class BeforeGenerateUtil {
         }
 
         // 生成带音标的文件
-        String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
-        if (CdFileUtil.isFileEmpty(aiFileName)) {
+        String aiFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(aiFileName)) {
             File file = TranslationUtil.genAiFile(fileNameTotal);
             assert file != null;
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
@@ -494,7 +494,7 @@ public class BeforeGenerateUtil {
         String phoneticsFileName =
                 folderPath + File.separator + subFolder + File.separator + subFolder
                         + "_total_phonetics.txt";
-        if (CdFileUtil.isFileEmpty(phoneticsFileName)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(phoneticsFileName)) {
             File file = TranslationUtil.genPhonetics(fileNameTotal, aiFileName);
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
         } else {
@@ -506,13 +506,13 @@ public class BeforeGenerateUtil {
     public static void processBook0201(String folderPath, String subFolder) {
         String fileNameTotal =
                 folderPath + subFolder + File.separator + subFolder + "_total.txt";
-        if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             return;
         }
 
         // 生成带音标的文件
-        String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
-        if (CdFileUtil.isFileEmpty(aiFileName)) {
+        String aiFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(aiFileName)) {
             File file = TranslationUtil.genAiFile(fileNameTotal);
             assert file != null;
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
@@ -524,7 +524,7 @@ public class BeforeGenerateUtil {
         String phoneticsFileName =
                 folderPath + File.separator + subFolder + File.separator + subFolder
                         + "_total_phonetics.txt";
-        if (CdFileUtil.isFileEmpty(phoneticsFileName)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(phoneticsFileName)) {
             File file = TranslationUtil.genPhonetics(fileNameTotal, aiFileName);
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
         } else {
@@ -535,13 +535,13 @@ public class BeforeGenerateUtil {
     public static void processBook002_AI(String folderPath, String subFolder) {
         String fileNameTotal =
                 folderPath + subFolder + File.separator + subFolder + "_total.txt";
-        if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             return;
         }
 
         // 生成带音标的文件
-        String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
-        if (CdFileUtil.isFileEmpty(aiFileName)) {
+        String aiFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(aiFileName)) {
             File file = TranslationUtil.genAiFile(fileNameTotal);
             assert file != null;
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
@@ -554,18 +554,18 @@ public class BeforeGenerateUtil {
     public static void processBook002Phonetics(String folderPath, String subFolder) {
         String fileNameTotal =
                 folderPath + subFolder + File.separator + subFolder + "_total.txt";
-        if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             return;
         }
 
         // 生成带音标的文件
-        String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+        String aiFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
 
         // 2. 生成英文+音标的文件
         String phoneticsFileName =
                 folderPath + File.separator + subFolder + File.separator + subFolder
                         + "_total_phonetics.txt";
-        if (CdFileUtil.isFileEmpty(phoneticsFileName)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(phoneticsFileName)) {
             File file = TranslationUtil.genPhonetics(fileNameTotal, aiFileName);
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
         } else {
@@ -575,7 +575,7 @@ public class BeforeGenerateUtil {
 
     private static boolean genTotal(String fileNameTotal,
                                     List<SentencePair> filteredList1) {
-        if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
 
             List<String> totalList = new ArrayList<>();
             String englishSentence;
@@ -645,7 +645,7 @@ public class BeforeGenerateUtil {
 //    // 1.1. 创建目标文件夹
 //    File targetFolder = new File(targetFolderPath);
 //    if (!targetFolder.exists()) {
-//      FileUtil.mkdir(targetFolderPath);
+//      CdFileUtil.mkdir(targetFolderPath);
 //    }
 
         Map<Integer, DialogSingleEntity> dialogSingleEntityListSceneMap = getSceneMap(
@@ -796,7 +796,7 @@ public class BeforeGenerateUtil {
 
         String fileNameTotal =
                 folderPath + subFolder + File.separator + subFolder + "_total.txt";
-        if (CdFileUtil.isFileEmpty(fileNameTotal)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             File fileTotal = FileUtil.writeLines(totalList, fileNameTotal,
                     StandardCharsets.UTF_8);
             log.info("文件不存在或为空，已生成新文件: {}",
@@ -806,8 +806,8 @@ public class BeforeGenerateUtil {
         }
 
         // 生成带音标的文件
-        String aiFileName = CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
-        if (CdFileUtil.isFileEmpty(aiFileName)) {
+        String aiFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileNameTotal, "_ai");
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(aiFileName)) {
             File file = TranslationUtil.genAiFile(fileNameTotal);
             assert file != null;
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
@@ -819,7 +819,7 @@ public class BeforeGenerateUtil {
         String phoneticsFileName =
                 folderPath + File.separator + subFolder + File.separator + subFolder
                         + "_total_phonetics.txt";
-        if (CdFileUtil.isFileEmpty(phoneticsFileName)) {
+        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(phoneticsFileName)) {
             File file = TranslationUtil.genPhonetics(fileNameTotal, aiFileName);
             log.info("带音标文件生成成功！文件名为：{}", file.getAbsolutePath());
         } else {

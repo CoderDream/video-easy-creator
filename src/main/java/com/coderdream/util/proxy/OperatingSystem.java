@@ -57,7 +57,8 @@ public class OperatingSystem {
 
     // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
     switch (osType) {
-      case OS_WINDOWS -> proxyPort = 1080;//7890; TODO singbox 为1080，看bat文件可以获取端口 clash 为7890
+      case OS_WINDOWS ->
+        proxyPort = 1080;//7890; TODO singbox 为1080，看bat文件可以获取端口 clash 为7890
       case OS_MAC -> proxyPort = 1087;
       case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
       default -> System.out.println("无法识别的操作系统。");
@@ -76,11 +77,10 @@ public class OperatingSystem {
     // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
     switch (osType) {
       case OS_WINDOWS -> folderPath =
-        "D:" + File.separator + "0000" + File.separator + bookName
-          + File.separator;
+        "D:" + File.separator + "0000" + File.separator + bookName;
       case OS_MAC -> folderPath =
         File.separator + "Volumes" + File.separator + "System" + File.separator
-          + "0000" + File.separator + bookName + File.separator;
+          + "0000" + File.separator + bookName;
       case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
       default -> System.out.println("无法识别的操作系统。");
     }
@@ -133,6 +133,21 @@ public class OperatingSystem {
     switch (osType) {
       case OS_WINDOWS -> folderPath = "D:\\0000" + File.separator;
       case OS_MAC -> folderPath = "/Volumes/System/0000" + File.separator;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
+    }
+    return folderPath;
+  }
+
+  public static String getDiskFolder() {
+    String osType = OperatingSystem.getOS();
+//        System.out.println("操作系统类型: " + osType);
+
+    String folderPath = "";
+    // 可以根据操作系统类型执行不同的逻辑 export http_proxy=http://127.0.0.1:1087;export https_proxy=http://127.0.0.1:1087;export ALL_PROXY=socks5://127.0.0.1:1080
+    switch (osType) {
+      case OS_WINDOWS -> folderPath = "D:";
+      case OS_MAC -> folderPath = "/Volumes/System";
       case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
       default -> System.out.println("无法识别的操作系统。");
     }

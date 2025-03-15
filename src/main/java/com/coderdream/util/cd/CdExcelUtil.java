@@ -198,7 +198,7 @@ public class CdExcelUtil {
 //        String dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
 //        String path = BaseUtils.getPath();
 //        String fileName = File.separator + path + File.separator + dateStr + ".xlsx";
-//        ExcelReader reader = ExcelUtil.getReader(FileUtil.file(fileName), "Sheet1");
+//        ExcelReader reader = ExcelUtil.getReader(CdFileUtil.file(fileName), "Sheet1");
         ExcelReader reader = ExcelUtil.getReader(FileUtil.file(filePath), sheetName);
         // 单词	英音	美音	释义	等级
         reader.addHeaderAlias("单词", "word");
@@ -221,7 +221,7 @@ public class CdExcelUtil {
 //        String dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
 //        String path = BaseUtils.getPath();
 //        String fileName = File.separator + path + File.separator + dateStr + ".xlsx";
-//        ExcelReader reader = ExcelUtil.getReader(FileUtil.file(fileName), "Sheet1");
+//        ExcelReader reader = ExcelUtil.getReader(CdFileUtil.file(fileName), "Sheet1");
         ExcelReader reader = ExcelUtil.getReader(FileUtil.file(filePath), sheetName);
         // 单词	英音	美音	释义	等级
         reader.addHeaderAlias("单词", "word");

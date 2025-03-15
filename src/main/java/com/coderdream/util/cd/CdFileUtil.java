@@ -92,8 +92,8 @@ public class CdFileUtil {
       // 定义UTF-16 Little Endian编码
 //      Charset utf16Le = StandardCharsets.UTF_16LE;
       // 读取文件内容到列表
-//            return FileUtil.readLines(file, "UTF-8");
-//            List<String> lines = FileUtil.readLines(file, utf16Le);
+//            return CdFileUtil.readLines(file, "UTF-8");
+//            List<String> lines = CdFileUtil.readLines(file, utf16Le);
       List<String> lines = FileUtil.readLines(file, StandardCharsets.UTF_8);
       // 移除每行首尾空格，并过滤掉空行
       return lines.stream()
@@ -125,7 +125,7 @@ public class CdFileUtil {
       // 定义UTF-16 Little Endian编码
 //            Charset utf16Le = StandardCharsets.UTF_16LE;
       // 读取文件内容到列表
-//            return FileUtil.readLines(file, "UTF-8");
+//            return CdFileUtil.readLines(file, "UTF-8");
       List<String> lines = FileUtil.readLines(file, charset);
       // 移除每行首尾空格，并过滤掉空行
       return lines.stream()
@@ -161,7 +161,7 @@ public class CdFileUtil {
   public static String getArticleTitle(String folderName) {
 //    String fileName = CdConstants.RESOURCES_BASE_PATH + "\\bbc\\title.txt";
     String fileName =
-      CdFileUtil.getResourceRealPath() + "\\data\\bbc\\title.txt";
+      com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + "\\data\\bbc\\title.txt";
 
     List<ArticleTitle> articleTitleList = getArticleTitleList(fileName);
     for (ArticleTitle article : articleTitleList) {
@@ -645,7 +645,7 @@ public class CdFileUtil {
       return null;
     }
 
-    // 使用 FileUtil.ls(String) 获取所有文件和文件夹，然后过滤出文件夹
+    // 使用 CdFileUtil.ls(String) 获取所有文件和文件夹，然后过滤出文件夹
     File[] filesArray = FileUtil.ls(directoryPath);  // 使用 String 路径，返回 File[]
 
     // 修复空目录的校验逻辑
@@ -676,7 +676,7 @@ public class CdFileUtil {
 //    System.out.println("修改后的文件路径2: " + newFilePath2);
 
     String inputFilePath = "D:\\0000\\EnBook002\\Chapter007\\Chapter007_temp.txt"; // 替换为你的输入文件路径
-    String outputFilePath = CdFileUtil.generateOutputFilePath(inputFilePath);
+    String outputFilePath = com.coderdream.util.cd.CdFileUtil.generateOutputFilePath(inputFilePath);
     System.out.println("新的文件路径: " + outputFilePath);
 
   }

@@ -61,13 +61,13 @@ public class RemoveDuplicateBookmarks {
 }
 
 //        // 读取HTML文件内容
-//        List<String> htmlContentList = FileUtil.readLines(inputFilePath, StandardCharsets.UTF_8);
+//        List<String> htmlContentList = CdFileUtil.readLines(inputFilePath, StandardCharsets.UTF_8);
 //
 //        // 调用方法去除重复书签
 //        String cleanedHtml = removeDuplicateBookmarks(htmlContentList);
 //
 //        // 将清理后的HTML写入到新文件
-//        FileUtil.writeUtf8String(cleanedHtml, outputFilePath);
+//        CdFileUtil.writeUtf8String(cleanedHtml, outputFilePath);
 //
 //        System.out.println("清理完成，去重后的HTML已保存到：" + outputFilePath);
 //    }

@@ -5,7 +5,6 @@ import static java.lang.Thread.sleep;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.cd.CdConstants;
-import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.ffmpeg.FfmpegUtil;
 
@@ -17,7 +16,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.xalan.res.XSLTErrorResources_en;
 
 @Slf4j
 public class SingleCreateVideoUtil {
@@ -80,7 +78,7 @@ public class SingleCreateVideoUtil {
     String videoFileName, double duration) {
 
     File videoFile = new File(videoFileName);
-    if (!CdFileUtil.isFileEmpty(videoFileName)) {
+    if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(videoFileName)) {
       log.info("视频文件已存在，无需重新生成，{}", videoFileName);
       return videoFile;
     }
@@ -127,8 +125,8 @@ public class SingleCreateVideoUtil {
 //      log.info("创建目录：{}，结果：{}", videoPath, isSuccess);
 //    }
 //
-//    List<String> imagePathNameList = FileUtil.listFileNames(imagePath);
-//    List<String> audioPathNameList = FileUtil.listFileNames(audioPath);
+//    List<String> imagePathNameList = CdFileUtil.listFileNames(imagePath);
+//    List<String> audioPathNameList = CdFileUtil.listFileNames(audioPath);
 //
 //    // 如果图片列表数量和音频列表数量不一致，则抛出异常
 //    if (CollectionUtil.isEmpty(imagePathNameList) || CollectionUtil.isEmpty(
@@ -211,7 +209,7 @@ public class SingleCreateVideoUtil {
       String audioFileName = audioPath + File.separator
         + audioPathNameList.get(i);
       String videoFileName =
-        videoPath + CdFileUtil.getPureFileNameWithoutExtensionWithPath(
+        videoPath + com.coderdream.util.cd.CdFileUtil.getPureFileNameWithoutExtensionWithPath(
           audioFileName) + ".mp4";
 
       Runnable task = () -> {

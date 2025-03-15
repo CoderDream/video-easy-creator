@@ -8,13 +8,13 @@ class PrepareForMakeVideoUtilTest {
 
   @Test
   void processForSixMinutes() {
-    String folderName = "170406";
+    String folderName = "170420";
     PrepareForMakeVideoUtil.processForSixMinutes(folderName);
   }
 
   @Test
   void processForSixMinutesFromTodo() {
-    String folderName = "250306";
+    String folderName = "250313";
     PrepareForMakeVideoUtil.processForSixMinutes(folderName);
   }
 }

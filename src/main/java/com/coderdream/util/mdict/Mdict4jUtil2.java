@@ -39,7 +39,7 @@ public class Mdict4jUtil2 {
 //            getWordDetail(word, "");
     // hangry
 
-//        List<String> strings = FileUtil.readLines("D:\\Download\\20000words.txt", StandardCharsets.UTF_8);
+//        List<String> strings = CdFileUtil.readLines("D:\\Download\\20000words.txt", StandardCharsets.UTF_8);
 //
 //        int i = 0;
 //        int index = 10000;
