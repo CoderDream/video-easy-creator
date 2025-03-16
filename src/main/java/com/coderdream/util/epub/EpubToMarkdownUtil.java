@@ -126,7 +126,7 @@ public class EpubToMarkdownUtil {
     StringBuilder markdownContent = new StringBuilder();
 
     // 先删除images文件夹下的所有文件
-    String imageDir = folderPath + "images";
+    String imageDir = folderPath + File.separator + "images";
     deleteDirectory(new File(imageDir));
 
     // 遍历 HTML 内容并转换为 Markdown
@@ -148,7 +148,7 @@ public class EpubToMarkdownUtil {
         // 处理封面图片
         Resource coverImage = getCoverImage(book);
         if (coverImage != null) {
-          saveImage(coverImage, folderPath + "images");
+          saveImage(coverImage, folderPath + File.separator + "images");
           markdownContent.append("![Cover Image](").append("/images/")
             .append(coverImage.getHref())
             .append(")\n\n");
@@ -164,7 +164,7 @@ public class EpubToMarkdownUtil {
     // 处理图片资源并保存到本地
     for (Resource image : images) {
       if (image.getMediaType().toString().startsWith("image")) {
-        saveImage(image, folderPath + "images");
+        saveImage(image, folderPath + File.separator + "images");
 //                markdownContent.append("![Image](").append("images/").append(image.getHref()).append(")\n\n");
       }
     }
@@ -199,7 +199,7 @@ public class EpubToMarkdownUtil {
       addToZipFile(mdFileName, zos);
 
       // 添加 images 文件夹到 ZIP 文件
-      addToZipFolder(folderPath + "images", zos);
+      addToZipFolder(folderPath + File.separator + "images", zos);
     }
 
     log.info("ZIP 文件已生成：{}", zipFileName);

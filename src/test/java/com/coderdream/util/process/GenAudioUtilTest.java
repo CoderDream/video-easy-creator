@@ -105,10 +105,34 @@ class GenAudioUtilTest {
     }
   }
 
+  @Test
+  void processBatchEnBook_0008() {
+    String bookName = "EnBook008";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 2; // 假定总共50章 51
+    for (int i = 1; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenAudioUtil.processV2(folderPath, subFolder);
+    }
+  }
+
   // GenDualAudioUtil.genHeadAudio();
 
   @Test
-  void genHeadAudio() {
+  void genHeadAudioBatch() {
       GenAudioUtil.genHeadAudio();
+  }
+
+
+  @Test
+  void genHeadAudio_EnBook008() {
+    String bookName = "EnBook008";
+    GenAudioUtil.genHeadAudio(bookName);
   }
 }

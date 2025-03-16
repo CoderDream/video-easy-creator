@@ -38,10 +38,10 @@ public class BeforeGenerateUtil {
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";
 //    String subFolder = "ch004"; ❸
         String sourcePath =
-                folderPath + subFolder + File.separator + subFolder + "_temp.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_temp.txt";
 
         String targetFolderPath =
-                folderPath + subFolder + File.separator + "input" + File.separator;
+                folderPath + File.separator + subFolder + File.separator + "input" + File.separator;
         // 1.1. 创建目标文件夹
         File targetFolder = new File(targetFolderPath);
         if (!targetFolder.exists()) {
@@ -69,10 +69,10 @@ public class BeforeGenerateUtil {
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";
 //    String subFolder = "ch004"; ❸
         String sourcePath =
-                folderPath + subFolder + File.separator + subFolder + "_temp.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_temp.txt";
 
         String targetFolderPath =
-                folderPath + subFolder + File.separator + "input" + File.separator;
+                folderPath + File.separator + subFolder + File.separator + "input" + File.separator;
         // 1.1. 创建目标文件夹
         File targetFolder = new File(targetFolderPath);
         if (!targetFolder.exists()) {
@@ -80,11 +80,11 @@ public class BeforeGenerateUtil {
         }
         // 生成初剪文本
         String basicPath =
-                folderPath + subFolder + File.separator + subFolder + "_basic.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_basic.txt";
         String dialogPath =
-                folderPath + subFolder + File.separator + subFolder + "_dialog.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_dialog.txt";
         String totalPath =
-                folderPath + subFolder + File.separator + subFolder + "_total.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_total.txt";
         if (
           com.coderdream.util.cd.CdFileUtil.isFileEmpty(dialogPath) || com.coderdream.util.cd.CdFileUtil.isFileEmpty(basicPath)
                 || com.coderdream.util.cd.CdFileUtil.isFileEmpty(totalPath) || replaceFlag) {
@@ -169,7 +169,7 @@ public class BeforeGenerateUtil {
     public static void genAiFile(String folderPath, String subFolder) {
 
         String fileNameTotal =
-                folderPath + subFolder + File.separator + subFolder + "_total.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_total.txt";
         if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             File fileTotal = DialogSingleEntityUtil.genTotalFile(folderPath,
                     subFolder);
@@ -195,7 +195,7 @@ public class BeforeGenerateUtil {
     public static void process(String folderPath, String subFolder) {
         // 1. 生成章节文本
         String fileNameTotal =
-                folderPath + subFolder + File.separator + subFolder + ".txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + ".txt";
         if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             File fileTotal = DialogSingleEntityUtil.genTotalFile(folderPath,
                     subFolder);
@@ -234,7 +234,7 @@ public class BeforeGenerateUtil {
                 "video_list_file", "subtitle", "video_cht_1", "video_cht_2", "video_cht_3", "video_cht_4");
         for (String folderName : folderNameList) {
             String subFolderPath =
-                    folderPath + subFolder + File.separator + folderName;
+                    folderPath + File.separator + subFolder + File.separator + folderName;
             if (new File(subFolderPath).exists()) {
                 // 删除文件夹及其内容
                 FileUtil.del(new File(subFolderPath));
@@ -257,7 +257,7 @@ public class BeforeGenerateUtil {
         }
 
         String fileNameTotal =
-                folderPath + subFolder + File.separator + subFolder + "_total.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_total.txt";
         if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             File fileTotal = DialogSingleEntityUtil.genTotalFile(folderPath,
                     subFolder);
@@ -296,10 +296,10 @@ public class BeforeGenerateUtil {
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";
 //    String subFolder = "ch004"; ❸
         String sourcePath =
-                folderPath + subFolder + File.separator + subFolder + ".txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + ".txt";
 
         String targetFolderPath =
-                folderPath + subFolder + File.separator + "input" + File.separator;
+                folderPath + File.separator + subFolder + File.separator + "input" + File.separator;
         // 1.1. 创建目标文件夹
         File targetFolder = new File(targetFolderPath);
         if (!targetFolder.exists()) {
@@ -470,7 +470,7 @@ public class BeforeGenerateUtil {
         }
 
         String fileNameTotal =
-                folderPath + subFolder + File.separator + subFolder + "_total.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_total.txt";
         if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             File fileTotal = FileUtil.writeLines(totalList, fileNameTotal,
                     StandardCharsets.UTF_8);
@@ -505,7 +505,7 @@ public class BeforeGenerateUtil {
 
     public static void processBook0201(String folderPath, String subFolder) {
         String fileNameTotal =
-                folderPath + subFolder + File.separator + subFolder + "_total.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_total.txt";
         if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             return;
         }
@@ -534,7 +534,7 @@ public class BeforeGenerateUtil {
 
     public static void processBook002_AI(String folderPath, String subFolder) {
         String fileNameTotal =
-                folderPath + subFolder + File.separator + subFolder + "_total.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_total.txt";
         if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             return;
         }
@@ -553,7 +553,7 @@ public class BeforeGenerateUtil {
 
     public static void processBook002Phonetics(String folderPath, String subFolder) {
         String fileNameTotal =
-                folderPath + subFolder + File.separator + subFolder + "_total.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_total.txt";
         if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             return;
         }
@@ -638,10 +638,10 @@ public class BeforeGenerateUtil {
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";
 //    String subFolder = "ch004"; ❸
         String sourcePath =
-                folderPath + subFolder + File.separator + subFolder + ".txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + ".txt";
 
 //    String targetFolderPath =
-//      folderPath + subFolder + File.separator + "input" + File.separator;
+//      folderPath + File.separator + subFolder + File.separator + "input" + File.separator;
 //    // 1.1. 创建目标文件夹
 //    File targetFolder = new File(targetFolderPath);
 //    if (!targetFolder.exists()) {
@@ -795,7 +795,7 @@ public class BeforeGenerateUtil {
         }
 
         String fileNameTotal =
-                folderPath + subFolder + File.separator + subFolder + "_total.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_total.txt";
         if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(fileNameTotal)) {
             File fileTotal = FileUtil.writeLines(totalList, fileNameTotal,
                     StandardCharsets.UTF_8);
@@ -895,7 +895,7 @@ public class BeforeGenerateUtil {
 
         Book002ChapterInfoEntity book002ChapterInfoEntity = new Book002ChapterInfoEntity();
         String sourcePath =
-                folderPath + subFolder + File.separator + subFolder + "_temp.txt";
+                folderPath + File.separator + subFolder + File.separator + subFolder + "_temp.txt";
         List<String> stringList = FileUtil.readLines(sourcePath,
                 StandardCharsets.UTF_8);
         List<SentencePair> sentencePairs = new ArrayList<>();

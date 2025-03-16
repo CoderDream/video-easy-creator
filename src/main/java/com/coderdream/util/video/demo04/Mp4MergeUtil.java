@@ -4,6 +4,7 @@ import static com.coderdream.util.cd.CdConstants.OS_MAC;
 import static com.coderdream.util.cd.CdConstants.OS_WINDOWS;
 
 import cn.hutool.core.io.FileUtil;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.video.demo06.VideoEncoder;
@@ -24,6 +25,75 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Mp4MergeUtil {
+
+  /**
+   * 合并指定文件夹中的所有MP4文件，每10个文件为一组合并，最后剩余的文件继续合并
+   *
+   * @param inputDir  MP4文件夹路径
+   * @param outputDir 合并后输出文件夹路径
+   */
+  public static void mergeMp4Files(List<Path> mp4FilesPart1,
+    List<Path> mp4FilesPart2, List<Path> mp4FilesPart3, String folderPath,
+    String chapterName, Path outputDir) {
+    // 记录方法调用的开始时间
+    long startTime = System.currentTimeMillis();
+
+    try {
+      int size = 0;
+      if (mp4FilesPart1.size() != mp4FilesPart2.size()
+        || mp4FilesPart1.size() != mp4FilesPart3.size()) {
+        log.error("文件列表大小不一致");
+        return;
+      } else {
+        size = mp4FilesPart1.size();
+      }
+
+      for (int i = 0; i < size; i++) {
+        List<Path> mp4Files = new ArrayList<>();
+        mp4Files.add(mp4FilesPart1.get(i));
+        mp4Files.add(mp4FilesPart2.get(i));
+        mp4Files.add(mp4FilesPart3.get(i));
+
+        log.info("找到{}个MP4文件进行合并", mp4Files.size());
+
+        // 创建存放list.txt文件的目录
+        String listFilePath =
+          folderPath + File.separator + chapterName + File.separator
+            + "video_list_file";
+        Path listDir = Paths.get(listFilePath);
+        if (!Files.exists(listDir)) {
+          Files.createDirectories(listDir);
+          log.info("目录创建成功: {}", listDir);
+        }
+
+        int count = 0;
+        // 生成合并后文件的名称，使用第一个和最后一个文件的文件名的数字部分
+        String prefix = getFileNamePrefix(mp4Files);
+        String outputFileName = "merged_" + prefix + ".mp4";
+        Path groupOutputFile = outputDir.resolve(outputFileName);
+        count++;
+        // 生成list.txt文件存放路径
+        File inputListFile = createInputListFile(mp4Files, listDir, count);
+        if (!CdFileUtil.isFileEmpty(groupOutputFile.toString())) {
+          log.info("文件已存在，跳过合并: {}", outputFileName);
+        } else {
+          log.info("开始合并文件: {}", outputFileName);
+          // 合并文件
+          mergeFileGroup(inputListFile, groupOutputFile);
+        }
+      }
+      // 输出合并完成日志
+      log.info("所有MP4文件合并完成");
+
+    } catch (IOException e) {
+      log.error("文件处理异常", e);
+    } finally {
+      // 记录方法调用的结束时间并计算耗时
+      long endTime = System.currentTimeMillis();
+      long duration = endTime - startTime;
+      log.info("合并操作耗时：{}毫秒", duration);
+    }
+  }
 
   /**
    * 合并指定文件夹中的所有MP4文件，每10个文件为一组合并，最后剩余的文件继续合并
@@ -78,7 +148,8 @@ public class Mp4MergeUtil {
         count++;
         // 生成list.txt文件存放路径
         File inputListFile = createInputListFile(group, listDir, count);
-        if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(groupOutputFile.toString())) {
+        if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+          groupOutputFile.toString())) {
           log.info("文件已存在，跳过合并: {}", outputFileName);
         } else {
           log.info("开始合并文件: {}", outputFileName);
@@ -158,7 +229,7 @@ public class Mp4MergeUtil {
     command.add("experimental");
     command.add(output.toString());
 
-    log.error("执行 FFmpeg 命令: {}", String.join(" ", command));
+    log.error("执行 FFmpeg 命令: {}", java.lang.String.join(" ", command));
 
     ProcessBuilder processBuilder = new ProcessBuilder(command);
     processBuilder.redirectErrorStream(true);
@@ -211,7 +282,7 @@ public class Mp4MergeUtil {
   private static File createInputListFile(List<Path> fileGroup, Path listDir,
     int count)
     throws IOException {
-    String countStr = String.format("%03d", count);
+    String countStr = java.lang.String.format("%03d", count);
     File inputListFile = new File(listDir.toFile(),
       "input_list" + countStr + ".txt");
     try (BufferedWriter writer = new BufferedWriter(
@@ -256,10 +327,10 @@ public class Mp4MergeUtil {
       folderPath + File.separator + subFolder + File.separator + "video";
     int count = 1;
     String inputDirStr =
-      folderPath + subFolder + File.separator + "video_cht";
+      folderPath + File.separator + subFolder + File.separator + "video_cht";
     Path inputDir = Paths.get(inputDirStr);
     String outputDirStr =
-      folderPath + subFolder + File.separator + "video_cht_"
+      folderPath + File.separator + subFolder + File.separator + "video_cht_"
         + count;
     String destinationFileName =
       destinationDirectory + File.separator + subFolder + ".mp4";
@@ -277,19 +348,21 @@ public class Mp4MergeUtil {
       return;
     } else {
       // 如果video文件夹下的ChapterXXX.mp4已经存在，则不再处理
-      if(com.coderdream.util.cd.CdFileUtil.isFileEmpty(destinationFileName)) {
+      if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(destinationFileName)) {
         mergeMp4Files(folderPath, subFolder, inputDir, outputDir);
 
         files = FileUtil.loopFiles(outputDir,
-                file -> !file.isDirectory());
+          file -> !file.isDirectory());
         while (files.size() > 1) {
           inputDirStr =
-                  folderPath + File.separator + subFolder + File.separator + "video_cht_"
-                          + count;
+            folderPath + File.separator + subFolder + File.separator
+              + "video_cht_"
+              + count;
           inputDir = Paths.get(inputDirStr);
           outputDirStr =
-                  folderPath + File.separator + subFolder + File.separator + "video_cht_"
-                          + (count + 1);
+            folderPath + File.separator + subFolder + File.separator
+              + "video_cht_"
+              + (count + 1);
           // 确保输出目录存在
           dir = new File(outputDirStr);
           if (!dir.exists() && dir.mkdirs()) {
@@ -308,7 +381,8 @@ public class Mp4MergeUtil {
     }
 
     // 拷贝 outputDir 到最终的文件夹中
-    if (files.size() == 1 && com.coderdream.util.cd.CdFileUtil.isFileEmpty(destinationFileName)) {
+    if (files.size() == 1 && com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+      destinationFileName)) {
       // 将视频拷贝到最终的文件夹中
       log.info("已完成合并，无需进一步操作");
       String sourceFile = files.get(0).getAbsolutePath(); // 替换成你的源文件路径
@@ -348,7 +422,8 @@ public class Mp4MergeUtil {
       // 删除旧的合并文件
       for (int index = 1; index < 6; index++) {
         String outputDirStr2 =
-          folderPath + subFolder + File.separator + "video_cht_"
+          folderPath + File.separator + subFolder + File.separator
+            + "video_cht_"
             + index;
         boolean del = FileUtil.del(outputDirStr2);
         if (del) {
@@ -360,12 +435,15 @@ public class Mp4MergeUtil {
     }
 
     // 重编码视频文件，用于B站发布
-    String outputFilePath = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(destinationFileName,
+    String outputFilePath = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      destinationFileName,
       "_new");
     if (
-      com.coderdream.util.cd.CdFileUtil.isFileEmpty(outputFilePath) && !com.coderdream.util.cd.CdFileUtil.isFileEmpty(
-      destinationFileName)) {      String encodedVideo = VideoEncoder.encodeVideo(destinationFileName,
-      outputFilePath);
+      com.coderdream.util.cd.CdFileUtil.isFileEmpty(outputFilePath)
+        && !com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        destinationFileName)) {
+      String encodedVideo = VideoEncoder.encodeVideo(destinationFileName,
+        outputFilePath);
       log.info("视频编码完成: {}", encodedVideo);
 
     }

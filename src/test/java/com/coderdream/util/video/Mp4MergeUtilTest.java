@@ -34,7 +34,7 @@ class Mp4MergeUtilTest {
         String chapterName = "20250311_白宫简报";
 
         String folderPath =
-          OperatingSystem.getBaseFolder() + bookFolderName + File.separator + subFolder;
+          OperatingSystem.getBaseFolder() + File.separator + bookFolderName + File.separator + subFolder;
         String destinationFileName =
           folderPath + File.separator + chapterName + File.separator + chapterName + ".mp4";
         // 重编码视频文件，用于B站发布

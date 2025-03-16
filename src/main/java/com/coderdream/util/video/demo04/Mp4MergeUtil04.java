@@ -275,7 +275,7 @@ public class Mp4MergeUtil04 {
 
   public static void main(String[] args) {
     String bookName = "EnBook002";
-    String folderPath = OperatingSystem.getBaseFolder() + bookName;
+    String folderPath = OperatingSystem.getBaseFolder() + File.separator + bookName;
     String subFolder = "Chapter012";
     Mp4MergeUtil04.processMerge(folderPath, subFolder);
   }

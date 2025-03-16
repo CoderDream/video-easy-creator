@@ -50,7 +50,21 @@ public class SsmlGenerator {
         return ssmlString;
     }
 
-    public static void main(String[] args) {
+  /**
+   * x-slow /ɪks sloʊ/ (极慢)
+   *
+   * slow /sloʊ/ (慢)
+   *
+   * medium /ˈmiːdiəm/ (中等/正常)
+   *
+   * fast /fæst/ (快)
+   *
+   * x-fast /ɪks fæst/ (极快)
+   *
+   * default /dɪˈfɒlt/ (默认值，相当于 medium)
+   * @param args
+   */
+  public static void main(String[] args) {
         List<String> textList = List.of("你好", "欢迎使用微软的文本转语音服务！");
         String voiceName = "zh-CN-XiaoxiaoNeural";
         String pitch = "medium";

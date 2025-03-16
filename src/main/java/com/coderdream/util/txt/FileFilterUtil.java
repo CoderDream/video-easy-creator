@@ -14,10 +14,10 @@ public class FileFilterUtil {
    */
   public static void filterAndSaveFile(String folderPath, String subFolder) {
     String inputFilePath =
-      folderPath + subFolder + File.separator + subFolder + "_temp.txt";
+      folderPath + File.separator + subFolder + File.separator + subFolder + "_temp.txt";
 
     String outputFilePath =
-      folderPath + subFolder + File.separator + subFolder + ".txt";
+      folderPath + File.separator + subFolder + File.separator + subFolder + ".txt";
 
     File inputFile = new File(inputFilePath);
     File outputFile = new File(outputFilePath);

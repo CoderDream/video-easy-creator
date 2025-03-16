@@ -18,6 +18,13 @@
 
 
 
+
+## 20250315
+
+- [x] 根据图片文字生成封面
+  - ImageTextOverlayUtil.addTextOverlay
+
+
 ## 20250309
 
 - [x] 根据ppt模板批量生成封面

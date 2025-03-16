@@ -19,7 +19,7 @@ public class SQLiteConnector {
             // 创建数据库连接 D:\04_GitHub\video-easy-creator\src\main\resources\data\dict\db2.db
             String folderPath = CdFileUtil.getResourceRealPath() + File.separatorChar
                     + "data" + File.separatorChar + "dict" + File.separatorChar;
-            String url = "jdbc:sqlite:" + folderPath + "db2.db";
+            String url = "jdbc:sqlite:" + folderPath + File.separator + "db2.db";
             // "jdbc:sqlite:D:/04_GitHub/video-easy-creator/src/main/resources/data/dict/db2.db"
             System.out.println(url);
             connection = DriverManager.getConnection(url);

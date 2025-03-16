@@ -51,7 +51,7 @@ public class ReadPdfUtil {
     String folderName = "170209";
     String folderPath = CommonUtil.getFullPath(folderName);
     String fileName = PdfFileFinder.findPdfFileName(folderName);
-    String fileNameWithPath = folderPath + fileName;
+    String fileNameWithPath = folderPath + File.separator + fileName;
 //    List<String> stringList = getStringList(folderPath, fileName);
 //    for (String str : stringList) {
 //      System.out.println(str);

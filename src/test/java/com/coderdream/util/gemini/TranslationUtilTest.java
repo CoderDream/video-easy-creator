@@ -69,7 +69,7 @@ class TranslationUtilTest {
   void genDescription() {
     String folderName = "250206"; // 250102
 //    String folderPath = CommonUtil.getFullPath(folderName);
-//    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
+//    String fileName = folderPath + File.separator + folderName + "_中英双语对话脚本.txt";
     TranslationUtil.genDescription(folderName);
 //    log.info("translate: {}", translate);
   }
@@ -85,7 +85,7 @@ class TranslationUtilTest {
     }
 
 //    String folderPath = CommonUtil.getFullPath(folderName);
-//    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
+//    String fileName = folderPath + File.separator + folderName + "_中英双语对话脚本.txt";
 //    TranslationUtil.genDescription(fileName);
 //    log.info("translate: {}", translate);
   }
@@ -121,16 +121,16 @@ class TranslationUtilTest {
     String folderName = "ReadBook_0003";
     String bookFileName = "高难度沟通";
     String bookFileNameWithPath =
-      OperatingSystem.getBaseFolder() + "ReadBook" + File.separator + folderName
+      OperatingSystem.getBaseFolder() + File.separator + "ReadBook" + File.separator + folderName
         + File.separator + bookFileName + ".txt";
     DateFormat dateFormat = new SimpleDateFormat("yyMMddHHmm");
     String readBookScriptFileName =
-      OperatingSystem.getBaseFolder() + "ReadBook" + File.separator + folderName
+      OperatingSystem.getBaseFolder() + File.separator + "ReadBook" + File.separator + folderName
         + File.separator + folderName + "_" + dateFormat.format(new Date())
         + ".txt";
 
 //    String folderPath = CommonUtil.getFullPath(folderName);
-//    String fileName = folderPath + folderName + "_中英双语对话脚本.txt";
+//    String fileName = folderPath + File.separator + folderName + "_中英双语对话脚本.txt";
     TranslationUtil.genReadBookScript(folderName, bookFileNameWithPath,
       readBookScriptFileName);
 //    log.info("translate: {}", translate);

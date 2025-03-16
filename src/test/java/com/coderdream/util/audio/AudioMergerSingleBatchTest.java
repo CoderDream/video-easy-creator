@@ -14,9 +14,9 @@ class AudioMergerSingleBatchTest {
   @Test
   void mergeWavFile() {
     String inputDir =
-      OperatingSystem.getBaseFolder() + "bgmusic"
+      OperatingSystem.getBaseFolder() + File.separator + "bgmusic"
         + File.separator + "head" + File.separator;
-    String outputFileDir =  OperatingSystem.getBaseFolder()  + "bgmusic"
+    String outputFileDir =  OperatingSystem.getBaseFolder() + File.separator  + "bgmusic"
       + File.separator;
     String outputFileName = "head.wav";
     File outputFile = AudioMergerSingleBatch.mergeWavFile(inputDir, outputFileDir,

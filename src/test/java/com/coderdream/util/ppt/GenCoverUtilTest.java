@@ -16,7 +16,7 @@ class GenCoverUtilTest {
 //        String folderPath = OperatingSystem.getFolderPath(bookName1);
 
     String presentationName =
-      OperatingSystem.getBaseFolder() + "ppt" + File.separator + bookName1
+      OperatingSystem.getBaseFolder() + File.separator + "ppt" + File.separator + bookName1
         + File.separator + "商务英语.pptx";
     String chapterFileName = "900_cht_name.txt";
     String bookName = "EnBook001";
@@ -41,7 +41,7 @@ class GenCoverUtilTest {
   @Test
   void process_0102() {
     String presentationName =
-      OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book02"
+      OperatingSystem.getBaseFolder() + File.separator + "ppt" + File.separator + "Book02"
         + File.separator + "Book02模板.pptx";
     String chapterFileName = "book02_name.txt";
     String bookName = "EnBook002";
@@ -55,7 +55,7 @@ class GenCoverUtilTest {
   void process_EnBook004_0102() {
     String bookName = "EnBook004";
     String presentationName =
-      OperatingSystem.getBaseFolder() + "ppt" + File.separator + bookName
+      OperatingSystem.getBaseFolder() + File.separator + "ppt" + File.separator + bookName
         + File.separator + bookName + "模板.pptx";
     String chapterFileName = "book04_name.txt";
     String folderPath = OperatingSystem.getFolderPath(bookName);
@@ -68,7 +68,7 @@ class GenCoverUtilTest {
   void process_EnBook005_0102() {
     String bookName = "EnBook005";
     String presentationName =
-      OperatingSystem.getBaseFolder() + "ppt" + File.separator + bookName
+      OperatingSystem.getBaseFolder() + File.separator + "ppt" + File.separator + bookName
         + File.separator + bookName + "模板.pptx";
     String chapterFileName = "book05_name.txt";
     String folderPath = OperatingSystem.getFolderPath(bookName);
@@ -78,9 +78,22 @@ class GenCoverUtilTest {
   }
 
   @Test
+  void process_EnBook008() {
+    String bookName = "EnBook008";
+    String presentationName =
+      OperatingSystem.getBaseFolder() + File.separator + "ppt" + File.separator + bookName
+        + File.separator + bookName + "模板.pptx";
+    String chapterFileName = bookName+ "_name.txt";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    String imageFormat = "png";
+    GenCoverUtil.process(folderPath, chapterFileName, presentationName,
+      imageFormat, 1280, 720);
+  }
+
+  @Test
   void process_02() {
     String presentationName =
-      OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book02"
+      OperatingSystem.getBaseFolder() + File.separator + "ppt" + File.separator + "Book02"
         + File.separator + "Book02模板.pptx";
     String chapterFileName = "book02_name.txt";
     String bookName = "EnBook002";
@@ -93,7 +106,7 @@ class GenCoverUtilTest {
 //    String inputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 PNG 文件的目录
 //    String outputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 JPG 文件的目录
     String inputDirectory =
-      folderPath + bookName + File.separator + "cover"; // 存放 PNG 文件的目录
+      folderPath + File.separator + bookName + File.separator + "cover"; // 存放 PNG 文件的目录
     String outputDirectory = inputDirectory; // 存放 JPG 文件的目录
     float jpgQuality = 1.0f;// 0.8f; // JPG 图像质量
 
@@ -112,7 +125,7 @@ class GenCoverUtilTest {
 
   void process_0201() {
     String presentationName =
-      OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book02"
+      OperatingSystem.getBaseFolder() + File.separator + "ppt" + File.separator + "Book02"
         + File.separator + "Book02模板.pptx";
     String chapterFileName = "book02_name.txt";
     String bookName = "EnBook002";
@@ -125,7 +138,7 @@ class GenCoverUtilTest {
 //    String inputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 PNG 文件的目录
 //    String outputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 JPG 文件的目录
     String inputDirectory =
-      folderPath + bookName + File.separator + "cover"; // 存放 PNG 文件的目录
+      folderPath + File.separator + bookName + File.separator + "cover"; // 存放 PNG 文件的目录
     String outputDirectory = inputDirectory; // 存放 JPG 文件的目录
     float jpgQuality = 1.0f;// 0.8f; // JPG 图像质量
 
@@ -146,7 +159,7 @@ class GenCoverUtilTest {
   @Test
   void process_03() {
     String presentationName =
-      OperatingSystem.getBaseFolder() + "ppt" + File.separator + "Book02"
+      OperatingSystem.getBaseFolder() + File.separator + "ppt" + File.separator + "Book02"
         + File.separator + "Book02模板.pptx";
 
     String bookName = "EnBook002";
@@ -156,7 +169,7 @@ class GenCoverUtilTest {
 //    String inputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 PNG 文件的目录
 //    String outputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 JPG 文件的目录
     String inputDirectory =
-      folderPath + "cover"; // 存放 PNG 文件的目录
+      folderPath + File.separator + "cover"; // 存放 PNG 文件的目录
     String outputDirectory = inputDirectory; // 存放 JPG 文件的目录
     float jpgQuality = 1.0f;// 0.8f; // JPG 图像质量
 
@@ -172,4 +185,36 @@ class GenCoverUtilTest {
     PngToJpgConverter.batchConvertPngToJpg(inputDirectory, outputDirectory,
       jpgQuality);
   }
+
+
+
+//  @Test
+//  void processEnBook008() {
+//    String presentationName =
+//      OperatingSystem.getBaseFolder() + File.separator + "ppt" + File.separator + "Book02"
+//        + File.separator + "Book02模板.pptx";
+//
+//    String bookName = "EnBook008";
+//    String folderPath = OperatingSystem.getFolderPath(bookName);
+//
+//    // 示例用法
+////    String inputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 PNG 文件的目录
+////    String outputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 JPG 文件的目录
+//    String inputDirectory =
+//      folderPath + File.separator + "cover"; // 存放 PNG 文件的目录
+//    String outputDirectory = inputDirectory; // 存放 JPG 文件的目录
+//    float jpgQuality = 1.0f;// 0.8f; // JPG 图像质量
+//
+////        // 创建测试用的目录和文件（可移除，仅用于测试）
+////        new File(inputDirectory).mkdirs();
+////        try {
+////            new File(inputDirectory, "test.png").createNewFile();
+////            new File(inputDirectory, "test2.PNG").createNewFile();
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
+//
+//    PngToJpgConverter.batchConvertPngToJpg(inputDirectory, outputDirectory,
+//      jpgQuality);
+//  }
 }

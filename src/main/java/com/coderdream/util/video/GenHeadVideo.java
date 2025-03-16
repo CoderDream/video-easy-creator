@@ -41,7 +41,7 @@ public class GenHeadVideo {
                 pureFileName = CdFileUtil.removePostfixToFileName(pureFileName, part);
             }
             String videoPath =
-                    folderPath + pureFileName + File.separator + "video_cht"
+                    folderPath + File.separator + pureFileName + File.separator + "video_cht"
                             + File.separator;
             // --- FFmpeg 任务 ---
             // 假设你有多个输入文件和输出文件

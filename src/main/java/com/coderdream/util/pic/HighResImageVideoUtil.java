@@ -89,7 +89,7 @@ public class HighResImageVideoUtil {
   public static List<File> generateImages(String backgroundImageName,
     String filePath, String contentFileName, String lang) {
     String fullPath = filePath + contentFileName + ".txt";
-    List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFile(
+    List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFileV2(
       fullPath);
     String outputDir = filePath + "/pic/"; // 输出目录
     // 设置路径
@@ -104,6 +104,28 @@ public class HighResImageVideoUtil {
   /**
    * 生成带有文本的图片。
    *
+   * @param backgroundImageName 背景图片名称
+   * @param contentFileName     文件名称
+   * @return 图片文件列表
+   */
+  public static List<File> generateImages(String backgroundImageName,
+    String filePath, String contentFileName, String lang, boolean isDualLanguage) {
+    String fullPath = filePath + contentFileName + ".txt";
+    List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFileV2(
+      fullPath);
+    String outputDir = filePath + "/pic/"; // 输出目录
+    // 设置路径
+    if (StrUtil.isNotEmpty(lang)) {
+      outputDir = filePath + "/pic_" + lang + "/"; // 输出目录
+    }
+
+    return generateImages(sentenceVOs, backgroundImageName, contentFileName,
+      outputDir, isDualLanguage);
+  }
+
+  /**
+   * 生成带有文本的图片。
+   *
    * @param sentenceVOs 要显示的文本内容列表
    * @param imagePath   背景图片路径
    * @param outputDir   输出目录
@@ -111,6 +133,22 @@ public class HighResImageVideoUtil {
    */
   public static List<File> generateImages(List<SentenceVO> sentenceVOs,
     String imagePath, String fileName, String outputDir) {
+    boolean isDualLanguage = false;
+    return generateImages(sentenceVOs, imagePath, fileName, outputDir,
+      isDualLanguage);
+  }
+
+  /**
+   * 生成带有文本的图片。
+   *
+   * @param sentenceVOs 要显示的文本内容列表
+   * @param imagePath   背景图片路径
+   * @param outputDir   输出目录
+   * @return 图片文件列表
+   */
+  public static List<File> generateImages(List<SentenceVO> sentenceVOs,
+    String imagePath, String fileName, String outputDir,
+    boolean isDualLanguage) {
     long startTime = System.currentTimeMillis();
     List<File> imageFiles = new ArrayList<>();
 
@@ -135,13 +173,15 @@ public class HighResImageVideoUtil {
       log.info("目录创建成功: {}", dir.getAbsolutePath());
     }
 
-    Font noFont = new Font("Arial", Font.BOLD,
+    Font noFont = new Font("Source Han Sans Heavy", Font.BOLD,
       FontSizeConverter.pixelToPoint(54));
-    Font englishFont = new Font("Arial", Font.PLAIN,
+    Font englishFont = new Font("Source Han Sans Heavy", Font.PLAIN,
       FontSizeConverter.pixelToPoint(80));
     Font phoneticsFont = new Font("Arial Unicode MS", Font.PLAIN,
       FontSizeConverter.pixelToPoint(80));
-    Font chineseFont = new Font("SimHei", Font.PLAIN,
+    Font chineseZhCnFont = new Font("Source Han Sans Heavy", Font.PLAIN,
+      FontSizeConverter.pixelToPoint(96));
+    Font chineseZhTwFont = new Font("Source Han Sans Heavy", Font.PLAIN,
       FontSizeConverter.pixelToPoint(96));
 
     for (int i = 0; i < Objects.requireNonNull(sentenceVOs).size(); i++) {
@@ -167,7 +207,7 @@ public class HighResImageVideoUtil {
 
       drawPageNumber(g2d, noFont, width, sentenceVOs.size(), i + 1);
 
-      int startY = height / 2 - 100;
+      int startY = height / 2 - 200;
       int currentY = startY;
 
       currentY = drawWrappedText(g2d, englishFont, Color.WHITE,
@@ -175,14 +215,15 @@ public class HighResImageVideoUtil {
       // #fbc531    Color.getColor("#FBC531")
       currentY = drawWrappedText(g2d, phoneticsFont, new Color(251, 197, 49),
         sentenceVO.getPhonetics(), currentY + LINE_SPACING, width, false);
+      currentY += 20;
+      if (isDualLanguage) {
+        currentY = drawWrappedText(g2d, chineseZhCnFont, new Color(255, 255, 155),
+          ZhConverterUtil.toSimple(sentenceVO.getChinese()), currentY + LINE_SPACING, width, true);
 
-      currentY = drawWrappedText(g2d, chineseFont, Color.WHITE,
-        sentenceVO.getChinese(), currentY + LINE_SPACING, width, true);
-
-      drawWrappedText(g2d, chineseFont, Color.WHITE,
-        ZhConverterUtil.toSimple(sentenceVO.getChinese()),
-        currentY + LINE_SPACING, width, true);
-
+        drawWrappedText(g2d, chineseZhTwFont, Color.YELLOW,
+          ZhConverterUtil.toTraditional(sentenceVO.getChinese()),
+          currentY + LINE_SPACING, width, true);
+      }
       g2d.dispose();
 
       try {

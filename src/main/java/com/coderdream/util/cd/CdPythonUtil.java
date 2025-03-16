@@ -12,9 +12,9 @@ public class CdPythonUtil {
         // python -m aeneas.tools.execute_task audio.mp3 script_dialog_new.txt "task_language=eng|os_task_file_format=srt|is_text_type=plain" eng_raw.srt
 
         String folderPath = "D:\\14_LearnEnglish\\u11_frankenstein\\u11_frankenstein_episode1\\";
-        String mp3FileName = folderPath + "u11_frankenstein_episode1.mp3";
-        String subtitleFileName = folderPath + "u11_frankenstein_episode1_subtitle.txt";
-        String srtFileName = folderPath + "u11_frankenstein_episode1.srt";
+        String mp3FileName = folderPath + File.separator + "u11_frankenstein_episode1.mp3";
+        String subtitleFileName = folderPath + File.separator + "u11_frankenstein_episode1_subtitle.txt";
+        String srtFileName = folderPath + File.separator + "u11_frankenstein_episode1.srt";
         CdPythonUtil.executePythonCommand(mp3FileName, subtitleFileName, srtFileName);
     }
 

@@ -70,23 +70,23 @@ public class Mdict4jDemo {
 
         switch (dictType) {
             case "cambridge":
-                mdxFile = folderPath + "cdepe.mdx"; // 剑桥在线英汉双解词典完美版 400MB
+                mdxFile = folderPath + File.separator + "cdepe.mdx"; // 剑桥在线英汉双解词典完美版 400MB
                 break;
             case "oaldpe":
-                mdxFile = folderPath + "oaldpe.mdx"; // 74MB
+                mdxFile = folderPath + File.separator + "oaldpe.mdx"; // 74MB
                 break;
             case "maldpe":
-                mdxFile = folderPath + "maldpe.mdx"; // 28MB
+                mdxFile = folderPath + File.separator + "maldpe.mdx"; // 28MB
                 break;
 
             case "c8":
-                mdxFile = folderPath + "牛津高阶8简体.mdx"; // 28MB
+                mdxFile = folderPath + File.separator + "牛津高阶8简体.mdx"; // 28MB
                 break;   //
             case "collins":
-                mdxFile = folderPath + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
+                mdxFile = folderPath + File.separator + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
                 break;   //
             default:
-                mdxFile = folderPath + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
+                mdxFile = folderPath + File.separator + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
                 break;
         }
         MDictDictionary dictionary = MDictDictionary.loadDictionary(mdxFile);

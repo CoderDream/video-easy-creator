@@ -209,14 +209,14 @@ public class Mdict4jUtil {
       + File.separatorChar;
 
     return switch (dictType) {
-      case "cambridge" -> folderPath + "cdepe.mdx";
-      case "oaldpe" -> folderPath + "oaldpe.mdx";
-      case "maldpe" -> folderPath + "maldpe.mdx";
-      case "c8" -> folderPath + "牛津高阶8简体.mdx";
-      case "collins" -> folderPath + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
-      case "oald" -> folderPath + "oald.mdx";
-      case "Oxford10" -> folderPath + "牛津高阶英汉双解词典（第10版）V3.mdx";
-      default -> folderPath + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
+      case "cambridge" -> folderPath + File.separator + "cdepe.mdx";
+      case "oaldpe" -> folderPath + File.separator + "oaldpe.mdx";
+      case "maldpe" -> folderPath + File.separator + "maldpe.mdx";
+      case "c8" -> folderPath + File.separator + "牛津高阶8简体.mdx";
+      case "collins" -> folderPath + File.separator + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
+      case "oald" -> folderPath + File.separator + "oald.mdx";
+      case "Oxford10" -> folderPath + File.separator + "牛津高阶英汉双解词典（第10版）V3.mdx";
+      default -> folderPath + File.separator + "柯林斯COBUILD高阶英汉双解学习词典.mdx";
     };
   }
 

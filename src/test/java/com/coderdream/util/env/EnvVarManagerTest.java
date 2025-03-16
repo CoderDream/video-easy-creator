@@ -3,6 +3,7 @@ package com.coderdream.util.env;
 
 import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.proxy.OperatingSystem;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ class EnvVarManagerTest {
 
   @Test
   void readEnvVar04() {
-    String envFileName = OperatingSystem.getBaseFolder() + "env.txt";
+    String envFileName = OperatingSystem.getBaseFolder() + File.separator + "env.txt";
     List<String> envVars = FileUtil.readLines(envFileName, StandardCharsets.UTF_8);
     for (String envVar : envVars) {
       String[] split = envVar.split("\t");
@@ -49,7 +50,7 @@ class EnvVarManagerTest {
 
   @Test
   void setEnvVar() {
-    String envFileName = OperatingSystem.getBaseFolder() + "env.txt";
+    String envFileName = OperatingSystem.getBaseFolder() + File.separator + "env.txt";
     List<String> envVars = FileUtil.readLines(envFileName, StandardCharsets.UTF_8);
     for (String envVar : envVars) {
       String[] split = envVar.split("\t");

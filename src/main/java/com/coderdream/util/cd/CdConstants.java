@@ -152,6 +152,9 @@ public class CdConstants {
 
   public static final String LANG_CN = "cn";
   public static final String LANG_EN = "en";
+  public static final String LANG_EN_FAST = "en_fast";
+  public static final String LANG_EN_NORMAL = "en_normal";
+  public static final String LANG_EN_SLOW = "en_slow";
 
   public static final String AUDIO_TYPE_WAV = "wav";
   public static final String AUDIO_TYPE_MP3 = "mp3";

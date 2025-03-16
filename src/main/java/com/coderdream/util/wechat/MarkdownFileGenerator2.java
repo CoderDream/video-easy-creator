@@ -213,11 +213,11 @@ public class MarkdownFileGenerator2 {
     String introduction = "这是一个示例简介。";
     String folderName = "180830";
     String folderPath = CommonUtil.getFullPath(folderName);
-    String imageFolder = folderPath + "\\" + folderName;
-    String englishTextFile = folderPath + "\\" + "script_dialog.txt";
+    String imageFolder = folderPath + File.separator + "\\" + folderName;
+    String englishTextFile = folderPath + File.separator + "\\" + "script_dialog.txt";
     String bilingualTextFile =
-      folderPath + "\\" + folderName + "_中英双语对话脚本.txt";
-    String vocabularyFile = folderPath + "\\" + "voc_cn.txt";
+      folderPath + File.separator + "\\" + folderName + "_中英双语对话脚本.txt";
+    String vocabularyFile = folderPath + File.separator + "\\" + "voc_cn.txt";
     String endString = "结尾字符串。";
 
     try {

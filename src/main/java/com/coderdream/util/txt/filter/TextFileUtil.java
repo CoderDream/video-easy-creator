@@ -265,9 +265,9 @@ public class TextFileUtil {
     String folderPath = "D:\\0000\\EnBook001\\900\\";
     String subFolder = "ch004";
     String sourcePath =
-      folderPath + subFolder + File.separator + subFolder + "_temp.txt";
+      folderPath + File.separator + subFolder + File.separator + subFolder + "_temp.txt";
     String targetPath =
-      folderPath + subFolder + File.separator + subFolder + ".txt";
+      folderPath + File.separator + subFolder + File.separator + subFolder + ".txt";
 
     String elapsedTime = TextFileUtil.filterTextFile(sourcePath, targetPath);
     log.info("耗时：{}", elapsedTime);

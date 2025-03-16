@@ -2,6 +2,8 @@ package com.coderdream.util.pic;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.coderdream.util.cd.CdFileUtil;
+import com.coderdream.util.proxy.OperatingSystem;
 import java.io.File;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -50,5 +52,34 @@ class HighResImageVideoUtilTest {
       filePath, contentFileName, language);
     assertNotNull(files);
     assertFalse(files.isEmpty());
+  }
+
+
+  @Test
+  void testGenerateImages_03() {
+    String bookName = "EnBook008";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    String subFolder = "Chapter001";
+    String backgroundImageName =
+      OperatingSystem.getBaseFolder() + File.separator + "bgmusic" + File.separator
+        + "content_bg.png";
+    String phoneticsFileName =
+      folderPath + File.separator + subFolder + File.separator + subFolder
+        + ".txt";
+    String filePath = folderPath + File.separator + subFolder
+      + File.separator;
+    String language = "en";
+    List<File> files = null;
+//    files = HighResImageVideoUtil.generateImages(backgroundImageName,
+//      filePath,
+//      CdFileUtil.getPureFileNameWithoutExtensionWithPath(phoneticsFileName),
+//      language);
+
+    language = "dual";
+    // 生成带英文和中文的图片
+    files = HighResImageVideoUtil.generateImages(backgroundImageName,
+      filePath,
+      CdFileUtil.getPureFileNameWithoutExtensionWithPath(phoneticsFileName),
+      language, true);
   }
 }

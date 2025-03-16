@@ -64,7 +64,7 @@ public class WordCountUtil {
       CdFileUtil.getResourceRealPath() + File.separatorChar + "data"
         + File.separatorChar + "bbc"
         + File.separatorChar;
-    List<String> NUMBER_LIST = FileUtil.readLines(folderPath + "todo.txt",
+    List<String> NUMBER_LIST = FileUtil.readLines(folderPath + File.separator + "todo.txt",
       "UTF-8");
 
     for (String num : NUMBER_LIST) {

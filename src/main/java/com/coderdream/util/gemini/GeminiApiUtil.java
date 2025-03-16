@@ -106,12 +106,12 @@ public class GeminiApiUtil {
   public static GeneratedContent generateContent(String content) {
     LocalDateTime startTime = LocalDateTime.now();
     // 打印content 的前100个字符
-    if (content.length() > 100) {
-      log.info("----- content的前100个字符: {}", content.substring(0, 100));
-    } else {
-      log.info("----- content的长度小于等于100，直接打印：{}", content);
-    }
-//    log.info("----- 生成文本内容（阻塞式）: {}", content);
+//    if (content.length() > 100) {
+//      log.info("----- content的前100个字符: {}", content.substring(0, 100));
+//    } else {
+//      log.info("----- content的长度小于等于100，直接打印：{}", content);
+//    }
+    log.error("----- 生成文本内容（阻塞式）: {}", content);
     var model = createModel(content);
     GeneratedContent generatedContent = null;
     try {

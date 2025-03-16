@@ -183,8 +183,7 @@ public class SubtitleUtil {
         srtStringList.add(enSubtitleEntity.getSubIndex() + "");
         srtStringList.add(enSubtitleEntity.getTimeStr());
         srtStringList.add(enSubtitleEntity.getSubtitle());
-        srtStringList.add(ZhConverterUtil.toTraditional(
-          chnSubtitleEntityList.get(i).getSubtitle()));
+        srtStringList.add(chnSubtitleEntityList.get(i).getSubtitle());
         srtStringList.add("");
       }
     } else {
@@ -269,7 +268,8 @@ public class SubtitleUtil {
       sentenceList.add(sentenceVO.getChinese());
       sentenceList.add(sentenceVO.getEnglish());
     }
-    String srtRawFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileName, "_raw");
+    String srtRawFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      fileName, "_raw");
 //    log.info("srtRawFileName:{}", srtRawFileName);
     com.coderdream.util.cd.CdFileUtil.writeToFile(srtRawFileName, sentenceList);
 
@@ -280,7 +280,8 @@ public class SubtitleUtil {
     // D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics\audio\ch01_mix.wav
     String audioFileName =
       path + File.separator
-        + com.coderdream.util.cd.CdFileUtil.getPureFileNameWithoutExtensionWithPath(fileName)
+        + com.coderdream.util.cd.CdFileUtil.getPureFileNameWithoutExtensionWithPath(
+        fileName)
         + File.separator + "audio\\" + "ch01_mix.wav";
     File audioFile = new File(audioFileName);
     if (!audioFile.exists()) {
@@ -288,7 +289,8 @@ public class SubtitleUtil {
       return;
     }
 
-    String srtFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(audioFileName, "srt");
+    String srtFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(
+      audioFileName, "srt");
     String lang = "eng"; //  String lang = "cmn";
     log.info("audioFileName:{}", audioFileName);
     SubtitleUtil.genSrtByExecuteCommand(audioFileName, srtRawFileName,
@@ -300,7 +302,8 @@ public class SubtitleUtil {
    *                 生成文本文件，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
    */
   public static String transferSubtitleToSentenceTextFile(String fileName) {
-    String textFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(fileName, "txt");
+    String textFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(
+      fileName, "txt");
     List<SubtitleEntity> sentenceVOList = com.coderdream.util.cd.CdFileUtil.readSrcFileContent(
       fileName);
     StringBuilder text = new StringBuilder();
@@ -314,12 +317,14 @@ public class SubtitleUtil {
     List<String> pureSentenceList = new ArrayList<>();
     for (String sentence : sentenceList) {
       String pureSentence = filterContent(sentence);
-      if(pureSentence.length() > 150){
-        log.info("sentence length:{},  {}", pureSentence.length(), pureSentence);
+      if (pureSentence.length() > 150) {
+        log.info("sentence length:{},  {}", pureSentence.length(),
+          pureSentence);
       }
       pureSentenceList.add(pureSentence);
     }
-    com.coderdream.util.cd.CdFileUtil.writeToFile(textFileName, pureSentenceList);
+    com.coderdream.util.cd.CdFileUtil.writeToFile(textFileName,
+      pureSentenceList);
 //    if (CdFileUtil.isFileEmpty(textFileName)) {
 //      CdFileUtil.writeToFile(textFileName, pureSentenceList);
 //    } else {
@@ -366,10 +371,11 @@ public class SubtitleUtil {
 
   /**
    * 生成字幕文件，调用 python 命令
-   * @param audioFileName 音频文件路径，例如：D:\0000\EnBook001\900\ch01\audio\ch01_mix.wav
-   * @param subtitleFileName  字幕文件路径，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
-   * @param srtFileName 字幕文件路径，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
-   * @param lang  语言，例如：eng, cmn
+   *
+   * @param audioFileName    音频文件路径，例如：D:\0000\EnBook001\900\ch01\audio\ch01_mix.wav
+   * @param subtitleFileName 字幕文件路径，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+   * @param srtFileName      字幕文件路径，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
+   * @param lang             语言，例如：eng, cmn
    */
   public static void genSrtByExecuteCommand(String audioFileName,
     String subtitleFileName, String srtFileName, String lang) {

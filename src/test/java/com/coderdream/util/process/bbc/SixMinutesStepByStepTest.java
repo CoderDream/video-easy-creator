@@ -18,7 +18,7 @@ class SixMinutesStepByStepTest {
       CdFileUtil.getResourceRealPath() + File.separatorChar + "data" + File.separatorChar + "bbc"
         + File.separatorChar;
 
-    NUMBER_LIST = FileUtil.readLines(folderPath + "todo.txt", "UTF-8");
+    NUMBER_LIST = FileUtil.readLines(folderPath + File.separator + "todo.txt", "UTF-8");
 //        list = new ArrayList<>(Arrays.asList("test1", "test2"));
   }
 

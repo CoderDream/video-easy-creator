@@ -68,7 +68,7 @@ public class GenCoverUtil {
     Locale locale = new Locale("zh", "cn");
     Locale.setDefault(locale);
     // 生成封面图
-    String coverPath = folderPath + "cover" + File.separator;
+    String coverPath = folderPath + File.separator + "cover" + File.separator;
     File coverPathFile = new File(coverPath);
     if (!coverPathFile.exists()) {
       boolean mkdir = coverPathFile.mkdirs();

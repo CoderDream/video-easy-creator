@@ -292,7 +292,7 @@ public class ChapterStringParser {
 
     for (String subFolder : subFolders) {
       String sourcePath =
-        folderPath + subFolder + File.separator + subFolder + "_temp.txt";
+        folderPath + File.separator + subFolder + File.separator + subFolder + "_temp.txt";
 
       Book002ChapterStringEntity chapterEntity = ChapterStringParser.parseChapterFile(
         sourcePath);

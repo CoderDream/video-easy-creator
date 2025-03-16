@@ -110,7 +110,7 @@ public class HtmlWordParser {
         String folderPath = "D:\\04_GitHub\\video-easy-creator\\src\\test\\java\\com\\coderdream\\util\\mdict\\";
         String fileName = "word06.html";
 
-        Vocabulary vocabulary = parseWord(folderPath + fileName);
+        Vocabulary vocabulary = parseWord(folderPath + File.separator + fileName);
         if (vocabulary!= null) {
             System.out.println("词汇: " + vocabulary.getWord());
             System.out.println("词性: " + vocabulary.getPos());

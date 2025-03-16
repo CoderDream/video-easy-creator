@@ -278,6 +278,104 @@ public class GenDualAudioUtil {
 
   /**
    * 将对话文本文件转换为音频文件（中英文）。
+   *
+   * @param folderName 根文件夹
+   * @param subFolder  子文件夹
+   * @param fileName   文件名（不包含扩展名）
+   * @param audioType  音频类型，如 wav 或 mp3
+   */
+  public static void genDialogToAudioThreeTypes(String folderName,
+    String subFolder,
+    String fileName, String audioType) {
+    String fullFileName =
+      folderName + File.separator + subFolder + File.separator + fileName
+        + ".txt";
+    log.info("开始解析脚本文件: {}", fullFileName);
+
+    // 设置输出目录
+    String outputDirCn =
+      folderName + File.separator + subFolder + File.separator
+        + CdConstants.AUDIO_FOLDER + File.separator
+        + CdConstants.LANG_CN; // 中文音频输出目录
+    String outputDirEnNormal =
+      folderName + File.separator + subFolder + File.separator
+        + CdConstants.AUDIO_FOLDER + File.separator
+        + CdConstants.LANG_EN_NORMAL; // 英文音频输出目录
+    String outputDirEnSlow =
+      folderName + File.separator + subFolder + File.separator
+        + CdConstants.AUDIO_FOLDER + File.separator
+        + CdConstants.LANG_EN_SLOW; // 英文音频输出目录
+    // 创建目录
+    File dirCn = new File(outputDirCn);
+    if (!dirCn.exists() && dirCn.mkdirs()) {
+      log.info("中文音频目录创建成功: {}", dirCn.getAbsolutePath());
+    }
+    File dirEnNormal = new File(outputDirEnNormal);
+    if (!dirEnNormal.exists() && dirEnNormal.mkdirs()) {
+      log.info("英文音频目录创建成功: {}", dirEnNormal.getAbsolutePath());
+    }
+
+    File dirEnSlow = new File(outputDirEnSlow);
+    if (!dirEnSlow.exists() && dirEnSlow.mkdirs()) {
+      log.info("英文音频目录创建成功: {}", dirEnSlow.getAbsolutePath());
+    }
+
+    // 解析文本文件
+    List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFileV2(
+      fullFileName);
+    int number = 0;
+//     SceneMatcherUtil.addCommaBeforeSpace("testString");
+    // 遍历句子列表，生成音频
+    for (SentenceVO sentenceVO : sentenceVOs) {
+      // 特殊处理，在 Scene XXX 后添加逗号和句号，以便在音频中停顿更明显
+      sentenceVO.setChinese(
+        SceneMatcherUtil.addCommaBeforeSpace(sentenceVO.getChinese()));
+      sentenceVO.setEnglish(
+        SceneMatcherUtil.addCommaBeforeSpace(sentenceVO.getEnglish()));
+
+      number++;
+      // 构建中文音频文件名
+      String cnFileName =
+        outputDirCn + File.separator + subFolder + "_" + MessageFormat.format(
+          "{0,number,000}", number) + "_cn." + audioType;
+      // 构建英文音频文件名
+      String enNormalFileName =
+        outputDirEnNormal + File.separator + subFolder + "_"
+          + MessageFormat.format(
+          "{0,number,000}", number) + "_en." + audioType;
+      // 构建英文音频文件名
+      String enSlowFileName =
+        outputDirEnSlow + File.separator + subFolder + "_"
+          + MessageFormat.format(
+          "{0,number,000}", number) + "_en." + audioType;
+
+      // 调用 content2Audio 生成中文和英文音频
+      if (CdFileUtil.isFileEmpty(cnFileName)) {
+        content2Audio(List.of(sentenceVO.getChinese()), "zh-CN-XiaochenNeural",
+          "medium", "medium", "medium", cnFileName, audioType, "zh-cn");
+      } else {
+        log.warn("中文音频文件已存在，跳过生成: {}", cnFileName);
+      }
+
+      if (CdFileUtil.isFileEmpty(enNormalFileName)) {
+        content2Audio(List.of(sentenceVO.getEnglish()), "en-US-JennyNeural",
+          "default", "default", "default", enNormalFileName, audioType,
+          "en-us");
+      } else {
+        log.warn("常速英文音频文件已存在，跳过生成: {}", enNormalFileName);
+      }
+
+      if (CdFileUtil.isFileEmpty(enSlowFileName)) {
+        content2Audio(List.of(sentenceVO.getEnglish()), "en-US-JennyNeural",
+          "default", "default", "slow", enSlowFileName, audioType, "en-us");
+      } else {
+        log.warn("慢速英文音频文件已存在，跳过生成: {}", enSlowFileName);
+      }
+    }
+  }
+
+  /**
+   * 将对话文本文件转换为音频文件（中英文）。
    */
   public static void genHeadAudio() {
     String headContentFileName = "head_content.txt";
@@ -290,9 +388,8 @@ public class GenDualAudioUtil {
    *
    * @param audioType 音频类型，如 wav 或 mp3
    */
-  public static void genHeadAudio(
-    String headContentFileName, String audioType) {
-
+  public static void genHeadAudio(String headContentFileName,
+    String audioType) {
     String resourcesPath = ResourcesSourcePathUtil.getResourcesSourceAbsolutePath();
     List<String> contentList = CdFileUtil.readFileContent(
       resourcesPath + File.separator + headContentFileName);
@@ -310,7 +407,7 @@ public class GenDualAudioUtil {
         String cnContent = split[2].trim();
 
         String folderPath =
-          OperatingSystem.getFolderPath(bookName) + "head";
+          OperatingSystem.getFolderPath(bookName) + File.separator + "head";
         File dirCn = new File(folderPath);
         if (!dirCn.exists() && dirCn.mkdirs()) {
           log.info("Head音频目录创建成功: {}", dirCn.getAbsolutePath());

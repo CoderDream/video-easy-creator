@@ -36,7 +36,7 @@ public class PrepareForMakeVideoUtil {
     log.info("删除文件夹结果：{}", del);
 
     // 1. 图片 文件夹拷贝
-    String imageFolderName = folderPath + folderName;
+    String imageFolderName = folderPath + File.separator + folderName;
     List<File> files = FileUtil.loopFiles(imageFolderName);
     if (CollectionUtil.isEmpty(files)) {
       log.error("图片文件夹为空，退出处理流程；{}", imageFolderName);
@@ -51,19 +51,46 @@ public class PrepareForMakeVideoUtil {
       }
     }
     // 2. 音频
-    String audioFileName = folderPath +  "audio5.mp3";
+    String audioFileName = folderPath + File.separator + "audio5.mp3";
     String destinationAudioFileName = distFolderName + "audio.mp3";
     FileUtil.copy(Paths.get(audioFileName),
       Paths.get(destinationAudioFileName), StandardCopyOption.REPLACE_EXISTING);
 
     // 3. 字幕
-    String subtitleFileNameEng = folderPath + "eng.srt";
+    String subtitleFileNameEng = folderPath + File.separator + "eng.srt";
     FileUtil.copy(subtitleFileNameEng, distFolderName, true);
-    String subtitleFileNameChn = folderPath + "chn.srt";
+    String subtitleFileNameChn = folderPath + File.separator + "chn.srt";
     FileUtil.copy(subtitleFileNameChn, distFolderName, true);
 
     // 4. 封面
   }
 
+  public static void processYoutube(String typeName, String folderName) {
+    String folderPath =
+      OperatingSystem.getBaseFolder() + File.separator + typeName + File.separator + folderName;
+    String distFolderName = "D:\\0000_video\\0008_DailyNews_Draft\\";
+    // 0. 清理文件夹
+    boolean del = FileUtil.del(distFolderName);
+    log.info("删除文件夹结果：{}", del);
+    // 2. 拷贝视频
+    String mp4FilePath = folderPath + File.separator + folderName + ".mp4";
+    if (!CdFileUtil.isFileEmpty(mp4FilePath)) {
+      String destinationMp4FileName = distFolderName + "video_new.mp4";
+      FileUtil.copy(Paths.get(mp4FilePath),
+        Paths.get(destinationMp4FileName), StandardCopyOption.REPLACE_EXISTING);
+    }
+    // 3. 字幕
+    String subtitleFileNameEng =
+      folderPath + File.separator + folderName + ".en.srt";
+    FileUtil.copy(subtitleFileNameEng, distFolderName, true);
+    String subtitleFileNameChn =
+      folderPath + File.separator + folderName + ".zh-TW.srt";
+    FileUtil.copy(subtitleFileNameChn, distFolderName, true);
+
+    // 4. 封面
+    String coverFileName =
+      folderPath + File.separator + folderName + "_cover.jpg";
+    FileUtil.copy(coverFileName, distFolderName, true);
+  }
 
 }

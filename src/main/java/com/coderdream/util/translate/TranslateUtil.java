@@ -834,13 +834,14 @@ public class TranslateUtil {
         zhTwSrtStringList.add(enSubtitleEntity.getTimeStr());
         switch (platformName) {
           case CdConstants.TRANSLATE_PLATFORM_GEMINI:
-            zhCnSrtStringList.add(
-              subtitleEntityList.get(i).getSecondSubtitle());
+            zhCnSrtStringList.add(ZhConverterUtil.toSimple(
+              subtitleEntityList.get(i).getSecondSubtitle()));
             zhTwSrtStringList.add(ZhConverterUtil.toTraditional(
               subtitleEntityList.get(i).getSecondSubtitle()));
             break;
           case CdConstants.TRANSLATE_PLATFORM_MSTTS:
-            zhCnSrtStringList.add(subtitleEntityList.get(i).getSubtitle());
+            zhCnSrtStringList.add(ZhConverterUtil.toSimple(
+              subtitleEntityList.get(i).getSubtitle()));
             zhTwSrtStringList.add(
               ZhConverterUtil.toTraditional(
                 subtitleEntityList.get(i).getSubtitle()));

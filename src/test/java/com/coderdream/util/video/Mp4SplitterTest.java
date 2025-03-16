@@ -14,9 +14,9 @@ class Mp4SplitterTest {
 
     String folderName = "vance_0003";
     String folderPath =
-      OperatingSystem.getBaseFolder() + "0005_VP" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0005_VP" + File.separator
         + folderName + File.separator;
-    String inputFilePath = folderPath + folderName + ".mp4";
+    String inputFilePath = folderPath + File.separator + folderName + ".mp4";
 
     // 示例用法
 //    String inputFilePath = "D:\\0000\\0003_PressBriefings\\250128\\250128.mp4";
@@ -45,9 +45,9 @@ class Mp4SplitterTest {
 // D:\0000\0007_Trump\20250307
     String folderName = "20250302";
     String folderPath =
-      OperatingSystem.getBaseFolder() + "0007_Trump" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0007_Trump" + File.separator
         + folderName + File.separator;
-    String inputFilePath = folderPath + folderName + ".mp4";
+    String inputFilePath = folderPath + File.separator + folderName + ".mp4";
 
     // 示例用法
 //    String inputFilePath = "D:\\0000\\0003_PressBriefings\\250128\\250128.mp4";
@@ -77,15 +77,15 @@ class Mp4SplitterTest {
 
 //    String folderName = "vance_0003";
 //    String folderPath =
-//      OperatingSystem.getBaseFolder() + "0005_VP" + File.separator
+//      OperatingSystem.getBaseFolder() + File.separator + "0005_VP" + File.separator
 //        + folderName + File.separator;
-//    String inputFilePath = folderPath + folderName + ".mp4";
+//    String inputFilePath = folderPath + File.separator + folderName + ".mp4";
 
     String bookFolderName = "background";
     String subFolder = "ocean_0001";
     String folderPath =
-      OperatingSystem.getBaseFolder() + bookFolderName + File.separator;
-    String inputFilePath = folderPath + subFolder + File.separator + subFolder
+      OperatingSystem.getBaseFolder() + File.separator + bookFolderName + File.separator;
+    String inputFilePath = folderPath + File.separator + subFolder + File.separator + subFolder
       + "_pure.mp4"; // 替换为期望的输出路径和文件名
 
     // 示例用法

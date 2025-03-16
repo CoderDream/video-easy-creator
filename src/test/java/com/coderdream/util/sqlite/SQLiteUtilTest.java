@@ -65,7 +65,7 @@ class SQLiteUtilTest {
 
     String bookFolderName = "CEFR";
     String folderPath =
-      OperatingSystem.getBaseFolder() + bookFolderName;
+      OperatingSystem.getBaseFolder() + File.separator + bookFolderName;
 
 //    String bookName = "商務英語";
 //    String chapterName = "900_cht_name.txt";
@@ -102,7 +102,7 @@ class SQLiteUtilTest {
 
     String bookFolderName = "CEFR";
     String folderPath =
-      OperatingSystem.getBaseFolder() + bookFolderName;
+      OperatingSystem.getBaseFolder() + File.separator + bookFolderName;
 
 //    String bookName = "商務英語";
 //    String chapterName = "900_cht_name.txt";

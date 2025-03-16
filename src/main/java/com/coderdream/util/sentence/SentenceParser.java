@@ -1,5 +1,6 @@
 package com.coderdream.util.sentence;
 
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.vo.SentenceVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,6 +53,33 @@ public class SentenceParser {
       log.error("文件行数不是3的倍数,无法正确解析");
       throw new IllegalArgumentException("文件行数不是3的倍数，无法解析");
     }
+    return sentenceList;
+  }
+
+  public static List<SentenceVO> parseSentencesFromFileV2(String filePath) {
+    List<SentenceVO> sentenceList = new ArrayList<>();
+    List<String> lines = CdFileUtil.readFileContent(filePath);
+    assert lines != null;
+    int lineCount = lines.size();
+    if (lineCount % 3 != 0) {
+      log.error("文件行数不是3的倍数，无法正确解析，文件路径:{}", filePath);
+      return sentenceList;
+    }
+
+    for (int i = 0; i < lineCount; i += 3) {
+      String english = lines.get(i).trim();
+      if(english.startsWith("A:") || english.startsWith("B:")){
+        english = english.substring(2); // 去掉A:或B:
+      }
+      String phonetics = lines.get(i + 1).trim();
+      String chinese = lines.get(i + 2).trim();
+      SentenceVO sentence = new SentenceVO();
+      sentence.setEnglish(english);
+      sentence.setPhonetics(phonetics);
+      sentence.setChinese(chinese);
+      sentenceList.add(sentence);
+    }
+
     return sentenceList;
   }
 

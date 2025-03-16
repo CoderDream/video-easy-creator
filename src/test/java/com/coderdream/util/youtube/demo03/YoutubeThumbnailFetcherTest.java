@@ -16,7 +16,7 @@ class YoutubeThumbnailFetcherTest {
   void getThumbnail() {
     String videoUrl = "https://www.youtube.com/watch?v=jUxdO-D0OXs";
     String thumbnailPath =
-      OperatingSystem.getBaseFolder() + "cover" + File.separator;
+      OperatingSystem.getBaseFolder() + File.separator + "cover" + File.separator;
     DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     String thumbnailFileName = dateFormat.format(new Date()) + ".jpg";
 

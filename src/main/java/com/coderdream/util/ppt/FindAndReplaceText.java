@@ -65,7 +65,7 @@ public class FindAndReplaceText {
     //      if (pres != null) {
     //        pres.dispose();
     //      }
-    //    }  MP3_INFO_LIST = CdFileUtil.readLines(folderPath + "mp3.txt", "UTF-8");
+    //    }  MP3_INFO_LIST = CdFileUtil.readLines(folderPath + File.separator + "mp3.txt", "UTF-8");
     //ExEnd:FontFamily
     LicenseUtil.loadLicense(MicrosoftConstants.PPTX_TO_OTHER);
     Presentation pres = null;

@@ -64,7 +64,7 @@ public class PreparePublishUtil {
 //    String srtFileName = CdFileUtil.changeExtension(mp3FileName, "srt");
 //    // D:\0000\EnBook001\900\ch003\ch003_total.txt
 //    String subtitleFileName =
-//      folderPath + subFolder + File.separator + subFolder +
+//      folderPath + File.separator + subFolder + File.separator + subFolder +
 //        "_total.txt";
 //    File totalFile = new File(subtitleFileName);
 //    if (!totalFile.exists() || totalFile.length() == 0) {
@@ -135,13 +135,13 @@ public class PreparePublishUtil {
   public static void process(String bookFolderName, String subFolder,
     String chapterFileName, String headContentFileName) {
     String folderPath =
-      OperatingSystem.getBaseFolder() + bookFolderName + File.separator;
+      OperatingSystem.getBaseFolder() + File.separator + bookFolderName + File.separator;
 
     // 1. 生成字幕
     String lang = "cmn";
 
     String mp4FileName =
-      folderPath + subFolder + File.separator + "video" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "video" + File.separator
         + subFolder
         + ".mp4";
     String mp3FileName = com.coderdream.util.cd.CdFileUtil.changeExtension(mp4FileName, "mp3");
@@ -154,7 +154,7 @@ public class PreparePublishUtil {
     }
 
     String subtitleFolderPath =
-      folderPath + subFolder + File.separator + "subtitle" + File.separator;
+      folderPath + File.separator + subFolder + File.separator + "subtitle" + File.separator;
     if (!new File(subtitleFolderPath).exists()) {
       log.info("subtitle文件夹不存在，先创建： {}", subtitleFolderPath);
       try {
@@ -165,9 +165,9 @@ public class PreparePublishUtil {
     }
 
 //        String totalFileNameTotal =
-//          folderPath + subFolder + File.separator + subFolder + "_total.txt";
+//          folderPath + File.separator + subFolder + File.separator + subFolder + "_total.txt";
     String totalFileNameTotal =
-      folderPath + subFolder + File.separator + subFolder + ".txt";
+      folderPath + File.separator + subFolder + File.separator + subFolder + ".txt";
     if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(totalFileNameTotal)) {
       log.info("文件不存在或为空，已生成新文件: {}",
         totalFileNameTotal);
@@ -249,12 +249,12 @@ public class PreparePublishUtil {
 
     lang = "eng";
     String srtFileNameInSubtitleFolder =
-      folderPath + subFolder + File.separator + "subtitle" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "subtitle" + File.separator
         + subFolder
         + ".srt";
 
     String srtFileName =
-      folderPath + subFolder + File.separator + "video" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "video" + File.separator
         + subFolder
         + ".srt";
 
@@ -376,7 +376,7 @@ public class PreparePublishUtil {
 
     // 复制封面文件到视频文件夹
     // 生成封面图
-    String coverPath = folderPath + "cover" + File.separator;
+    String coverPath = folderPath + File.separator + "cover" + File.separator;
     File coverPathFile = new File(coverPath);
     if (!coverPathFile.exists()) {
       boolean mkdir = coverPathFile.mkdirs();
@@ -391,7 +391,7 @@ public class PreparePublishUtil {
     String coverFileName =
       coverPath + subFolder + "_" + "720p." + imageFormat;
     String destinationCoverFileName =
-      folderPath + subFolder + File.separator + "video" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "video" + File.separator
         + subFolder + "_" + "720p." + imageFormat;
     if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(coverFileName)) {
       log.error("封面图不存在，先生成： {}", coverFileName);
@@ -470,7 +470,7 @@ public class PreparePublishUtil {
     String srtFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(mp3FileName, "srt");
     // D:\0000\EnBook001\900\ch003\ch003_total.txt
     String subtitleFileName =
-      OperatingSystem.getBaseFolder() + bookFolderName + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + bookFolderName + File.separator
         + subFolder + File.separator + subFolder +
         "_total.txt";
     File totalFile = new File(subtitleFileName);

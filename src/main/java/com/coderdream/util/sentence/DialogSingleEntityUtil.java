@@ -27,7 +27,7 @@ public class DialogSingleEntityUtil {
 //    String part1FileName = subFolder + "01.txt";
 //    // 构造part1文件路径
 //    String part1FilePath =
-//      folderPath + subFolder + File.separator + "input" + File.separator
+//      folderPath + File.separator + subFolder + File.separator + "input" + File.separator
 //        + part1FileName;
 //    //   String fileName = "D:\\0000\\EnBook001\\900\\900V1_ch0201.txt";
 //    List<DialogSingleEntity> dialogSingleEntities = parsePart1(part1FilePath);
@@ -43,11 +43,11 @@ public class DialogSingleEntityUtil {
 //    });
 //
 //    String fileNamePart1En =
-//      folderPath + subFolder + File.separator + CdFileUtil.addPostfixToFileName(
+//      folderPath + File.separator + subFolder + File.separator + CdFileUtil.addPostfixToFileName(
 //        part1FileName,
 //        "_part1_en");
 //    String fileNamePart1Cn =
-//      folderPath + subFolder + File.separator + CdFileUtil.addPostfixToFileName(
+//      folderPath + File.separator + subFolder + File.separator + CdFileUtil.addPostfixToFileName(
 //        part1FileName,
 //        "_part1_cn");
 //    CdFileUtil.writeToFile(fileNamePart1En, enSentenceList);
@@ -59,7 +59,7 @@ public class DialogSingleEntityUtil {
 //    String part2FileName = subFolder + "02.txt";
 //    // 构造part2文件路径
 //    String part2FilePath =
-//      folderPath + subFolder + File.separator + "input" + File.separator
+//      folderPath + File.separator + subFolder + File.separator + "input" + File.separator
 //        + part2FileName;
 //    //   String fileName = "D:\\0000\\EnBook001\\900\\900V1_ch0201.txt";
 //    List<String> enSentenceList = new ArrayList<>();
@@ -79,11 +79,11 @@ public class DialogSingleEntityUtil {
 //    });
 //
 //    String fileNamePart2En =
-//      folderPath + subFolder + File.separator + CdFileUtil.addPostfixToFileName(
+//      folderPath + File.separator + subFolder + File.separator + CdFileUtil.addPostfixToFileName(
 //        part2FileName,
 //        "_part1_en");
 //    String fileNamePart2Cn =
-//      folderPath + subFolder + File.separator + CdFileUtil.addPostfixToFileName(
+//      folderPath + File.separator + subFolder + File.separator + CdFileUtil.addPostfixToFileName(
 //        part2FileName,
 //        "_part1_cn");
 //    CdFileUtil.writeToFile(fileNamePart2En, enSentenceList);
@@ -96,19 +96,19 @@ public class DialogSingleEntityUtil {
     String fileName = subFolder + ".txt";
     // 构造文件路径
     String filePath =
-      folderPath + subFolder + File.separator + "input" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "input" + File.separator
         + fileName;
     // 构造part1文件名
     String part1FileName = subFolder + "01.txt";
     // 构造part1文件路径
     String part1FilePath =
-      folderPath + subFolder + File.separator + "input" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "input" + File.separator
         + part1FileName;
     // 构造part2文件名
     String part2FileName = subFolder + "02.txt";
     // 构造part2文件路径
     String part2FilePath =
-      folderPath + subFolder + File.separator + "input" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "input" + File.separator
         + part2FileName;
     List<String> contentList = FileUtil.readLines(filePath, "UTF-8");
     // 找到列表的第一个空行作为分割点，将列表分为part1和part2两个部分
@@ -180,14 +180,14 @@ public class DialogSingleEntityUtil {
     String part1FileName = subFolder + "01.txt";
     // 构造part1文件路径
     String part1FilePath =
-      folderPath + subFolder + File.separator + "input" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "input" + File.separator
         + part1FileName;
 
     // 构造part2文件名
     String part2FileName = subFolder + "02.txt";
     // 构造part2文件路径
     String part2FilePath =
-      folderPath + subFolder + File.separator + "input" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "input" + File.separator
         + part2FileName;
 
     List<String> enSentenceList = new ArrayList<>();
@@ -212,7 +212,7 @@ public class DialogSingleEntityUtil {
     }
 
     String fileNameTotal =
-      folderPath + subFolder + File.separator + CdFileUtil.addPostfixToFileName(
+      folderPath + File.separator + subFolder + File.separator + CdFileUtil.addPostfixToFileName(
         subFolder, "_total" + ".txt");
 
     CdFileUtil.writeToFile(fileNameTotal, totalSentenceList);
@@ -395,7 +395,7 @@ public class DialogSingleEntityUtil {
 
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";
 //    String subFolder = "ch01";
-//    File file = new File(folderPath + subFolder);
+//    File file = new File(folderPath + File.separator + subFolder);
 //    if (!file.exists()) {
 //      file.mkdirs();
 //    }

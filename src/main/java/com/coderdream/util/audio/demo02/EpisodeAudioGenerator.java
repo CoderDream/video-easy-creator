@@ -32,7 +32,7 @@ public class EpisodeAudioGenerator {
 
     // 2. 创建输出目录
     String episodeDir =
-      folderPath + episodeName + File.separator + "audio" + File.separator;
+      folderPath + File.separator + episodeName + File.separator + "audio" + File.separator;
     createDirectory(episodeDir + "cn", "Chinese audio");
     createDirectory(episodeDir + "en", "English audio");
 
@@ -128,7 +128,7 @@ public class EpisodeAudioGenerator {
 
     for (String subFolder : subFolders) {
       String inputFilePath =
-        folderPath + subFolder + File.separator + subFolder + ".txt";
+        folderPath + File.separator + subFolder + File.separator + subFolder + ".txt";
       generateEpisodeAudio(folderPath, subFolder, inputFilePath);
     }
   }

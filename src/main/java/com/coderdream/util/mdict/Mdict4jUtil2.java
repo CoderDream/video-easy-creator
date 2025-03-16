@@ -232,15 +232,15 @@ public class Mdict4jUtil2 {
     // C:\Users\CoderDream\Downloads\ABDM\牛津高阶英汉双解词典（第10版）V3.mdx
     //
     return switch (dictType) {
-      case "cambridge" -> folderPath + "cdepe.mdx"; // 剑桥在线英汉双解词典完美版 400MB
-      case "oaldpe" -> folderPath + "oaldpe.mdx"; // 74MB
-      case "maldpe" -> folderPath + "maldpe.mdx"; // 28MB
-      case "c8" -> folderPath + "牛津高阶8简体.mdx"; // 28MB
+      case "cambridge" -> folderPath + File.separator + "cdepe.mdx"; // 剑桥在线英汉双解词典完美版 400MB
+      case "oaldpe" -> folderPath + File.separator + "oaldpe.mdx"; // 74MB
+      case "maldpe" -> folderPath + File.separator + "maldpe.mdx"; // 28MB
+      case "c8" -> folderPath + File.separator + "牛津高阶8简体.mdx"; // 28MB
       //
       case "collins" ->
-        folderPath + "柯林斯COBUILD高阶英汉双解学习词典.mdx";   //
+        folderPath + File.separator + "柯林斯COBUILD高阶英汉双解学习词典.mdx";   //
       case "oald" ->
-        folderPath + "oald.mdx"; // C:\Users\CoderDream\Downloads\ABDM\牛津高阶英汉双解词典（第10版）V3.mdx
+        folderPath + File.separator + "oald.mdx"; // C:\Users\CoderDream\Downloads\ABDM\牛津高阶英汉双解词典（第10版）V3.mdx
       case "Oxford10" ->
         "DC:\\Users\\CoderDream\\Downloads\\ABDM\\牛津高阶英汉双解词典（第10版）V3.mdx"; //
       default -> "D:\\Download\\柯林斯COBUILD高阶英汉双解学习词典.mdx";

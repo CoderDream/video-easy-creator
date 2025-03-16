@@ -323,4 +323,22 @@ class GenVideoUtilTest {
       Mp4MergeUtil.processMerge(folderPath, subFolder);
     }
   }
+
+  @Test
+  void processBatchAndMergeEnBook008() {
+    String bookName = "EnBook008";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 2; // 假定总共100章 101
+    for (int i = 1; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenVideoUtil.processV5(bookName, folderPath, subFolder);
+      Mp4MergeUtil.processMerge(folderPath, subFolder);
+    }
+  }
 }
