@@ -1,12 +1,12 @@
 package com.coderdream.util.process;
 
 import cn.hutool.core.io.FileUtil;
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.video.GenHeadVideo;
 import com.coderdream.util.video.SingleCreateVideoUtil;
 
-import com.coderdream.util.video.demo02.FFmpegOneByMany;
 import com.coderdream.util.video.demo02.FFmpegOneByOne;
 import com.coderdream.util.video.demo02.FFmpegParallelOptimized;
 
@@ -98,23 +98,24 @@ public class GenVideoUtil {
 
   public static List<Path> processPartOne(String folderPath,
     String subFolder) {
-    String backgroundImageName =
-      OperatingSystem.getBaseFolder() + File.separator + "bgmusic"
-        + File.separator
-        + "content_bg.png";
+    String imagePath =
+      folderPath + File.separator + subFolder + File.separator + "pic_"
+        + CdConstants.PIC_TYPE_NO_SUBTITLE
+        + File.separator;
     String audioPath =
       folderPath + File.separator + subFolder + File.separator + "audio_dual_en"
         + File.separator;
     String videoPath =
       folderPath + File.separator + subFolder + File.separator + "video_part1"
         + File.separator;
-    return FFmpegOneByMany.process(backgroundImageName, audioPath, videoPath);
+    return FFmpegOneByOne.process(imagePath, audioPath, videoPath);
   }
 
   public static List<Path> processPartTwo(String folderPath,
     String subFolder) {
     String imagePath =
-      folderPath + File.separator + subFolder + File.separator + "pic_en"
+      folderPath + File.separator + subFolder + File.separator + "pic_"
+        + CdConstants.PIC_TYPE_EN
         + File.separator;
     String audioPath =
       folderPath + File.separator + subFolder + File.separator + "audio"
@@ -129,7 +130,8 @@ public class GenVideoUtil {
   public static List<Path> processPartThree(String folderPath,
     String subFolder) {
     String imagePath =
-      folderPath + File.separator + subFolder + File.separator + "pic_dual"
+      folderPath + File.separator + subFolder + File.separator + "pic_"
+        + CdConstants.PIC_TYPE_MIX
         + File.separator;
     String audioPath =
       folderPath + File.separator + subFolder + File.separator + "audio_mix"

@@ -156,6 +156,10 @@ public class CdConstants {
   public static final String LANG_EN_NORMAL = "en_normal";
   public static final String LANG_EN_SLOW = "en_slow";
 
+  public static final String PIC_TYPE_NO_SUBTITLE = "no_subtitle"; // 无字幕
+  public static final String PIC_TYPE_EN = "en";
+  public static final String PIC_TYPE_MIX = "mix";
+
   public static final String AUDIO_TYPE_WAV = "wav";
   public static final String AUDIO_TYPE_MP3 = "mp3";
 
@@ -260,7 +264,6 @@ public class CdConstants {
 
   public static final String SUBTITLE_EN_ZH_CN = "en-zh-CN";
   public static final String SUBTITLE_EN_ZH_TW = "en-zh-TW";
-
 
 
 }

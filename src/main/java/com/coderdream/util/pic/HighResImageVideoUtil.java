@@ -4,9 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.FontSizeConverter;
-import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.util.sentence.SentenceParser;
-import com.coderdream.util.video.BatchCreateVideoCommonUtil;
 import com.coderdream.vo.SentenceVO;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.awt.*;
@@ -35,12 +33,12 @@ public class HighResImageVideoUtil {
    * @param fileName 文件名称
    * @return 图片文件列表
    */
-  public static List<File> generateImages(String fileName) {
-    // 设置路径
-    String imagePath = CdConstants.RESOURCES_BASE_PATH + File.separator
-      + CdConstants.BACKGROUND_IMAGE_FILENAME;// "src/main/resources/background.png"; // 背景图片
-    return generateImages(imagePath, fileName);
-  }
+//  public static List<File> generateImages(String fileName) {
+//    // 设置路径
+//    String imagePath = CdConstants.RESOURCES_BASE_PATH + File.separator
+//      + CdConstants.BACKGROUND_IMAGE_FILENAME;// "src/main/resources/background.png"; // 背景图片
+//    return generateImages(imagePath, fileName);
+//  }
 
   /**
    * 生成带有文本的图片。
@@ -49,21 +47,21 @@ public class HighResImageVideoUtil {
    * @param fileName            文件名称
    * @return 图片文件列表
    */
-  public static List<File> generateImages(String backgroundImageName,
-    String fileName) {
-    String fullPath =
-      CdConstants.RESOURCES_BASE_PATH + File.separator + fileName + ".txt";
-//    fullPath = fileName + ".txt";
-    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
-      fullPath);
-
-    // 设置路径
-    String outputDir = BatchCreateVideoCommonUtil.getPicPath(
-      fileName);//  "src/main/resources/pic"; // 输出目录
-
-    return generateImages(sentenceVOs, backgroundImageName, fileName,
-      outputDir);
-  }
+//  public static List<File> generateImages(String backgroundImageName,
+//    String fileName) {
+//    String fullPath =
+//      CdConstants.RESOURCES_BASE_PATH + File.separator + fileName + ".txt";
+////    fullPath = fileName + ".txt";
+//    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
+//      fullPath);
+//
+//    // 设置路径
+//    String outputDir = BatchCreateVideoCommonUtil.getPicPath(
+//      fileName);//  "src/main/resources/pic"; // 输出目录
+//
+//    return generateImages(sentenceVOs, backgroundImageName, fileName,
+//      outputDir);
+//  }
 
 
   /**
@@ -87,18 +85,18 @@ public class HighResImageVideoUtil {
    * @return 图片文件列表
    */
   public static List<File> generateImages(String backgroundImageName,
-    String filePath, String contentFileName, String lang) {
+    String filePath, String contentFileName, String picType) {
     String fullPath = filePath + contentFileName + ".txt";
     List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFileV2(
       fullPath);
-    String outputDir = filePath + "/pic/"; // 输出目录
+    String outputDir = filePath + File.separator + "pic"; // 输出目录
     // 设置路径
-    if (StrUtil.isNotEmpty(lang)) {
-      outputDir = filePath + "/pic_" + lang + "/"; // 输出目录
+    if (StrUtil.isNotEmpty(picType)) {
+      outputDir = filePath + File.separator + "pic_" + picType; // 输出目录
     }
 
     return generateImages(sentenceVOs, backgroundImageName, contentFileName,
-      outputDir);
+      outputDir, picType);
   }
 
   /**
@@ -109,18 +107,18 @@ public class HighResImageVideoUtil {
    * @return 图片文件列表
    */
   public static List<File> generateImages(String backgroundImageName,
-    String filePath, String contentFileName, String lang, boolean isDualLanguage) {
+    String filePath, String contentFileName, String lang, String picType) {
     String fullPath = filePath + contentFileName + ".txt";
     List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFileV2(
       fullPath);
     String outputDir = filePath + "/pic/"; // 输出目录
     // 设置路径
-    if (StrUtil.isNotEmpty(lang)) {
-      outputDir = filePath + "/pic_" + lang + "/"; // 输出目录
+    if (StrUtil.isNotEmpty(picType)) {
+      outputDir = filePath + "/pic_" + picType + "/"; // 输出目录
     }
 
     return generateImages(sentenceVOs, backgroundImageName, contentFileName,
-      outputDir, isDualLanguage);
+      outputDir, picType);
   }
 
   /**
@@ -133,9 +131,9 @@ public class HighResImageVideoUtil {
    */
   public static List<File> generateImages(List<SentenceVO> sentenceVOs,
     String imagePath, String fileName, String outputDir) {
-    boolean isDualLanguage = false;
+    String picType = "en";
     return generateImages(sentenceVOs, imagePath, fileName, outputDir,
-      isDualLanguage);
+      picType);
   }
 
   /**
@@ -148,7 +146,7 @@ public class HighResImageVideoUtil {
    */
   public static List<File> generateImages(List<SentenceVO> sentenceVOs,
     String imagePath, String fileName, String outputDir,
-    boolean isDualLanguage) {
+    String picType) {
     long startTime = System.currentTimeMillis();
     List<File> imageFiles = new ArrayList<>();
 
@@ -174,7 +172,7 @@ public class HighResImageVideoUtil {
     }
 
     Font noFont = new Font("Source Han Sans Heavy", Font.BOLD,
-      FontSizeConverter.pixelToPoint(54));
+      FontSizeConverter.pixelToPoint(80));
     Font englishFont = new Font("Source Han Sans Heavy", Font.PLAIN,
       FontSizeConverter.pixelToPoint(80));
     Font phoneticsFont = new Font("Arial Unicode MS", Font.PLAIN,
@@ -210,20 +208,41 @@ public class HighResImageVideoUtil {
       int startY = height / 2 - 200;
       int currentY = startY;
 
-      currentY = drawWrappedText(g2d, englishFont, Color.WHITE,
-        sentenceVO.getEnglish(), currentY, width, false);
-      // #fbc531    Color.getColor("#FBC531")
-      currentY = drawWrappedText(g2d, phoneticsFont, new Color(251, 197, 49),
-        sentenceVO.getPhonetics(), currentY + LINE_SPACING, width, false);
-      currentY += 20;
-      if (isDualLanguage) {
-        currentY = drawWrappedText(g2d, chineseZhCnFont, new Color(255, 255, 155),
-          ZhConverterUtil.toSimple(sentenceVO.getChinese()), currentY + LINE_SPACING, width, true);
+      switch (picType) {
+        case CdConstants.PIC_TYPE_EN:
+          currentY = drawWrappedText(g2d, englishFont, Color.WHITE,
+            sentenceVO.getEnglish(), currentY, width, false);
+          // #fbc531    Color.getColor("#FBC531")
 
-        drawWrappedText(g2d, chineseZhTwFont, Color.YELLOW,
-          ZhConverterUtil.toTraditional(sentenceVO.getChinese()),
-          currentY + LINE_SPACING, width, true);
+          currentY = drawWrappedText(g2d, phoneticsFont,
+            new Color(251, 197, 49),
+            sentenceVO.getPhonetics(), currentY + LINE_SPACING, width, false);
+          break;
+        case CdConstants.PIC_TYPE_MIX:
+          currentY = drawWrappedText(g2d, englishFont, Color.WHITE,
+            sentenceVO.getEnglish(), currentY, width, false);
+          // #fbc531    Color.getColor("#FBC531")
+
+          currentY = drawWrappedText(g2d, phoneticsFont,
+            new Color(251, 197, 49),
+            sentenceVO.getPhonetics(), currentY + LINE_SPACING, width, false);
+
+          currentY += 20;
+
+          currentY = drawWrappedText(g2d, chineseZhCnFont,
+            new Color(255, 255, 155),
+            ZhConverterUtil.toSimple(sentenceVO.getChinese()),
+            currentY + LINE_SPACING, width, true);
+
+          drawWrappedText(g2d, chineseZhTwFont, Color.YELLOW,
+            ZhConverterUtil.toTraditional(sentenceVO.getChinese()),
+            currentY + LINE_SPACING, width, true);
+          break;
+
+        default:
+          break;
       }
+
       g2d.dispose();
 
       try {
@@ -326,23 +345,23 @@ public class HighResImageVideoUtil {
     g2d.setColor(Color.GRAY);
     String pageNumber = current + "";
     int textWidth = g2d.getFontMetrics().stringWidth(pageNumber);
-    int x = 40; // 左侧边距
-    int y = 60; // 顶部边距
+    int x = 80; // 左侧边距
+    int y = 120; // 顶部边距
     g2d.drawString(pageNumber, x, y);
   }
 
   public static void main(String[] args) throws Exception {
-    String filePath = "src/main/resources";
-    String fileName = "CampingInvitation_cht";
-    log.info("开始解析文件: {}", filePath);
-    String fullPath = filePath + File.separator + fileName + ".txt";
-    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
-      fullPath);
-
-    String imagePath = "src/main/resources/background.png";
-    String outputDir = "src/main/resources/pic";
-
-    HighResImageVideoUtil.generateImages(sentenceVOs, imagePath, fileName,
-      outputDir);
+//    String filePath = "src/main/resources";
+//    String fileName = "CampingInvitation_cht";
+//    log.info("开始解析文件: {}", filePath);
+//    String fullPath = filePath + File.separator + fileName + ".txt";
+//    List<SentenceVO> sentenceVOs = TextParserUtilChatgpt.parseFileToSentenceVOsSingleLine(
+//      fullPath);
+//
+//    String imagePath = "src/main/resources/background.png";
+//    String outputDir = "src/main/resources/pic";
+//
+//    HighResImageVideoUtil.generateImages(sentenceVOs, imagePath, fileName,
+//      outputDir);
   }
 }

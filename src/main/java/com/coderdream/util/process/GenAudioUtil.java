@@ -244,18 +244,30 @@ public class GenAudioUtil {
 
     String filePath = folderPath + File.separator + subFolder
       + File.separator;
-    String language = "dual";
-    // 生成带英文和中文的图片
-    List<File> files = HighResImageVideoUtil.generateImages(backgroundImageName,
+//    String language = "dual";
+//    String picType = "dual";
+    HighResImageVideoUtil.generateImages(backgroundImageName,
       filePath,
       CdFileUtil.getPureFileNameWithoutExtensionWithPath(phoneticsFileName),
-      language, true);
+      CdConstants.PIC_TYPE_NO_SUBTITLE);
+
     // 生成只带英文的图片
-    language = "en";
-    files = HighResImageVideoUtil.generateImages(backgroundImageName,
+    HighResImageVideoUtil.generateImages(backgroundImageName,
       filePath,
       CdFileUtil.getPureFileNameWithoutExtensionWithPath(phoneticsFileName),
-      language);
+      CdConstants.PIC_TYPE_EN);
+
+    // 生成带英文和中文的图片
+    HighResImageVideoUtil.generateImages(backgroundImageName,
+      filePath,
+      CdFileUtil.getPureFileNameWithoutExtensionWithPath(phoneticsFileName),
+       CdConstants.PIC_TYPE_MIX);
+
+
+
+//    language = "no_subtitle";
+//    picType = "no_subtitle";
+
 
     return true;
   }

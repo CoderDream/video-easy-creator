@@ -3,4 +3,4 @@ EnBook002 | Enhance your English listening with 30-minute sessions of English au
 EnBook003 | Enhance your English listening with 30-minute sessions of English audio, paired with Chinese dubbing. | 英文加中文配音，每次半小時，增强你的英文听力。
 EnBook004 | Enhance your English listening with 5-minute sessions of English audio, paired with Chinese dubbing. | 英文加中文配音，每次五分钟，增强你的英文听力。
 EnBook005 | Enhance your English listening with 5-minute sessions of English audio, paired with Chinese dubbing. | 英文加中文配音，每次五分钟，增强你的英文听力。
-EnBook008 | Enhance your English listening skills with 100 daily English phrases. Listen with both English and Chinese audio for 30 minutes per session. | 日常英语100句，英文加中文配音，每次半小時，增强你的英文听力。
+EnBook008 | Enhance your English listening skills with 100 daily English phrases. Listen with both English and Chinese audio for 30 minutes per session. | 日常会话100句，英文加中文配音，每次半小時，增强你的英文听力。

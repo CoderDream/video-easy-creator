@@ -2,6 +2,7 @@ package com.coderdream.util.pic;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import java.io.File;
@@ -77,9 +78,9 @@ class HighResImageVideoUtilTest {
 
     language = "dual";
     // 生成带英文和中文的图片
-    files = HighResImageVideoUtil.generateImages(backgroundImageName,
-      filePath,
-      CdFileUtil.getPureFileNameWithoutExtensionWithPath(phoneticsFileName),
-      language, true);
+//    files = HighResImageVideoUtil.generateImages(backgroundImageName,
+//      filePath,
+//      CdFileUtil.getPureFileNameWithoutExtensionWithPath(phoneticsFileName),
+//      language, CdConstants.PIC_TYPE_DUAL_EN);
   }
 }
