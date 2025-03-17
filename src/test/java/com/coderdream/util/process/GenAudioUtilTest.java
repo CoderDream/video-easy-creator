@@ -118,7 +118,7 @@ class GenAudioUtilTest {
     }
 
     for (String subFolder : subFolders) {
-      GenAudioUtil.processV2(folderPath, subFolder);
+      GenAudioUtil.processV20250317(folderPath, subFolder);
     }
   }
 

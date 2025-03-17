@@ -1,7 +1,7 @@
 <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
   <voice name="en-US-JennyNeural">
-    <prosody pitch="default" volume="default" rate="default">
-      Enhance your English listening skills with 100 daily English phrases. Listen with both English and Chinese audio for 30 minutes per session.
+    <prosody pitch="default" volume="default" rate="slow">
+       I went to the park with my family. It was fun!
     </prosody>
   </voice>
 </speak>

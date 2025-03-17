@@ -77,6 +77,40 @@ public class GenVideoUtil {
     String videoPath =
       folderPath + File.separator + subFolder + File.separator + "video_cht"
         + File.separator;
+    FFmpegOneByOne.process(imagePath, audioPath, videoPath);
+  }
+
+  public static void processV20250317(String bookName, String folderPath,
+    String subFolder) {
+    // 先检查头视频有没有生成，如果没有，则生成 TODO
+    GenVideoUtil.genHeadVideo(bookName);
+
+    String imagePath =
+      folderPath + File.separator + subFolder + File.separator + "pic_mix"
+        + File.separator;
+    String audioPath =
+      folderPath + File.separator + subFolder + File.separator + "audio_mix"
+        + File.separator;
+    String videoPath =
+      folderPath + File.separator + subFolder + File.separator + "video_cht"
+        + File.separator;
+    FFmpegOneByOne.process(imagePath, audioPath, videoPath);
+  }
+
+  public static void process(String bookName, String imagePath,
+    String audioPath, String videoPath, String subFolder) {
+    // 先检查头视频有没有生成，如果没有，则生成 TODO
+    GenVideoUtil.genHeadVideo(bookName);
+
+//    String imagePath =
+//      folderPath + File.separator + subFolder + File.separator + "pic_cht"
+//        + File.separator;
+//    String audioPath =
+//      folderPath + File.separator + subFolder + File.separator + "audio_mix"
+//        + File.separator;
+//    String videoPath =
+//      folderPath + File.separator + subFolder + File.separator + "video_cht"
+//        + File.separator;
     FFmpegOneByOne.process(imagePath, audioPath,
       videoPath);
   }

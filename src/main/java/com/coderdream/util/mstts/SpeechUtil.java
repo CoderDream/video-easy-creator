@@ -266,6 +266,94 @@ public class SpeechUtil {
     }
   }
 
+
+  /**
+   * 将对话文本文件转换为音频文件：中文常速、英文常速、英文慢速
+   *
+   * @param folderName 根文件夹
+   * @param subFolder  子文件夹
+   * @param fileName   文件名（不包含扩展名）
+   * @param audioType  音频类型，如 wav 或 mp3
+   */
+  public static void genDialog2AudioThreeTypes(String folderName, String subFolder,
+    String fileName, String audioType) {
+    String fullFileName =
+      folderName + subFolder + File.separator + fileName
+        + ".txt";
+    log.info("开始解析脚本文件: {}", fullFileName);
+
+    // 设置输出目录
+    String outputDirCn =
+      folderName + subFolder + File.separator
+        + CdConstants.AUDIO_FOLDER + File.separator
+        + CdConstants.LANG_CN; // 中文音频输出目录
+    String outputDirEn =
+      folderName + subFolder + File.separator
+        + CdConstants.AUDIO_FOLDER + File.separator
+        + CdConstants.LANG_EN; // 英文音频输出目录
+    String outputDirEnSlow =
+      folderName + subFolder + File.separator
+        + CdConstants.AUDIO_FOLDER + File.separator
+        + CdConstants.LANG_EN_SLOW; // 英文音频输出目录
+    // 创建目录
+    File dirCn = new File(outputDirCn);
+    if (!dirCn.exists() && dirCn.mkdirs()) {
+      log.info("中文常速音频目录创建成功: {}", dirCn.getAbsolutePath());
+    }
+    File dirEn = new File(outputDirEn);
+    if (!dirEn.exists() && dirEn.mkdirs()) {
+      log.info("英文常速音频目录创建成功: {}", dirEn.getAbsolutePath());
+    }
+
+    File dirEnSlow = new File(outputDirEnSlow);
+    if (!dirEnSlow.exists() && dirEnSlow.mkdirs()) {
+      log.info("英文慢速音频目录创建成功: {}", dirEnSlow.getAbsolutePath());
+    }
+
+    // 解析文本文件
+    List<SentenceVO> sentenceVOs = SentenceParser.parseSentencesFromFile(
+      fullFileName);
+    int number = 0;
+    // 遍历句子列表，生成音频
+    for (SentenceVO sentenceVO : sentenceVOs) {
+      number++;
+      // 构建中文音频文件名
+      String cnFileName =
+        outputDirCn + File.separator + subFolder + "_" + MessageFormat.format(
+          "{0,number,000}", number) + "_"+CdConstants.LANG_CN+"." + audioType;
+      // 构建英文音频文件名
+      String enFileName =
+        outputDirEn + File.separator + subFolder + "_" + MessageFormat.format(
+          "{0,number,000}", number) + "_"+CdConstants.LANG_EN+"." + audioType;
+      // 构建英文音频文件名
+      String enSlowFileName =
+        outputDirEn + File.separator + subFolder + "_" + MessageFormat.format(
+          "{0,number,000}", number) + "_"+CdConstants.LANG_EN_SLOW+"." + audioType;
+
+      // 调用 content2Audio 生成中文和英文音频
+      if (CdFileUtil.isFileEmpty(cnFileName) ) {
+        content2Audio(List.of(sentenceVO.getChinese()), "zh-CN-XiaochenNeural",
+          "medium", "medium", "medium", cnFileName, audioType, "zh-cn");
+      } else {
+        log.info("中文常速音频文件已存在，跳过生成: {}", cnFileName);
+      }
+
+      if (CdFileUtil.isFileEmpty(enFileName) ) {
+        content2Audio(List.of(sentenceVO.getEnglish()), "en-US-JennyNeural",
+          "default", "default", "default", enFileName, audioType, "en-us");
+      } else {
+        log.info("英文常速音频文件已存在，跳过生成: {}", enFileName);
+      }
+
+      if (CdFileUtil.isFileEmpty(enSlowFileName) ) {
+        content2Audio(List.of(sentenceVO.getEnglish()), "en-US-JennyNeural",
+          "default", "default", "-20%", enSlowFileName, audioType, "en-us");
+      } else {
+        log.info("英文慢速音频文件已存在，跳过生成: {}", enSlowFileName);
+      }
+    }
+  }
+
   /**
    * 将对话文本文件转换为音频文件（中英文）。
    *

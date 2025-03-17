@@ -300,7 +300,7 @@ public class GenDualAudioUtil {
     String outputDirEnNormal =
       folderName + File.separator + subFolder + File.separator
         + CdConstants.AUDIO_FOLDER + File.separator
-        + CdConstants.LANG_EN_NORMAL; // 英文音频输出目录
+        + CdConstants.LANG_EN; // 英文音频输出目录
     String outputDirEnSlow =
       folderName + File.separator + subFolder + File.separator
         + CdConstants.AUDIO_FOLDER + File.separator

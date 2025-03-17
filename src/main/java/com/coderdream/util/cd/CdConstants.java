@@ -145,6 +145,12 @@ public class CdConstants {
    * 音频文件夹
    */
   public static final String AUDIO_FOLDER = "audio";
+
+
+  /**
+   * mix音频文件夹
+   */
+  public static final String AUDIO_MIX_FOLDER = "audio_mix";
   /**
    * 视频文件夹
    */
@@ -153,7 +159,6 @@ public class CdConstants {
   public static final String LANG_CN = "cn";
   public static final String LANG_EN = "en";
   public static final String LANG_EN_FAST = "en_fast";
-  public static final String LANG_EN_NORMAL = "en_normal";
   public static final String LANG_EN_SLOW = "en_slow";
 
   public static final String PIC_TYPE_NO_SUBTITLE = "no_subtitle"; // 无字幕

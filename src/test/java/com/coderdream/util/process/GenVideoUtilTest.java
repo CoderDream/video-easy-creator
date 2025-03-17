@@ -337,7 +337,7 @@ class GenVideoUtilTest {
     }
 
     for (String subFolder : subFolders) {
-      GenVideoUtil.processV5(bookName, folderPath, subFolder);
+      GenVideoUtil.processV20250317(bookName, folderPath, subFolder);
       Mp4MergeUtil.processMerge(folderPath, subFolder);
     }
   }
