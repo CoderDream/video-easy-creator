@@ -37,11 +37,11 @@ class CommandUtilTest {
     // D:\0000\0005_VP\vance_0002 D:\0000\0003_PressBriefings\250305
 
     String bookFolderName = "0003_PressBriefings";
-    String subFolder = "250311";
+    String subFolder = "250317";
     String folderPath =
       OperatingSystem.getBaseFolder() + File.separator + bookFolderName + File.separator;
 
-    String videoLink = "https://www.youtube.com/watch?v=5_6R9nmcvMM";// "https://www.youtube.com/watch?v=dCY0b1wWX9A"; // 替换为实际的视频链接
+    String videoLink = "https://www.youtube.com/watch?v=yqO-mwyKeBA";// "https://www.youtube.com/watch?v=dCY0b1wWX9A"; // 替换为实际的视频链接
     String outputFileName = folderPath + File.separator + subFolder + File.separator + subFolder
       + ".mp4"; // 替换为期望的输出路径和文件名
     CommandUtil.downloadBest720p(videoLink, outputFileName);

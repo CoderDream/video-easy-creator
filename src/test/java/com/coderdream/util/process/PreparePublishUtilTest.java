@@ -91,7 +91,8 @@ class PreparePublishUtilTest {
     String bookFolderName = "EnBook002";
     String subFolder = "Chapter012";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName + File.separator;
+      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+        + File.separator;
 
     PreparePublishUtil.process(folderPath, subFolder);
   }
@@ -110,7 +111,8 @@ class PreparePublishUtilTest {
     String chapterName = "book02_name.txt";
     String headContentFileName = "head_content.txt";
     for (String subFolder : subFolders) {
-      PreparePublishUtil.process(bookFolderName, subFolder, chapterName, headContentFileName);
+      PreparePublishUtil.process(bookFolderName, subFolder, chapterName,
+        headContentFileName);
     }
   }
 
@@ -128,7 +130,8 @@ class PreparePublishUtilTest {
     String chapterName = "book04_name.txt";
     String headContentFileName = "head_content.txt";
     for (String subFolder : subFolders) {
-      PreparePublishUtil.process(bookFolderName, subFolder, chapterName, headContentFileName);
+      PreparePublishUtil.process(bookFolderName, subFolder, chapterName,
+        headContentFileName);
     }
   }
 
@@ -146,7 +149,8 @@ class PreparePublishUtilTest {
     String chapterName = "book05_name.txt";
     String headContentFileName = "head_content.txt";
     for (String subFolder : subFolders) {
-      PreparePublishUtil.process(bookFolderName, subFolder, chapterName, headContentFileName);
+      PreparePublishUtil.process(bookFolderName, subFolder, chapterName,
+        headContentFileName);
     }
   }
 
@@ -164,7 +168,18 @@ class PreparePublishUtilTest {
     String chapterName = bookFolderName + "_name.txt";
     String headContentFileName = "head_content.txt";
     for (String subFolder : subFolders) {
-      PreparePublishUtil.process(bookFolderName, subFolder, chapterName, headContentFileName);
+      PreparePublishUtil.process(bookFolderName, subFolder, chapterName,
+        headContentFileName);
     }
   }
+
+  @Test
+  void copyFileToPublishFolderEnBook008() {
+    String bookFolderName = "EnBook008";
+    Integer chapterSize = 2;
+
+    PreparePublishUtil.copyFileToPublishFolder(bookFolderName, chapterSize);
+  }
+
+
 }

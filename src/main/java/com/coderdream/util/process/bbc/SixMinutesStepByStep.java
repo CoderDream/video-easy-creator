@@ -190,16 +190,16 @@ public class SixMinutesStepByStep {
       CdFileUtil.getResourceRealPath() + File.separatorChar + "data"
         + File.separatorChar + "bbc"
         + File.separatorChar + "mp3.txt";
-//    if (CdFileUtil.isFileEmpty(srtEngRawFileName)) {
-    // 写中文翻译文本
-    File mp3InfoFile = FileUtil.writeLines(timeList, mp3InfoFileName,
-      StandardCharsets.UTF_8);
-    if (CdFileUtil.isFileEmpty(mp3InfoFileName)) {
-      log.info("已生成新的Mp3 Info 文件: {}", mp3InfoFile.getAbsolutePath());
+    if (CdFileUtil.isFileEmpty(srtEngRawFileName)) {
+      // 写中文翻译文本
+      File mp3InfoFile = FileUtil.writeLines(timeList, mp3InfoFileName,
+        StandardCharsets.UTF_8);
+      if (CdFileUtil.isFileEmpty(mp3InfoFileName)) {
+        log.info("已生成新的Mp3 Info 文件: {}", mp3InfoFile.getAbsolutePath());
+      }
+    } else {
+      log.info("文件已存在: {}", mp3InfoFileName);
     }
-//    } else {
-//      log.info("文件已存在: {}", mp3InfoFileName);
-//    }
 
     // 以tab分隔符，得到数组
     String[] split = timeList.get(0).split("\\s+");
@@ -302,19 +302,30 @@ public class SixMinutesStepByStep {
     // 生成油管平台描述文件
     String descriptionFileNameYT = CdFileUtil.changeExtension(pptxFileName,
       "md");
-    descriptionFileName = CdFileUtil.addPostfixToFileName(descriptionFileName,
+    descriptionFileNameYT = CdFileUtil.addPostfixToFileName(
+      descriptionFileNameYT,
       "_description");
-    if (CdFileUtil.isFileEmpty(descriptionFileName)) {
+    if (CdFileUtil.isFileEmpty(descriptionFileNameYT)) {
       TranslationUtil.genDescription(scriptDialogMergeFileName,
-        descriptionFileName);
+        descriptionFileNameYT);
     } else {
-      log.info("Md 文件已存在: {}", descriptionFileName);
+      log.info("Md 文件已存在: {}", descriptionFileNameYT);
     }
 
     // 2. 生成描述
-    PreparePublishUtil.genDescriptionForYT(folderPath, folderName, "", "", "6",
-      srtFileName, chapterName);
+//    String mdFileName = CommonUtil.getFullPathFileName(folderPath, folderName,
+//      ".md");
+    String chnMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      descriptionFileNameYT, "_chn");
+    String chtMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      descriptionFileNameYT, "_cht");
+    if (CdFileUtil.isFileEmpty(chnMdFileName) || CdFileUtil.isFileEmpty(
+      chtMdFileName)) {
+      PreparePublishUtil.genDescriptionForYT(folderPath, folderName, "", "",
+        "6",
+        srtFileName, chapterName);
 
+    }
   }
 
 }

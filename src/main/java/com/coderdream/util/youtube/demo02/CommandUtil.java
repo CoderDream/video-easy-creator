@@ -211,6 +211,74 @@ public class CommandUtil {
         }
     }
 
+    /**
+     * 下载最佳 720p 视频。
+     *
+     * @param videoLink      视频链接。
+     * @param outputFileName 输出文件名。
+     * @param proxyProtocol  代理协议 (例如: http, https, socks5)。 可以为null或空字符串，表示不使用代理
+     * @param proxyAddress   代理地址。 可以为null或空字符串，表示不使用代理
+     * @param proxyPort      代理端口。 如果没有代理，该值会被忽略
+     */
+    public static void downloadBest720p(String videoLink, String outputFileName, String proxyProtocol, String proxyAddress, int proxyPort) {
+
+        // 构建基础命令
+        List<String> listFormatsCommandList = new ArrayList<>();
+        listFormatsCommandList.add("yt-dlp");
+        if (proxyAddress != null && !proxyAddress.isEmpty() && proxyProtocol != null && !proxyProtocol.isEmpty()) {
+            listFormatsCommandList.add("--proxy");
+            listFormatsCommandList.add(proxyProtocol + "://" + proxyAddress + ":" + proxyPort);
+        }
+        listFormatsCommandList.add("-F");
+        listFormatsCommandList.add(videoLink);
+
+        String listFormatsCommand = String.join(" ", listFormatsCommandList); // 将 List<String> 转换为 String
+
+        List<String> formats = listFormats(listFormatsCommand);
+
+        String bestVideoFormat = null;
+        String bestAudioFormat = null;
+
+        for (String format : formats) {
+            if (format.contains("1280x720") && format.contains("video only")) {
+                if (bestVideoFormat == null || getBitrate(format) > getBitrate(bestVideoFormat)) {
+                    bestVideoFormat = format;
+                }
+            }
+
+            if (format.contains("audio only")) {
+                if (bestAudioFormat == null || getAudioBitrate(format) > getAudioBitrate(bestAudioFormat)) {
+                    bestAudioFormat = format;
+                }
+            }
+        }
+
+        if (bestVideoFormat != null && bestAudioFormat != null) {
+            String videoId = extractFormatId(bestVideoFormat);
+            String audioId = extractFormatId(bestAudioFormat);
+
+            List<String> downloadCommand = new ArrayList<>();
+            downloadCommand.add("yt-dlp");
+            if (proxyAddress != null && !proxyAddress.isEmpty() && proxyProtocol != null && !proxyProtocol.isEmpty()) {
+                downloadCommand.add("--proxy");
+                downloadCommand.add(proxyProtocol + "://" + proxyAddress + ":" + proxyPort);
+            }
+
+            downloadCommand.add("-f");
+            downloadCommand.add(videoId + "+" + audioId);
+            downloadCommand.add("--merge-output-format");
+            downloadCommand.add("mp4");
+            downloadCommand.add("-o");
+            downloadCommand.add(outputFileName);
+            downloadCommand.add(videoLink);
+
+            executeCommand(downloadCommand);
+
+            log.info("成功下载最佳720p视频到：{}", outputFileName);
+        } else {
+            log.error("未找到最佳720p视频或音频格式.");
+        }
+    }
 
     /**
      * 从格式信息中提取格式 ID

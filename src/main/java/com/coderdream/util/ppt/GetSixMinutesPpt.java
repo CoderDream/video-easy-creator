@@ -423,15 +423,19 @@ public class GetSixMinutesPpt {
           tbl.get_Item(0, y).getTextFrame()
             .setText(wordInfo2.getNo() + ""); // 设置序号
           tbl.get_Item(1, y).getTextFrame()
-            .setText(wordInfo2.getWord()); // 设置单词
+            .setText(wordInfo2.getWord()); // 设置单词 psychologist
+          if(wordInfo2.getWord().equals("psychologist")) {
+            System.out.println("###### wordInfo2.getUk() is null");
+          }
+
           String uk = wordInfo2.getUk();
-          if (StrUtil.isNotBlank(uk) && uk.length() > 15) {
-            uk = uk.substring(0, 13) + "…";
+          if (StrUtil.isNotBlank(uk) && uk.length() >= 15) {
+            uk = uk.substring(0, 13) ;// + "…"
           }
           tbl.get_Item(2, y).getTextFrame().setText(uk); // 设置音标
           String comment = wordInfo2.getComment();
           if (StrUtil.isNotBlank(comment) && comment.length() > 49) {
-            comment = comment.substring(0, 48) + "…";
+            comment = comment.substring(0, 48) ;// + "…"
           }
 
           tbl.get_Item(3, y).getTextFrame()

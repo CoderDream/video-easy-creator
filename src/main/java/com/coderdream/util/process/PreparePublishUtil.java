@@ -6,11 +6,13 @@ import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.SubtitleEntity;
 import com.coderdream.util.CommonUtil;
 import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cmd.CommandUtil;
 import com.coderdream.util.gemini.GeminiApiUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.resource.ResourcesSourcePathUtil;
 import com.coderdream.util.subtitle.SubtitleUtil;
+import com.coderdream.util.video.demo04.Mp4MergeUtil;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 
 import java.io.File;
@@ -135,16 +137,19 @@ public class PreparePublishUtil {
   public static void process(String bookFolderName, String subFolder,
     String chapterFileName, String headContentFileName) {
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName + File.separator;
+      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+        + File.separator;
 
     // 1. 生成字幕
     String lang = "cmn";
 
     String mp4FileName =
-      folderPath + File.separator + subFolder + File.separator + "video" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "video"
+        + File.separator
         + subFolder
         + ".mp4";
-    String mp3FileName = com.coderdream.util.cd.CdFileUtil.changeExtension(mp4FileName, "mp3");
+    String mp3FileName = com.coderdream.util.cd.CdFileUtil.changeExtension(
+      mp4FileName, "mp3");
 
     if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(mp3FileName)) {
       log.info("mp3文件不存在，先生成： {}", mp3FileName);
@@ -154,7 +159,8 @@ public class PreparePublishUtil {
     }
 
     String subtitleFolderPath =
-      folderPath + File.separator + subFolder + File.separator + "subtitle" + File.separator;
+      folderPath + File.separator + subFolder + File.separator + "subtitle"
+        + File.separator;
     if (!new File(subtitleFolderPath).exists()) {
       log.info("subtitle文件夹不存在，先创建： {}", subtitleFolderPath);
       try {
@@ -167,7 +173,8 @@ public class PreparePublishUtil {
 //        String totalFileNameTotal =
 //          folderPath + File.separator + subFolder + File.separator + subFolder + "_total.txt";
     String totalFileNameTotal =
-      folderPath + File.separator + subFolder + File.separator + subFolder + ".txt";
+      folderPath + File.separator + subFolder + File.separator + subFolder
+        + ".txt";
     if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(totalFileNameTotal)) {
       log.info("文件不存在或为空，已生成新文件: {}",
         totalFileNameTotal);
@@ -249,17 +256,20 @@ public class PreparePublishUtil {
 
     lang = "eng";
     String srtFileNameInSubtitleFolder =
-      folderPath + File.separator + subFolder + File.separator + "subtitle" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "subtitle"
+        + File.separator
         + subFolder
         + ".srt";
 
     String srtFileName =
-      folderPath + File.separator + subFolder + File.separator + "video" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "video"
+        + File.separator
         + subFolder
         + ".srt";
 
     if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(srtFileName)) {
-      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(srtFileNameInSubtitleFolder)) {
+      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        srtFileNameInSubtitleFolder)) {
         log.info("subtitle中的srt文件存在，直接拷贝： {}",
           srtFileNameInSubtitleFolder);
         FileUtil.copy(Paths.get(srtFileNameInSubtitleFolder),
@@ -281,33 +291,40 @@ public class PreparePublishUtil {
     for (String srt : srtList) {
       zhTwList.add(ZhConverterUtil.toTraditional(srt));
     }
-    String zhCnSrtFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(srtFileName,
+    String zhCnSrtFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      srtFileName,
       ".zh-CN");
-    String zhTwSrtFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(srtFileName,
+    String zhTwSrtFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      srtFileName,
       ".zh-TW");
 
     if (
-      com.coderdream.util.cd.CdFileUtil.isFileEmpty(zhCnSrtFileName) || com.coderdream.util.cd.CdFileUtil.isFileEmpty(
-      zhTwSrtFileName)) {
+      com.coderdream.util.cd.CdFileUtil.isFileEmpty(zhCnSrtFileName)
+        || com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        zhTwSrtFileName)) {
       com.coderdream.util.cd.CdFileUtil.writeToFile(zhCnSrtFileName, srtList);
       com.coderdream.util.cd.CdFileUtil.writeToFile(zhTwSrtFileName, zhTwList);
     }
 
     String mdFileName = Objects.requireNonNull(
       com.coderdream.util.cd.CdFileUtil.changeExtension(srtFileName, "md"));
-    String chnMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(mdFileName,
+    String chnMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      mdFileName,
       "_zh_CN");
-    String chtMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(mdFileName,
+    String chtMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      mdFileName,
       "_zh_TW");
     // 2. 生成描述
     if (
-      com.coderdream.util.cd.CdFileUtil.isFileEmpty(chnMdFileName) || com.coderdream.util.cd.CdFileUtil.isFileEmpty(
-      chtMdFileName)) {
+      com.coderdream.util.cd.CdFileUtil.isFileEmpty(chnMdFileName)
+        || com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        chtMdFileName)) {
       log.info("文件已存在，不再生成: {}", mdFileName);
 
       log.info("----- 4.测试 generateContent 方法开始");
       String prompt = FileUtil.readString(
-        com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + File.separator + "youtube"
+        com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + File.separator
+          + "youtube"
           + File.separator + "description_prompt.txt",
         StandardCharsets.UTF_8);
       prompt += "字幕如下：";
@@ -391,13 +408,15 @@ public class PreparePublishUtil {
     String coverFileName =
       coverPath + subFolder + "_" + "720p." + imageFormat;
     String destinationCoverFileName =
-      folderPath + File.separator + subFolder + File.separator + "video" + File.separator
+      folderPath + File.separator + subFolder + File.separator + "video"
+        + File.separator
         + subFolder + "_" + "720p." + imageFormat;
     if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(coverFileName)) {
       log.error("封面图不存在，先生成： {}", coverFileName);
       return;
     }
-    if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(destinationCoverFileName)) {
+    if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+      destinationCoverFileName)) {
       FileUtil.copy(Paths.get(coverFileName),
         Paths.get(destinationCoverFileName),
         StandardCopyOption.REPLACE_EXISTING);
@@ -467,10 +486,12 @@ public class PreparePublishUtil {
       log.info("mp3文件不存在, {}", mp3FileName);
       return;
     }
-    String srtFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(mp3FileName, "srt");
+    String srtFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(
+      mp3FileName, "srt");
     // D:\0000\EnBook001\900\ch003\ch003_total.txt
     String subtitleFileName =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+        + File.separator
         + subFolder + File.separator + subFolder +
         "_total.txt";
     File totalFile = new File(subtitleFileName);
@@ -492,7 +513,8 @@ public class PreparePublishUtil {
     String newSubtitleFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
       subtitleFileName,
       "_cht");// "D:\\0000\\EnBook001\\900\\ch003\\ch003_total_new.txt";
-    com.coderdream.util.cd.CdFileUtil.writeToFile(newSubtitleFileName, textList);
+    com.coderdream.util.cd.CdFileUtil.writeToFile(newSubtitleFileName,
+      textList);
 
     lang = "eng";
 
@@ -515,7 +537,8 @@ public class PreparePublishUtil {
     String timeStr, String srtFileName, String chapterName) {
     log.info("----- 4.测试 generateContent 方法开始");
     String prompt = FileUtil.readString(
-      com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + File.separator + "youtube"
+      com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + File.separator
+        + "youtube"
         + File.separator + "description_prompt.txt",
       StandardCharsets.UTF_8);
     prompt += "字幕如下：";
@@ -527,8 +550,10 @@ public class PreparePublishUtil {
     String mdFileName = CommonUtil.getFullPathFileName(subFolder, subFolder,
       ".md");
 //    String mdFileName = CdFileUtil.changeExtension(srtFileName, "md");
-    String chnMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(mdFileName, "_chn");
-    String chtMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(mdFileName, "_cht");
+    String chnMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      mdFileName, "_chn");
+    String chtMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      mdFileName, "_cht");
     String title = "";
     // 商務英語 EP 18 餐館英語|🎧30分鐘英文聽力訓練|中英雙語配音，效果加倍|雙語沉浸式學習|英文聽力大提升，附帶中文翻譯|每日英文聽力|讓你的耳朵更靈敏|生活化英文會話|輕鬆掌握實用口語
     if (StrUtil.isNotBlank(bookName)) {
@@ -542,8 +567,9 @@ public class PreparePublishUtil {
     }
     try {
       if (
-        com.coderdream.util.cd.CdFileUtil.isFileEmpty(chnMdFileName) || com.coderdream.util.cd.CdFileUtil.isFileEmpty(
-        chtMdFileName)) {
+        com.coderdream.util.cd.CdFileUtil.isFileEmpty(chnMdFileName)
+          || com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+          chtMdFileName)) {
         String text = generatedContent.text();
         text = title + "\n\n" + text;
         FileUtils.writeStringToFile(new File(chtMdFileName),
@@ -566,5 +592,72 @@ public class PreparePublishUtil {
     String timeStr = "30";
     process(folderPath, subFolder, shortSubFolder, bookFolderName,
       bookName, chapterFileName, timeStr);
+  }
+
+  public static void copyFileToPublishFolder(String bookName,
+    Integer chapterSize) {
+
+    // , String subFolder,
+    //    String shortSubFolder, String bookFolderName,
+    //    String bookName, String chapterFileName
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = chapterSize + 1; // 假定总共100章 101
+    for (int i = 1; i < chapterSize + 1; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+//    String folderPath =
+//      OperatingSystem.getBaseFolder() + File.separator + typeName + File.separator + folderName;
+    String distFolderName = folderPath + File.separator + "publish";
+    if (!FileUtil.exist(distFolderName)) {
+      boolean mkdirs = new File(distFolderName).mkdirs();
+      if (mkdirs) {
+        log.info("创建文件夹结果：{}", mkdirs);
+      }
+    }
+
+    for (String folderName : subFolders) {
+//      GenVideoUtil.processV20250317(bookName, folderPath, subFolder);
+//      Mp4MergeUtil.processMerge(folderPath, subFolder);
+
+      String destinationCoverFileName =
+        folderPath + File.separator + folderName + File.separator + "video"
+          + File.separator
+          + folderName + "_" + "720p.png";
+      if (!CdFileUtil.isFileEmpty(destinationCoverFileName)) {
+        FileUtil.copy(destinationCoverFileName, distFolderName, true);
+      }
+
+      // 0. 清理文件夹
+      boolean del = FileUtil.del(distFolderName);
+      log.info("删除文件夹结果：{}", del);
+      // 2. 拷贝视频
+      String mp4FilePath = folderPath + File.separator + folderName + ".mp4";
+      if (!CdFileUtil.isFileEmpty(mp4FilePath)) {
+        String destinationMp4FileName = distFolderName + "video_new.mp4";
+        FileUtil.copy(Paths.get(mp4FilePath),
+          Paths.get(destinationMp4FileName),
+          StandardCopyOption.REPLACE_EXISTING);
+      }
+      // 3. 字幕
+      String subtitleFileNameEng =
+        folderPath + File.separator + folderName + File.separator
+          + CdConstants.VIDEO_FOLDER + File.separator + folderName
+          + "_zh-CN.md";
+      FileUtil.copy(subtitleFileNameEng, distFolderName, true);
+      String subtitleFileNameChn =
+        folderPath + File.separator + folderName + File.separator
+          + CdConstants.VIDEO_FOLDER + File.separator + folderName
+          + "_zh-TW.md";
+      FileUtil.copy(subtitleFileNameChn, distFolderName, true);
+
+      // 4. 封面
+      String coverFileName =
+        folderPath + File.separator + folderName + "_cover.jpg";
+      FileUtil.copy(coverFileName, distFolderName, true);
+    }
   }
 }
