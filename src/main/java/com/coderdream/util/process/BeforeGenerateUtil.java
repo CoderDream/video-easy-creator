@@ -243,6 +243,20 @@ public class BeforeGenerateUtil {
         }
     }
 
+    public static void deleteFolder(String folderPath, String subFolder, List<String> folderNameList) {
+
+
+        for (String folderName : folderNameList) {
+            String subFolderPath =
+                    folderPath + File.separator + subFolder + File.separator + folderName;
+            if (new File(subFolderPath).exists()) {
+                // 删除文件夹及其内容
+                FileUtil.del(new File(subFolderPath));
+                log.info("已删除文件夹: {}", subFolderPath);
+            }
+        }
+    }
+
     public static void processBook01(String folderPath, String subFolder) {
         // 1. 生成章节文本
 //    String folderPath = "D:\\0000\\EnBook001\\900\\";

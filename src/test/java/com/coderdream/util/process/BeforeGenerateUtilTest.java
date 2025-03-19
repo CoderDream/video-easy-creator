@@ -321,7 +321,28 @@ class BeforeGenerateUtilTest {
     }
 
     for (String subFolder : subFolders) {
-     // BeforeGenerateUtil.deleteFolder(folderPath, subFolder);
+      BeforeGenerateUtil.deleteFolder(folderPath, subFolder);
+    }
+
+    assertTrue(true);
+    System.out.println("done");
+  }
+
+  @Test
+  void deleteFolder_Book008() {
+    String bookName = "EnBook008";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+    List<String> subFolders = new ArrayList<>();
+    int end = 15;// 15;
+    for (int i = 2; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+    // , "video_cht",
+    //            "video_list_file", "subtitle", "video_cht_1", "video_cht_2", "video_cht_3", "video_cht_4"
+    List<String> folderNameList = Arrays.asList("audio_dual_en", "audio_mix");
+    for (String subFolder : subFolders) {
+      BeforeGenerateUtil.deleteFolder(folderPath, subFolder, folderNameList);
     }
 
     assertTrue(true);

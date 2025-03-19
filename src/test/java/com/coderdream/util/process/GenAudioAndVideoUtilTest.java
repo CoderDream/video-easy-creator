@@ -17,7 +17,7 @@ class GenAudioAndVideoUtilTest {
     String folderPath = OperatingSystem.getFolderPath(bookName);
 
     List<String> subFolders = new ArrayList<>();
-    int end = 3; // 假定总共100章 101
+    int end = 15; // 假定总共100章 101
     for (int i = 2; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);

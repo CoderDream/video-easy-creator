@@ -77,7 +77,7 @@ public class CdFileBatchUtil {
   }
 
   public static void batchCopy() {
-    String bookName = "EnBook005";
+    String bookName = "EnBook002";
     String folderPath = OperatingSystem.getFolderPath(bookName);
     List<String> subFolders = new ArrayList<>();
     int end = 101;//51
@@ -103,7 +103,7 @@ public class CdFileBatchUtil {
       String srcFilePath =
         folderPath + File.separator + subFolder + File.separator + "video"
           + File.separator + subFolder
-          + ".mp4";
+          + "_new.mp4";
 
       String destFileName =
         destFilePath + File.separator + subFolder + ".mp4";

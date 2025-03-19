@@ -206,5 +206,4 @@ class GenSubtitleUtilTest {
     GenSubtitleUtil.filterContentFile(srcFileNameEng, srcFileNameEng);
   }
 
-
 }

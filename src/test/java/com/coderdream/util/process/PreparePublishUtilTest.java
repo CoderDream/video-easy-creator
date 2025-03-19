@@ -174,10 +174,30 @@ class PreparePublishUtilTest {
   }
 
   @Test
+  void copyFileToPublishFolderEnBook002() {
+    String bookFolderName = "EnBook002";
+    Integer chapterSize = 50;
+    PreparePublishUtil.copyFileToPublishFolder(bookFolderName, chapterSize);
+  }
+
+  @Test
+  void copyFileToPublishFolderEnBook004() {
+    String bookFolderName = "EnBook004";
+    Integer chapterSize = 100;
+    PreparePublishUtil.copyFileToPublishFolder(bookFolderName, chapterSize);
+  }
+
+  @Test
+  void copyFileToPublishFolderEnBook005() {
+    String bookFolderName = "EnBook005";
+    Integer chapterSize = 100;
+    PreparePublishUtil.copyFileToPublishFolder(bookFolderName, chapterSize);
+  }
+
+  @Test
   void copyFileToPublishFolderEnBook008() {
     String bookFolderName = "EnBook008";
-    Integer chapterSize = 2;
-
+    Integer chapterSize = 100;
     PreparePublishUtil.copyFileToPublishFolder(bookFolderName, chapterSize);
   }
 

@@ -445,8 +445,6 @@ public class Mp4MergeUtil {
       String encodedVideo = VideoEncoder.encodeVideo(destinationFileName,
         outputFilePath);
       log.info("视频编码完成: {}", encodedVideo);
-
     }
-
   }
 }
