@@ -155,6 +155,11 @@ public class CdConstants {
    * 视频文件夹
    */
   public static final String VIDEO_FOLDER = "video";
+  /**
+   * cover文件夹
+   */
+  public static final String COVER_FOLDER = "cover";
+
 
   public static final String LANG_CN = "cn";
   public static final String LANG_EN = "en";
