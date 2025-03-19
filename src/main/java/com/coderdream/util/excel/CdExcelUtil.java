@@ -8,6 +8,7 @@ import cn.hutool.poi.excel.ExcelUtil;
 import com.coderdream.entity.SceneDialogEntity;
 import com.coderdream.entity.WordInfoEntity;
 import com.coderdream.util.CommonUtil;
+import com.coderdream.util.cd.CdFileUtil;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -139,7 +140,7 @@ public class CdExcelUtil {
         subFolderName
           + File.separator + "Chapter" + String.format("%03d", idx) + ".txt";
 //      if (!CdFileUtil.isFileEmpty(fileName)) {
-      com.coderdream.util.cd.CdFileUtil.writeToFile(fileName, contentList);
+      CdFileUtil.writeToFile(fileName, contentList);
 //      }
     }
   }

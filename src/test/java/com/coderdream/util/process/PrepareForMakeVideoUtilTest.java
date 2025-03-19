@@ -21,9 +21,19 @@ class PrepareForMakeVideoUtilTest {
   }
 
   @Test
+  void processYoutubeFromTodo_0003() {
+    String typeName = "0003_PressBriefings";
+    String folderName = "20250317";
+    PrepareForMakeVideoUtil.processYoutube(typeName, folderName);
+  }
+
+
+  @Test
   void processYoutubeFromTodo_0008() {
     String typeName = "0008_DailyNews";
     String folderName = "20250314";
     PrepareForMakeVideoUtil.processYoutube(typeName, folderName);
   }
+
+
 }

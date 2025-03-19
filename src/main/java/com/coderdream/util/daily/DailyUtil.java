@@ -2,6 +2,7 @@ package com.coderdream.util.daily;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.file.PdfFileFinder;
 import com.coderdream.util.gemini.GeminiApiUtil;
@@ -39,7 +40,7 @@ public class DailyUtil {
     long startTime = System.currentTimeMillis(); // 记录开始时间
     // 2. 生成描述
     String prompt = FileUtil.readString(
-      com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + File.separator
+      CdFileUtil.getResourceRealPath() + File.separator
         + "youtube"
         + File.separator + "description_prompt.txt",
       StandardCharsets.UTF_8);
@@ -66,7 +67,7 @@ public class DailyUtil {
   public static void syncFilesToQuark(String year) {
     String yearPath = "D:\\14_LearnEnglish\\6MinuteEnglish\\" + year;
 
-    List<File> files = com.coderdream.util.cd.CdFileUtil.getFirstLevelDirectories(
+    List<File> files = CdFileUtil.getFirstLevelDirectories(
       yearPath);
     if (CollectionUtil.isEmpty(files)) {
       log.error("图片文件夹为空，退出处理流程；{}", yearPath);
@@ -94,36 +95,36 @@ public class DailyUtil {
         folderName + "_核心词汇表.xlsx";
       String fileNameF =
         folderName + "_高级词汇表.xlsx";
-      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+      if (!CdFileUtil.isFileEmpty(
         folderPath + File.separator + fileNameC)
-        && com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        && CdFileUtil.isFileEmpty(
         newFolderPath + File.separator + fileNameC)) {
         FileUtil.copyFile(folderPath + File.separator + fileNameC,
           newFolderPath + File.separator + fileNameC,
           StandardCopyOption.REPLACE_EXISTING);
       }
 
-      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+      if (!CdFileUtil.isFileEmpty(
         folderPath + File.separator + fileNameD)
-        && com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        && CdFileUtil.isFileEmpty(
         newFolderPath + File.separator + fileNameD)) {
         FileUtil.copyFile(folderPath + File.separator + fileNameD,
           newFolderPath + File.separator + fileNameD,
           StandardCopyOption.REPLACE_EXISTING);
       }
 
-      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+      if (!CdFileUtil.isFileEmpty(
         folderPath + File.separator + fileNameE)
-        && com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        && CdFileUtil.isFileEmpty(
         newFolderPath + File.separator + fileNameE)) {
         FileUtil.copyFile(folderPath + File.separator + fileNameE,
           newFolderPath + File.separator + fileNameE,
           StandardCopyOption.REPLACE_EXISTING);
       }
 
-      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+      if (!CdFileUtil.isFileEmpty(
         folderPath + File.separator + fileNameF)
-        && com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        && CdFileUtil.isFileEmpty(
         newFolderPath + File.separator + fileNameF)) {
         FileUtil.copyFile(folderPath + File.separator + fileNameF,
           newFolderPath + File.separator + fileNameF,
@@ -132,23 +133,23 @@ public class DailyUtil {
 
       // 找pdf和mp3
       String pdfFileName = PdfFileFinder.findPdfFileName(folderName);
-      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+      if (!CdFileUtil.isFileEmpty(
         folderPath + File.separator + pdfFileName)
-        && com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        && CdFileUtil.isFileEmpty(
         newFolderPath + File.separator + pdfFileName)) {
         FileUtil.copyFile(folderPath + File.separator + pdfFileName,
           newFolderPath + File.separator + pdfFileName,
           StandardCopyOption.REPLACE_EXISTING);
       }
 
-      if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+      if (!CdFileUtil.isFileEmpty(
         folderPath + File.separator + pdfFileName)) {
         String mp3FileName =
-          com.coderdream.util.cd.CdFileUtil.getFileNameWithoutExtension(
+          CdFileUtil.getFileNameWithoutExtension(
             pdfFileName) + ".mp3";
-        if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        if (!CdFileUtil.isFileEmpty(
           folderPath + File.separator + mp3FileName)
-          && com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+          && CdFileUtil.isFileEmpty(
           newFolderPath + File.separator + mp3FileName)) {
           FileUtil.copyFile(folderPath + File.separator + mp3FileName,
             newFolderPath + File.separator + mp3FileName,

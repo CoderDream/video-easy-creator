@@ -3,6 +3,7 @@ package com.coderdream.util.process;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.CommonUtil;
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.gemini.GeminiApiUtil;
 import com.coderdream.util.proxy.OperatingSystem;
@@ -11,6 +12,7 @@ import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -67,30 +69,70 @@ public class PrepareForMakeVideoUtil {
 
   public static void processYoutube(String typeName, String folderName) {
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + typeName + File.separator + folderName;
-    String distFolderName = "D:\\0000_video\\0008_DailyNews_Draft\\";
+      OperatingSystem.getBaseFolder() + File.separator + typeName
+        + File.separator + folderName;
+    String distFolderName = "D:\\0000_video" + File.separator + typeName;
+    if (!FileUtil.exist(distFolderName)) {
+      File mkdir = FileUtil.mkdir(distFolderName);
+      log.info("创建文件夹结果：{}", mkdir);
+    }
     // 0. 清理文件夹
-    boolean del = FileUtil.del(distFolderName);
-    log.info("删除文件夹结果：{}", del);
+//    boolean del = FileUtil.del(distFolderName);
+//    log.error("删除文件夹结果：{} {}", del, distFolderName);
     // 2. 拷贝视频
     String mp4FilePath = folderPath + File.separator + folderName + ".mp4";
     if (!CdFileUtil.isFileEmpty(mp4FilePath)) {
-      String destinationMp4FileName = distFolderName + "video_new.mp4";
-      FileUtil.copy(Paths.get(mp4FilePath),
+      String destinationMp4FileName =
+        distFolderName + File.separator + "video.mp4";
+      Path copy = FileUtil.copy(Paths.get(mp4FilePath),
         Paths.get(destinationMp4FileName), StandardCopyOption.REPLACE_EXISTING);
+      log.info("视频文件拷贝结果：{}", copy);
+    } else {
+      log.error("视频文件不存在，退出处理流程；{}", mp4FilePath);
     }
+
     // 3. 字幕
     String subtitleFileNameEng =
       folderPath + File.separator + folderName + ".en.srt";
-    FileUtil.copy(subtitleFileNameEng, distFolderName, true);
-    String subtitleFileNameChn =
-      folderPath + File.separator + folderName + ".zh-TW.srt";
-    FileUtil.copy(subtitleFileNameChn, distFolderName, true);
+    if (!CdFileUtil.isFileEmpty(subtitleFileNameEng)) {
+      String destinationSubtitleFileNameEng =
+        distFolderName + File.separator + CdConstants.SUBTITLE_EN + ".srt";
+      Path copy = FileUtil.copy(Paths.get(subtitleFileNameEng),
+        Paths.get(destinationSubtitleFileNameEng),
+        StandardCopyOption.REPLACE_EXISTING);
+      log.info("英文字幕文件拷贝结果：{}", copy);
+    } else {
+      log.error("英文字幕文件不存在，退出处理流程；{}", subtitleFileNameEng);
+    }
+
+    String subtitleFileNameZhTw =
+      folderPath + File.separator + folderName + "."
+        + CdConstants.SUBTITLE_ZH_TW + ".srt";
+    if (!CdFileUtil.isFileEmpty(subtitleFileNameZhTw)) {
+      String destinationSubtitleFileNameZhTw =
+        distFolderName + File.separator + CdConstants.SUBTITLE_ZH_TW + ".srt";
+      Path copy = FileUtil.copy(Paths.get(subtitleFileNameZhTw),
+        Paths.get(destinationSubtitleFileNameZhTw),
+        StandardCopyOption.REPLACE_EXISTING);
+      log.info("繁体字幕文件拷贝结果：{}", copy);
+    } else {
+      log.error("繁体字幕文件不存在，退出处理流程；{}", subtitleFileNameZhTw);
+    }
 
     // 4. 封面
+    String formatName = "png";
     String coverFileName =
-      folderPath + File.separator + folderName + "_cover.jpg";
-    FileUtil.copy(coverFileName, distFolderName, true);
+      folderPath + File.separator + folderName + "_cover." + formatName;
+    if (!CdFileUtil.isFileEmpty(coverFileName)) {
+      String destinationCoverFileName =
+        distFolderName + File.separator + "cover." + formatName;
+      Path copy = FileUtil.copy(Paths.get(coverFileName),
+        Paths.get(destinationCoverFileName),
+        StandardCopyOption.REPLACE_EXISTING);
+      log.info("封面文件拷贝结果：{}", copy);
+    } else {
+      log.error("封面文件不存在，退出处理流程；{}", coverFileName);
+    }
   }
 
 }

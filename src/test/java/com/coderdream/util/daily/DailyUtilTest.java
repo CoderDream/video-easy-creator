@@ -1,6 +1,7 @@
 package com.coderdream.util.daily;
 
 import cn.hutool.core.io.FileUtil;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cmd.CommandUtil;
 import com.coderdream.util.gemini.TranslationUtil;
 
@@ -53,7 +54,7 @@ class DailyUtilTest {
   void process_180927() {
     String folderName = "170330";
 //    String folderName = "250213";
-    String title = "【BBC六分钟英语】" + com.coderdream.util.cd.CdFileUtil.getArticleTitle(
+    String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
       folderName);// "【BBC六分钟英语】泰国50年老汤真的能吃吗？";
     DailyUtil.process(folderName, title);
 
@@ -81,7 +82,7 @@ class DailyUtilTest {
   void process_todo() {
     String folderName = "170330";
 //    String folderName = "250213";
-    String title = "【BBC六分钟英语】" + com.coderdream.util.cd.CdFileUtil.getArticleTitle(
+    String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
       folderName);// "【BBC六分钟英语】泰国50年老汤真的能吃吗？";
     DailyUtil.process(folderName, title);
 
@@ -100,7 +101,7 @@ class DailyUtilTest {
   @BeforeEach
   void init() {
     String folderPath =
-      com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + File.separatorChar + "data"
+      CdFileUtil.getResourceRealPath() + File.separatorChar + "data"
         + File.separatorChar + "bbc"
         + File.separatorChar;
 
@@ -113,7 +114,7 @@ class DailyUtilTest {
     // D:\04_GitHub\video-easy-creator\src\main\resources\data\bbc\todo.txt
     for (String num : NUMBER_LIST) {
       String folderName = "" + num;
-      String title = "【BBC六分钟英语】" + com.coderdream.util.cd.CdFileUtil.getArticleTitle(
+      String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
         folderName);
       DailyUtil.process(folderName, title);
 //      TranslationUtil.genDescription(folderName);

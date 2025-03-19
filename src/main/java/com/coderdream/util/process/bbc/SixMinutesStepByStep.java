@@ -315,9 +315,9 @@ public class SixMinutesStepByStep {
     // 2. 生成描述
 //    String mdFileName = CommonUtil.getFullPathFileName(folderPath, folderName,
 //      ".md");
-    String chnMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+    String chnMdFileName = CdFileUtil.addPostfixToFileName(
       descriptionFileNameYT, "_chn");
-    String chtMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+    String chtMdFileName = CdFileUtil.addPostfixToFileName(
       descriptionFileNameYT, "_cht");
     if (CdFileUtil.isFileEmpty(chnMdFileName) || CdFileUtil.isFileEmpty(
       chtMdFileName)) {

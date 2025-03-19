@@ -5,6 +5,7 @@ import static java.lang.Thread.sleep;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.ffmpeg.FfmpegUtil;
 
@@ -78,7 +79,7 @@ public class SingleCreateVideoUtil {
     String videoFileName, double duration) {
 
     File videoFile = new File(videoFileName);
-    if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(videoFileName)) {
+    if (!CdFileUtil.isFileEmpty(videoFileName)) {
       log.info("视频文件已存在，无需重新生成，{}", videoFileName);
       return videoFile;
     }
@@ -209,7 +210,7 @@ public class SingleCreateVideoUtil {
       String audioFileName = audioPath + File.separator
         + audioPathNameList.get(i);
       String videoFileName =
-        videoPath + com.coderdream.util.cd.CdFileUtil.getPureFileNameWithoutExtensionWithPath(
+        videoPath + CdFileUtil.getPureFileNameWithoutExtensionWithPath(
           audioFileName) + ".mp4";
 
       Runnable task = () -> {

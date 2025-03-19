@@ -28,12 +28,12 @@ public class ImageTextOverlayUtil {
   private static final Color SHADOW_COLOR = new Color(0, 0, 0, 80);
   private static final Color SUB_TITLE_COLOR = Color.YELLOW;
   private static final Color BOTTOM_SHADOW_COLOR = new Color(50, 50, 50, 80);
-  private static final int BOTTOM_HEIGHT = 260;
+  private static final int BOTTOM_HEIGHT = 320;
 
   // *** 新增的常量，用于控制字幕垂直位置 ***
   private static final int MAIN_TITLE_Y = 700; // 默认主标题 Y 坐标
-  private static final int SUB_TITLE_Y = 100; // 0 用来标记需要自动计算，如果需要固定值，就设置具体的数值
-  private static final int BOTTOM_TITLE_Y_OFFSET = 10; // 底部标题的 Y 轴偏移量（用于精细调整）
+  private static final int SUB_TITLE_Y = 120; // 0 用来标记需要自动计算，如果需要固定值，就设置具体的数值
+  private static final int BOTTOM_TITLE_Y_OFFSET = -30; // 底部标题的 Y 轴偏移量（用于精细调整）
 
   /**
    * 在背景图片上添加文字叠加效果
@@ -42,9 +42,11 @@ public class ImageTextOverlayUtil {
    * @param outputImagePath     输出文件地址
    * @param mainTitle           主标题字符串
    * @param bottomTitle         底部大标题字符串
+   * @param formatName          图片格式
    */
   public static void addTextOverlay(String backgroundImagePath,
-    String outputImagePath, String mainTitle, String bottomTitle) {
+    String outputImagePath, String mainTitle, String bottomTitle,
+    String formatName) {
     long startTime = System.currentTimeMillis();
     log.info(
       "开始处理图片文字叠加，背景图片: {}, 输出图片: {}, 主标题: {}, 底部标题: {}",
@@ -78,7 +80,7 @@ public class ImageTextOverlayUtil {
       // 设置字体
       Font mainFont = new Font("Source Han Sans Heavy", Font.PLAIN, 140);
       Font subFont = new Font("Microsoft YaHei", Font.BOLD, 74);
-      Font bottomFont = new Font("Source Han Sans Heavy", Font.PLAIN, 140);
+      Font bottomFont = new Font("Source Han Sans Heavy", Font.PLAIN, 150);
 
       // 绘制副标题
       g2d.setFont(subFont);
@@ -128,7 +130,7 @@ public class ImageTextOverlayUtil {
 
       // 保存新图像
       try {
-        ImageIO.write(image, "jpg", new File(outputImagePath));
+        ImageIO.write(image, formatName, new File(outputImagePath));
         log.info("图片保存成功: {}", outputImagePath);
       } catch (IOException e) {
         log.error("保存图片失败: {}", e.getMessage(), e);
@@ -206,9 +208,9 @@ public class ImageTextOverlayUtil {
     String outputImagePath = "D:\\0000\\0007_Trump\\20250303\\cover_008.jpg";
     String mainTitle = "新主标题示例";
     String bottomTitle = "新底部标题示例";
-
+    String formatName = "png";
     addTextOverlay(backgroundImagePath, outputImagePath, mainTitle,
-      bottomTitle);
+      bottomTitle, formatName);
     System.out.println("Image processing completed!");
   }
 }

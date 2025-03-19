@@ -1,6 +1,7 @@
 package com.coderdream.util.mdict;
 
 
+import com.coderdream.util.cd.CdFileUtil;
 import io.github.eb4j.mdict.MDictDictionary;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -66,7 +67,7 @@ public class Mdict4jDemo {
         String mdxFile = "D:\\Download\\柯林斯COBUILD高阶英汉双解学习词典.mdx";
 
         String folderPath =
-          com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + File.separatorChar + "dict" + File.separatorChar;
+          CdFileUtil.getResourceRealPath() + File.separatorChar + "dict" + File.separatorChar;
 
         switch (dictType) {
             case "cambridge":

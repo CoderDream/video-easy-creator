@@ -8,6 +8,7 @@ import com.aspose.slides.IShape;
 import com.aspose.slides.ISlide;
 import com.aspose.slides.Presentation;
 import com.aspose.slides.SaveFormat;
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.resource.ResourcesSourcePathUtil;
 
@@ -68,7 +69,7 @@ public class GenCoverUtil {
     Locale locale = new Locale("zh", "cn");
     Locale.setDefault(locale);
     // 生成封面图
-    String coverPath = folderPath + File.separator + "cover" + File.separator;
+    String coverPath = folderPath + File.separator + CdConstants.COVER_FOLDER + File.separator;
     File coverPathFile = new File(coverPath);
     if (!coverPathFile.exists()) {
       boolean mkdir = coverPathFile.mkdirs();

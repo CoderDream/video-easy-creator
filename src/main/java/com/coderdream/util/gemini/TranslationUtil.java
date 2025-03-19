@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.VocInfo;
 import com.coderdream.util.CommonUtil;
 import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTextUtil;
 import com.coderdream.util.process.ListSplitterStream;
 import com.coderdream.util.sentence.demo1.SentenceParser;
@@ -82,7 +83,7 @@ public class TranslationUtil {
     List<String> list = Arrays.asList(temp.split("__"));
 
     // 写入文件
-    boolean writeToFileResult = com.coderdream.util.cd.CdFileUtil.writeToFile(newFileName, list);
+    boolean writeToFileResult = CdFileUtil.writeToFile(newFileName, list);
     log.info("写入文件结果: {}", writeToFileResult);
     return writeToFileResult;
   }
@@ -95,7 +96,7 @@ public class TranslationUtil {
   public static File genAiFile(String fileName) {
     List<String> sentences = CdTextUtil.getAllEnglishSentencesFromFile(
       fileName);
-    String aiFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(fileName, "_ai");
+    String aiFileName = CdFileUtil.addPostfixToFileName(fileName, "_ai");
     if (CollectionUtil.isEmpty(sentences)) {
       log.error("sentences is empty");
       return null;
@@ -111,9 +112,9 @@ public class TranslationUtil {
     List<String> totalTranslateList = new ArrayList<>();
     for (List<String> sentencesList : sentencesLists) {
       i++;
-      englishFileNamePart = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      englishFileNamePart = CdFileUtil.addPostfixToFileName(
         fileName, "_en" + "_" + i);
-      jsonFileNamePart = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+      jsonFileNamePart = CdFileUtil.addPostfixToFileName(
         fileName, "_ai" + "_" + i);
       assert jsonFileNamePart != null;
       File jsonFilePart = new File(jsonFileNamePart);
@@ -295,7 +296,7 @@ public class TranslationUtil {
 
   private static File writePhoneticsToFile(String totalFileName,
     String jsonFileName) {
-    String addPostfixToFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(totalFileName,
+    String addPostfixToFileName = CdFileUtil.addPostfixToFileName(totalFileName,
       "_phonetics");
     List<String> lines = FileUtil.readLines(new File(jsonFileName),
       StandardCharsets.UTF_8);
@@ -353,11 +354,11 @@ public class TranslationUtil {
   public static void genDescription(String folderName) {
     String txtFileName = CommonUtil.getFullPathFileName(folderName, folderName,
       ".txt");
-    String scriptDialogMergeFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+    String scriptDialogMergeFileName = CdFileUtil.addPostfixToFileName(
       txtFileName,
       "_中英双语对话脚本");
-    String descriptionFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(txtFileName, "md");
-    descriptionFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(descriptionFileName,
+    String descriptionFileName = CdFileUtil.changeExtension(txtFileName, "md");
+    descriptionFileName = CdFileUtil.addPostfixToFileName(descriptionFileName,
       "_description");
     genDescription(scriptDialogMergeFileName, descriptionFileName);
   }
@@ -373,7 +374,7 @@ public class TranslationUtil {
 //    String folderPath = CommonUtil.getFullPath(folderName);
 //    String fileName = folderPath + File.separator + folderName + "_中英双语对话脚本.txt";
     String text = "解析下面的文本，帮我写文章，用来发快手、小红书和公众号，要根据不同的平台特性生成不同风格的文章，快手的文章字数在500~600之间，小红书不超过800字，公众号不超过200字；另外，帮我每个平台取3个疑问句的标题，标题中间不要有任何标点符号、表情符号且不超过20个字，快手加入一些表情符号。文本如下：";
-    List<String> vocInfoList = com.coderdream.util.cd.CdFileUtil.readFileContent(
+    List<String> vocInfoList = CdFileUtil.readFileContent(
       scriptDialogMergeFileName);
     assert vocInfoList != null;
     String content = String.join("\n", vocInfoList);

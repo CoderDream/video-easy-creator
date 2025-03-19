@@ -182,7 +182,7 @@ public class GenVideoUtil {
     long startTime = System.currentTimeMillis();
     // D:\0000\ppt\Book02\cover
     String imagePath =
-      folderPath + File.separator + "cover" + File.separator;
+      folderPath + File.separator + CdConstants.COVER_FOLDER + File.separator;
     String audioNameWithPath =
       OperatingSystem.getBaseFolder() + File.separator + bookName
         + File.separator + "head"

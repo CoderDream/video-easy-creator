@@ -118,8 +118,10 @@ public class GenSubtitleUtil {
     String srcFileName = CdFileUtil.changeExtension(filePath, "srt");
     String srcFileNameEn = CdFileUtil.addPostfixToFileName(srcFileName,
       "." + CdConstants.SUBTITLE_EN);
-    String srcRawFileName = CdFileUtil.addPostfixToFileName(srcFileName,
+    // _raw.srt
+    String srcTextRawFileName = CdFileUtil.addPostfixToFileName(srcFileName,
       "_raw");
+    srcTextRawFileName = CdFileUtil.changeExtension(srcTextRawFileName, "txt");
 
     // 如果 XXX.en.srt 不存在， 生成英文SRT文件
     if (CdFileUtil.isFileEmpty(srcFileNameEn)) {
@@ -133,15 +135,15 @@ public class GenSubtitleUtil {
         List<String> srtRawList = StanfordSentenceSplitter.splitSentences(
           srcContent);
 
-        if (CdFileUtil.isFileEmpty(srcRawFileName)) {
+        if (CdFileUtil.isFileEmpty(srcTextRawFileName)) {
           List<String> srtTxtList = new ArrayList<>();
 
           for (String srtRaw : srtRawList) {
             srtTxtList.addAll(StringSplitter4.splitString(srtRaw, 200));
           }
-          CdFileUtil.writeToFile(srcRawFileName, srtTxtList);
+          CdFileUtil.writeToFile(srcTextRawFileName, srtTxtList);
         } else {
-          log.info("srtRawFilePath 文件已存在: {} ", srcRawFileName);
+          log.info("srtRawFilePath 文件已存在: {} ", srcTextRawFileName);
         }
         // 生成新的字幕文件
 
@@ -155,7 +157,7 @@ public class GenSubtitleUtil {
 
         if (!CdFileUtil.isFileEmpty(mp3FileName)) {
           // 生成新的字幕文件
-          SubtitleUtil.genSrtByExecuteCommand(mp3FileName, srcRawFileName,
+          SubtitleUtil.genSrtByExecuteCommand(mp3FileName, srcTextRawFileName,
             srcFileNameEn, "eng");
         } else {
           log.warn("mp3 文件不存在，无法生成字幕文件: {}", mp3FileName);

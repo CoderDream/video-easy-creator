@@ -1,5 +1,8 @@
 package com.coderdream.util.video.demo06;
 
+import static com.coderdream.util.cd.CdConstants.OS_MAC;
+import static com.coderdream.util.cd.CdConstants.OS_WINDOWS;
+
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import lombok.extern.slf4j.Slf4j;
@@ -53,10 +56,18 @@ public class VideoEncoder {
         commandList.add(inputFilePath);
 
         // 根据操作系统选择不同的编码参数
-        if (OperatingSystem.getOS().equals(osType)) {
+        if (OS_WINDOWS.equals(osType)) {
             // macOS 编码参数
             commandList.add("-c:v");
-            commandList.add("libx264");
+            commandList.add("libx264"); // 使用 libx264 编码器 TODO
+//            String os = OperatingSystem.getOS();
+//            if (OS_WINDOWS.equals(os)) {
+//                commandList.add("h264_nvenc");
+//            } else if (OS_MAC.equals(os)) {
+//                commandList.add("h264_videotoolbox");
+//            } else {
+//                commandList.add("libx264");
+//            }
             commandList.add("-preset");
             commandList.add("slow");
             commandList.add("-crf");

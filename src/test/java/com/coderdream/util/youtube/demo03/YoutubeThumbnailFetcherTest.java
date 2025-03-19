@@ -1,5 +1,6 @@
 package com.coderdream.util.youtube.demo03;
 
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import java.io.File;
@@ -16,7 +17,7 @@ class YoutubeThumbnailFetcherTest {
   void getThumbnail() {
     String videoUrl = "https://www.youtube.com/watch?v=jUxdO-D0OXs";
     String thumbnailPath =
-      OperatingSystem.getBaseFolder() + File.separator + "cover" + File.separator;
+      OperatingSystem.getBaseFolder() + File.separator + CdConstants.COVER_FOLDER + File.separator;
     DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
     String thumbnailFileName = dateFormat.format(new Date()) + ".jpg";
 

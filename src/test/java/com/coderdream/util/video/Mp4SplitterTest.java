@@ -9,6 +9,37 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 class Mp4SplitterTest {
 
+
+  @Test
+  void splitVideo0003() {
+//D:\0000\0003_PressBriefings\250317
+    String folderName = "20250317";
+    String folderPath =
+      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings" + File.separator
+        + folderName;
+    String inputFilePath = folderPath + File.separator + folderName + "_raw.mp4";
+
+    // 示例用法
+//    String inputFilePath = "D:\\0000\\0003_PressBriefings\\250128\\250128.mp4";
+    String timeStr = "00:00:02,000 --> 00:31:47,279";// 00:00:45,560 --> 00:00:49,960
+
+//        00:00:49,960 --> 00:00:53,640
+    String[] times = timeStr.split(" --> ");
+    String startTime = times[0];//"00:00:03,400";
+    String endTime = times[1];//"00:00:13,680";
+    String outputFilePath = CdFileUtil.removePostfixToFileName(inputFilePath,
+      "_raw");
+
+    String splitFile = Mp4Splitter.splitVideo(inputFilePath, startTime,
+      endTime, outputFilePath);
+
+    if (splitFile != null) {
+      log.info("视频分割成功，文件保存在: {}", splitFile);
+    } else {
+      log.error("视频分割失败!");
+    }
+  }
+
   @Test
   void splitVideo() {
 

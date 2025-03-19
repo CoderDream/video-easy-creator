@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.DurationEntity;
 import com.coderdream.entity.SubtitleEntity;
 import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.chatgpt.TextParserUtilChatgpt;
 import com.coderdream.util.cmd.CommandUtil;
@@ -167,9 +168,9 @@ public class SubtitleUtil {
   public static void mergeSubtitleFile(String srcFileNameEng,
     String srcFileNameChn, String srcFileName) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
-    List<SubtitleEntity> engSubtitleEntityList = com.coderdream.util.cd.CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> engSubtitleEntityList = CdFileUtil.readSrcFileContent(
       srcFileNameEng);
-    List<SubtitleEntity> chnSubtitleEntityList = com.coderdream.util.cd.CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> chnSubtitleEntityList = CdFileUtil.readSrcFileContent(
       srcFileNameChn);
 
     SubtitleEntity enSubtitleEntity;
@@ -193,7 +194,7 @@ public class SubtitleUtil {
 
     if (CollectionUtil.isNotEmpty(srtStringList)) {
       // 写中文翻译文本
-      com.coderdream.util.cd.CdFileUtil.writeToFile(srcFileName, srtStringList);
+      CdFileUtil.writeToFile(srcFileName, srtStringList);
       long elapsedTime = System.currentTimeMillis() - startTime; // 计算耗时
       log.info("写入完成，文件路径: {}，共计耗时：{}", srcFileName,
         CdTimeUtil.formatDuration(elapsedTime));
@@ -207,7 +208,7 @@ public class SubtitleUtil {
    */
   public static void modifySubtitleFile(String srcFileName) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
-    List<SubtitleEntity> subtitleEntityList = com.coderdream.util.cd.CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> subtitleEntityList = CdFileUtil.readSrcFileContent(
       srcFileName);
 
     SubtitleEntity subtitleEntity;
@@ -268,10 +269,10 @@ public class SubtitleUtil {
       sentenceList.add(sentenceVO.getChinese());
       sentenceList.add(sentenceVO.getEnglish());
     }
-    String srtRawFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
+    String srtRawFileName = CdFileUtil.addPostfixToFileName(
       fileName, "_raw");
 //    log.info("srtRawFileName:{}", srtRawFileName);
-    com.coderdream.util.cd.CdFileUtil.writeToFile(srtRawFileName, sentenceList);
+    CdFileUtil.writeToFile(srtRawFileName, sentenceList);
 
     // 生成字幕文件，调用 python 命令
     File file = new File(srtRawFileName);
@@ -280,7 +281,7 @@ public class SubtitleUtil {
     // D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics\audio\ch01_mix.wav
     String audioFileName =
       path + File.separator
-        + com.coderdream.util.cd.CdFileUtil.getPureFileNameWithoutExtensionWithPath(
+        + CdFileUtil.getPureFileNameWithoutExtensionWithPath(
         fileName)
         + File.separator + "audio\\" + "ch01_mix.wav";
     File audioFile = new File(audioFileName);
@@ -289,7 +290,7 @@ public class SubtitleUtil {
       return;
     }
 
-    String srtFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(
+    String srtFileName = CdFileUtil.changeExtension(
       audioFileName, "srt");
     String lang = "eng"; //  String lang = "cmn";
     log.info("audioFileName:{}", audioFileName);
@@ -302,9 +303,9 @@ public class SubtitleUtil {
    *                 生成文本文件，例如：D:\0000\EnBook001\900\ch01\dialog_single_with_phonetics.txt
    */
   public static String transferSubtitleToSentenceTextFile(String fileName) {
-    String textFileName = com.coderdream.util.cd.CdFileUtil.changeExtension(
+    String textFileName = CdFileUtil.changeExtension(
       fileName, "txt");
-    List<SubtitleEntity> sentenceVOList = com.coderdream.util.cd.CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> sentenceVOList = CdFileUtil.readSrcFileContent(
       fileName);
     StringBuilder text = new StringBuilder();
     for (SubtitleEntity sentenceVO : sentenceVOList) {
@@ -323,7 +324,7 @@ public class SubtitleUtil {
       }
       pureSentenceList.add(pureSentence);
     }
-    com.coderdream.util.cd.CdFileUtil.writeToFile(textFileName,
+    CdFileUtil.writeToFile(textFileName,
       pureSentenceList);
 //    if (CdFileUtil.isFileEmpty(textFileName)) {
 //      CdFileUtil.writeToFile(textFileName, pureSentenceList);

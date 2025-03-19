@@ -1,5 +1,6 @@
 package com.coderdream.util.ppt;
 
+import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.pic.PngToJpgConverter;
 import com.coderdream.util.proxy.OperatingSystem;
 
@@ -106,7 +107,7 @@ class GenCoverUtilTest {
 //    String inputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 PNG 文件的目录
 //    String outputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 JPG 文件的目录
     String inputDirectory =
-      folderPath + File.separator + bookName + File.separator + "cover"; // 存放 PNG 文件的目录
+      folderPath + File.separator + bookName + File.separator + CdConstants.COVER_FOLDER; // 存放 PNG 文件的目录
     String outputDirectory = inputDirectory; // 存放 JPG 文件的目录
     float jpgQuality = 1.0f;// 0.8f; // JPG 图像质量
 
@@ -138,7 +139,7 @@ class GenCoverUtilTest {
 //    String inputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 PNG 文件的目录
 //    String outputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 JPG 文件的目录
     String inputDirectory =
-      folderPath + File.separator + bookName + File.separator + "cover"; // 存放 PNG 文件的目录
+      folderPath + File.separator + bookName + File.separator + CdConstants.COVER_FOLDER; // 存放 PNG 文件的目录
     String outputDirectory = inputDirectory; // 存放 JPG 文件的目录
     float jpgQuality = 1.0f;// 0.8f; // JPG 图像质量
 
@@ -169,7 +170,7 @@ class GenCoverUtilTest {
 //    String inputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 PNG 文件的目录
 //    String outputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 JPG 文件的目录
     String inputDirectory =
-      folderPath + File.separator + "cover"; // 存放 PNG 文件的目录
+      folderPath + File.separator + CdConstants.COVER_FOLDER; // 存放 PNG 文件的目录
     String outputDirectory = inputDirectory; // 存放 JPG 文件的目录
     float jpgQuality = 1.0f;// 0.8f; // JPG 图像质量
 
@@ -201,7 +202,7 @@ class GenCoverUtilTest {
 ////    String inputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 PNG 文件的目录
 ////    String outputDirectory = "D:\\0000\\EnBook002\\cover"; // 存放 JPG 文件的目录
 //    String inputDirectory =
-//      folderPath + File.separator + "cover"; // 存放 PNG 文件的目录
+//      folderPath + File.separator + CdConstants.COVER_FOLDER; // 存放 PNG 文件的目录
 //    String outputDirectory = inputDirectory; // 存放 JPG 文件的目录
 //    float jpgQuality = 1.0f;// 0.8f; // JPG 图像质量
 //

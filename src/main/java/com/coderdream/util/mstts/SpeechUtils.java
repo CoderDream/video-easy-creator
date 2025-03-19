@@ -574,7 +574,7 @@ public class SpeechUtils {
     log.error("字数：" + size);
 //        text = String.join("\r\n    ", stringList);
     String rate = "+" + rateValue + ".00";
-    String lang = "zh-CN";
+    String lang = CdConstants.SUBTITLE_ZH_CN;
     lang = "en-US";
 //        String xmlString =
 //            "<speak xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"http://www.w3.org/2001/mstts\" xmlns:emo=\"http://www.w3.org/2009/10/emotionml\" version=\"1.0\" xml:lang=\""
@@ -610,7 +610,7 @@ public class SpeechUtils {
     log.error("字数：" + size);
 //        text = String.join("\r\n    ", stringList);
     String rate = "+" + rateValue + ".00";
-    String lang = "zh-CN";
+    String lang = CdConstants.SUBTITLE_ZH_CN;
     lang = "en-US";
 //        String xmlString =
 //            "<speak xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"http://www.w3.org/2001/mstts\" xmlns:emo=\"http://www.w3.org/2009/10/emotionml\" version=\"1.0\" xml:lang=\""
@@ -653,7 +653,7 @@ public class SpeechUtils {
 //        text = String.join("\r\n    ", stringList);
     String rate = "+" + rateValue + ".00";
 //        String
-    lang = "zh-CN";
+    lang = CdConstants.SUBTITLE_ZH_CN;
     lang = "en-US";
 //        String xmlString =
 //            "<speak xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"http://www.w3.org/2001/mstts\" xmlns:emo=\"http://www.w3.org/2009/10/emotionml\" version=\"1.0\" xml:lang=\""
