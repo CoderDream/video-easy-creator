@@ -133,20 +133,25 @@ public class DailyUtil {
 
       // 找pdf和mp3
       String pdfFileName = PdfFileFinder.findPdfFileName(folderName);
-      if (!CdFileUtil.isFileEmpty(
-        folderPath + File.separator + pdfFileName)
-        && CdFileUtil.isFileEmpty(
-        newFolderPath + File.separator + pdfFileName)) {
-        FileUtil.copyFile(folderPath + File.separator + pdfFileName,
-          newFolderPath + File.separator + pdfFileName,
-          StandardCopyOption.REPLACE_EXISTING);
+      if (!CdFileUtil.isFileEmpty(folderPath + File.separator + pdfFileName)) {
+        if (CdFileUtil.isFileEmpty(
+          newFolderPath + File.separator + pdfFileName)) {
+          FileUtil.copyFile(folderPath + File.separator + pdfFileName,
+            newFolderPath + File.separator + pdfFileName,
+            StandardCopyOption.REPLACE_EXISTING);
+        } else {
+          log.error("目标pdf文件已存在，退出处理流程；{}",
+            folderPath + File.separator + pdfFileName);
+          continue;
+        }
+      } else {
+        log.error("找不到源pdf文件，退出处理流程；{}",
+          folderPath + File.separator + pdfFileName);
+        continue;
       }
 
-      if (!CdFileUtil.isFileEmpty(
-        folderPath + File.separator + pdfFileName)) {
-        String mp3FileName =
-          CdFileUtil.getFileNameWithoutExtension(
-            pdfFileName) + ".mp3";
+      String mp3FileName = CdFileUtil.changeExtension(pdfFileName, "mp3");
+      if (!CdFileUtil.isFileEmpty(mp3FileName)) {
         if (!CdFileUtil.isFileEmpty(
           folderPath + File.separator + mp3FileName)
           && CdFileUtil.isFileEmpty(
@@ -155,7 +160,22 @@ public class DailyUtil {
             newFolderPath + File.separator + mp3FileName,
             StandardCopyOption.REPLACE_EXISTING);
         }
+      } else {
+        log.error("找不到mp3文件，退出处理流程；{}",
+          folderPath + File.separator + mp3FileName);
+        continue;
       }
+
+//      String fileNameF =
+//        folderName + "_高级词汇表.xlsx";
+//      if (!CdFileUtil.isFileEmpty(
+//        folderPath + File.separator + fileNameC)
+//        && CdFileUtil.isFileEmpty(
+//        newFolderPath + File.separator + fileNameC)) {
+//        FileUtil.copyFile(folderPath + File.separator + fileNameC,
+//          newFolderPath + File.separator + fileNameC,
+//          StandardCopyOption.REPLACE_EXISTING);
+//      }
 
       // 2025/02/20  18:20         9,065,952 170309_mermaids.mp3
       //2025/02/20  17:50           232,887 170309_mermaids.pdf

@@ -105,7 +105,8 @@ class DailyUtilTest {
         + File.separatorChar + "bbc"
         + File.separatorChar;
 
-    NUMBER_LIST = FileUtil.readLines(folderPath + File.separator + "todo.txt", "UTF-8");
+    NUMBER_LIST = FileUtil.readLines(folderPath + File.separator + "todo.txt",
+      "UTF-8");
 //        list = new ArrayList<>(Arrays.asList("test1", "test2"));
   }
 
@@ -122,7 +123,7 @@ class DailyUtilTest {
 
     String baseHexoFolder = OperatingSystem.getHexoFolder();
     List<String> commandList = Arrays.asList(
-    //  "cd " + baseHexoFolder + " && hexo clean",
+      //  "cd " + baseHexoFolder + " && hexo clean",
       "cd " + baseHexoFolder + " && hexo g",
       "cd " + baseHexoFolder + " && hexo d");
     for (String command : commandList) {
@@ -140,7 +141,8 @@ class DailyUtilTest {
 
   @Test
   void syncFilesToQuarkBatch() {
-    List<String> years = Arrays.asList("2017", "2025");
+    List<String> years = Arrays.asList("2017", "2018", "2019", "2020", "2021",
+      "2022", "2023", "2024", "2025");
     for (String year : years) {
       DailyUtil.syncFilesToQuark(year);
     }
