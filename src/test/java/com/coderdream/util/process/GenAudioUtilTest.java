@@ -59,7 +59,7 @@ class GenAudioUtilTest {
 
     List<String> subFolders = new ArrayList<>();
     int end = 51; // 假定总共50章 51
-    for (int i = 20; i < end; i++) {
+    for (int i = 7; i < end; i++) {
       String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
       subFolders.add("Chapter" + dayNumberString);
     }
