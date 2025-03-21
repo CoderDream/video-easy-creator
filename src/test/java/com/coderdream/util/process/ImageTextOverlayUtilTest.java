@@ -11,18 +11,18 @@ class ImageTextOverlayUtilTest {
   void addTextOverlay_0003_20250311() {
     // 专辑名称
     String albumName = "0003_PressBriefings";
-    String folderName = "20250317"; // D:\0000\0007_Trump\20250227
+    String folderName = "20250319"; // D:\0000\0007_Trump\20250227
 
     String folderPath =
       OperatingSystem.getFolderPath(albumName) + File.separator + folderName;
     String formatName = "png";
     String backgroundImagePath =
-      folderPath + File.separator + "20250317.mp4_000732.603." + formatName;
+      folderPath + File.separator + "20250319.mp4_000025.711." + formatName;
 
     String outputImagePath =
       folderPath + File.separator + folderName + "_cover." + formatName;
-    String mainTitle = "美墨邊境非法越境人數暴跌";
-    String bottomTitle = "強硬反擊胡塞 捍衛美國航運";
+    String mainTitle = "機密文件公開 真相即將揭曉";
+    String bottomTitle = "8 萬頁肯尼迪遇刺檔案解密";
 
     ImageTextOverlayUtil.addTextOverlay(backgroundImagePath, outputImagePath,
       mainTitle,

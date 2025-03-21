@@ -126,27 +126,10 @@ public class GenSubtitleUtil {
     // 如果 XXX.en.srt 不存在， 生成英文SRT文件
     if (CdFileUtil.isFileEmpty(srcFileNameEn)) {
       if (!CdFileUtil.isFileEmpty(srcFileName)) {
-        List<SubtitleEntity> subtitleEntities = CdFileUtil.readSrcFileContent(
-          srcFileName);
-        // 原始字符串取英文字幕内容，生成英文SRT文件
-        String srcContent = subtitleEntities.stream().map(
-          SubtitleEntity::getSubtitle).collect(Collectors.joining(" "));
-        log.info("生成英文SRT文件: {}", srcFileNameEn);
-        List<String> srtRawList = StanfordSentenceSplitter.splitSentences(
-          srcContent);
-
-        if (CdFileUtil.isFileEmpty(srcTextRawFileName)) {
-          List<String> srtTxtList = new ArrayList<>();
-
-          for (String srtRaw : srtRawList) {
-            srtTxtList.addAll(StringSplitter4.splitString(srtRaw, 200));
-          }
-          CdFileUtil.writeToFile(srcTextRawFileName, srtTxtList);
-        } else {
-          log.info("srtRawFilePath 文件已存在: {} ", srcTextRawFileName);
-        }
+        genRawTextFile(srcFileName, srcTextRawFileName);
         // 生成新的字幕文件
 
+        log.info("生成英文SRT文件: {}", srcFileNameEn);
 //        String rawContent = String.join(" ", srtTxtList);
         // 检查 mp3 文件是否存在，不存在则先生成
         String mp3FileName = CdFileUtil.changeExtension(srcFileName, "mp3");
@@ -257,6 +240,27 @@ public class GenSubtitleUtil {
         chtMdFileName);
     } else {
       log.info("描述文件已存在: {}， {}", chnMdFileName, chtMdFileName);
+    }
+  }
+
+  public static void genRawTextFile(String srcFileName, String srcTextRawFileName) {
+    List<SubtitleEntity> subtitleEntities = CdFileUtil.readSrcFileContent(
+      srcFileName);
+    // 原始字符串取英文字幕内容，生成英文SRT文件
+    String srcContent = subtitleEntities.stream().map(
+      SubtitleEntity::getSubtitle).collect(Collectors.joining(" "));
+    List<String> srtRawList = StanfordSentenceSplitter.splitSentences(
+      srcContent);
+
+    if (CdFileUtil.isFileEmpty(srcTextRawFileName)) {
+      List<String> srtTxtList = new ArrayList<>();
+
+      for (String srtRaw : srtRawList) {
+        srtTxtList.addAll(StringSplitter4.splitString(srtRaw, 200));
+      }
+      CdFileUtil.writeToFile(srcTextRawFileName, srtTxtList);
+    } else {
+      log.info("srtRawFilePath 文件已存在: {} ", srcTextRawFileName);
     }
   }
 

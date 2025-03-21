@@ -201,5 +201,11 @@ class PreparePublishUtilTest {
     PreparePublishUtil.copyFileToPublishFolder(bookFolderName, chapterSize);
   }
 
+  @Test
+  void copyFileToPublishFolder_0003() {
+    String bookFolderName = "EnBook008";
+    Integer chapterSize = 100;
+    PreparePublishUtil.copyFileToPublishFolder(bookFolderName, chapterSize);
+  }
 
 }

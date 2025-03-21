@@ -2,38 +2,42 @@ package com.coderdream.util.network;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
+import com.coderdream.util.cd.CdFileUtil;
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.network.QuarkDiskUtil.QuarkDiskResponse.FileList;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class QuarkDiskUtil {
 
   private static final String URL = "https://drive-pc.quark.cn/1/clouddrive/file/sort";
   private static final String SHARE_URL =
-      "https://drive-pc.quark.cn/1/clouddrive/share?pr=ucpro&fr=pc&uc_param_str=";
+    "https://drive-pc.quark.cn/1/clouddrive/share?pr=ucpro&fr=pc&uc_param_str=";
   private static final String TASK_URL = "https://drive-pc.quark.cn/1/clouddrive/task";
   private static final String SHARE_PASSWORD_URL =
-      "https://drive-pc.quark.cn/1/clouddrive/share/password?pr=ucpro&fr=pc&uc_param_str=";
+    "https://drive-pc.quark.cn/1/clouddrive/share/password?pr=ucpro&fr=pc&uc_param_str=";
 
-  private static final int BEFORE_CALL_SLEEP_MS = 3000; // 3 秒
-  private static final int BEFORE_RETRY_SLEEP_MS = 5000; // 5 秒
+  private static final int BEFORE_CALL_SLEEP_MS = 2000; // 3 秒
+  private static final int BEFORE_RETRY_SLEEP_MS = 3000; // 5 秒
 
-  /** 文件排序参数对象 */
+  /**
+   * 文件排序参数对象
+   */
   @Data
   public static class FileSortParams {
+
     private String pr = "ucpro";
     private String fr = "pc";
     private String uc_param_str = "";
@@ -45,9 +49,12 @@ public class QuarkDiskUtil {
     private String _sort = "file_type:asc,file_name:asc";
   }
 
-  /** 响应数据对象 - 简化示例，请根据实际情况调整 */
+  /**
+   * 响应数据对象 - 简化示例，请根据实际情况调整
+   */
   @Data
   public static class QuarkDiskResponse {
+
     private int status;
     private int code;
     private String message;
@@ -57,11 +64,13 @@ public class QuarkDiskUtil {
 
     @lombok.Data
     public static class Data {
+
       private List<FileList> list;
     }
 
     @lombok.Data
     public static class FileList {
+
       private String fid;
       private String file_name;
       private String pdir_fid;
@@ -114,6 +123,7 @@ public class QuarkDiskUtil {
 
     @lombok.Data
     public static class FileStruct {
+
       private String fir_source;
       private String sec_source;
       private String thi_source;
@@ -122,6 +132,7 @@ public class QuarkDiskUtil {
 
     @lombok.Data
     public static class Metadata {
+
       private Integer _size;
       private String req_id;
       private Integer _page;
@@ -131,9 +142,12 @@ public class QuarkDiskUtil {
     }
   }
 
-  /** 分享请求参数对象 */
+  /**
+   * 分享请求参数对象
+   */
   @Data
   public static class ShareParams {
+
     private List<String> fid_list;
     private String title;
     private Integer url_type;
@@ -142,6 +156,7 @@ public class QuarkDiskUtil {
 
   @Data
   public static class ShareResponse {
+
     private int status;
     private int code;
     private String message;
@@ -150,6 +165,7 @@ public class QuarkDiskUtil {
 
     @Data
     public static class ShareData {
+
       private String task_id;
       private Boolean task_sync;
     }
@@ -157,6 +173,7 @@ public class QuarkDiskUtil {
 
   @Data
   public static class TaskResponse {
+
     private int status;
     private int code;
     private String message;
@@ -166,6 +183,7 @@ public class QuarkDiskUtil {
 
     @Data
     public static class TaskData {
+
       private String task_id;
       private String event_id;
       private Integer task_type;
@@ -181,6 +199,7 @@ public class QuarkDiskUtil {
 
     @Data
     public static class SaveAs {
+
       private List<String> save_as_select_top_fids;
       private String is_pack;
       private List<String> save_as_top_fids;
@@ -188,6 +207,7 @@ public class QuarkDiskUtil {
 
     @Data
     public static class CreationSnapshot {
+
       private Integer success_count;
       private Integer failed_count;
     }
@@ -195,11 +215,13 @@ public class QuarkDiskUtil {
 
   @Data
   public static class SharePasswordParams {
+
     private String share_id;
   }
 
   @Data
   public static class SharePasswordResponse {
+
     private int status;
     private int code;
     private String message;
@@ -208,6 +230,7 @@ public class QuarkDiskUtil {
 
     @Data
     public static class SharePasswordData {
+
       private String title;
       private String sub_title;
       private Integer share_type;
@@ -226,6 +249,7 @@ public class QuarkDiskUtil {
 
     @Data
     public static class FirstFile {
+
       private String fid;
       private Integer category;
       private Integer file_type;
@@ -254,10 +278,13 @@ public class QuarkDiskUtil {
     }
   }
 
-  /** 从文件中读取请求头 */
+  /**
+   * 从文件中读取请求头
+   */
   private static Map<String, String> readHeadersFromFile(String filePath) {
     Map<String, String> headers = new HashMap<>();
-    List<String> lines = FileUtil.readLines(new File(filePath), StandardCharsets.UTF_8);
+    List<String> lines = FileUtil.readLines(new File(filePath),
+      StandardCharsets.UTF_8);
     for (String line : lines) {
       if (StrUtil.isBlank(line)) {
         continue;
@@ -295,8 +322,11 @@ public class QuarkDiskUtil {
     return headers;
   }
 
-  /** 发起GET请求 */
-  public static QuarkDiskResponse getFileSort(FileSortParams params, String headerFilePath) {
+  /**
+   * 发起GET请求
+   */
+  public static QuarkDiskResponse getFileSort(FileSortParams params,
+    String headerFilePath) {
     sleepBeforeCall(); // 休眠 3 秒
     Map<String, String> headers = readHeadersFromFile(headerFilePath);
     Map<String, Object> paramMap = BeanUtil.beanToMap(params);
@@ -321,8 +351,11 @@ public class QuarkDiskUtil {
     }
   }
 
-  /** 发起 POST 请求 (Share) */
-  public static ShareResponse postShare(ShareParams params, String headerFilePath) {
+  /**
+   * 发起 POST 请求 (Share)
+   */
+  public static ShareResponse postShare(ShareParams params,
+    String headerFilePath) {
     sleepBeforeCall(); // 休眠 3 秒
     Map<String, String> headers = readHeadersFromFile(headerFilePath);
     String jsonBody = JSONUtil.toJsonStr(params);
@@ -349,17 +382,19 @@ public class QuarkDiskUtil {
     }
   }
 
-  /** 发起 GET 请求 (Task)，增加重试机制 */
+  /**
+   * 发起 GET 请求 (Task)，增加重试机制
+   */
   public static TaskResponse getTask(String taskId, String headerFilePath) {
     int maxRetries = 10;
     for (int retry = 1; retry <= maxRetries; retry++) {
       Map<String, String> headers = readHeadersFromFile(headerFilePath);
       String url =
-          TASK_URL
-              + "?pr=ucpro&fr=pc&uc_param_str=&task_id="
-              + taskId
-              + "&retry_index="
-              + retry;
+        TASK_URL
+          + "?pr=ucpro&fr=pc&uc_param_str=&task_id="
+          + taskId
+          + "&retry_index="
+          + retry;
       // log.info("GET Task (Retry {}/{}) - Request URL: {}", retry, maxRetries, url); // 打印请求 URL
 
       HttpRequest request = HttpUtil.createGet(url);
@@ -372,8 +407,8 @@ public class QuarkDiskUtil {
         if (response.isOk()) {
           TaskResponse taskResponse = JSONUtil.toBean(body, TaskResponse.class);
           if (taskResponse != null
-              && taskResponse.getData() != null
-              && !StrUtil.isBlank(taskResponse.getData().getShare_id())) {
+            && taskResponse.getData() != null
+            && !StrUtil.isBlank(taskResponse.getData().getShare_id())) {
             // log.info("Successfully extracted shareId on retry: {}", retry);
             return taskResponse; // 成功获取 shareId，返回
           } else {
@@ -403,9 +438,11 @@ public class QuarkDiskUtil {
     return null; // 超过最大重试次数，返回 null
   }
 
-  /** 发起 POST 请求 (Share Password) */
+  /**
+   * 发起 POST 请求 (Share Password)
+   */
   public static SharePasswordResponse postSharePassword(
-      String shareId, String headerFilePath) {
+    String shareId, String headerFilePath) {
     sleepBeforeCall(); // 休眠 3 秒
     Map<String, String> headers = readHeadersFromFile(headerFilePath);
     SharePasswordParams params = new SharePasswordParams();
@@ -415,7 +452,8 @@ public class QuarkDiskUtil {
     // log.info("POST Share Password - Request URL: {}", SHARE_PASSWORD_URL); // 打印请求 URL
     // log.info("POST Share Password - Request Body: {}", jsonBody); // 打印请求 JSON
 
-    HttpRequest request = HttpUtil.createPost(SHARE_PASSWORD_URL).body(jsonBody);
+    HttpRequest request = HttpUtil.createPost(SHARE_PASSWORD_URL)
+      .body(jsonBody);
     headers.forEach(request::header);
 
     try (HttpResponse response = request.execute()) {
@@ -437,10 +475,11 @@ public class QuarkDiskUtil {
   /**
    * 递归处理每个 FileList 对象
    *
-   * @param fileList FileList 对象
+   * @param fileList       FileList 对象
    * @param headerFilePath 请求头文件路径
    */
-  public static void processFileList(FileList fileList, String headerFilePath) {
+  public static String processFileList(FileList fileList,
+    String headerFilePath) {
     // log.info("Processing file: {} with fid: {}", fileList.getFile_name(), fileList.getFid());
 
     String fid = fileList.getFid();
@@ -453,7 +492,8 @@ public class QuarkDiskUtil {
     shareParams.setUrl_type(1);
     shareParams.setExpired_type(1);
 
-    ShareResponse shareResponse = QuarkDiskUtil.postShare(shareParams, headerFilePath);
+    ShareResponse shareResponse = QuarkDiskUtil.postShare(shareParams,
+      headerFilePath);
     String taskId = null;
 
     if (shareResponse != null) {
@@ -461,11 +501,12 @@ public class QuarkDiskUtil {
       // log.info("Extracted taskId for GET Task: {}", taskId);
     } else {
       // log.error("POST Share Request failed for fid: {}", fid);
-      return; // 如果第二个请求失败，直接退出当前循环
+      return ""; // 如果第二个请求失败，直接退出当前循环
     }
 
     // 3. GET Task
-    TaskResponse taskResponse = getTask(taskId, headerFilePath); // 使用更新后的 getTask 方法
+    TaskResponse taskResponse = getTask(taskId,
+      headerFilePath); // 使用更新后的 getTask 方法
     String shareId = null;
 
     if (taskResponse != null && taskResponse.getData() != null) {
@@ -473,24 +514,37 @@ public class QuarkDiskUtil {
       // log.info("Extracted shareId for POST Share Password: {}", shareId);
     } else {
       // log.error("GET Task Request failed for fid: {}", fid);
-      return; // 如果第三个请求失败，直接退出当前循环
+      return ""; // 如果第三个请求失败，直接退出当前循环
     }
 
     // 4. POST Share Password
     SharePasswordResponse sharePasswordResponse =
-        postSharePassword(shareId, headerFilePath);
-
+      postSharePassword(shareId, headerFilePath);
+//    String title = "";
+    String text = "";
     if (sharePasswordResponse != null) {
-       log.info(
-          "Share URL for title {} : {}",
+      log.error(
+        "Share URL for title {} : {}",
         sharePasswordResponse.getData().getTitle(),
-          sharePasswordResponse.getData().getShare_url()); //
+        sharePasswordResponse.getData().getShare_url()); //
+      text = sharePasswordResponse.getData().getTitle() + " : "
+        + sharePasswordResponse.getData().getShare_url();
     } else {
       // log.error("POST Share Password Request failed for fid: {}", fid);
     }
+
+    if (title.length() > 1) {
+      title = title.substring(0, 2);
+    }
+
+    // 5. 下载文件
+    //   CdFileUtil.writeToFile("D:\\output\\20" + title + ".txt", textList);
+    return text;
   }
 
-  /** 休眠 */
+  /**
+   * 休眠
+   */
   private static void sleepBeforeCall() {
     try {
       Thread.sleep(BEFORE_CALL_SLEEP_MS);
@@ -501,26 +555,63 @@ public class QuarkDiskUtil {
   }
 
   public static void main(String[] args) {
+//    String year = "2023";
+    List<String> years = List.of("2018", "2019", "2020", "2021", "2022", "2023");
+    for (String year : years) {
+      process(year);
+    }
+  }
+
+  public static void process(String year) {
+    long startTime = System.currentTimeMillis(); // 记录开始时间
+    List<String> list = FileUtil.readLines(
+      "D:\\input\\quark_share_year_fid.txt",
+      StandardCharsets.UTF_8);
+    Map<String, String> map = new HashMap<>();
+    for (String line : list) {
+      if (line.contains(":")) {
+        String[] split = line.split(":");
+        map.put(split[0].trim(), split[1].trim());
+      } else {
+        log.error("line is not valid: {}", line);
+        return;
+      }
+    }
+    String fid = map.get(year);
+    if (fid == null) {
+      log.error("fid is null for year: {}", year);
+      return;
+    }
+
     String headerFilePath = "D:\\input\\quark.txt"; // 修改后的文件路径
     FileSortParams fileSortParams = new FileSortParams();
-    fileSortParams.setPdir_fid("df5fa55ae8c34cd08e50e76cc57da28a"); // 设置 pdir_fid
+//    fileSortParams.setPdir_fid("df5fa55ae8c34cd08e50e76cc57da28a"); // 设置 pdir_fid
+    fileSortParams.setPdir_fid(fid); // 设置 pdir_fid
 
     // 1. GET File Sort
-    QuarkDiskResponse fileSortResponse = getFileSort(fileSortParams, headerFilePath);
+    QuarkDiskResponse fileSortResponse = getFileSort(fileSortParams,
+      headerFilePath);
 
     if (fileSortResponse != null
-        && fileSortResponse.getData() != null
-        && fileSortResponse.getData().getList() != null
-        && !fileSortResponse.getData().getList().isEmpty()) {
+      && fileSortResponse.getData() != null
+      && fileSortResponse.getData().getList() != null
+      && !fileSortResponse.getData().getList().isEmpty()) {
 
+      List<String> textList = new ArrayList<>();
       // 循环处理 list 中的每个 FileList 对象
-      List<QuarkDiskResponse.FileList> fileList = fileSortResponse.getData().getList();
+      List<QuarkDiskResponse.FileList> fileList = fileSortResponse.getData()
+        .getList();
       for (QuarkDiskResponse.FileList file : fileList) {
-        processFileList(file, headerFilePath);
+        textList.add(QuarkDiskUtil.processFileList(file, headerFilePath));
       }
-
+      CdFileUtil.writeToFile("D:\\output\\quark_share_" + year + ".txt",
+        textList);
     } else {
       // log.error("GET File Sort Request failed.");
     }
+    long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
+    long durationMillis = endTime - startTime; // 计算耗时（毫秒）
+    log.info("{} 年分享文件创建成功，耗时: {}", year,
+      CdTimeUtil.formatDuration(durationMillis));
   }
 }

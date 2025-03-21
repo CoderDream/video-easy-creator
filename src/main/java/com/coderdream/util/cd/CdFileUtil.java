@@ -419,10 +419,10 @@ public class CdFileUtil {
   public static String changeExtension(String filePathString,
     String newExtension) {
     Path filePath = Paths.get(filePathString);
-    if (!Files.exists(filePath)) {
-      log.warn("文件不存在: {}", filePath.toAbsolutePath());
-      return null;
-    }
+//    if (!Files.exists(filePath)) {
+//      log.warn("文件不存在: {}", filePath.toAbsolutePath());
+//      return null;
+//    }
 
     String originalFileName = filePath.getFileName().toString();
     String newFileName =
@@ -659,6 +659,18 @@ public class CdFileUtil {
 
     // 过滤出文件夹
     return files.stream()
+      .filter(File::isDirectory)
+      .collect(Collectors.toList());
+  }
+
+  public static List<File> getDirectSubdirectories(String directoryPath) {
+    File directory = new File(directoryPath);
+    if (!directory.exists() || !directory.isDirectory()) {
+      throw new IllegalArgumentException("Invalid directory: " + directory);
+    }
+
+    File[] files = FileUtil.ls(directory.getAbsolutePath());
+    return Arrays.stream(files)
       .filter(File::isDirectory)
       .collect(Collectors.toList());
   }

@@ -1,25 +1,21 @@
 package com.coderdream.util.video.demo06;
 
-import static com.coderdream.util.cd.CdConstants.OS_MAC;
 import static com.coderdream.util.cd.CdConstants.OS_WINDOWS;
 
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class VideoEncoder {
+public class VideoEncoder02 {
 
     private static final String FFMPEG_COMMAND = "ffmpeg"; // 可配置
-    private static final String DEFAULT_CRF = "23";  // Default CRF value
-    private static final String DEFAULT_PRESET = "medium"; // Default Preset
 
     /**
      * 使用 FFmpeg 对视频进行编码 (根据操作系统选择命令)
@@ -58,16 +54,42 @@ public class VideoEncoder {
         commandList.add(inputFilePath);
 
         // 根据操作系统选择不同的编码参数
-        switch (osType) {
-            case OS_WINDOWS:
-                addWindowsEncodingParams(commandList);
-                break;
-            case OS_MAC:
-                addMacEncodingParams(commandList);
-                break;
-            default:
-                addLinuxEncodingParams(commandList); // Linux or other
-                break;
+        if (OS_WINDOWS.equals(osType)) {
+            // macOS 编码参数
+            commandList.add("-c:v");
+            commandList.add("libx264"); // 使用 libx264 编码器 TODO
+//            String os = OperatingSystem.getOS();
+//            if (OS_WINDOWS.equals(os)) {
+//                commandList.add("h264_nvenc");
+//            } else if (OS_MAC.equals(os)) {
+//                commandList.add("h264_videotoolbox");
+//            } else {
+//                commandList.add("libx264");
+//            }
+            commandList.add("-preset");
+            commandList.add("slow");
+            commandList.add("-crf");
+            commandList.add("20");
+            commandList.add("-tune");
+            commandList.add("film");
+            commandList.add("-profile:v");
+            commandList.add("high");
+            commandList.add("-level");
+            commandList.add("4.2");
+            commandList.add("-x264-params");
+            commandList.add("ref=5:deblock=-1,-1:bframes=5");
+            commandList.add("-vf");
+            commandList.add("scale=1920:-2:flags=lanczos");
+            commandList.add("-r");
+            commandList.add("30");
+        } else {
+            // 默认编码参数 (可以根据需要修改)
+            commandList.add("-c:v");
+            commandList.add("libx264"); // 使用 libx264 编码器作为默认值
+            commandList.add("-preset");
+            commandList.add("medium");
+            commandList.add("-crf");
+            commandList.add("23");
         }
 
         // 通用的音频和格式参数
@@ -95,6 +117,7 @@ public class VideoEncoder {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     output.append(line).append(System.lineSeparator());
+//                    log.info(line);
                 }
             }
 
@@ -115,36 +138,6 @@ public class VideoEncoder {
         }
 
         return null;
-    }
-
-    private static void addWindowsEncodingParams(List<String> commandList) {
-        // Windows with NVENC
-        commandList.add("-c:v");
-        commandList.add("h264_nvenc"); // Use NVIDIA's NVENC encoder
-        commandList.add("-preset");
-        commandList.add("slow");  // or p7 for slowest
-        commandList.add("-rc:v");  //Rate control mode
-        commandList.add("vbr_hq");  //Variable bitrate, high quality
-        commandList.add("-cq");    //Constant quality rate control
-        commandList.add("20"); // Constant Quantizer (CQ) value
-    }
-
-    private static void addMacEncodingParams(List<String> commandList) {
-        // macOS with VideoToolbox
-        commandList.add("-c:v");
-        commandList.add("h264_videotoolbox"); // Use VideoToolbox encoder
-        commandList.add("-q:v");
-        commandList.add("23"); // Constant Quantizer (CQ) value
-    }
-
-    private static void addLinuxEncodingParams(List<String> commandList) {
-        // Linux or other platforms with libx264
-        commandList.add("-c:v");
-        commandList.add("libx264"); // Use libx264 encoder
-        commandList.add("-preset");
-        commandList.add(DEFAULT_PRESET);
-        commandList.add("-crf");
-        commandList.add(DEFAULT_CRF);
     }
 
     public static void main(String[] args) {

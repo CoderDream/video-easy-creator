@@ -7,9 +7,11 @@ import com.coderdream.util.gemini.TranslationUtil;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import com.coderdream.util.proxy.OperatingSystem;
+import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -148,5 +150,48 @@ class DailyUtilTest {
     }
   }
 
+
+  @Test
+  void syncHistoryVideoToQuark_001() {
+//    String year = "2017";
+//    List<String> years = Arrays.asList("2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025");
+    List<String> years = Arrays.asList("2018", "2019", "2020",  "2021", "2022", "2023", "2024");
+    for (String year : years) {
+      DailyUtil.syncHistoryVideoToQuark(year);
+    }
+  }
+
+  //
+  @Test
+  void genTitleFile() {
+//    String year = "2017";
+    List<String> years = Arrays.asList("2018", "2019", "2020", "2021",
+      "2022", "2023", "2024");
+//    List<String> years = Arrays.asList("2017", "2018", "2019", "2024", "2025");
+    for (String year : years) {
+      DailyUtil.genTitleFile(year);
+    }
+  }
+
+
+  @Test
+  void moveHistoryVideoToQuark_001() {
+//    String year = "2017";
+    List<String> years = Arrays.asList("2024");
+//    List<String> years = Arrays.asList("2018", "2019", "2020", "2021", "2022", "2023", "2024");
+    for (String year : years) {
+      DailyUtil.moveHistoryVideoToQuark(year);
+    }
+  }
+
+  @Test
+  void moveHistoryVideoToQuark_002() {
+//    String year = "2017";
+//    List<String> years = Arrays.asList("2025");
+    List<String> years = Arrays.asList("2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025");
+    for (String year : years) {
+      DailyUtil.moveHistoryVideoToQuarkV2(year);
+    }
+  }
 
 }

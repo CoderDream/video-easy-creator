@@ -46,6 +46,32 @@ public class OperatingSystem {
     return folderPath;
   }
 
+  public static String getHistoryBBCFolder() {
+    String osType = OperatingSystem.getOS();
+    String folderPath = "";
+    switch (osType) {
+      case OS_WINDOWS -> folderPath = "C:\\Users\\CoderDream\\Videos\\History_BBC"
+       ; // "D:\\14_LearnEnglish\\6MinuteEnglish\\";
+      case OS_MAC -> folderPath = "/Volumes/System/Temp/History_BBC " ;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
+    }
+    return folderPath;
+  }
+
+  public static String getBaiduSyncDiskFolder() {
+    String osType = OperatingSystem.getOS();
+    String folderPath = "";
+    switch (osType) {
+      case OS_WINDOWS -> folderPath = "D:\\14_LearnEnglish\\000_BBC\\BaiduSyncdisk\\000_BBC"      ;
+      case OS_MAC -> folderPath = "/Volumes/System/Temp/Baidu_BBC " ;
+      case OS_LINUX -> System.out.println("执行 Linux 相关的操作...");
+      default -> System.out.println("无法识别的操作系统。");
+    }
+    return folderPath;
+  }
+
+
 
   /**
    * @return

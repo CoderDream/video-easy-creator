@@ -2,17 +2,26 @@ package com.coderdream.util.daily;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.CharsetUtil;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.file.PdfFileFinder;
 import com.coderdream.util.gemini.GeminiApiUtil;
+import com.coderdream.util.proxy.OperatingSystem;
+import com.coderdream.util.video.demo06.VideoEncoder;
+import com.coderdream.util.video.demo06.VideoEncoder02;
 import com.coderdream.util.wechat.MarkdownFileGenerator;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import swiss.ameri.gemini.api.GenAi.GeneratedContent;
@@ -224,5 +233,169 @@ public class DailyUtil {
 //    CdFileUtil.copy(subtitleFileNameChn, distFolderName, true);
 
     // 4. 封面
+  }
+
+  public static void syncHistoryVideoToQuark(String year) {
+    List<File> fileNamesWithPath = CdFileUtil.getFirstLevelDirectories(
+      OperatingSystem.getHistoryBBCFolder());
+    Map<String, String> sourceVideoFilePathmap = new HashMap<>();
+    assert fileNamesWithPath != null;
+    for (File file : fileNamesWithPath) {
+      sourceVideoFilePathmap.put(file.getName(), file.getAbsolutePath());
+    }
+
+    List<String> titleList = FileUtil.readLines(
+      OperatingSystem.getBaseFolder() + File.separator + "input"
+        + File.separator + "title_" + year
+        + ".txt", CharsetUtil.CHARSET_UTF_8);
+    String distFolderPath = OperatingSystem.getBaiduSyncDiskFolder();
+    for (String title : titleList) {
+      log.info("标题：{}", title);
+      String[] split = title.split("：");
+      if (split.length == 2) {
+        String folderName = year.substring(2, 4) + title.substring(0, 4);
+        String videoTitle = "【BBC六分钟英语】" + split[1];
+        if (sourceVideoFilePathmap.containsKey(videoTitle)) {
+          String sourcePath = sourceVideoFilePathmap.get(videoTitle);
+          String sourceFileName =
+            sourcePath + File.separator + videoTitle + ".mp4";
+          String targetFileName =
+            distFolderPath + File.separator + year + File.separator + folderName
+              + "_" + videoTitle + ".mp4";
+          log.info("源视频路径：{}", sourceFileName);
+          log.info("视频目标路径：{}", targetFileName);
+          if (FileUtil.exist(sourceFileName) && !FileUtil.exist(
+            targetFileName)) {
+            String encodedVideo = VideoEncoder02.encodeVideo(sourceFileName,
+              targetFileName);
+            log.info("视频编码完成: {}", encodedVideo);
+          }
+        }
+      }
+    }
+  }
+
+  public static void moveHistoryVideoToQuark(String year) {
+    List<File> fileNamesWithPath = CdFileUtil.getFirstLevelDirectories(
+      "C:\\Users\\CoderDream\\Videos\\History_BBC\\");
+    Map<String, String> sourceVideoFilePathmap = new HashMap<>();
+    assert fileNamesWithPath != null;
+    for (File file : fileNamesWithPath) {
+      sourceVideoFilePathmap.put(file.getName(), file.getAbsolutePath());
+    }
+
+    List<String> titleList = FileUtil.readLines(
+      "D:\\input\\title_" + year
+        + ".txt", CharsetUtil.CHARSET_UTF_8);
+    Map<String, String> map = new HashMap<>();
+    String distFolderPath = "D:\\14_LearnEnglish\\000_BBC\\BaiduSyncdisk\\000_BBC";
+    for (String title : titleList) {
+      log.info("标题：{}", title);
+      String[] split = title.split("：");
+      if (split.length == 2) {
+        String sourceFolderName = year.substring(0, 2) + title.substring(0, 4);
+        String targetFolderName = year.substring(2, 4) + title.substring(0, 4);
+        String videoTitle = "【BBC六分钟英语】" + split[1];
+        if (sourceVideoFilePathmap.containsKey(videoTitle)) {
+          String sourcePath = sourceVideoFilePathmap.get(videoTitle);
+//          String sourceFileName =
+//            sourcePath + File.separator + videoTitle + ".mp4";
+          String sourceFileName =
+            distFolderPath + File.separator + year + File.separator
+              + sourceFolderName
+              + "_" + videoTitle + ".mp4";
+          String targetFileName =
+            distFolderPath + File.separator + year + File.separator
+              + targetFolderName + File.separator
+              + targetFolderName
+              + "_" + videoTitle + ".mp4";
+          log.info("源视频路径：{}", sourceFileName);
+          log.info("视频目标路径：{}", targetFileName);
+          if (FileUtil.exist(sourceFileName) && !FileUtil.exist(
+            targetFileName)) {
+//            FileUtil.move(sourceFileName, targetFileName);
+            try {
+              Files.move(Paths.get(sourceFileName), Paths.get(targetFileName));
+            } catch (IOException e) {
+              log.error("移动文件出错: {}", e.getMessage(), e);
+            }
+//            String encodedVideo = VideoEncoder02.encodeVideo(sourceFileName,
+//              targetFileName);
+//            log.info("视频编码完成: {}", encodedVideo);
+          }
+        }
+      }
+    }
+  }
+
+  public static void moveHistoryVideoToQuarkV2(String year) {
+    List<File> fileNamesWithPath = CdFileUtil.getFirstLevelDirectories(
+      "C:\\Users\\CoderDream\\Videos\\History_BBC\\");
+    Map<String, String> sourceVideoFilePathmap = new HashMap<>();
+    assert fileNamesWithPath != null;
+    for (File file : fileNamesWithPath) {
+      sourceVideoFilePathmap.put(file.getName(), file.getAbsolutePath());
+    }
+
+    List<String> titleList = FileUtil.readLines(
+      "D:\\input\\title_" + year
+        + ".txt", CharsetUtil.CHARSET_UTF_8);
+    Map<String, String> map = new HashMap<>();
+    String distFolderPath = "D:\\14_LearnEnglish\\000_BBC\\BaiduSyncdisk\\000_BBC";
+    for (String title : titleList) {
+      log.info("标题：{}", title);
+      String[] split = title.split("：");
+      if (split.length == 2) {
+        String sourceFolderName = year.substring(2, 4) + title.substring(0, 4);
+        String targetFolderName = year.substring(2, 4) + title.substring(0, 4);
+        String videoTitle = "【BBC六分钟英语】" + split[1];
+        if (sourceVideoFilePathmap.containsKey(videoTitle)) {
+          String sourcePath = sourceVideoFilePathmap.get(videoTitle);
+//          String sourceFileName =
+//            sourcePath + File.separator + videoTitle + ".mp4";
+          String sourceFileName =
+            distFolderPath + File.separator + year + File.separator
+              + sourceFolderName
+              + "_" + videoTitle + ".mp4";
+          String targetFileName =
+            distFolderPath + File.separator + year + File.separator
+              + sourceFolderName + File.separator
+              + targetFolderName
+              + "_" + videoTitle + ".mp4";
+          log.info("源视频路径：{}", sourceFileName);
+          log.info("视频目标路径：{}", targetFileName);
+          if (FileUtil.exist(sourceFileName) && !FileUtil.exist(
+            targetFileName)) {
+//            FileUtil.move(sourceFileName, targetFileName);
+            try {
+              Files.move(Paths.get(sourceFileName), Paths.get(targetFileName));
+            } catch (IOException e) {
+              log.error("移动文件出错: {}", e.getMessage(), e);
+            }
+//            String encodedVideo = VideoEncoder02.encodeVideo(sourceFileName,
+//              targetFileName);
+//            log.info("视频编码完成: {}", encodedVideo);
+          }
+        }
+      }
+    }
+  }
+
+  public static void genTitleFile(String year) {
+    String folderPath = "D:\\input";
+    String sourceFileName =
+      folderPath + File.separator + "title_" + year + "_raw.txt";
+    List<String> sourceFileContent = FileUtil.readLines(sourceFileName,
+      CharsetUtil.CHARSET_UTF_8);
+    List<String> targetFileContent = new ArrayList<>();
+    for (int i = 0; i < sourceFileContent.size(); i += 2) {
+      targetFileContent.add(sourceFileContent.get(i));
+    }
+
+    String targetFileName =
+      folderPath + File.separator + "title_" + year + ".txt";
+    if (CdFileUtil.isFileEmpty(targetFileName)) {
+      CdFileUtil.writeToFile(targetFileName, targetFileContent);
+    }
   }
 }

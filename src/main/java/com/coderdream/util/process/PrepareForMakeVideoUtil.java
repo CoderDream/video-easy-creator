@@ -77,8 +77,8 @@ public class PrepareForMakeVideoUtil {
       log.info("创建文件夹结果：{}", mkdir);
     }
     // 0. 清理文件夹
-//    boolean del = FileUtil.del(distFolderName);
-//    log.error("删除文件夹结果：{} {}", del, distFolderName);
+    boolean del = FileUtil.del(distFolderName);
+    log.error("删除文件夹结果：{} {}", del, distFolderName);
     // 2. 拷贝视频
     String mp4FilePath = folderPath + File.separator + folderName + ".mp4";
     if (!CdFileUtil.isFileEmpty(mp4FilePath)) {

@@ -23,6 +23,27 @@ class GenSubtitleUtilTest {
     GenSubtitleUtil.process(filePath, maxLineLength);
   }
 
+  @Test
+  void genRawTextFile_01() {
+    //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
+    String folderName = "20250319";
+    String filePath =
+      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings" + File.separator
+        + folderName + File.separator + folderName
+        + ".mp4";
+    String srtFileName = CdFileUtil.changeExtension(filePath, "srt");
+
+    String largeSrtFileName = CdFileUtil.addPostfixToFileName(srtFileName, "_raw_large");
+    String largeTextRawFileName = CdFileUtil.changeExtension(largeSrtFileName,
+      "txt");
+    GenSubtitleUtil.genRawTextFile(largeSrtFileName, largeTextRawFileName);
+
+    String middleSrtFileName = CdFileUtil.addPostfixToFileName(srtFileName, "_raw_middle");
+    String middleTextRawFileName = CdFileUtil.changeExtension(middleSrtFileName,
+      "txt");
+    GenSubtitleUtil.genRawTextFile(middleSrtFileName, middleTextRawFileName);
+  }
+
 
   @Test
   void process_02() {
@@ -51,10 +72,9 @@ class GenSubtitleUtilTest {
 
   @Test
   void processSrtAndGenDescription_01() {
-    //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
-    String folderName = "250219";
+    String folderName = "20250319";
     String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings" + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
     GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
@@ -63,7 +83,7 @@ class GenSubtitleUtilTest {
   @Test
   void processSrtAndGenDescription_02() {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
-    String folderName = "250305";
+    String folderName = "250319";
     String mp4FilePath =
       OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings" + File.separator
         + folderName + File.separator + folderName
@@ -205,5 +225,9 @@ class GenSubtitleUtilTest {
       ".eng");
     GenSubtitleUtil.filterContentFile(srcFileNameEng, srcFileNameEng);
   }
+
+
+
+
 
 }

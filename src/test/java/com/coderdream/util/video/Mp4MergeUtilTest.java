@@ -25,13 +25,32 @@ class Mp4MergeUtilTest {
         Mp4MergeUtil.processMerge(bookPath, chapterName);
     }
 
-    //
+    // D:\14_LearnEnglish\6MinuteEnglish\2017\170511\170511_【BBC六分钟英语】你浪费了多少食物？\170511_【BBC六分钟英语】你浪费了多少食物？.mp4
+
+    @Test
+    void processMerge_S() {
+        String bookFolderName = "0003_PressBriefings";
+        String subFolder = "20250319";
+        String chapterName = "20250319_白宫简报";
+
+        String folderPath =
+          OperatingSystem.getBaseFolder() + File.separator + bookFolderName + File.separator + subFolder;
+        String destinationFileName =
+          folderPath + File.separator + chapterName + File.separator + chapterName + ".mp4";
+        destinationFileName = "D:\\14_LearnEnglish\\6MinuteEnglish\\2017\\170511\\170511_【BBC六分钟英语】你浪费了多少食物？\\170511_【BBC六分钟英语】你浪费了多少食物？.mp4";
+        // 重编码视频文件，用于B站发布
+        String outputFilePath = CdFileUtil.addPostfixToFileName(destinationFileName,
+          "_new");
+        String encodedVideo = VideoEncoder.encodeVideo(destinationFileName,
+          outputFilePath);
+        log.info("视频编码完成: {}", encodedVideo);
+    }
 
     @Test
     void processMerge_0007() {
         String bookFolderName = "0003_PressBriefings";
-        String subFolder = "20250311";
-        String chapterName = "20250311_白宫简报";
+        String subFolder = "20250319";
+        String chapterName = "20250319_白宫简报";
 
         String folderPath =
           OperatingSystem.getBaseFolder() + File.separator + bookFolderName + File.separator + subFolder;
