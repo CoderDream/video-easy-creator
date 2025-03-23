@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.coderdream.entity.ArticleTitle;
 import com.coderdream.entity.DialogSingleEntity;
 import com.coderdream.entity.SubtitleEntity;
+import com.coderdream.util.proxy.OperatingSystem;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -145,24 +147,33 @@ public class CdFileUtil {
     List<ArticleTitle> articleTitleList = new ArrayList<>();
     List<String> titleList = FileUtil.readLines(fileName,
       StandardCharsets.UTF_8);
-    ArticleTitle articleTitle = null;
+    ArticleTitle articleTitle;
     for (String title : titleList) {
       articleTitle = new ArticleTitle();
-      String[] arrs = title.split("\t");
+      String[] arrs = title.split("\\|");
       if (arrs.length == 2) {
         articleTitle.setDateStr(arrs[0]);
         articleTitle.setTitle(arrs[1]);
         articleTitleList.add(articleTitle);
       }
     }
+
+    // 使用 Comparator.comparing 对 ArticleTitleList 进行排序
+    articleTitleList.sort(Comparator.comparing(ArticleTitle::getDateStr));
+
     return articleTitleList;
   }
 
   public static String getArticleTitle(String folderName) {
 //    String fileName = CdConstants.RESOURCES_BASE_PATH + "\\bbc\\title.txt";
     String fileName =
-      com.coderdream.util.cd.CdFileUtil.getResourceRealPath() + "\\data\\bbc\\title.txt";
+      OperatingSystem.getProjectResourcesFolder() + File.separator + "data"
+        + File.separator + "bbc" + File.separator + "title.txt";
 
+    if (CdFileUtil.isFileEmpty(fileName)) {
+      log.error("文件不存在：{}", fileName);
+      return "";
+    }
     List<ArticleTitle> articleTitleList = getArticleTitleList(fileName);
     for (ArticleTitle article : articleTitleList) {
       if (article.getDateStr().equals(folderName)) {
@@ -400,7 +411,7 @@ public class CdFileUtil {
     }
 
     // 构建新的文件名
-    if(baseName.endsWith(part)){
+    if (baseName.endsWith(part)) {
       baseName = baseName.substring(0, baseName.length() - part.length());
     }
 
@@ -688,7 +699,8 @@ public class CdFileUtil {
 //    System.out.println("修改后的文件路径2: " + newFilePath2);
 
     String inputFilePath = "D:\\0000\\EnBook002\\Chapter007\\Chapter007_temp.txt"; // 替换为你的输入文件路径
-    String outputFilePath = com.coderdream.util.cd.CdFileUtil.generateOutputFilePath(inputFilePath);
+    String outputFilePath = com.coderdream.util.cd.CdFileUtil.generateOutputFilePath(
+      inputFilePath);
     System.out.println("新的文件路径: " + outputFilePath);
 
   }

@@ -348,7 +348,7 @@ public class Mp4MergeUtil {
       return;
     } else {
       // 如果video文件夹下的ChapterXXX.mp4已经存在，则不再处理
-      if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(destinationFileName)) {
+      if (CdFileUtil.isFileEmpty(destinationFileName)) {
         mergeMp4Files(folderPath, subFolder, inputDir, outputDir);
 
         files = FileUtil.loopFiles(outputDir,

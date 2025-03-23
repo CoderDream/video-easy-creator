@@ -10,6 +10,7 @@ import cn.hutool.json.JSONUtil;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.network.QuarkDiskUtil.QuarkDiskResponse.FileList;
+import com.coderdream.util.proxy.OperatingSystem;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -556,7 +557,8 @@ public class QuarkDiskUtil {
 
   public static void main(String[] args) {
 //    String year = "2023";
-    List<String> years = List.of("2018", "2019", "2020", "2021", "2022", "2023");
+//    List<String> years = List.of("2018", "2019", "2020", "2021", "2022", "2023");
+    List<String> years = List.of("2025");
     for (String year : years) {
       process(year);
     }
@@ -564,8 +566,11 @@ public class QuarkDiskUtil {
 
   public static void process(String year) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
+    String quarkPath = OperatingSystem.getBaseFolder() + File.separator + "quark";
     List<String> list = FileUtil.readLines(
-      "D:\\input\\quark_share_year_fid.txt",
+      quarkPath
+        + File.separator  + "input"
+        + File.separator + "quark_share_year_fid.txt",
       StandardCharsets.UTF_8);
     Map<String, String> map = new HashMap<>();
     for (String line : list) {
@@ -583,7 +588,9 @@ public class QuarkDiskUtil {
       return;
     }
 
-    String headerFilePath = "D:\\input\\quark.txt"; // 修改后的文件路径
+    String headerFilePath =
+      quarkPath + File.separator + "input"
+        + File.separator + "quark_cookie.txt"; // 修改后的文件路径
     FileSortParams fileSortParams = new FileSortParams();
 //    fileSortParams.setPdir_fid("df5fa55ae8c34cd08e50e76cc57da28a"); // 设置 pdir_fid
     fileSortParams.setPdir_fid(fid); // 设置 pdir_fid
@@ -604,7 +611,9 @@ public class QuarkDiskUtil {
       for (QuarkDiskResponse.FileList file : fileList) {
         textList.add(QuarkDiskUtil.processFileList(file, headerFilePath));
       }
-      CdFileUtil.writeToFile("D:\\output\\quark_share_" + year + ".txt",
+      CdFileUtil.writeToFile(
+        quarkPath + File.separator + "output"
+          + File.separator + "quark_share_" + year + ".txt",
         textList);
     } else {
       // log.error("GET File Sort Request failed.");

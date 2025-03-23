@@ -8,7 +8,6 @@ import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.file.PdfFileFinder;
 import com.coderdream.util.gemini.GeminiApiUtil;
 import com.coderdream.util.proxy.OperatingSystem;
-import com.coderdream.util.video.demo06.VideoEncoder;
 import com.coderdream.util.video.demo06.VideoEncoder02;
 import com.coderdream.util.wechat.MarkdownFileGenerator;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
@@ -172,67 +171,8 @@ public class DailyUtil {
       } else {
         log.error("找不到mp3文件，退出处理流程；{}",
           folderPath + File.separator + mp3FileName);
-        continue;
       }
-
-//      String fileNameF =
-//        folderName + "_高级词汇表.xlsx";
-//      if (!CdFileUtil.isFileEmpty(
-//        folderPath + File.separator + fileNameC)
-//        && CdFileUtil.isFileEmpty(
-//        newFolderPath + File.separator + fileNameC)) {
-//        FileUtil.copyFile(folderPath + File.separator + fileNameC,
-//          newFolderPath + File.separator + fileNameC,
-//          StandardCopyOption.REPLACE_EXISTING);
-//      }
-
-      // 2025/02/20  18:20         9,065,952 170309_mermaids.mp3
-      //2025/02/20  17:50           232,887 170309_mermaids.pdf
-      //2025/03/03  10:34            12,786 170309_中英双语对话脚本.txt
-      //2025/03/03  10:34            35,369 170309_完整词汇表.xlsx
-      //2025/03/03  10:34             9,472 170309_核心词汇表.xlsx
-      //2025/03/03  10:34            10,234 170309_高级词汇表.xlsx
-
-      // 1. 图片
-//        String imageFolderName = "D:\\14_LearnEnglish\\6MinuteEnglish\\quark_share" + File.separator;
-//        CdFileUtil.copy(Paths.get(imageFolderName), Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
-
     }
-
-//    String folderPath = CommonUtil.getFullPath(folderName);
-//    String distFolderName = "D:\\14_LearnEnglish\\6MinuteEnglish\\quark_share";
-//    // 0. 清理文件夹
-////    boolean del = CdFileUtil.del(distFolderName);
-////    log.info("删除文件夹结果：{}", del);
-//
-//    // 1. 图片 文件夹拷贝
-//    String imageFolderName = folderPath + File.separator + folderName;
-//    List<File> files = CdFileUtil.loopFiles(imageFolderName);
-//    if (CollectionUtil.isEmpty(files)) {
-//      log.error("图片文件夹为空，退出处理流程；{}", imageFolderName);
-//      return;
-//    }
-//    for (File file : files) {
-//      if (file.isFile()) {
-//        String fileName = file.getName();
-//        CdFileUtil.copyFile(file.getAbsolutePath(),
-//          distFolderName + fileName,
-//          StandardCopyOption.REPLACE_EXISTING);
-//      }
-//    }
-//    // 2. 音频
-//    String audioFileName = folderPath + File.separator +  "audio5.mp3";
-//    String destinationAudioFileName = distFolderName + "audio.mp3";
-//    CdFileUtil.copy(Paths.get(audioFileName),
-//      Paths.get(destinationAudioFileName), StandardCopyOption.REPLACE_EXISTING);
-//
-//    // 3. 字幕
-//    String subtitleFileNameEng = folderPath + File.separator + "eng.srt";
-//    CdFileUtil.copy(subtitleFileNameEng, distFolderName, true);
-//    String subtitleFileNameChn = folderPath + File.separator + "chn.srt";
-//    CdFileUtil.copy(subtitleFileNameChn, distFolderName, true);
-
-    // 4. 封面
   }
 
   public static void syncHistoryVideoToQuark(String year) {

@@ -21,6 +21,7 @@ import com.coderdream.entity.WordInfoEntity;
 import com.coderdream.util.CommonUtil;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.excel.CdExcelUtil;
 import com.coderdream.util.translate.TranslatorTextUtil;
 import java.awt.image.BufferedImage;
@@ -77,6 +78,7 @@ public class GetSixMinutesPpt {
    * @param folderName 文件夹名称
    */
   public static void process(String folderName, String chapterName) {
+    long start = System.currentTimeMillis(); // 获取当前时间毫秒数
     LicenseUtil.loadLicense(
       MicrosoftConstants.PPTX_TO_OTHER); // 加载 Aspose.Slides 的 License，用于去除水印等限制
     Presentation pres = null; // 定义 Presentation 对象，用于表示 PPT 文档
@@ -347,8 +349,12 @@ public class GetSixMinutesPpt {
         CommonUtil.getFullPathFileName(
           folderName, folderName, ".pptx"),
         SaveFormat.Pptx); // 将修改后的 PPT 保存到文件中
-      log.info("PPT生成成功:{}", CommonUtil.getFullPathFileName(
-        folderName, folderName, ".pptx"));//使用log.info记录PPT生成成功日志
+
+      long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
+      long durationMillis = endTime - start; // 计算耗时（毫秒）
+      log.info("PPT生成成功:{}，耗时: {}", CommonUtil.getFullPathFileName(
+          folderName, folderName, ".pptx"),
+        CdTimeUtil.formatDuration(durationMillis));
     } catch (Exception e) {
       log.error("PPT生成过程中出现异常", e); //使用log.error记录PPT生成异常日志
     } finally {
@@ -365,7 +371,8 @@ public class GetSixMinutesPpt {
    */
   public static void process(String folderName) {
     // 查询章节名称
-    String chapterName = GetSixMinutesPpt.queryChapterNameForSixMinutes(folderName);
+    String chapterName = GetSixMinutesPpt.queryChapterNameForSixMinutes(
+      folderName);
 
     process(folderName, chapterName); // 调用 process 方法，传入文件夹名称和标题
   }
@@ -424,18 +431,18 @@ public class GetSixMinutesPpt {
             .setText(wordInfo2.getNo() + ""); // 设置序号
           tbl.get_Item(1, y).getTextFrame()
             .setText(wordInfo2.getWord()); // 设置单词 psychologist
-          if(wordInfo2.getWord().equals("psychologist")) {
+          if (wordInfo2.getWord().equals("psychologist")) {
             System.out.println("###### wordInfo2.getUk() is null");
           }
 
           String uk = wordInfo2.getUk();
           if (StrUtil.isNotBlank(uk) && uk.length() >= 15) {
-            uk = uk.substring(0, 13) ;// + "…"
+            uk = uk.substring(0, 13);// + "…"
           }
           tbl.get_Item(2, y).getTextFrame().setText(uk); // 设置音标
           String comment = wordInfo2.getComment();
           if (StrUtil.isNotBlank(comment) && comment.length() > 49) {
-            comment = comment.substring(0, 48) ;// + "…"
+            comment = comment.substring(0, 48);// + "…"
           }
 
           tbl.get_Item(3, y).getTextFrame()

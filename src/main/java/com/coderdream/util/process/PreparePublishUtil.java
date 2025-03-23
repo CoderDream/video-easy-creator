@@ -151,7 +151,7 @@ public class PreparePublishUtil {
         String mp3FileName = com.coderdream.util.cd.CdFileUtil.changeExtension(
                 mp4FileName, "mp3");
 
-        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(mp3FileName)) {
+        if (CdFileUtil.isFileEmpty(mp3FileName)) {
             log.info("mp3文件不存在，先生成： {}", mp3FileName);
             CommandUtil.extractAudioFromMp4(mp4FileName, mp3FileName);
         } else {
@@ -175,7 +175,7 @@ public class PreparePublishUtil {
         String totalFileNameTotal =
                 folderPath + File.separator + subFolder + File.separator + subFolder
                         + ".txt";
-        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(totalFileNameTotal)) {
+        if (CdFileUtil.isFileEmpty(totalFileNameTotal)) {
             log.info("文件不存在或为空，已生成新文件: {}",
                     totalFileNameTotal);
             return;
@@ -228,7 +228,7 @@ public class PreparePublishUtil {
 
         String subtitleRawFileName =
                 subtitleFolderPath + subFolder + "_subtitle_raw.txt";
-        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(subtitleRawFileName)) {
+        if (CdFileUtil.isFileEmpty(subtitleRawFileName)) {
 
             String enContent = contentEnMap.get(bookFolderName);
             String cnContent = contentCnMap.get(bookFolderName);
@@ -267,7 +267,7 @@ public class PreparePublishUtil {
                         + subFolder
                         + ".srt";
 
-        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(srtFileName)) {
+        if (CdFileUtil.isFileEmpty(srtFileName)) {
             if (!com.coderdream.util.cd.CdFileUtil.isFileEmpty(
                     srtFileNameInSubtitleFolder)) {
                 log.info("subtitle中的srt文件存在，直接拷贝： {}",
@@ -411,11 +411,11 @@ public class PreparePublishUtil {
                 folderPath + File.separator + subFolder + File.separator + "video"
                         + File.separator
                         + subFolder + "_" + "720p." + imageFormat;
-        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(coverFileName)) {
+        if (CdFileUtil.isFileEmpty(coverFileName)) {
             log.error("封面图不存在，先生成： {}", coverFileName);
             return;
         }
-        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(
+        if (CdFileUtil.isFileEmpty(
                 destinationCoverFileName)) {
             FileUtil.copy(Paths.get(coverFileName),
                     Paths.get(destinationCoverFileName),
@@ -447,7 +447,7 @@ public class PreparePublishUtil {
             srtList.add(subtitle);
         }
 
-        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(srtFileName)) {
+        if (CdFileUtil.isFileEmpty(srtFileName)) {
             com.coderdream.util.cd.CdFileUtil.writeToFile(srtFileName, srtList);
         }
     }
@@ -518,7 +518,7 @@ public class PreparePublishUtil {
 
         lang = "eng";
 
-        if (com.coderdream.util.cd.CdFileUtil.isFileEmpty(srtFileName)) {
+        if (CdFileUtil.isFileEmpty(srtFileName)) {
             log.info("srtFile 文件不存在, {}", srtFileName);
             SubtitleUtil.genSrtByExecuteCommand(mp3FileName, newSubtitleFileName,
                     srtFileName, lang);
