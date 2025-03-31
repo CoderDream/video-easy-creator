@@ -15,8 +15,13 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -495,7 +500,7 @@ public class QuarkDiskUtil {
 
     ShareResponse shareResponse = QuarkDiskUtil.postShare(shareParams,
       headerFilePath);
-    String taskId = null;
+    String taskId;
 
     if (shareResponse != null) {
       taskId = shareResponse.getData().getTask_id();
@@ -566,10 +571,11 @@ public class QuarkDiskUtil {
 
   public static void process(String year) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
-    String quarkPath = OperatingSystem.getBaseFolder() + File.separator + "quark";
+    String quarkPath =
+      OperatingSystem.getBaseFolder() + File.separator + "quark";
     List<String> list = FileUtil.readLines(
       quarkPath
-        + File.separator  + "input"
+        + File.separator + "input"
         + File.separator + "quark_share_year_fid.txt",
       StandardCharsets.UTF_8);
     Map<String, String> map = new HashMap<>();
@@ -603,18 +609,33 @@ public class QuarkDiskUtil {
       && fileSortResponse.getData() != null
       && fileSortResponse.getData().getList() != null
       && !fileSortResponse.getData().getList().isEmpty()) {
+      String quarkShareFileName =quarkPath + File.separator + "output"
+        + File.separator + "quark_share_" + year + ".txt";
+      List<String> textList = new LinkedList<>();
+      Set<String> fileNameSet = new LinkedHashSet<>();
+      List<String> oldTextList = FileUtil.readLines(quarkShareFileName,StandardCharsets.UTF_8);
+      for (String line : oldTextList) {
+        String[] split = line.split(" : ");
+        if (split.length == 2) {
+          fileNameSet.add(split[0].trim());
+          textList.add(line);
+        }
+      }
 
-      List<String> textList = new ArrayList<>();
       // 循环处理 list 中的每个 FileList 对象
       List<QuarkDiskResponse.FileList> fileList = fileSortResponse.getData()
         .getList();
       for (QuarkDiskResponse.FileList file : fileList) {
-        textList.add(QuarkDiskUtil.processFileList(file, headerFilePath));
+        String fileName = file.getFile_name();
+        if(!fileNameSet.contains(fileName)){
+          textList.add(QuarkDiskUtil.processFileList(file, headerFilePath));
+        } else {
+          log.info("分享链接已存在，跳过: {}", fileName);
+        }
       }
-      CdFileUtil.writeToFile(
-        quarkPath + File.separator + "output"
-          + File.separator + "quark_share_" + year + ".txt",
-        textList);
+      textList = textList.stream().sorted().collect(Collectors.toList());
+
+      CdFileUtil.writeToFile(quarkShareFileName,    textList);
     } else {
       // log.error("GET File Sort Request failed.");
     }

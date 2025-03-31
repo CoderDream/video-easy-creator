@@ -14,6 +14,7 @@ public class WordInfo  {
     private String word;    // 单词
     private String uk;      // 英音
     private String us;      // 美音
+    private String pos;      // 词性
     private String comment;      // 释义
     private String levelStr;    // 等级
     private Integer times;  // 次数

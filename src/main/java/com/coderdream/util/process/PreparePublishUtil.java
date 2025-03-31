@@ -435,7 +435,7 @@ public class PreparePublishUtil {
                 StandardCharsets.UTF_8);
         List<String> srtList = new ArrayList<>(textList);
         // 解析字符串为字幕对象列表
-        List<SubtitleEntity> subtitleEntityList = com.coderdream.util.cd.CdFileUtil.genSubtitleEntityList(
+        List<SubtitleEntity> subtitleEntityList = CdFileUtil.genSubtitleEntityList(
                 responseList, CdConstants.TRANSLATE_PLATFORM_GEMINI);
         for (SubtitleEntity subtitleEntity : subtitleEntityList) {
             String subtitle = subtitleEntity.getSubtitle();
@@ -448,7 +448,7 @@ public class PreparePublishUtil {
         }
 
         if (CdFileUtil.isFileEmpty(srtFileName)) {
-            com.coderdream.util.cd.CdFileUtil.writeToFile(srtFileName, srtList);
+            CdFileUtil.writeToFile(srtFileName, srtList);
         }
     }
 

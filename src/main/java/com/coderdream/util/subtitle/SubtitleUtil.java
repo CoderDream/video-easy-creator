@@ -18,7 +18,6 @@ import com.coderdream.util.video.BatchCreateVideoCommonUtil;
 import com.coderdream.vo.SentenceDurationVO;
 import com.coderdream.vo.SentenceVO;
 
-import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
@@ -168,9 +167,9 @@ public class SubtitleUtil {
   public static void mergeSubtitleFile(String srcFileNameEng,
     String srcFileNameChn, String srcFileName) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
-    List<SubtitleEntity> engSubtitleEntityList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> engSubtitleEntityList = CdFileUtil.readSrtFileContent(
       srcFileNameEng);
-    List<SubtitleEntity> chnSubtitleEntityList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> chnSubtitleEntityList = CdFileUtil.readSrtFileContent(
       srcFileNameChn);
 
     SubtitleEntity enSubtitleEntity;
@@ -208,7 +207,7 @@ public class SubtitleUtil {
    */
   public static void modifySubtitleFile(String srcFileName) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
-    List<SubtitleEntity> subtitleEntityList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> subtitleEntityList = CdFileUtil.readSrtFileContent(
       srcFileName);
 
     SubtitleEntity subtitleEntity;
@@ -305,7 +304,7 @@ public class SubtitleUtil {
   public static String transferSubtitleToSentenceTextFile(String fileName) {
     String textFileName = CdFileUtil.changeExtension(
       fileName, "txt");
-    List<SubtitleEntity> sentenceVOList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> sentenceVOList = CdFileUtil.readSrtFileContent(
       fileName);
     StringBuilder text = new StringBuilder();
     for (SubtitleEntity sentenceVO : sentenceVOList) {

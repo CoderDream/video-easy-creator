@@ -18,7 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 图片文字叠加工具类
  * <p>
- * 用于在背景图片上添加带有立体效果的文字，包括主标题、副标题和底部大标题。 支持自定义主标题和底部大标题，副标题固定为“中英大字幕”。
+ * 用于在背景图片上添加带有立体效果的文字，包括主标题、副标题、顶部Title和底部大标题。
+ * 支持自定义主标题和底部大标题，副标题固定为“中英大字幕”。
  * </p>
  */
 @Slf4j
@@ -27,30 +28,34 @@ public class ImageTextOverlayUtil {
   private static final Color MAIN_TITLE_COLOR = new Color(255, 247, 149);
   private static final Color SHADOW_COLOR = new Color(0, 0, 0, 80);
   private static final Color SUB_TITLE_COLOR = Color.YELLOW;
+  private static final Color TITLE_COLOR = Color.WHITE;
   private static final Color BOTTOM_SHADOW_COLOR = new Color(50, 50, 50, 80);
-  private static final int BOTTOM_HEIGHT = 320;
+  private static final int BOTTOM_HEIGHT = 180;
 
   // *** 新增的常量，用于控制字幕垂直位置 ***
-  private static final int MAIN_TITLE_Y = 700; // 默认主标题 Y 坐标
+  private static final int MAIN_TITLE_Y = 500; // 默认主标题 Y 坐标
   private static final int SUB_TITLE_Y = 120; // 0 用来标记需要自动计算，如果需要固定值，就设置具体的数值
-  private static final int BOTTOM_TITLE_Y_OFFSET = -30; // 底部标题的 Y 轴偏移量（用于精细调整）
+  private static final int TITLE_Y = 80;  // 顶部Title的Y坐标
+  private static final int BOTTOM_TITLE_Y_OFFSET = -10; // 底部标题的 Y 轴偏移量（用于精细调整） 0 居中，负值，向下偏移
+  private static final int SUB_TITLE_LINE_SPACING = 80; // 副标题行间距
 
   /**
    * 在背景图片上添加文字叠加效果
    *
    * @param backgroundImagePath 背景图片地址
    * @param outputImagePath     输出文件地址
+   * @param title               顶部Title字符串
    * @param mainTitle           主标题字符串
    * @param bottomTitle         底部大标题字符串
    * @param formatName          图片格式
    */
   public static void addTextOverlay(String backgroundImagePath,
-    String outputImagePath, String mainTitle, String bottomTitle,
-    String formatName) {
+      String outputImagePath, String title, String mainTitle, String bottomTitle,
+      String formatName) {
     long startTime = System.currentTimeMillis();
     log.info(
-      "开始处理图片文字叠加，背景图片: {}, 输出图片: {}, 主标题: {}, 底部标题: {}",
-      backgroundImagePath, outputImagePath, mainTitle, bottomTitle);
+        "开始处理图片文字叠加，背景图片: {}, 输出图片: {}, 顶部Title: {}, 主标题: {}, 底部标题: {}",
+        backgroundImagePath, outputImagePath, title, mainTitle, bottomTitle);
 
     BufferedImage image;
     Graphics2D g2d = null;
@@ -72,36 +77,58 @@ public class ImageTextOverlayUtil {
 
       // 开启抗锯齿
       g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-        RenderingHints.VALUE_ANTIALIAS_ON);
+          RenderingHints.VALUE_ANTIALIAS_ON);
+
+      // 兼容低版本JDK
       g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+          RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
       log.debug("已开启抗锯齿设置");
 
       // 设置字体
-      Font mainFont = new Font("Source Han Sans Heavy", Font.PLAIN, 140);
+      Font mainFont = new Font("Source Han Sans Heavy", Font.PLAIN, 96);
       Font subFont = new Font("Microsoft YaHei", Font.BOLD, 74);
-      Font bottomFont = new Font("Source Han Sans Heavy", Font.PLAIN, 150);
+      Font titleFont = new Font("Microsoft YaHei", Font.BOLD, 80);
+      Font bottomFont = new Font("Source Han Sans Heavy", Font.PLAIN, 100);
 
-      // 绘制副标题
+      // 绘制顶部Title
+      g2d.setFont(titleFont);
+      drawCentered3DOutlinedText(g2d, title, image.getWidth(), TITLE_Y,
+          TITLE_COLOR, Color.BLACK);
+      log.debug("顶部Title绘制完成: {}", title);
+      log.debug("顶部Title Y 坐标: {}", TITLE_Y);
+
+      // 绘制副标题（分两行）
       g2d.setFont(subFont);
       int subTitleY = (SUB_TITLE_Y == 0) ? image.getHeight() - 210
-        : SUB_TITLE_Y; //自动计算或者设置为静态值
-      draw3DOutlinedText(g2d, "雙語大字幕", image.getWidth() - 400, subTitleY,
-        SUB_TITLE_COLOR, Color.BLACK);
-      log.debug("副标题绘制完成: 中英大字幕");
-      log.debug("副标题 Y 坐标: {}", subTitleY);
+          : SUB_TITLE_Y; // 自动计算或者设置为静态值
+
+      String subTitleLine1 = "雙語";
+      String subTitleLine2 = "大字幕";
+      int subTitleX1 = image.getWidth() - 230; // 调整位置，使其靠近右侧边缘
+      int subTitleX2 = image.getWidth() - 270;  // 调整位置，使其靠近右侧边缘
+
+      draw3DOutlinedText(g2d, subTitleLine1, subTitleX1, subTitleY,
+          SUB_TITLE_COLOR, Color.BLACK);
+
+      draw3DOutlinedText(g2d, subTitleLine2, subTitleX2,
+          subTitleY + SUB_TITLE_LINE_SPACING,
+          SUB_TITLE_COLOR, Color.BLACK);
+
+      log.debug("副标题绘制完成: 雙語大字幕 (分两行)");
+      log.debug("副标题 Y 坐标: {}, {}", subTitleY,
+          subTitleY + SUB_TITLE_LINE_SPACING);
 
       // 绘制主标题
       g2d.setFont(mainFont);
       drawCentered3DOutlinedText(g2d, mainTitle, image.getWidth(), MAIN_TITLE_Y,
-        MAIN_TITLE_COLOR, Color.BLACK);
+          MAIN_TITLE_COLOR, Color.BLACK);
       log.debug("主标题绘制完成: {}", mainTitle);
       log.debug("主标题 Y 坐标: {}", MAIN_TITLE_Y);
 
       // 绘制底部背景
       g2d.setColor(new Color(0, 57, 166));
       g2d.fillRect(0, image.getHeight() - BOTTOM_HEIGHT, image.getWidth(),
-        BOTTOM_HEIGHT);
+          BOTTOM_HEIGHT);
       log.debug("底部蓝色背景绘制完成");
 
       // 绘制底部大标题
@@ -124,7 +151,7 @@ public class ImageTextOverlayUtil {
       centeredY -= BOTTOM_TITLE_Y_OFFSET; // 应用偏移量
 
       drawCentered3DOutlinedText(g2d, bottomTitle, image.getWidth(), centeredY,
-        Color.WHITE, Color.BLACK);
+          Color.WHITE, Color.BLACK);
       log.debug("底部大标题绘制完成: {}", bottomTitle);
       log.debug("底部大标题 Y 坐标: {}", centeredY);
 
@@ -147,7 +174,7 @@ public class ImageTextOverlayUtil {
     long endTime = System.currentTimeMillis();
     long durationMillis = endTime - startTime;
     log.info("图片文字叠加处理完成，耗时: {}",
-      CdTimeUtil.formatDuration(durationMillis));
+        CdTimeUtil.formatDuration(durationMillis));
   }
 
   /**
@@ -161,7 +188,7 @@ public class ImageTextOverlayUtil {
    * @param outlineColor 描边颜色
    */
   private static void drawCentered3DOutlinedText(Graphics2D g2d, String text,
-    int width, int y, Color fillColor, Color outlineColor) {
+      int width, int y, Color fillColor, Color outlineColor) {
     FontRenderContext frc = g2d.getFontRenderContext();
     Rectangle2D bounds = g2d.getFont().getStringBounds(text, frc);
     int x = (int) ((width - bounds.getWidth()) / 2);
@@ -179,9 +206,9 @@ public class ImageTextOverlayUtil {
    * @param outlineColor 描边颜色
    */
   private static void draw3DOutlinedText(Graphics2D g2d, String text, int x,
-    int y, Color fillColor, Color outlineColor) {
+      int y, Color fillColor, Color outlineColor) {
     Color shadowColor =
-      (fillColor == Color.WHITE) ? BOTTOM_SHADOW_COLOR : SHADOW_COLOR;
+        (fillColor == Color.WHITE) ? BOTTOM_SHADOW_COLOR : SHADOW_COLOR;
 
     g2d.setColor(shadowColor);
     g2d.drawString(text, x + 1, y + 1);
@@ -206,11 +233,12 @@ public class ImageTextOverlayUtil {
   public static void main(String[] args) {
     String backgroundImagePath = "D:\\0000\\0007_Trump\\20250303\\cover_002.jpg";
     String outputImagePath = "D:\\0000\\0007_Trump\\20250303\\cover_008.jpg";
+    String title = "顶部Title示例";
     String mainTitle = "新主标题示例";
     String bottomTitle = "新底部标题示例";
     String formatName = "png";
-    addTextOverlay(backgroundImagePath, outputImagePath, mainTitle,
-      bottomTitle, formatName);
+    addTextOverlay(backgroundImagePath, outputImagePath, title, mainTitle,
+        bottomTitle, formatName);
     System.out.println("Image processing completed!");
   }
 }

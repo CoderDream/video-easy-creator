@@ -1,5 +1,6 @@
 package com.coderdream.util.txt.filter;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class TextFileUtil2 {
 
     Instant end = Instant.now();  // 记录结束时间
     Duration duration = Duration.between(start, end); // 计算耗时
-    String elapsedTime = formatDuration(duration);  // 格式化耗时
+    String elapsedTime = CdTimeUtil.formatDuration(duration.toMillis());;  // 格式化耗时
     log.info("文件处理耗时：{}", elapsedTime);
     return elapsedTime;
   }
@@ -100,21 +101,6 @@ public class TextFileUtil2 {
     }
 
     return lines2;
-  }
-
-  /**
-   * 格式化时间
-   *
-   * @param duration Duration时间
-   * @return 返回时分秒毫秒
-   */
-  private static String formatDuration(Duration duration) {
-    long hours = duration.toHours();
-    long minutes = duration.toMinutesPart();
-    long seconds = duration.toSecondsPart();
-    long millis = duration.toMillisPart();
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-      millis);
   }
 
   public static void main(String[] args) {

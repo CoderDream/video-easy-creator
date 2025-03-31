@@ -1,5 +1,6 @@
 package com.coderdream.util.ffmpeg;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -125,12 +126,7 @@ public class FFmpegVideoOverlay {
     Duration timeElapsed = Duration.between(start, end);
 
     //格式化耗时
-    long hours = timeElapsed.toHours();
-    long minutes = timeElapsed.toMinutesPart();
-    long seconds = timeElapsed.toSecondsPart();
-    long millis = timeElapsed.toMillisPart();
-    String elapsedTimeStr = String.format("%02d:%02d:%02d.%03d", hours, minutes,
-      seconds, millis);
+    String elapsedTimeStr = CdTimeUtil.formatDuration(timeElapsed.toMillis());
 
     log.info("方法执行耗时: {}", elapsedTimeStr); //记录耗时
 

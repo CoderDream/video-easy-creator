@@ -23,11 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author CoderDream
  * 该类使用 Stanford CoreNLP 库进行词形还原（Lemmatization）
  */
+@Slf4j
 public class CoreNlpUtils {
 
     public static void main(String[] args) {
@@ -78,7 +80,7 @@ public class CoreNlpUtils {
         // CoreMap 本质上是一个 Map，使用 class 对象作为键，并具有自定义类型的值
         List<CoreMap> sentences = document.get(SentencesAnnotation.class);
 
-        System.out.println("word\tpos\tlemma\tner");
+//        System.out.println("word\tpos\tlemma\tner");
         // 遍历每个句子
         for (CoreMap sentence : sentences) {
             // 遍历当前句子中的每个单词
@@ -94,19 +96,27 @@ public class CoreNlpUtils {
                 String lemma = token.get(LemmaAnnotation.class);
 
 //                System.out.println(word + "\t" + pos + "\t" + lemma + "\t" + ne);
+//                log.info("word:{}, pos:{}, lemma:{}, ner:{}", word, pos, lemma, ne);
 //                stringMap.put(word, lemma.toLowerCase()); // 可选择是否转换为小写
                 stringMap.put(word, lemma); // 存储原始单词和词形还原结果
             }
             // 获取当前句子的解析树
 //            Tree tree = sentence.get(TreeAnnotation.class);
+//            log.info("tree:{}", tree);
 
             // 获取当前句子的 Stanford 依赖图
 //            SemanticGraph dependencies = sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
+//            log.info("dependencies: {}", dependencies);
         }
         // 获取共指链接图
         // 每个链存储一组相互链接的提及项，以及获取最具代表性的提及项的方法
         // 句子和 token 偏移量均从 1 开始！
 //        Map<Integer, CorefChain> graph = document.get(CorefChainAnnotation.class);
+//        if(graph != null) {
+//            for (CorefChain cc : graph.values()) {
+//                log.info("CorefChain: {}", cc);
+//            }
+//        }
 
         return stringMap; // 返回包含词形还原结果的 Map
     }

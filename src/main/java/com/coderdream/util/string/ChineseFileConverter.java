@@ -1,5 +1,6 @@
 package com.coderdream.util.string;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,32 +50,12 @@ public class ChineseFileConverter {
         writer.newLine();
       }
       log.info("文件转换完成，总行数:{}", lineNumber);
-      return getElapsedTime(start);
+      return CdTimeUtil.formatDuration(start.toEpochMilli());
     } catch (IOException e) {
       log.error("文件处理过程中出现错误: {}", e.getMessage(), e);
       return "文件处理出现错误: " + e.getMessage();
     }
   }
-
-
-  /**
-   * 记录方法调用耗时，返回时分秒毫秒
-   *
-   * @param start 起始时间
-   * @return 耗时时长
-   */
-  private static String getElapsedTime(Instant start) {
-    Instant end = Instant.now();
-    Duration duration = Duration.between(start, end);
-    long hours = duration.toHours();
-    long minutes = duration.toMinutes() % 60;
-    long seconds = duration.getSeconds() % 60;
-    long millis = duration.toMillis() % 1000;
-
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-      millis);
-  }
-
 
   public static void main(String[] args) {
     String inputFilePath = "D:\\0000\\EnBook001\\900\\ch01\\ch01.txt";

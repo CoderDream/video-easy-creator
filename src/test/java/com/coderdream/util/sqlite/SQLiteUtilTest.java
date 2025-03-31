@@ -63,7 +63,7 @@ class SQLiteUtilTest {
     long startTime = System.currentTimeMillis();
     String tableName = "cefr_c1_words";
 
-    String bookFolderName = "CEFR";
+    String bookFolderName = "CefrEnum";
     String folderPath =
       OperatingSystem.getBaseFolder() + File.separator + bookFolderName;
 
@@ -100,7 +100,7 @@ class SQLiteUtilTest {
     long startTime = System.currentTimeMillis();
     String tableName = "c1c2";
 
-    String bookFolderName = "CEFR";
+    String bookFolderName = "CefrEnum";
     String folderPath =
       OperatingSystem.getBaseFolder() + File.separator + bookFolderName;
 

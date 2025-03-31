@@ -19,7 +19,7 @@ public class ITextParagraphExtractor {
       String folderName = "170202";
       String pdfFileName = PdfFileFinder.findPdfFileName(folderName);
       String fileNameWithPath =
-        CommonUtil.getFullPath(folderName) + pdfFileName;
+        CommonUtil.getFullPath(folderName) + File.separator + pdfFileName;
       PdfDocument pdfDoc = new PdfDocument(
         new PdfReader(new File(fileNameWithPath)));
       StringBuilder text = new StringBuilder();

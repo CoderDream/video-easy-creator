@@ -58,7 +58,7 @@ public class HexoDeployer {
     public static void main(String[] args) {
         try {
             // 传入 Hexo 项目的路径并执行命令
-            String folderPath = OperatingSystem.getHexoFolder();
+            String folderPath = OperatingSystem.getGitHubCoderDreamHexoFolder();
             executeHexoCommands(folderPath);
         } catch (IOException | InterruptedException e) {
             log.error("执行命令时发生异常: {}", e.getMessage(), e);

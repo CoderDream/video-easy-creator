@@ -2,6 +2,7 @@ package com.coderdream.util.audio;
 
 import cn.hutool.core.io.FileUtil;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import java.nio.charset.StandardCharsets;
 
 import com.coderdream.util.proxy.OperatingSystem;
@@ -81,24 +82,9 @@ public class AudioMergerUtil {
 
         long endTime = System.currentTimeMillis(); // 记录方法结束时间
         long duration = endTime - startTime;
-        String formattedTime = formatDuration(duration);
+        String formattedTime = CdTimeUtil.formatDuration(duration);
         log.info("WAV 文件合并完成，输出路径为：{}，总耗时：{}", outputFilePath,
                 formattedTime);
-    }
-
-    /**
-     * 格式化耗时为时分秒毫秒
-     *
-     * @param duration 耗时，单位毫秒
-     * @return 格式化的耗时字符串
-     */
-    private static String formatDuration(long duration) {
-        long milliseconds = duration % 1000;
-        long seconds = (duration / 1000) % 60;
-        long minutes = (duration / (1000 * 60)) % 60;
-        long hours = (duration / (1000 * 60 * 60));
-        return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-                milliseconds);
     }
 
     /**

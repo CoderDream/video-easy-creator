@@ -1,6 +1,7 @@
 package com.coderdream.util.audio;
 
 import cn.hutool.core.io.FileUtil;
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.ffmpeg.FfmpegUtil;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -93,7 +94,7 @@ public class AudioFolderDurationUtil4 {
         }
 
        long endTime = System.currentTimeMillis(); // 记录结束时间
-       String elapsedTime = formatElapsedTime(endTime - startTime); // 格式化耗时
+       String elapsedTime = CdTimeUtil.formatDuration(endTime - startTime);
         log.info("音频文件时长列表已创建：{}，耗时：{}", durationFile.getAbsolutePath(), elapsedTime);
         return durationFile;
     }
@@ -127,21 +128,6 @@ public class AudioFolderDurationUtil4 {
             }
         }
         return 0.0; // 如果失败，返回0.0
-    }
-
-
-    /**
-    * 格式化时间差为 时:分:秒.毫秒 格式
-    * @param timeDiffMillis 时间差，单位毫秒
-    * @return 格式化后的时间字符串
-    */
-    private static String formatElapsedTime(long timeDiffMillis) {
-       long totalSeconds = timeDiffMillis / 1000;
-       long hours = totalSeconds / 3600;
-       long minutes = (totalSeconds % 3600) / 60;
-       long seconds = totalSeconds % 60;
-       long milliseconds = timeDiffMillis % 1000;
-        return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
     }
 
 }

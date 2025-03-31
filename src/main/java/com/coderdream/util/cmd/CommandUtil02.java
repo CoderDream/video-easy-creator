@@ -1,5 +1,6 @@
 package com.coderdream.util.cmd;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,7 +33,7 @@ public class CommandUtil02 {
             }
             log.info("命令执行完成: {}", command);
             Duration duration = Duration.between(startTime, LocalDateTime.now());// 计算执行时长
-            String formattedTime = formatDuration(duration);// 格式化时长为时分秒
+            String formattedTime = CdTimeUtil.formatDuration(duration.toMillis());;// 格式化时长为时分秒
             log.info("命令 {} 执行耗时：{}", command, formattedTime); // 记录执行耗时
         } catch (IOException e) {
             log.error("执行命令时发生IO异常: {}", e.getMessage(), e);
@@ -105,18 +106,6 @@ public class CommandUtil02 {
    }
 
 
-    /**
-     * 格式化时长为时分秒
-     *
-     * @param duration 时长
-     * @return 格式化后的时长字符串 HH:mm:ss
-     */
-    private static String formatDuration(Duration duration) {
-        long seconds = duration.getSeconds();
-        long absSeconds = Math.abs(seconds);
-        return String.format("%02d:%02d:%02d",
-                absSeconds / 3600, (absSeconds % 3600) / 60, absSeconds % 60);
-    }
 
     public static void main(String[] args) {
         // Windows specific commands

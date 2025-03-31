@@ -1,6 +1,12 @@
 package com.coderdream.util.translate;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.coderdream.util.bbc.TextTranslatorConstant;
+import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.youtube.YouTubeApiUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,10 +15,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -142,38 +151,234 @@ public class TranslatorTextUtil {
     return result;
   }
 
+//  public static List<String> translatorText(List<String> textList) {
+//    List<String> result = new ArrayList<>();
+//    try {
+//      TranslatorTextUtil translatorTextUtil = new TranslatorTextUtil();
+//
+////      text = text.replace("\n", " ");
+//      // 将textList 转成 String，用\r\n 连接
+//      String text = textList.stream().map(String::valueOf).collect(Collectors.joining("\n"));
+//      text = text.replace("\"", "'");
+//      log.info("请求内容为：{}", text);
+//      String response = translatorTextUtil.process(text);
+//      if (response.contains("error")) {
+//        log.error("错误信息： {}", prettify(response));
+//      }
+//
+//      List<String> contextList = parserTrans(response);
+//      result.addAll(contextList);
+//    } catch (Exception e) {
+//      log.error("异常信息： {}", e.getMessage(), e);
+//    }
+//
+//    return result;
+//  }
+
   public static List<String> translatorText(List<String> textList) {
+    int retryTimes = 10;
+    return translatorText(textList, retryTimes);
+  }
+
+//  public static List<String> translatorText(List<String> textList, int retryTimes) {
+//    List<String> result = new ArrayList<>();
+//    try {
+//      TranslatorTextUtil translatorTextUtil = new TranslatorTextUtil();
+//      String text = textList.stream().map(String::valueOf)
+//        .collect(Collectors.joining("\n"));
+//
+////      text = text.replace("\n", " ");
+//      // 双引号替换成单引号
+//      text = text.replace("\"", "'");
+//      String response = translatorTextUtil.process(text);
+//      if (response.contains("error")) {
+//        log.error("错误信息： {}", prettify(response));
+//      }
+//
+//      result = parserTrans(response);
+//
+//      if (result.size() != textList.size() && retryTimes > 0) {
+//        result = translatorText(textList, --retryTimes);
+//      }
+//    } catch (Exception e) {
+//      log.error("异常信息： {}", e.getMessage(), e);
+//    }
+//
+//    return result;
+//  }
+
+  public static List<String> translatorText(List<String> textList,
+    int retryTimes) {
     List<String> result = new ArrayList<>();
-    try {
-      TranslatorTextUtil translatorTextUtil = new TranslatorTextUtil();
-      String text = textList.stream().map(String::valueOf)
-        .collect(Collectors.joining("\n"));
+    int attempts = 0;
 
-//      text = text.replace("\n", " ");
-      // 双引号替换成单引号
-      text = text.replace("\"", "'");
-      String response = translatorTextUtil.process(text);
-      if (response.contains("error")) {
-        log.error("错误信息： {}", prettify(response));
+    while (attempts <= retryTimes && (result.size()
+      != textList.size())) { //循环条件
+      attempts++;  //每次循环增加一次
+      try {
+        TranslatorTextUtil translatorTextUtil = new TranslatorTextUtil(); //每次都新建，防止util里面有状态
+        String text = textList.stream()
+          .map(String::valueOf)
+          .collect(Collectors.joining("\n"));
+
+        text = text.replace("\"", "'"); // 双引号替换成单引号
+        String response = translatorTextUtil.process(text); //核心操作
+
+        if (response.contains("error")) {
+          log.error("错误信息 (Attempt {}): {}", attempts,
+            prettify(response)); //输出是第几次尝试
+        }
+
+        result = parserTrans2(response); // 赋值result
+        if (result == null) { //parserTrans 返回null需要进行处理
+          result = new ArrayList<>();
+        }
+
+        if (result.size() != textList.size()) {  //条件判断
+          log.warn("翻译结果数量不匹配 (Attempt {}): Expected {}, Actual {}",
+            attempts, textList.size(), result.size());  //输出是第几次尝试
+        } else {
+          log.info("翻译成功 (Attempt {}): 全文 {}", attempts, result);
+          break; // 翻译成功，退出循环
+        }
+
+      } catch (Exception e) {
+        log.error("异常信息 (Attempt {}): {}", attempts, e.getMessage(),
+          e); //输出是第几次尝试
+        result = new ArrayList<>();  //发生异常，清空result，重新retry
       }
+    }
 
-      List<String> contextList = parserTrans(response);
-      result.addAll(contextList);
-    } catch (Exception e) {
-      log.error("异常信息： {}", e.getMessage(), e);
+    if (result.size() != textList.size()) {
+      log.error(
+        "翻译失败: 达到最大重试次数 {}，结果数量仍然不匹配: Expected {}, Actual {}",
+        retryTimes + 1, textList.size(), result.size());  //最终retry失败log
     }
 
     return result;
   }
 
-  public static void main(String[] args) {
-    String content = "Hello, friend! What did you do today? How are you? I am fine.";
-    content = "Should we eat less rice?";
-//    YouTubeApiUtil.enableProxy();
-    List<String> stringList = TranslatorTextUtil.translatorText(content);
-    for (String str : stringList) {
-      System.out.println(str);
+  // 定义 JSON 响应对应的 Java 对象 (可以省略，但为了代码清晰，建议保留)
+  @Data
+  static class TranslationResponse {
+
+    private List<Translation> translations;
+  }
+
+  @Data
+  static class Translation {
+
+    private String text;
+    private String to;
+  }
+
+  // 假设的 parserTrans 方法，使用 HuTool 的 JSONUtil 解析 JSON
+  private static List<String> parserTrans2(String response) {
+    List<String> translatedTexts = new ArrayList<>();
+
+    try {
+      JSONArray responses = JSONUtil.parseArray(
+        response); // 将 JSON 字符串解析为 JSONArray
+
+      for (int i = 0; i < responses.size(); i++) {
+        JSONObject translationResponse = responses.getJSONObject(
+          i); // 获取数组中的每个 JSONObject
+        JSONArray translations = translationResponse.getJSONArray(
+          "translations");  // 获取 "translations" 数组
+
+        for (int j = 0; j < translations.size(); j++) {
+          JSONObject translation = translations.getJSONObject(
+            j); // 获取数组中的每个 JSONObject
+          String text = translation.getStr("text");
+          // 用 \n 分隔，因为可能有多个翻译结果
+          String[] textArray = text.split("\n");
+          // 获取翻译文本
+          translatedTexts.addAll(Arrays.asList(textArray));
+        }
+      }
+
+    } catch (Exception e) {
+      log.error("JSON 解析失败: {}", e.getMessage(), e);
+      return new ArrayList<>(); // 解析失败返回空列表
     }
+
+    return translatedTexts;
+  }
+
+  public static File translationTextFile(String sourceFileName,
+    String zhCnFileName) {
+    if (CdFileUtil.isFileEmpty(sourceFileName)) {
+      log.error("文件为空，不进行翻译: {}", sourceFileName);
+      return null;
+    }
+    if (!CdFileUtil.isFileEmpty(zhCnFileName)) {
+      log.warn("目标文件不为空，不进行翻译: {}", zhCnFileName);
+      return null;
+    }
+
+    List<String> stringList = CdFileUtil.readFileContent(sourceFileName);
+    assert stringList != null;
+    log.info("共计行数: {}", stringList.size());
+    List<String> translatedList = new ArrayList<>();
+    int groupSize = 100;
+    List<List<String>> splitList = ListUtil.split(stringList, groupSize);
+    int i = 0;
+    List<String> tempList;
+    for (List<String> strList : splitList) {
+      i++;
+      int startIndex = (i - 1) * groupSize + 1;
+      int endIndex = i * groupSize;
+      String tempFileName = CdFileUtil.addPostfixToFileName(zhCnFileName,
+        "_" + String.format("%03d", startIndex) + "_" + String.format(
+          "%03d", endIndex));
+      try {
+        if (!CdFileUtil.isFileEmpty(tempFileName)) {
+          tempList = CdFileUtil.readFileContent(tempFileName);
+          assert tempList != null;
+          translatedList.addAll(tempList);
+        } else {
+          tempList = TranslatorTextUtil.translatorText(strList);
+          if (CollectionUtil.isNotEmpty(tempList)) {
+            translatedList.addAll(tempList);
+            CdFileUtil.writeToFile(tempFileName, tempList);
+            Thread.sleep(2000); // 等待一秒，防止过快请求导致被封IP
+          } else {
+            log.error("翻译结果为空，不进行写入: {}", tempFileName);
+            return null;
+          }
+        }
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    if (CollectionUtil.isNotEmpty(translatedList)) {
+      CdFileUtil.writeToFile(zhCnFileName, translatedList);
+    }
+    return new File(zhCnFileName);
+  }
+
+
+  public static void main(String[] args) {
+//    String content = "Hello, friend! What did you do today? How are you? I am fine.";
+//    content = "Should we eat less rice?";
+////    YouTubeApiUtil.enableProxy();
+//    List<String> stringList = TranslatorTextUtil.translatorText(content);
+//    for (String str : stringList) {
+//      System.out.println(str);
+//    }
+
+//    List<String> textList = List.of("Again, he was asked and answered this question this past weekend when he took a lot of questions from the press, and he said that the February 1st date for Canada and Mexico still holds.",
+//      "And what about the China 10 percent tariff that he also had mused about last Tuesday going into effect on the same date?",
+//      "Yeah, the president has said that he is very much still considering that for February 1st.");
+//    int retryTimes = 10;
+//    List<String> translatedList = TranslatorTextUtil.translatorText(textList, retryTimes);
+//
+//    System.out.println("Translated list: " + translatedList);
+    String sourceFileName = "D:\\0000\\0003_PressBriefings\\20250128\\20250128_script.srt";
+    String zhCnFileName = "D:\\0000\\0003_PressBriefings\\20250128\\20250128_script_zhCn.txt";
+    TranslatorTextUtil.translationTextFile(sourceFileName, zhCnFileName);
+
 //
 //        String text = "How are you? I am fine. What did you do today?";
 ////        breakSentence(text);

@@ -1,5 +1,6 @@
 package com.coderdream.util.txt.filter;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -42,7 +43,7 @@ public class TextFileUtil3 {
 
     Instant end = Instant.now();
     Duration duration = Duration.between(start, end);
-    String elapsedTime = formatDuration(duration);
+    String elapsedTime = CdTimeUtil.formatDuration(duration.toMillis());;
     log.info("文件处理耗时：{}", elapsedTime);
     return elapsedTime;
   }
@@ -103,23 +104,6 @@ public class TextFileUtil3 {
 
     return filteredLines;
   }
-
-
-  /**
-   * 格式化时间
-   *
-   * @param duration Duration时间
-   * @return 返回时分秒毫秒
-   */
-  private static String formatDuration(Duration duration) {
-    long hours = duration.toHours();
-    long minutes = duration.toMinutesPart();
-    long seconds = duration.toSecondsPart();
-    long millis = duration.toMillisPart();
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-      millis);
-  }
-
 
   public static void main(String[] args) {
     String sourcePath = "D:\\0000\\EnBook001\\900\\ch003\\ch003_temp.txt";

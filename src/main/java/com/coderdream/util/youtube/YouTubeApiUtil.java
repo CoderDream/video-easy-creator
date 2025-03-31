@@ -23,7 +23,7 @@ import java.util.List;
 public class YouTubeApiUtil {
 
   private static final String APPLICATION_NAME = "YouTube API Example";
-  private static final String API_KEY = CdConstants.GOOGLE_API_KEY;
+  private static final String API_KEY = CdConstants.YOUTUBE_API_KEY;
 
   private static final String PROXY_HOST = "127.0.0.1";
   private static final String PROXY_PORT = "7890";

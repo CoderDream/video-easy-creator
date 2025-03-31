@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class YoutubeThumbnailFetcher {
 
-  private static final String API_KEY = CdConstants.GOOGLE_API_KEY; // 替换为你的 API 密钥
+  private static final String API_KEY = CdConstants.YOUTUBE_API_KEY; // 替换为你的 API 密钥
 //  private static final String VIDEO_ID = "5yjf1RvhflI"; // 示例视频ID
 //  private static final String APPLICATION_NAME = "YoutubeThumbnailFetcher";
 //  private static final String SAVE_DIRECTORY = "thumbnails"; // 保存图片的目录

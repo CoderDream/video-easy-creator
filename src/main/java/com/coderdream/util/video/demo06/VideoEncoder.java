@@ -94,6 +94,7 @@ public class VideoEncoder {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
+                    log.error("{}", line);
                     output.append(line).append(System.lineSeparator());
                 }
             }

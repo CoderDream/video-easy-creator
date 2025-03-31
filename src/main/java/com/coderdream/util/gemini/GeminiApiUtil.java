@@ -1,6 +1,7 @@
 package com.coderdream.util.gemini;
 
 import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdTimeUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
@@ -238,23 +239,6 @@ public class GeminiApiUtil {
     return embeddings;
   }
 
-  /**
-   * 将 Duration 转换为 "HH:mm:ss.SSS" 格式的字符串
-   *
-   * @param duration Duration 对象
-   * @return 格式化后的字符串
-   */
-  private static String formatDuration(Duration duration) {
-    long millis = duration.toMillis();
-    long hours = millis / (3600 * 1000);
-    millis %= (3600 * 1000);
-    long minutes = millis / (60 * 1000);
-    millis %= (60 * 1000);
-    long seconds = millis / 1000;
-    long remainingMillis = millis % 1000;
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-      remainingMillis);
-  }
 
   /**
    * 记录方法执行的耗时，并输出日志
@@ -266,7 +250,7 @@ public class GeminiApiUtil {
     String methodName) {
     LocalDateTime endTime = LocalDateTime.now();
     Duration duration = Duration.between(startTime, endTime);
-    String elapsedTime = formatDuration(duration);
+    String elapsedTime = CdTimeUtil.formatDuration(duration.toMillis());
     log.info("方法 {} 执行完成, 耗时: {}", methodName, elapsedTime);
   }
 

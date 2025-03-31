@@ -1,5 +1,6 @@
 package com.coderdream.util.ollama;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.config.RequestConfig;
@@ -102,7 +103,7 @@ public class OllamaApi {
                     OllamaResponse ollamaResponse = objectMapper.readValue(responseBody, OllamaResponse.class);
                     Instant end = Instant.now();
                     Duration duration = Duration.between(start, end);
-                    String time = formatDuration(duration);
+                    String time = CdTimeUtil.formatDuration(duration.toMillis());
                     log.info("Ollama API call successful. Time taken: {}", time);
                     return ollamaResponse;
                 } else {
@@ -114,21 +115,6 @@ public class OllamaApi {
             log.error("Error calling Ollama API: {}", e.getMessage(), e);
             throw e;
         }
-    }
-
-    /**
-     * 格式化耗时
-     *
-     * @param duration Duration对象
-     * @return 格式化后的字符串
-     */
-    private String formatDuration(Duration duration) {
-        long hours = duration.toHours();
-        long minutes = duration.toMinutesPart();
-        long seconds = duration.toSecondsPart();
-        long millis = duration.toMillisPart();
-
-        return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis);
     }
 
     public static void main(String[] args) {

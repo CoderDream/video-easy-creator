@@ -1,5 +1,6 @@
 package com.coderdream.util.itext5.flyingsaucer;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.itext5.util.PathUtil;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.BaseFont;
@@ -57,7 +58,7 @@ public class JavaToPdfImgHtmlFreeMarker {
     try {
       generatePngFromHtmlWithFreeMarker();
       long endTime = System.nanoTime();
-      String duration = formatDuration(startTime, endTime);
+      String duration = CdTimeUtil.formatDuration(endTime - startTime);
       log.info("PNG 图片生成完成， 耗时：{}", duration);
     } catch (Exception e) {
       log.error("生成 PNG 图片时发生错误:", e);
@@ -192,21 +193,5 @@ public class JavaToPdfImgHtmlFreeMarker {
     }
 
     return out;
-  }
-  /**
-   * 计算并格式化方法耗时.
-   *
-   * @param startTime 开始时间（纳秒）
-   * @param endTime   结束时间（纳秒）
-   * @return 格式化后的耗时字符串 (HH:mm:ss.SSS)
-   */
-  private static String formatDuration(long startTime, long endTime) {
-    long durationNano = endTime - startTime;
-    long durationMillis = TimeUnit.NANOSECONDS.toMillis(durationNano);
-    long hours = TimeUnit.MILLISECONDS.toHours(durationMillis);
-    long minutes = TimeUnit.MILLISECONDS.toMinutes(durationMillis) % 60;
-    long seconds = TimeUnit.MILLISECONDS.toSeconds(durationMillis) % 60;
-    long millis = durationMillis % 1000;
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis);
   }
 }

@@ -1,5 +1,6 @@
 package com.coderdream.util.txt.doubao;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -54,11 +55,7 @@ public class DoubaoTextFileProcessor2 {
         }
         Instant end = Instant.now();
         Duration duration = Duration.between(start, end);
-        long hours = duration.toHours();
-        long minutes = duration.toMinutes() % 60;
-        long seconds = duration.getSeconds() % 60;
-        long millis = duration.toMillis() % 1000;
-        return String.format("%02d:%02d:%02d:%03d", hours, minutes, seconds, millis);
+        return CdTimeUtil.formatDuration(duration.toMillis());
     }
 
     /**

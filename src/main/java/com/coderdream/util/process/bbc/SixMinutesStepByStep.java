@@ -1,7 +1,9 @@
 package com.coderdream.util.process.bbc;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import com.coderdream.entity.SubtitleEntity;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.CommonUtil;
@@ -111,37 +113,6 @@ public class SixMinutesStepByStep {
       log.info("文件已存在: {}", fullVocFileName);
     }
 
-    // Step08: 生成 script_dialog_new2.txt
-    String scriptDialogNew2FileName = CommonUtil.getFullPathFileName(folderName,
-      "script_dialog_new2",
-      CdConstants.TXT_EXTENSION);
-
-    if (CdFileUtil.isFileEmpty(scriptDialogNew2FileName)) {
-      int begin = 5;
-      if (folderName.startsWith("24") || folderName.startsWith("25")) {
-        begin = 3;
-      }
-      // 读取原文件内容并删除前四行和最后一行
-      List<String> lines = FileUtil.readLines(scriptDialogNewFileName,
-        StandardCharsets.UTF_8);
-
-      // 检查文件是否为空
-      if (lines.size() > begin + 1) {
-        List<String> newLines = lines.subList(begin, lines.size() - 1);
-        // 将修改后的内容写入新文件
-        File file = FileUtil.writeLines(newLines, scriptDialogNew2FileName,
-          StandardCharsets.UTF_8);
-
-        log.info("文件不存在或为空，已生成新文件: {}", file.getAbsolutePath());
-      } else {
-        System.out.println(
-          scriptDialogNewFileName + " 文件内容少于5行，无需处理。");
-        return;
-      }
-    } else {
-      log.info("文件已存在: {}", fullVocFileName);
-    }
-
     String mp3FileName = "";
     String folderPath = CommonUtil.getFullPath(folderName);
     List<String> fileNames = FileUtil.listFileNames(folderPath);
@@ -224,6 +195,48 @@ public class SixMinutesStepByStep {
         endTime);
     } else {
       log.info("文件已存在: {}", mp3FileNameFullNew);
+    }
+
+
+
+    // Step08: 生成 script_dialog_new2.txt
+    String scriptDialogNew2FileName = CommonUtil.getFullPathFileName(folderName,
+      "script_dialog_new2",
+      CdConstants.TXT_EXTENSION);
+
+    if (CdFileUtil.isFileEmpty(scriptDialogNew2FileName)) {
+
+      // 读取原文件内容并删除前四行和最后一行
+      List<String> lines = new ArrayList<>();
+      List<SubtitleEntity> subtitleEntityList = CdFileUtil.readSrtFileContent(srtEngRawFileName);
+      if(CollectionUtil.isNotEmpty(subtitleEntityList)) {
+        boolean isSubtitle = false;
+        for (SubtitleEntity subtitleEntity : subtitleEntityList) {
+          if(subtitleEntity.getTimeStr().startsWith(split[1])){
+            isSubtitle = true;
+          }
+          if(isSubtitle){
+            lines.add(subtitleEntity.getSubtitle());
+          }
+        }
+      }
+      // lines移除最后一项
+      lines.remove(lines.size() - 1);
+
+      // 检查文件是否为空
+      if (!lines.isEmpty()) {
+        // 将修改后的内容写入新文件
+        File file = FileUtil.writeLines(lines, scriptDialogNew2FileName,
+          StandardCharsets.UTF_8);
+
+        log.info("文件不存在或为空，已生成新文件: {}", file.getAbsolutePath());
+      } else {
+        System.out.println(
+          scriptDialogNewFileName + " 文件内容少于5行，无需处理。");
+        return;
+      }
+    } else {
+      log.info("文件已存在: {}", fullVocFileName);
     }
 
     // 5. 生成字幕文件 eng.srt

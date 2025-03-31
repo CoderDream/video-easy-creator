@@ -2,10 +2,14 @@ package com.coderdream.util.sqlite;
 
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
+import com.coderdream.entity.CefrWordEntity;
 import com.coderdream.entity.WordEntity;
+import com.coderdream.entity.WordLemmaEntity;
+import com.coderdream.util.cd.CdTimeUtil;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
-import lombok.Data;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -51,7 +55,7 @@ public class SQLiteUtil {
     if (isTableExist(tableName)) {
       log.warn("表 {} 已经存在，跳过创建。", tableName);
       stopWatch.stop();
-      return "表 " + tableName + " 已经存在，跳过创建。耗时：" + formatElapsedTime(
+      return "表 " + tableName + " 已经存在，跳过创建。耗时：" + CdTimeUtil.formatDuration(
         stopWatch.getTime(TimeUnit.MILLISECONDS));
     }
 
@@ -82,7 +86,7 @@ public class SQLiteUtil {
       stopWatch.stop();
       log.info("创建表 {} 结束", tableName);
     }
-    return formatElapsedTime(stopWatch.getTime(TimeUnit.MILLISECONDS));
+    return CdTimeUtil.formatDuration(stopWatch.getTime(TimeUnit.MILLISECONDS));
   }
 
   /**
@@ -104,31 +108,15 @@ public class SQLiteUtil {
   }
 
   /**
-   * 格式化耗时时间
+   * 从 Markdown 文件读取数据并写入 SQLite 数据库。 假设 Markdown 文件格式是标准的表格格式，并按照固定顺序解析数据。
+   * 忽略表头。 如果遇到重复数据，则更新已有的数据。
    *
-   * @param milliseconds 毫秒数
-   * @return 格式化后的时间字符串
-   */
-  private static String formatElapsedTime(long milliseconds) {
-    long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
-    long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) % 60;
-    long seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) % 60;
-    long millis = milliseconds % 1000;
-    return String.format("%02dh %02dm %02ds %03dms", hours, minutes, seconds,
-      millis);
-  }
-
-  /**
-   * 从 Markdown 文件读取数据并写入 SQLite 数据库。
-   * 假设 Markdown 文件格式是标准的表格格式，并按照固定顺序解析数据。
-   * 忽略表头。
-   * 如果遇到重复数据，则更新已有的数据。
-   *
-   * @param tableName       表名
+   * @param tableName        表名
    * @param markdownFilePath Markdown 文件路径
    * @return 导入结果描述
    */
-  public static String importDataFromMarkdown(String tableName, String markdownFilePath) {
+  public static String importDataFromMarkdown(String tableName,
+    String markdownFilePath) {
     StopWatch stopWatch = new StopWatch();
     stopWatch.start();
     log.info("开始从 Markdown 文件导入数据到表: {}", tableName);
@@ -147,10 +135,12 @@ public class SQLiteUtil {
       }
 
       // 使用 INSERT OR REPLACE 语句, 如果 headword 和 pos 已经存在，则更新数据
-      String insertOrReplaceSql = "INSERT OR REPLACE INTO " + tableName + " (headword,pos,CEFR,chineseDefinition,example,phonetic,exampleTranslation) VALUES (?,?,?,?,?,?,?)";
+      String insertOrReplaceSql = "INSERT OR REPLACE INTO " + tableName
+        + " (headword,pos,CEFR,chineseDefinition,example,phonetic,exampleTranslation) VALUES (?,?,?,?,?,?,?)";
       log.debug("SQL: {}", insertOrReplaceSql);
 
-      try (PreparedStatement pstmt = conn.prepareStatement(insertOrReplaceSql)) {
+      try (PreparedStatement pstmt = conn.prepareStatement(
+        insertOrReplaceSql)) {
         conn.setAutoCommit(false); // 开启事务
         int batchSize = 100;
         int count = 0;
@@ -194,19 +184,88 @@ public class SQLiteUtil {
       stopWatch.stop();
       log.info("从 Markdown 文件导入数据到表 {} 结束", tableName);
     }
-    return formatElapsedTime(stopWatch.getTime(TimeUnit.MILLISECONDS));
+    return CdTimeUtil.formatDuration(stopWatch.getTime(TimeUnit.MILLISECONDS));
   }
 
   /**
-   * 从 Markdown 文件中读取数据，解析表格内容，忽略表头和非表格内容。
-   * 按照固定的列顺序读取数据，不再依赖表头信息。
-   * 使用 WordInfo 对象封装数据 (英文属性)
+   * 从 Markdown 文件读取数据并写入 SQLite 数据库。 假设 Markdown 文件格式是标准的表格格式，并按照固定顺序解析数据。
+   * 忽略表头。 如果遇到重复数据，则更新已有的数据。
+   *
+   * @param wordLemmaDataMap 单词和词根数据映射
+   * @return 导入结果描述
+   */
+  public static String importWordLemmaDataFromMap(
+    Map<String, String> wordLemmaDataMap) {
+    String tableName = "word_lemma";
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+    log.info("开始从 wordLemmaDataMap 导入数据到表: {}", tableName);
+
+    try (Connection conn = DriverManager.getConnection(DB_URL)) {
+//      List<WordInfo> data = readDataFromMarkdown(markdownFilePath);
+      if (wordLemmaDataMap == null || wordLemmaDataMap.isEmpty()) {
+        log.warn("Markdown 文件中没有数据: {}", wordLemmaDataMap);
+        return "Markdown 文件中没有数据";
+      }
+
+      // 使用 INSERT OR REPLACE 语句, 如果 headword 和 pos 已经存在，则更新数据
+      String insertOrReplaceSql = "INSERT OR REPLACE INTO " + tableName
+        + " (word,lemma) VALUES (?,?)";
+      log.debug("SQL: {}", insertOrReplaceSql);
+
+      try (PreparedStatement pstmt = conn.prepareStatement(
+        insertOrReplaceSql)) {
+        conn.setAutoCommit(false); // 开启事务
+        int batchSize = 100;
+        int count = 0;
+        for (Map.Entry<String, String> entry : wordLemmaDataMap.entrySet()) {
+        //for (  : wordLemmaDataMap.entrySet()) {
+          int columnIndex = 1;
+          pstmt.setString(columnIndex++, entry.getKey());
+          pstmt.setString(columnIndex++, entry.getValue());
+
+          pstmt.addBatch();
+          count++;
+          if (count % batchSize == 0) {
+            pstmt.executeBatch();
+            conn.commit();
+            log.info("已提交 {} 条数据", count);
+          }
+        }
+
+        pstmt.executeBatch(); // 提交剩余的数据
+        conn.commit(); // 提交事务
+        log.info("数据从 Markdown 文件成功导入到表: {}", tableName);
+
+      } catch (SQLException e) {
+        conn.rollback();
+        log.error("插入/更新数据失败，事务已回滚: {}", e.getMessage(), e);
+        return "从 Markdown 文件导入数据失败: " + e.getMessage();
+      } finally {
+        conn.setAutoCommit(true); // 恢复自动提交
+      }
+
+    } catch (Exception e) {
+      log.error("从 Markdown 文件导入数据到表 {} 失败: {}", tableName,
+        e.getMessage(), e);
+      return "从 Markdown 文件导入数据失败: " + e.getMessage();
+    } finally {
+      stopWatch.stop();
+      log.info("从 Markdown 文件导入数据到表 {} 结束", tableName);
+    }
+    return CdTimeUtil.formatDuration(stopWatch.getTime(TimeUnit.MILLISECONDS));
+  }
+
+  /**
+   * 从 Markdown 文件中读取数据，解析表格内容，忽略表头和非表格内容。 按照固定的列顺序读取数据，不再依赖表头信息。 使用 WordInfo
+   * 对象封装数据 (英文属性)
    *
    * @param markdownFilePath Markdown 文件路径
    * @return 解析后的 WordInfo 对象列表
    * @throws IOException 读取文件失败时抛出
    */
-  public static List<WordInfo> readDataFromMarkdown(String markdownFilePath) throws IOException {
+  public static List<WordInfo> readDataFromMarkdown(String markdownFilePath)
+    throws IOException {
     List<String> lines = Files.readAllLines(Paths.get(markdownFilePath));
     List<WordInfo> data = new ArrayList<>();
 
@@ -218,7 +277,8 @@ public class SQLiteUtil {
 
       // 1. 跳过表头 (只跳过一次)
       if (!headerSkipped) {
-        if (dataLine.startsWith("|") && dataLine.endsWith("|") && StringUtils.countMatches(dataLine, "|") >= 7) {
+        if (dataLine.startsWith("|") && dataLine.endsWith("|")
+          && StringUtils.countMatches(dataLine, "|") >= 7) {
           log.debug("跳过表头行: {}", dataLine);
           headerSkipped = true; // 设置标记
           continue; // 跳过该行
@@ -229,7 +289,8 @@ public class SQLiteUtil {
       }
 
       // 2. 确保数据行以 "|" 分隔符开始和结束，并且包含至少 6 个 "|" (因为有 7 列)
-      if (dataLine.startsWith("|") && dataLine.endsWith("|") && StringUtils.countMatches(dataLine, "|") >= 7) {
+      if (dataLine.startsWith("|") && dataLine.endsWith("|")
+        && StringUtils.countMatches(dataLine, "|") >= 7) {
 
         // 3. 跳过分割线
         if (isSeparatorLine(dataLine)) {
@@ -254,7 +315,8 @@ public class SQLiteUtil {
           wordInfo.setExampleTranslation(values.get(6));
           data.add(wordInfo);
         } else {
-          log.warn("数据行 {} 列数不正确，跳过该行， 在 {} 文件中：", dataLine, markdownFilePath);
+          log.warn("数据行 {} 列数不正确，跳过该行， 在 {} 文件中：", dataLine,
+            markdownFilePath);
         }
       } else {
         log.debug("非表格数据行，跳过: {}", dataLine);
@@ -351,7 +413,7 @@ public class SQLiteUtil {
       stopWatch.stop();
       log.info("从 Excel 文件导入数据到表 {} 结束", tableName);
     }
-    return formatElapsedTime(stopWatch.getTime(TimeUnit.MILLISECONDS));
+    return CdTimeUtil.formatDuration(stopWatch.getTime(TimeUnit.MILLISECONDS));
   }
 
   /**
@@ -398,6 +460,74 @@ public class SQLiteUtil {
     }
 
     return wordList;
+  }
+
+  /**
+   * 从 SQLite 数据库读取数据到 WordEntity 对象列表
+   *
+   * @return WordEntity 对象列表
+   */
+  public static List<CefrWordEntity> getAllCefrWords(String tableName) {
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+    List<CefrWordEntity> wordList = new ArrayList<>();
+    log.info("开始从表 {} 读取数据到 WordEntity 对象列表", tableName);
+
+    try {
+      // 尝试加载 SQLite JDBC 驱动程序（通常不需要）
+      Class.forName("org.sqlite.JDBC");
+
+      try (Connection conn = DriverManager.getConnection(DB_URL);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM " + tableName)) {
+
+        while (rs.next()) {
+          fillCefrWordEntity(rs, wordList);
+        }
+        log.info("成功从表 {} 读取 {} 条数据到 WordEntity 对象列表", tableName,
+          wordList.size());
+
+      } catch (SQLException e) {
+        log.error("从表 {} 读取数据失败: {}", tableName, e.getMessage(), e);
+        return null; // 或者抛出异常
+      }
+    } catch (ClassNotFoundException e) {
+      log.error("找不到 SQLite JDBC 驱动程序: {}", e.getMessage(), e);
+      return null;
+    } finally {
+      stopWatch.stop();
+      log.info("从表 {} 读取数据到 WordEntity 对象列表结束", tableName);
+    }
+
+    return wordList;
+  }
+
+
+  private static void fillWordLemmaEntity(ResultSet rs,
+    List<WordLemmaEntity> wordList)
+    throws SQLException {
+    WordLemmaEntity wordLemmaEntity = new WordLemmaEntity();
+    wordLemmaEntity.setWord(rs.getString("word"));
+    wordLemmaEntity.setLemma(rs.getString("lemma"));
+    wordList.add(wordLemmaEntity);
+  }
+
+  private static void fillCefrWordEntity(ResultSet rs,
+    List<CefrWordEntity> wordList)
+    throws SQLException {
+    CefrWordEntity cefrWordEntity = new CefrWordEntity();
+    cefrWordEntity.setId(rs.getInt("id"));
+    cefrWordEntity.setHeadword(rs.getString("headword"));
+    cefrWordEntity.setEnglishPhonetic(rs.getString("english_phonetic"));
+    cefrWordEntity.setAmericanPhonetic(rs.getString("american_phonetic"));
+    cefrWordEntity.setPos(rs.getString("pos"));
+    cefrWordEntity.setCefr(rs.getString("cefr"));
+    cefrWordEntity.setChineseDefinition(rs.getString("chinese_definition"));
+    cefrWordEntity.setExample(rs.getString("example"));
+    cefrWordEntity.setExamplePhonetic(rs.getString("example_phonetic"));
+    cefrWordEntity.setExampleTranslation(rs.getString("example_translation"));
+    cefrWordEntity.setLevel(rs.getInt("level"));
+    wordList.add(cefrWordEntity);
   }
 
   /**
@@ -454,10 +584,172 @@ public class SQLiteUtil {
     } finally {
       stopWatch.stop();
       log.info("从词汇总表中查询单词结束，耗时: {}",
-        formatElapsedTime(stopWatch.getTime(TimeUnit.MILLISECONDS)));
+        CdTimeUtil.formatDuration(stopWatch.getTime(TimeUnit.MILLISECONDS)));
     }
 
     return wordList;
+  }
+
+  /**
+   * 根据提供的单词列表，从词汇总表中查询对应的记录。 使用 PreparedStatement 和 动态 IN 子句，避免 SQL 注入，提高效率。
+   *
+   * @param words 要查询的单词列表
+   * @return 包含查询结果的 WordEntity 对象列表, 如果出错返回null
+   */
+  public static List<CefrWordEntity> findCefrWordList(List<String> words) {
+    if (words == null || words.isEmpty()) {
+      log.warn("单词列表为空，不执行查询。");
+      return Collections.emptyList(); // 返回空列表，而不是 null
+    }
+
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+    List<CefrWordEntity> wordList = new ArrayList<>();
+    log.info("开始从词汇总表中查询单词...");
+
+    // 1. 动态构建 IN 子句的占位符 (?, ?, ?, ...)
+//    String placeholders = String.join(",",
+//      Collections.nCopies(words.size(), "?"));
+//    String placeholders = String.join(",", words);
+
+    // 2. 构建完整的 SQL 语句
+//    String sql = "SELECT * FROM cefr_total_words WHERE headword IN (" + placeholders + ") order by level asc";
+//    String sql = "SELECT * "
+//      + "FROM cefr_total_words "
+//      + "WHERE headword IN (" + placeholders + ") "
+//      + "AND rowid IN (SELECT MIN(rowid)\n"
+//      + "                FROM cefr_total_words\n"
+//      + "                WHERE headword IN (" + placeholders + ") "
+//      + "                GROUP BY headword) "
+//      + "ORDER BY level ASC;";
+//
+//    String placeholders = words.stream()
+//      .map(s -> "?")
+//      .collect(Collectors.joining(", "));
+
+    String sql = buildSql(words);
+
+    log.error("SQL: {}", sql);
+
+    try (Connection conn = DriverManager.getConnection(DB_URL);
+      // 3. 创建 PreparedStatement
+      PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      // 4. 设置参数 (将单词列表中的每个单词设置为参数)
+//      for (int i = 0; i < words.size(); i++) {
+//        pstmt.setString(i + 1, words.get(i)); // 注意：参数索引从 1 开始
+//      }
+
+      // 5. 执行查询
+      try (ResultSet rs = pstmt.executeQuery()) {
+        while (rs.next()) {
+          fillCefrWordEntity(rs, wordList);
+        }
+      }
+      log.info("从词汇总表中查询到 {} 条记录", wordList.size());
+    } catch (SQLException e) {
+      log.error("从词汇总表中查询单词失败: {}", e.getMessage(), e);
+      return null; // 或者抛出自定义异常, 由调用者决定
+    } finally {
+      stopWatch.stop();
+      log.info("从词汇总表中查询单词结束，耗时: {}",
+        CdTimeUtil.formatDuration(stopWatch.getTime(TimeUnit.MILLISECONDS)));
+    }
+
+    return wordList;
+  }
+
+  public static String buildSql(List<String> words) {
+    // 使用StringBuilder构建SQL语句
+    StringBuilder sqlBuilder = new StringBuilder();
+    sqlBuilder.append("SELECT * FROM cefr_total_words WHERE headword IN (");
+
+    // 构建headword的IN子句，并处理特殊字符
+    String inClause = words.stream()
+      .map(word -> "'" + escapeSql(word) + "'") // 包裹单引号并转义特殊字符
+      .collect(Collectors.joining(", "));
+
+    sqlBuilder.append(inClause);
+    sqlBuilder.append(") AND rowid IN (SELECT MIN(rowid) FROM cefr_total_words WHERE headword IN (");
+    sqlBuilder.append(inClause); // 复用 inClause
+    sqlBuilder.append(") GROUP BY headword) ORDER BY level ASC;");
+
+    return sqlBuilder.toString();
+  }
+
+  /**
+   * 根据提供的单词列表，从词汇总表中查询对应的记录。 使用 PreparedStatement 和 动态 IN 子句，避免 SQL 注入，提高效率。
+   *
+   * @param words 要查询的单词列表
+   * @return 包含查询结果的 WordEntity 对象列表, 如果出错返回null
+   */
+  public static Map<String, String> findWordLemmaList(List<String> words) {
+    if (words == null || words.isEmpty()) {
+      log.warn("单词列表为空，不执行查询。");
+      return null; // 返回空列表，而不是 null
+    }
+
+    StopWatch stopWatch = new StopWatch();
+    stopWatch.start();
+    List<WordLemmaEntity> wordLemmaEntityList = new ArrayList<>();
+    log.info("开始从词汇总表中查询单词...");
+
+    String sql = buildSqlForWordLemma(words);
+
+    log.error("SQL: {}", sql);
+
+    try (Connection conn = DriverManager.getConnection(DB_URL);
+      // 3. 创建 PreparedStatement
+      PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+      // 4. 设置参数 (将单词列表中的每个单词设置为参数)
+//      for (int i = 0; i < words.size(); i++) {
+//        pstmt.setString(i + 1, words.get(i)); // 注意：参数索引从 1 开始
+//      }
+
+      // 5. 执行查询
+      try (ResultSet rs = pstmt.executeQuery()) {
+        while (rs.next()) {
+          fillWordLemmaEntity(rs, wordLemmaEntityList);
+        }
+      }
+      log.info("从词汇总表中查询到 {} 条记录", wordLemmaEntityList.size());
+    } catch (SQLException e) {
+      log.error("从词汇总表中查询单词失败: {}", e.getMessage(), e);
+      return null; // 或者抛出自定义异常, 由调用者决定
+    } finally {
+      stopWatch.stop();
+      log.info("从词汇总表中查询单词结束，耗时: {}",
+        CdTimeUtil.formatDuration(stopWatch.getTime(TimeUnit.MILLISECONDS)));
+    }
+
+    Map<String, String> wordLemmaMap = new HashMap<>();
+    for (WordLemmaEntity wordLemmaEntity : wordLemmaEntityList) {
+      wordLemmaMap.put(wordLemmaEntity.getWord(), wordLemmaEntity.getLemma());
+    }
+
+    return wordLemmaMap;
+  }
+
+  public static String buildSqlForWordLemma(List<String> words) {
+    // 使用StringBuilder构建SQL语句
+    StringBuilder sqlBuilder = new StringBuilder();
+    sqlBuilder.append("SELECT * FROM word_lemma WHERE word IN (");
+
+    // 构建headword的IN子句，并处理特殊字符
+    String inClause = words.stream()
+      .map(word -> "'" + escapeSql(word) + "'") // 包裹单引号并转义特殊字符
+      .collect(Collectors.joining(", "));
+
+    sqlBuilder.append(inClause);
+    sqlBuilder.append(") ORDER BY word ASC;");
+
+    return sqlBuilder.toString();
+  }
+
+  // 转义SQL字符串中的特殊字符
+  private static String escapeSql(String word) {
+    return word.replace("'", "''"); // 将单引号替换为两个单引号，这是SQLite中的转义方式
   }
 
   /**
@@ -468,7 +760,7 @@ public class SQLiteUtil {
   public static void main(String[] args) {
     //  initData();
     String tableName = "cefr_c1_words";
-    String markdownFilePath = "D:/0000/CEFR/gemini_output_001.md";
+    String markdownFilePath = "D:/0000/CefrEnum/gemini_output_001.md";
 
     // 1. 创建表
     String createTableTime = createTable(tableName);

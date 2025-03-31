@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class YoutubeChannelInfo {
 
-  private static final String API_KEY = CdConstants.GOOGLE_API_KEY;
+  private static final String API_KEY = CdConstants.YOUTUBE_API_KEY;
   private static final String CHANNEL_USERNAME = null; // 设置为 null 或 ""
   private static final String CHANNEL_ID = "UCKVqsG3eQsbUiJirkeJnsyQ"; // 替换为正确的频道 ID https://www.youtube.com/channel/UCKVqsG3eQsbUiJirkeJnsyQ
   private static final String APPLICATION_NAME = "YoutubeChannelInfo";

@@ -1,5 +1,6 @@
 package com.coderdream.util.hexo;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -102,7 +103,7 @@ public class CmdUtil4 {
         // 记录结束时间并计算耗时
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
-        String formattedTime = formatDuration(duration);  // 格式化耗时为时分秒
+        String formattedTime = CdTimeUtil.formatDuration(duration);;  // 格式化耗时为时分秒
 
         if (exitCode == 0) {
             log.info("{} 执行成功，执行时间: {}", stepDescription, formattedTime);
@@ -111,16 +112,4 @@ public class CmdUtil4 {
         }
     }
 
-    /**
-     * 格式化毫秒为时分秒格式
-     *
-     * @param duration 耗时（毫秒）
-     * @return 格式化后的时间（时分秒）
-     */
-    private static String formatDuration(long duration) {
-        long hours = duration / (1000 * 60 * 60);
-        long minutes = (duration % (1000 * 60 * 60)) / (1000 * 60);
-        long seconds = (duration % (1000 * 60)) / 1000;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-    }
 }

@@ -1,5 +1,6 @@
 package com.coderdream.util.cmd;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,7 +39,7 @@ public class CommandUtil {
                 System.out.println(line);
             }
             Duration duration = Duration.between(startTime, LocalDateTime.now());
-            String formattedTime = formatDuration(duration);
+            String formattedTime = CdTimeUtil.formatDuration(duration.toMillis());
             log.info("命令执行完成，执行耗时：{}", formattedTime);
         } catch (IOException e) {
             log.error("执行命令时发生IO异常: {}", e.getMessage(), e);
@@ -94,19 +95,6 @@ public class CommandUtil {
         } else {
             return Charset.defaultCharset();
         }
-    }
-
-    /**
-     * 格式化时长为时分秒
-     *
-     * @param duration 时长
-     * @return 格式化后的时长字符串 HH:mm:ss
-     */
-    private static String formatDuration(Duration duration) {
-        long seconds = duration.getSeconds();
-        long absSeconds = Math.abs(seconds);
-        return String.format("%02d:%02d:%02d",
-                absSeconds / 3600, (absSeconds % 3600) / 60, absSeconds % 60);
     }
 
     /**

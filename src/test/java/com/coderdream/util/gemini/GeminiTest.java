@@ -1,6 +1,7 @@
 package com.coderdream.util.gemini;
 
 import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.cd.CdTimeUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
@@ -426,9 +427,6 @@ public class GeminiTest {
    */
   private String getDuration(LocalDateTime startTime, LocalDateTime endTime) {
     Duration duration = Duration.between(startTime, endTime);
-    long hours = duration.toHours();
-    long minutes = duration.toMinutesPart();
-    long seconds = duration.toSecondsPart();
-    return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    return CdTimeUtil.formatDuration(duration.toMillis());
   }
 }

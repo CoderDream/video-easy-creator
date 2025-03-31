@@ -1,39 +1,33 @@
 package com.coderdream.util.process;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.coderdream.util.proxy.OperatingSystem;
-import java.io.File;
 import org.junit.jupiter.api.Test;
 
 class PrepareForMakeVideoUtilTest {
 
   @Test
   void processForSixMinutes() {
-    String folderName = "170525";
+    String folderName = "170622";
     PrepareForMakeVideoUtil.processForSixMinutes(folderName);
   }
 
   @Test
   void processForSixMinutesFromTodo() {
-    String folderName = "250320";
+    String folderName = "250220";
     PrepareForMakeVideoUtil.processForSixMinutes(folderName);
   }
 
   @Test
   void processYoutubeFromTodo_0003() {
     String typeName = "0003_PressBriefings";
-    String folderName = "20250319";
+    String folderName = "20250326";
     PrepareForMakeVideoUtil.processYoutube(typeName, folderName);
   }
-
 
   @Test
   void processYoutubeFromTodo_0008() {
     String typeName = "0008_DailyNews";
-    String folderName = "20250314";
+    String folderName = "20250321";
     PrepareForMakeVideoUtil.processYoutube(typeName, folderName);
   }
-
 
 }

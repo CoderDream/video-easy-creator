@@ -12,7 +12,7 @@ import java.util.List;
 
 public class YoutubeThumbnailFetcher02 {
 
-    private static final String API_KEY = CdConstants.GOOGLE_API_KEY; // 替换为你的 API 密钥
+    private static final String API_KEY = CdConstants.YOUTUBE_API_KEY; // 替换为你的 API 密钥
     private static final String VIDEO_ID = "5yjf1RvhflI"; // 示例视频ID
     private static final String APPLICATION_NAME = "YoutubeThumbnailFetcher";
 

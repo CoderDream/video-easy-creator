@@ -126,26 +126,7 @@ public class CdMP3SplitterUtil {
 
         Instant end = Instant.now();
         Duration duration = Duration.between(start, end);
-        long seconds = duration.getSeconds();
-        long minutes = seconds / 60;
-        long hours = minutes / 60;
-        // 毫秒
-//        long remainingMillis = (duration % 1000) / 1000;
-//
-//        System.out.println(hours + "小时 " + minutes % 60 + "分 " + remainingSeconds + "秒 " + remainingMillis + "毫秒");
-//        String formattedTime = String.format("%02d:%02d:%02d", hours, minutes % 60, seconds % 60);
-//        log.info("视频文件合并完成，耗时: {}", formattedTime);
-
-//        long hours = seconds / 3600;
-        long remainingSeconds = seconds % 3600;
-//        long minutes = remainingSeconds / 60;
-
-        long remainingMillis = duration.toMillis() % 1000;
-        System.out.println(hours + "小时 " + minutes + "分 " + remainingSeconds + "秒 " + remainingMillis + "毫秒");
-        System.out.println(hours + "小时 " + minutes + "分 " + remainingSeconds + "秒 " + remainingMillis + "毫秒");
-        log.info("命令执行完成，耗时: {} 小时 {}分 {} 秒 {} 毫秒", hours, minutes, remainingSeconds, remainingMillis);
-
-        return duration.toString();
+        return CdTimeUtil.formatDuration(duration.toMillis());
     }
 
 //    public static void splitMP3(String inputFile, String outputFile, String startTime, String endTime) throws IOException, InterruptedException {

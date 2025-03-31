@@ -1,5 +1,6 @@
 package com.coderdream.util.audio;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class WavMerger02 {
     executeFfmpegMerge(fileListPath.toString(), outputFilePath);
 
     long elapsedTime = System.currentTimeMillis() - startTime;
-    String duration = formatDuration(elapsedTime);
+    String duration = CdTimeUtil.formatDuration(elapsedTime);
     log.info("WAV 文件合并完成，耗时：{}", duration);
 
     return duration;
@@ -133,22 +134,6 @@ public class WavMerger02 {
       throw new IOException("执行 FFmpeg 命令时发生中断", e);
     }
   }
-
-  /**
-   * 格式化毫秒数为 时:分:秒.毫秒 格式。
-   *
-   * @param millis 毫秒数
-   * @return 格式化后的字符串
-   */
-  private static String formatDuration(long millis) {
-    long hours = TimeUnit.MILLISECONDS.toHours(millis);
-    long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60;
-    long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60;
-    long milliseconds = millis % 1000;
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-      milliseconds);
-  }
-
 
   public static void main(String[] args) {
     // 示例用法

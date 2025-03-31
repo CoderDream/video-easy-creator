@@ -73,6 +73,52 @@ public class GeminiApiClient {
   }
 
   /**
+   * 调用 Gemini API 生成内容
+   *
+   * @param prompt 用户输入的提示文本
+   * @return Gemini API 返回的结果文本，或者错误信息
+   */
+  public static String generateRawContent(String prompt) {
+    Instant startTime = Instant.now();
+    JSONObject requestBody = buildRequestBody(prompt);
+    try {
+      String result = HttpUtil.httpHutoolPost(URL, requestBody.toString(),
+        CdConstants.PROXY_HOST,
+        OperatingSystem.getProxyPort());
+//            log.info("{}", result);
+//      // 使用 Hutool 将 JSON 字符串解析为对象
+//      JSONObject resultObject = JSONUtil.parseObj(result);
+//      // 将 JSON 数据转换为 GeminiApiResponse 实体类
+//      GeminiApiResponse response = resultObject.toBean(GeminiApiResponse.class);
+//
+//      // 打印结果验证
+//      log.info("响应内容: {} ", response.toString());
+//      log.info("模型版本号: {} ", response.getModelVersion());
+//      log.info("候选结果数量: {} ", response.getCandidates().size());
+//      log.info("第一条内容: {} ",
+//        response.getCandidates().get(0).getContent().getParts().get(0)
+//          .getText());
+//      result = response.getCandidates().get(0).getContent().getParts().get(0)
+//        .getText();
+      Instant endTime = Instant.now();
+      long duration = Duration.between(startTime, endTime).toMillis();
+//            log.info("Gemini API 调用成功，耗时: {}, 结果: {}",
+//                    CdDateUtil.formatDurationHMSS(duration), result);
+      log.info("Gemini API 调用成功，耗时: {}",
+        CdDateUtil.formatDurationHMSS(duration));
+      return result;
+    } catch (Exception e) {
+      Instant endTime = Instant.now();
+      long duration = Duration.between(startTime, endTime).toMillis();
+      String errorMessage = String.format(
+        "Gemini API 调用发生异常，耗时: %s, 异常信息: %s",
+        CdDateUtil.formatDurationHMSS(duration), e.getMessage());
+      log.error(errorMessage, e);
+      return errorMessage;
+    }
+  }
+
+  /**
    * 构造 Gemini API 的请求体
    *
    * @param prompt 用户提示文本

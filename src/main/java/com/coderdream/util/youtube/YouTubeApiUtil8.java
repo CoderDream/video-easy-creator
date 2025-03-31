@@ -24,7 +24,7 @@ import java.util.List;
 public class YouTubeApiUtil8 {
 
   private static final String APPLICATION_NAME = "YouTube API Example";
-  private static final String API_KEY = CdConstants.GOOGLE_API_KEY; // 替换为你的 API 密钥
+  private static final String API_KEY = CdConstants.YOUTUBE_API_KEY; // 替换为你的 API 密钥
 
   private NetHttpTransport NET_HTTP_TRANSPORT = new NetHttpTransport();
   private JacksonFactory JACKSON_FACTORY = new JacksonFactory();

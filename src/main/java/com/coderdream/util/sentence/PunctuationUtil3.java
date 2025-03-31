@@ -125,22 +125,6 @@ public class PunctuationUtil3 {
     return matcher.replaceAll("$1"); // 替换为空，保留标点符号
   }
 
-  /**
-   * 格式化时间，返回时分秒毫秒
-   *
-   * @param milliseconds 毫秒数
-   * @return 格式化后的时间字符串
-   */
-  private static String formatTime(long milliseconds) {
-    long totalSeconds = milliseconds / 1000;
-    long hours = totalSeconds / 3600;
-    long minutes = (totalSeconds % 3600) / 60;
-    long seconds = totalSeconds % 60;
-    long ms = milliseconds % 1000;
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, ms);
-  }
-
-
   public static void main(String[] args) {
     String text1 = "你好， 世界 !  测试 。  ：    ；‘’“”  （）";
     String text2 = "你好, world ! test . :  ;  ' '\" \" ( )";

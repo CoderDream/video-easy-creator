@@ -1,6 +1,7 @@
 package com.coderdream.util.subtitle;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.thread.ThreadUtil;
@@ -9,7 +10,6 @@ import com.coderdream.entity.SubtitleEntity;
 import com.coderdream.util.audio.FfmpegUtil2;
 import com.coderdream.util.bbc.StringSplitter4;
 import com.coderdream.util.sentence.StanfordSentenceSplitter;
-import com.coderdream.util.sentence.demo05.SentenceSplitWithComma;
 import com.coderdream.util.translate.TranslateUtil;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
@@ -18,7 +18,10 @@ import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.daily.DailyUtil;
 import com.coderdream.util.sentence.demo03.SentenceMerger;
 import com.coderdream.util.sentence.demo03.StanfordNLPSentenceSplitter;
+import com.github.houbb.opencc4j.util.ZhConverterUtil;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -115,19 +118,31 @@ public class GenSubtitleUtil {
 
   public static void processSrtAndGenDescription(String filePath) {
     // 生成英文SRT文件
-    String srcFileName = CdFileUtil.changeExtension(filePath, "srt");
-    String srcFileNameEn = CdFileUtil.addPostfixToFileName(srcFileName,
+    final String srcFileName = CdFileUtil.changeExtension(filePath, "srt");
+    final String srcFileNameEn = CdFileUtil.addPostfixToFileName(srcFileName,
       "." + CdConstants.SUBTITLE_EN);
     // _raw.srt
-    String srcTextRawFileName = CdFileUtil.addPostfixToFileName(srcFileName,
-      "_raw");
-    srcTextRawFileName = CdFileUtil.changeExtension(srcTextRawFileName, "txt");
 
-    // 如果 XXX.en.srt 不存在， 生成英文SRT文件
-    if (CdFileUtil.isFileEmpty(srcFileNameEn)) {
+    final String txtFileName = CdFileUtil.changeExtension(filePath, "txt");
+    String srtTextRawFileName = CdFileUtil.addPostfixToFileName(txtFileName,
+      "_raw");
+    String srtTextScriptFileName = CdFileUtil.addPostfixToFileName(txtFileName,
+      "_script");
+
+    srtTextRawFileName = CdFileUtil.changeExtension(srtTextRawFileName, "txt");
+
+    // 如果 XXX.en.srt 不存在 或者 _script.txt， 生成英文SRT文件
+    if (CdFileUtil.isFileEmpty(srcFileNameEn) || CdFileUtil.isFileEmpty(
+      srtTextScriptFileName)) {
       if (!CdFileUtil.isFileEmpty(srcFileName)) {
-        genRawTextFile(srcFileName, srcTextRawFileName);
+        genRawTextFile(srcFileName, srtTextScriptFileName, srtTextRawFileName);
         // 生成新的字幕文件
+        // 过滤内容文件
+        String srtTextScriptPureFileName = CdFileUtil.addPostfixToFileName(
+          srtTextScriptFileName,
+          "_pure");
+        GenSubtitleUtil.processRawToPureTextFile(srtTextScriptFileName,
+          srtTextScriptPureFileName);
 
         log.info("生成英文SRT文件: {}", srcFileNameEn);
 //        String rawContent = String.join(" ", srtTxtList);
@@ -140,7 +155,8 @@ public class GenSubtitleUtil {
 
         if (!CdFileUtil.isFileEmpty(mp3FileName)) {
           // 生成新的字幕文件
-          SubtitleUtil.genSrtByExecuteCommand(mp3FileName, srcTextRawFileName,
+          SubtitleUtil.genSrtByExecuteCommand(mp3FileName,
+            srtTextScriptPureFileName,
             srcFileNameEn, "eng");
         } else {
           log.warn("mp3 文件不存在，无法生成字幕文件: {}", mp3FileName);
@@ -161,6 +177,54 @@ public class GenSubtitleUtil {
     srcFileNameZhTw = CdFileUtil.addPostfixToFileName(srcFileNameZhTw,
       "." + CdConstants.SUBTITLE_ZH_TW);
 
+    // 使用现成的文本
+    String geminiFilePath = CdFileUtil.addPostfixToFileName(txtFileName,
+      "_pure_gemini");
+    String grokFilePath = CdFileUtil.addPostfixToFileName(txtFileName,
+      "_pure_grok");
+
+    // 翻译不为空，英文字幕不为空，使用gemini翻译
+    if (!CdFileUtil.isFileEmpty(geminiFilePath) && !CdFileUtil.isFileEmpty(
+      srcFileNameEn) && (CdFileUtil.isFileEmpty(srcFileNameZhCn)
+      || CdFileUtil.isFileEmpty(
+      srcFileNameZhCn))) {
+      // TODO 不带空格的纯文本文件，第一行英文，第二行中文
+      List<String> chTxtList = CdFileUtil.readFileContent(geminiFilePath);
+      List<SubtitleEntity> subtitleEntityZhCnList = new ArrayList<>();
+      List<SubtitleEntity> subtitleEntityZhTwList = new ArrayList<>();
+      List<SubtitleEntity> subtitleEntityEnList = CdFileUtil.readSrtFileContent(
+        srcFileNameEn);
+      assert chTxtList != null;
+      if (subtitleEntityEnList.size() != chTxtList.size() / 2) {
+        log.error("字幕文件数量不一致，无法合并");
+        return;
+      } else {
+        SubtitleEntity subtitleEntityZhCn;
+        SubtitleEntity subtitleEntityZhTw;
+        for (int i = 0; i < subtitleEntityEnList.size(); i++) {
+          SubtitleEntity subtitleEntity = subtitleEntityEnList.get(i);
+          subtitleEntityZhCn = new SubtitleEntity();
+          BeanUtil.copyProperties(subtitleEntity, subtitleEntityZhCn);
+          subtitleEntityZhCn.setSubtitle(
+            ZhConverterUtil.toSimple(chTxtList.get(i * 2 + 1)));
+          subtitleEntityZhCnList.add(subtitleEntityZhCn);
+
+          subtitleEntityZhTw = new SubtitleEntity();
+          BeanUtil.copyProperties(subtitleEntity, subtitleEntityZhTw);
+          subtitleEntityZhTw.setSubtitle(
+            ZhConverterUtil.toTraditional(chTxtList.get(i * 2 + 1)));
+          subtitleEntityZhTwList.add(subtitleEntityZhTw);
+        }
+      }
+      if (!subtitleEntityZhCnList.isEmpty()
+        && !subtitleEntityZhTwList.isEmpty()) {
+        SubtitleUtil.writeToSubtitleFile(srcFileNameZhCn,
+          subtitleEntityZhCnList);
+        SubtitleUtil.writeToSubtitleFile(srcFileNameZhTw,
+          subtitleEntityZhTwList);
+      }
+    }
+
     //  通过微软服务翻译
     int retryTime = 0;
     while ((CdFileUtil.isFileEmpty(srcFileNameZhCn) || CdFileUtil.isFileEmpty(
@@ -175,6 +239,7 @@ public class GenSubtitleUtil {
       retryTime++;
       ThreadUtil.sleep(3000L);
     }
+
     if (!CdFileUtil.isFileEmpty(srcFileNameZhCn) && !CdFileUtil.isFileEmpty(
       srcFileNameZhTw)) {
       log.info("chnSrcFileName 文件已创建: {} {}", srcFileNameZhCn,
@@ -219,7 +284,7 @@ public class GenSubtitleUtil {
       srcFileNameEnZhTw)) {
       SubtitleUtil.mergeSubtitleFile(srcFileNameEn, srcFileNameZhCn,
         srcFileNameEnZhCn);
-      SubtitleUtil.mergeSubtitleFile(srcFileNameEn, srcFileNameZhCn,
+      SubtitleUtil.mergeSubtitleFile(srcFileNameEn, srcFileNameZhTw,
         srcFileNameEnZhTw);
     } else {
       log.info("srtFilePath 文件已存在: {} {}", srcFileNameEnZhCn,
@@ -243,8 +308,9 @@ public class GenSubtitleUtil {
     }
   }
 
-  public static void genRawTextFile(String srcFileName, String srcTextRawFileName) {
-    List<SubtitleEntity> subtitleEntities = CdFileUtil.readSrcFileContent(
+  public static void genRawTextFile(String srcFileName,
+    String srtTextScriptFileName, String srtTextRawFileName) {
+    List<SubtitleEntity> subtitleEntities = CdFileUtil.readSrtFileContent(
       srcFileName);
     // 原始字符串取英文字幕内容，生成英文SRT文件
     String srcContent = subtitleEntities.stream().map(
@@ -252,15 +318,21 @@ public class GenSubtitleUtil {
     List<String> srtRawList = StanfordSentenceSplitter.splitSentences(
       srcContent);
 
-    if (CdFileUtil.isFileEmpty(srcTextRawFileName)) {
+    if (CdFileUtil.isFileEmpty(srtTextScriptFileName)) {
+      CdFileUtil.writeToFile(srtTextScriptFileName, srtRawList);
+    } else {
+      log.info("srtTextScriptFileName 文件已存在: {} ", srtTextRawFileName);
+    }
+
+    if (CdFileUtil.isFileEmpty(srtTextRawFileName)) {
       List<String> srtTxtList = new ArrayList<>();
 
       for (String srtRaw : srtRawList) {
         srtTxtList.addAll(StringSplitter4.splitString(srtRaw, 200));
       }
-      CdFileUtil.writeToFile(srcTextRawFileName, srtTxtList);
+      CdFileUtil.writeToFile(srtTextRawFileName, srtTxtList);
     } else {
-      log.info("srtRawFilePath 文件已存在: {} ", srcTextRawFileName);
+      log.info("srtRawFilePath 文件已存在: {} ", srtTextRawFileName);
     }
   }
 
@@ -391,6 +463,70 @@ public class GenSubtitleUtil {
     }
   }
 
+  /**
+   * 生成原始的SRT文件
+   *
+   * @param filePath 文件路径
+   */
+  public static void processRawToPureTextFile(String rawFileName,
+    String pureFileName) {
+    if (CdFileUtil.isFileEmpty(rawFileName)) {
+      log.error("rawFileName 文件为空，请检查文件路径: {}", rawFileName);
+      return;
+    }
+
+    if (!CdFileUtil.isFileEmpty(pureFileName)) {
+      log.error("pureFileName 文件已存在，请检查文件路径: {}", pureFileName);
+      return;
+    }
+
+    long startTime = System.currentTimeMillis(); // 记录开始时间
+    List<String> newSrtStringList = new ArrayList<>();
+    List<String> contentList = FileUtil.readLines(rawFileName, "UTF-8");
+    List<String> filterList = Arrays.asList("[ Inaudible ]",
+      "[ Applause ]",
+      "[Applause]",
+      "[applause]",
+      "[Laughter]",
+      "[Inaudible]",
+      "[ Applause ]",
+      "[ Applause ]",
+      "[ Applause ]",
+      ">>",
+      "[inaudible]");
+    int i = 0;
+    for (String content : contentList) {
+      if (StrUtil.isNotBlank(content)) {
+        // 双减号替换为逗号和空格
+        content = content.replace(" -- ", ", ");
+        // ...替换为句号
+        content = content.replace("...", ".");
+
+        // 过滤掉不需要的内容
+        for (String filter : filterList) {
+          content = content.replace(filter, "").trim();
+        }
+        i++;
+        String index = String.format("%03d", i);
+        if (content.length() > 180) {
+          log.error("第 {} 字幕过长，超过180个字符: {}", index,
+            content.length());
+        }
+
+        newSrtStringList.add(content);
+      }
+    }
+
+    if (CollectionUtil.isNotEmpty(newSrtStringList)) {
+      // 写入文件
+      CdFileUtil.writeToFile(pureFileName, newSrtStringList);
+      long elapsedTime = System.currentTimeMillis() - startTime; // 计算耗时
+      log.info("写入完成，文件路径: {}，共计耗时：{}", pureFileName,
+        CdTimeUtil.formatDuration(elapsedTime));
+    } else {
+      log.error("newSrtStringList is empty!");
+    }
+  }
 
   /**
    * 生成原始的SRT文件
@@ -521,6 +657,20 @@ public class GenSubtitleUtil {
     }
 
     return true;
+  }
+
+  public static int findBadPosition(String filePath) {
+    List<String> srtStringList = FileUtil.readLines(filePath,
+      StandardCharsets.UTF_8);
+    // 3行的倍数应该是空行，否则退出并返回下标
+    for (int i = 2; i < srtStringList.size(); i += 3) {
+      if (!StrUtil.isBlank(srtStringList.get(i))) {
+        log.warn("在第{}行发现非空内容，退出并返回下标", i);
+        return i;
+      }
+    }
+
+    return 0;
   }
 
 }

@@ -8,7 +8,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class TextProcessor {
 
 //    public static void main(String[] args) {
@@ -32,7 +34,7 @@ public class TextProcessor {
    * @return 第一部分和第二部分的时间戳，以制表符分隔。
    */
   public static String processFile(String fileName) {
-    List<String> lines = null;
+    List<String> lines;
     try {
       lines = readLinesFromFile(fileName);
     } catch (IOException e) {
@@ -64,13 +66,15 @@ public class TextProcessor {
   private static String findFirstPart(List<String> lines) {
     String previousLine = null;
     for (String line : lines) {
-      if (line.contains("I'm") || line.contains("I’m")) {
+      if (line.contains("I'm") || line.contains("I’m") || line.contains("I ")
+        || line.contains("Er ")) {
         if (previousLine != null && previousLine.length() >= 12) {
           return previousLine.substring(0, 12);
         }
       }
       previousLine = line;
     }
+    log.error("未找到符合条件的字符串。");
     return null;
   }
 

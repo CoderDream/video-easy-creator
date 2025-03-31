@@ -1,5 +1,6 @@
 package com.coderdream.util.download;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,12 +74,7 @@ public class TsFileDownloader02 {
         Instant finish = Instant.now(); // 记录结束时间
         long timeElapsed = Duration.between(start, finish).toMillis(); // 计算耗时
 
-        long milliseconds = timeElapsed % 1000;
-        long seconds = (timeElapsed / 1000) % 60;
-        long minutes = (timeElapsed / (1000 * 60)) % 60;
-        long hours = (timeElapsed / (1000 * 60 * 60)) % 24;
-
-        String elapsedTimeStr = String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
+        String elapsedTimeStr = CdTimeUtil.formatDuration(timeElapsed);
 
         log.info("下载合并耗时：{}", elapsedTimeStr);
         return elapsedTimeStr;

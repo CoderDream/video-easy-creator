@@ -35,7 +35,7 @@ public class PrepareForMakeVideoUtil {
     String distFolderName = "D:\\0000\\video\\0001_SixMinutes_Draft\\";
     // 0. 清理文件夹
     boolean del = FileUtil.del(distFolderName);
-    log.info("删除文件夹结果：{}", del);
+    log.info("删除文件夹结果：{}，文件夹为：{}", del, distFolderName);
 
     // 1. 图片 文件夹拷贝
     String imageFolderName = folderPath + File.separator + folderName;
@@ -133,6 +133,11 @@ public class PrepareForMakeVideoUtil {
     } else {
       log.error("封面文件不存在，退出处理流程；{}", coverFileName);
     }
+  }
+
+  public static void main(String[] args) {
+    String folderName = "170622";
+    PrepareForMakeVideoUtil.processForSixMinutes(folderName);
   }
 
 }

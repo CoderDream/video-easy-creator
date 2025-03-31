@@ -1,5 +1,6 @@
 package com.coderdream.util.sentence;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -65,7 +66,7 @@ public class PunctuationUtil1 {
                 Matcher matcher = pattern.matcher(result);
                 result = matcher.replaceAll(entry.getValue());
             }
-           log.info("英文标点替换为中文，耗时：{}", formatTime(System.currentTimeMillis() - startTime));
+           log.info("英文标点替换为中文，耗时：{}", CdTimeUtil.formatDuration(System.currentTimeMillis() - startTime));
            return result;
         } catch (Exception e) {
              log.error("替换英文标点符号为中文符号时发生异常", e);
@@ -95,7 +96,7 @@ public class PunctuationUtil1 {
                  Matcher matcher = pattern.matcher(result);
                  result = matcher.replaceAll(entry.getValue());
              }
-           log.info("中文标点替换为英文，耗时：{}", formatTime(System.currentTimeMillis() - startTime));
+           log.info("中文标点替换为英文，耗时：{}", CdTimeUtil.formatDuration(System.currentTimeMillis() - startTime));
              return result;
 
         } catch (Exception e) {
@@ -103,23 +104,6 @@ public class PunctuationUtil1 {
             return input;
         }
     }
-
-
-
-    /**
-     * 格式化时间，返回时分秒毫秒
-     * @param milliseconds 毫秒数
-     * @return 格式化后的时间字符串
-     */
-    private static String formatTime(long milliseconds) {
-        long totalSeconds = milliseconds / 1000;
-        long hours = totalSeconds / 3600;
-        long minutes = (totalSeconds % 3600) / 60;
-        long seconds = totalSeconds % 60;
-        long ms = milliseconds % 1000;
-        return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, ms);
-    }
-
 
     public static void main(String[] args) {
         String text1 = "你好， 世界 !  测试 。  ：    ；‘’“”  （）";

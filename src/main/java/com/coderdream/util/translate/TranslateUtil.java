@@ -598,7 +598,7 @@ public class TranslateUtil {
       ".srt");
     // readSrcFileContent
 
-    List<SubtitleEntity> SubtitleEntityList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> SubtitleEntityList = CdFileUtil.readSrtFileContent(
       srcFileName);
 
     List<String> subtitleList = SubtitleEntityList.stream()
@@ -668,7 +668,7 @@ public class TranslateUtil {
     String srcFileName = folderName + fileName + ".eng" + ".srt";
     // readSrcFileContent
 
-    List<SubtitleEntity> SubtitleEntityList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> SubtitleEntityList = CdFileUtil.readSrtFileContent(
       srcFileName);
 
     List<String> subtitleList = SubtitleEntityList.stream()
@@ -729,7 +729,7 @@ public class TranslateUtil {
 //    String srcFileName = folderName + fileName + ".eng" + ".srt";
     // readSrcFileContent
 
-    List<SubtitleEntity> SubtitleEntityList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> SubtitleEntityList = CdFileUtil.readSrtFileContent(
       srcFileNameEng);
 
     List<String> subtitleList = SubtitleEntityList.stream()
@@ -809,8 +809,8 @@ public class TranslateUtil {
     String srcFileNameZhCn, String srcFileNameZhTw, String platformName,
     Integer subListSize) {
     long startTime = System.currentTimeMillis(); // 记录开始时间
-    List<SubtitleEntity> subtitleEntityList = new ArrayList<>();
-    List<SubtitleEntity> enSubtitleEntityList = CdFileUtil.readSrcFileContent(
+    List<SubtitleEntity> subtitleEntityList;
+    List<SubtitleEntity> enSubtitleEntityList = CdFileUtil.readSrtFileContent(
       srcFileNameEng);
 
     List<String> subtitleList = enSubtitleEntityList.stream()
@@ -869,6 +869,70 @@ public class TranslateUtil {
       log.info("newList is empty!");
     }
   }
+
+//  public static void translateScriptFileWithPlatform(String scriptFileName,
+//    String srcFileNameZhCn, String srcFileNameZhTw, String platformName,
+//    Integer subListSize) {
+//    long startTime = System.currentTimeMillis(); // 记录开始时间
+//    List<String> stringList = CdFileUtil.readSrcFileContent(
+//      scriptFileName);
+//
+//    List<String> subtitleList = stringList.stream()
+//      .map(SubtitleEntity::getSubtitle)
+//      .toList();
+//    subtitleEntityList = writeTempSrtFiles(srcFileNameZhCn, platformName,
+//      subListSize, subtitleList);
+//
+//    SubtitleEntity enSubtitleEntity;
+//    List<String> zhCnSrtStringList = new ArrayList<>();
+//    List<String> zhTwSrtStringList = new ArrayList<>();
+//    if (CollectionUtil.isNotEmpty(subtitleEntityList)
+//      && subtitleEntityList.size() == stringList.size()) {
+//      log.info("相等 size: {}",
+//        subtitleEntityList.size());
+//      for (int i = 0; i < stringList.size(); i++) {
+//        enSubtitleEntity = stringList.get(i);
+//        zhCnSrtStringList.add(enSubtitleEntity.getSubIndex() + "");
+//        zhCnSrtStringList.add(enSubtitleEntity.getTimeStr());
+//        zhTwSrtStringList.add(enSubtitleEntity.getSubIndex() + "");
+//        zhTwSrtStringList.add(enSubtitleEntity.getTimeStr());
+//        switch (platformName) {
+//          case CdConstants.TRANSLATE_PLATFORM_GEMINI:
+//            zhCnSrtStringList.add(ZhConverterUtil.toSimple(
+//              subtitleEntityList.get(i).getSecondSubtitle()));
+//            zhTwSrtStringList.add(ZhConverterUtil.toTraditional(
+//              subtitleEntityList.get(i).getSecondSubtitle()));
+//            break;
+//          case CdConstants.TRANSLATE_PLATFORM_MSTTS:
+//            zhCnSrtStringList.add(ZhConverterUtil.toSimple(
+//              subtitleEntityList.get(i).getSubtitle()));
+//            zhTwSrtStringList.add(
+//              ZhConverterUtil.toTraditional(
+//                subtitleEntityList.get(i).getSubtitle()));
+//            break;
+//          default:
+//            log.error("平台名称不正确: {}", platformName);
+//            break;
+//        }
+//        zhCnSrtStringList.add("");
+//        zhTwSrtStringList.add("");
+//      }
+//    } else {
+//      log.error("返回结果: {}, 期待结果: {}",
+//        subtitleEntityList.size(), stringList.size());
+//    }
+//
+//    if (CollectionUtil.isNotEmpty(zhCnSrtStringList)) {
+//      // 写中文翻译文本
+//      CdFileUtil.writeToFile(srcFileNameZhCn, zhCnSrtStringList);
+//      CdFileUtil.writeToFile(srcFileNameZhTw, zhTwSrtStringList);
+//      long elapsedTime = System.currentTimeMillis() - startTime; // 计算耗时
+//      log.info("写入完成，文件路径: {}，共计耗时：{}", srcFileNameZhCn,
+//        CdTimeUtil.formatDuration(elapsedTime));
+//    } else {
+//      log.info("newList is empty!");
+//    }
+//  }
 
   public static List<SubtitleEntity> writeTempSrtFiles(String srcFileNameZhCn,
     String platformName, Integer subListSize, List<String> subtitleList) {

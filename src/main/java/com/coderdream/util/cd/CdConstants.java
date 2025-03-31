@@ -178,8 +178,9 @@ public class CdConstants {
   public static final String BACKGROUND_IMAGE_FILENAME = "background.png"; // 背景图片
   public static final String PIC_FOLDER = "pic"; // 输出目录
 
-  public static final String GOOGLE_API_KEY = System.getenv("GOOGLE_API_KEY");
+  public static final String YOUTUBE_API_KEY = System.getenv("GOOGLE_API_KEY");
 
+//  public static final String YOUTUBE_API_KEY = System.getenv("GOOGLE_API_KEY");
 
   public static final String GEMINI_API_KEY = System.getenv("GEMINI_API_KEY");
   public static final String GROK_API_KEY = System.getenv("GROK_API_KEY");
@@ -257,9 +258,14 @@ public class CdConstants {
   public static final String KEYWORD_LINUX1 = "linux";
   public static final String KEYWORD_LINUX2 = "unix";
 
-  public static final String POSTS_FOLDER =
-    OperatingSystem.getHexoFolder() + "source" + File.separator + "_posts";
-
+  public static final String CODERDREAM_POSTS_FOLDER =
+    OperatingSystem.getGitHubCoderDreamHexoFolder() + "source" + File.separator
+      + "_posts";
+  // getHalfHourEnglishHexoFolder
+  public static final String HALF_HOUR_ENGLISH_POSTS_FOLDER =
+    OperatingSystem.getHalfHourEnglishHexoFolder() + File.separator + "source"
+      + File.separator
+      + "_posts";
   public static final String TRANSLATE_PLATFORM_GEMINI = "gemini";
 
   public static final String TRANSLATE_PLATFORM_DEEP_SEEK = "deep_seek";

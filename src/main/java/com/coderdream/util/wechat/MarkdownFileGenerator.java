@@ -46,8 +46,8 @@ public class MarkdownFileGenerator {
 
         // 1. 构建文件名和文件夹路径
         String folderName = "wechat-" + date;
-        Path targetFolder = Paths.get(CdConstants.POSTS_FOLDER, folderName);
-        Path markdownFile = Paths.get(CdConstants.POSTS_FOLDER, folderName + ".md");
+        Path targetFolder = Paths.get(CdConstants.CODERDREAM_POSTS_FOLDER, folderName);
+        Path markdownFile = Paths.get(CdConstants.CODERDREAM_POSTS_FOLDER, folderName + ".md");
         log.info("目标文件夹：{}", targetFolder);
         log.info("目标markdown文件：{}", markdownFile);
         // 2. 创建目标文件夹

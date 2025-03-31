@@ -1,5 +1,6 @@
 package com.coderdream.util.video;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -73,7 +74,7 @@ public class FfmpegVideoGenerator1 {
 
         Instant end = Instant.now(); // 记录方法结束时间
         Duration duration = Duration.between(start, end);
-        String elapsedTime = formatDuration(duration);
+        String elapsedTime = CdTimeUtil.formatDuration(duration.toMillis());
         log.info("视频生成成功，耗时: {}", elapsedTime);
 
         return elapsedTime; // 返回方法执行耗时

@@ -59,7 +59,7 @@ public class GetSixMinutesPpt {
     String pptFilePath = CommonUtil.getFullPathFileName(
       folderName, folderName, ".pptx"); // 获取 PPT 文件的完整路径
     String outputDir =
-      CommonUtil.getFullPath(folderName) + folderName
+      CommonUtil.getFullPath(folderName) + File.separator + folderName
         + File.separator; // 定义输出目录
     if (!new File(outputDir).exists()) { // 检查输出目录是否存在
       boolean mkdir = new File(outputDir).mkdirs(); // 如果不存在，则创建目录

@@ -2,6 +2,7 @@ package com.coderdream.util.txt.filter;
 
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdStringUtil;
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.cd.ChineseCharacterUtil;
 import java.io.File;
 import java.util.regex.Matcher;
@@ -54,7 +55,7 @@ public class TextFileUtil {
 
     Instant end = Instant.now();
     Duration duration = Duration.between(start, end);
-    String elapsedTime = formatDuration(duration);
+    String elapsedTime = CdTimeUtil.formatDuration(duration.toMillis());;
     log.info("文件处理耗时：{}", elapsedTime);
     return elapsedTime;
   }
@@ -242,21 +243,6 @@ public class TextFileUtil {
       }
     }
     return filteredLines;
-  }
-
-  /**
-   * 格式化时间
-   *
-   * @param duration Duration时间
-   * @return 返回时分秒毫秒
-   */
-  private static String formatDuration(Duration duration) {
-    long hours = duration.toHours();
-    long minutes = duration.toMinutesPart();
-    long seconds = duration.toSecondsPart();
-    long millis = duration.toMillisPart();
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-      millis);
   }
 
   public static void main(String[] args) {

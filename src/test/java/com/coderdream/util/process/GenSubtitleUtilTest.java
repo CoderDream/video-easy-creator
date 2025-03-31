@@ -16,7 +16,8 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
     String folderName = "250305";
     String filePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
     int maxLineLength = 80; // 生成mp3
@@ -28,20 +29,33 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
     String folderName = "20250319";
     String filePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
     String srtFileName = CdFileUtil.changeExtension(filePath, "srt");
 
-    String largeSrtFileName = CdFileUtil.addPostfixToFileName(srtFileName, "_raw_large");
+    String largeSrtFileName = CdFileUtil.addPostfixToFileName(srtFileName,
+      "_raw_large");
     String largeTextRawFileName = CdFileUtil.changeExtension(largeSrtFileName,
       "txt");
-    GenSubtitleUtil.genRawTextFile(largeSrtFileName, largeTextRawFileName);
 
-    String middleSrtFileName = CdFileUtil.addPostfixToFileName(srtFileName, "_raw_middle");
+    String srcTextScriptFileName = CdFileUtil.addPostfixToFileName(
+      largeTextRawFileName,
+      "_script");
+    GenSubtitleUtil.genRawTextFile(largeSrtFileName, srcTextScriptFileName,
+      largeTextRawFileName);
+
+    String middleSrtFileName = CdFileUtil.addPostfixToFileName(srtFileName,
+      "_raw_middle");
     String middleTextRawFileName = CdFileUtil.changeExtension(middleSrtFileName,
       "txt");
-    GenSubtitleUtil.genRawTextFile(middleSrtFileName, middleTextRawFileName);
+    String middleTextRawFileName2 = CdFileUtil.changeExtension(
+      middleSrtFileName,
+      "txt");
+
+    GenSubtitleUtil.genRawTextFile(middleSrtFileName, middleTextRawFileName,
+      middleTextRawFileName);
   }
 
 
@@ -50,7 +64,8 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
     String folderName = "250219";
     String filePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
     int maxLineLength = 80;
@@ -62,7 +77,8 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
     String folderName = "250219";
     String filePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents"
+        + File.separator
         + folderName + File.separator + folderName
         + ".srt";
     String sourceFilePath = CdFileUtil.addPostfixToFileName(filePath, ".eng");
@@ -72,9 +88,10 @@ class GenSubtitleUtilTest {
 
   @Test
   void processSrtAndGenDescription_01() {
-    String folderName = "20250319";
+    String folderName = "20250128";
     String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
     GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
@@ -85,7 +102,8 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
     String folderName = "250319";
     String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
 
@@ -97,7 +115,8 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
     String folderName = "vance_0003";
     String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0005_VP" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0005_VP"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
     GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
@@ -105,10 +124,11 @@ class GenSubtitleUtilTest {
 
   @Test
   void processSrtAndGenDescription_0601() {
-    //    String filePath = "D:\\0000\\0006_KK\\250128\\250131.mp4";
-    String folderName = "20250314";
+    //    String filePath = "D:\\0000\\0006_KK\\250128\\250131.mp4"; //D:\0000\0006_KarolineLeavitt\20250222
+    String folderName = "20250222";
     String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0006_KK" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0006_KarolineLeavitt"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
 
@@ -120,9 +140,10 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
     // 专辑名称
     String albumName = "0003_PressBriefings";
-    String folderName = "20250311"; // D:\0000\0007_Trump\20250227
+    String folderName = "20250326"; // D:\0000\0007_Trump\20250227
     String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + albumName + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + albumName
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
 
@@ -134,7 +155,8 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
     String folderName = "20250307"; // D:\0000\0007_Trump\20250227
     String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0007_Trump" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0007_Trump"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
 
@@ -146,7 +168,8 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
     String folderName = "20250307"; // D:\0000\0007_Trump\20250227
     String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0007_Trump" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0007_Trump"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
 
@@ -158,7 +181,8 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
     String folderName = "20250303"; // D:\0000\0007_Trump\20250227
     String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0007_Trump" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0007_Trump"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
 
@@ -168,20 +192,42 @@ class GenSubtitleUtilTest {
   @Test
   void processSrtAndGenDescription_000801() {
     //  D:\0000\0008_DailyNews\2025030401  String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
-    String folderName = "20250314"; // D:\0000\0007_Trump\20250227
+    String folderName = "20250321"; // D:\0000\0007_Trump\20250227
     String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0008_DailyNews" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0008_DailyNews"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
     GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
   }
 
   @Test
+  void findBadPosition_000801() {
+    //  D:\0000\0008_DailyNews\2025030401  String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
+    String folderName = "20250321"; // D:\0000\0007_Trump\20250227
+    String mp4FilePath =
+      OperatingSystem.getBaseFolder() + File.separator + "0008_DailyNews"
+        + File.separator
+        + folderName + File.separator + folderName
+        + ".mp4";
+    mp4FilePath = CdFileUtil.changeExtension(mp4FilePath, "txt");
+    String geminiFilePath = CdFileUtil.addPostfixToFileName(mp4FilePath,
+      "_pure_gemini");
+    GenSubtitleUtil.findBadPosition(geminiFilePath);
+
+    String grokFilePath = CdFileUtil.addPostfixToFileName(mp4FilePath,
+      "_pure_grok");
+    GenSubtitleUtil.findBadPosition(grokFilePath);
+  }
+
+
+  @Test
   void processRawSrtFile_03() {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
     String folderName = "250219";
     String filePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents"
+        + File.separator
         + folderName + File.separator + folderName
         + ".srt";
     String sourceFilePath = CdFileUtil.addPostfixToFileName(filePath, ".chn");
@@ -194,7 +240,8 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
     String folderName = "250219";
     String filePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
     String srtFilePath = CdFileUtil.changeExtension(filePath, "srt");
@@ -217,7 +264,8 @@ class GenSubtitleUtilTest {
     //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.txt";
     String folderName = "250219";
     String filePath =
-      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0004_AppleEvents"
+        + File.separator
         + folderName + File.separator + folderName
         + ".mp4";
     String srtFilePath = CdFileUtil.changeExtension(filePath, "srt");
@@ -225,9 +273,6 @@ class GenSubtitleUtilTest {
       ".eng");
     GenSubtitleUtil.filterContentFile(srcFileNameEng, srcFileNameEng);
   }
-
-
-
 
 
 }

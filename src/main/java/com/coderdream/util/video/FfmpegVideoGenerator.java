@@ -1,5 +1,6 @@
 package com.coderdream.util.video;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -75,7 +76,7 @@ public class FfmpegVideoGenerator {
 
     Instant end = Instant.now(); // 记录方法结束时间
     Duration duration = Duration.between(start, end);
-    String elapsedTime = formatDuration(duration);
+    String elapsedTime = CdTimeUtil.formatDuration(duration.toMillis());;
     log.info("视频生成成功，耗时: {}", elapsedTime);
 
     return elapsedTime; // 返回方法执行耗时
@@ -145,23 +146,6 @@ public class FfmpegVideoGenerator {
       throw new IOException("ffmpeg执行被中断", e);
     }
   }
-
-
-  /**
-   * 将 Duration 对象格式化为 时:分:秒.毫秒 字符串
-   *
-   * @param duration Duration 对象
-   * @return 格式化的时间字符串
-   */
-  private String formatDuration(Duration duration) {
-    long hours = duration.toHours();
-    long minutes = duration.toMinutesPart();
-    long seconds = duration.toSecondsPart();
-    long milliseconds = duration.toMillisPart();
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-      milliseconds);
-  }
-
 
   public static void main(String[] args) {
     String imagePath = "D:\\0000\\bgmusic\\background.png";

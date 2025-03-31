@@ -1,5 +1,6 @@
 package com.coderdream.util.itext5;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -29,7 +30,8 @@ public class JavaToPdf {
     try {
       generateHelloWorldPdf();
       long endTime = System.nanoTime(); // 记录结束时间
-      String duration = formatDuration(startTime, endTime); // 计算方法耗时
+      String duration = CdTimeUtil.formatDuration(
+        endTime - startTime); // 计算方法耗时
       log.info("PDF 文件生成完成， 耗时：{}", duration);
     } catch (Exception e) {
       log.error("生成 PDF 文件时发生错误:", e);
@@ -64,23 +66,4 @@ public class JavaToPdf {
     }
   }
 
-
-  /**
-   * 计算并格式化方法耗时.
-   *
-   * @param startTime 开始时间（纳秒）
-   * @param endTime   结束时间（纳秒）
-   * @return 格式化后的耗时字符串 (HH:mm:ss.SSS)
-   */
-  private static String formatDuration(long startTime, long endTime) {
-    long durationNano = endTime - startTime;
-    long durationMillis = TimeUnit.NANOSECONDS.toMillis(durationNano);
-    long hours = TimeUnit.MILLISECONDS.toHours(durationMillis);
-    long minutes = TimeUnit.MILLISECONDS.toMinutes(durationMillis) % 60;
-    long seconds = TimeUnit.MILLISECONDS.toSeconds(durationMillis) % 60;
-    long millis = durationMillis % 1000;
-
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-      millis);
-  }
 }

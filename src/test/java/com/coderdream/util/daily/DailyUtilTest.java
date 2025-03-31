@@ -7,11 +7,9 @@ import com.coderdream.util.gemini.TranslationUtil;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 import com.coderdream.util.proxy.OperatingSystem;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +58,7 @@ class DailyUtilTest {
       folderName);// "【BBC六分钟英语】泰国50年老汤真的能吃吗？";
     DailyUtil.process(folderName, title);
 
-    String baseHexoFolder = OperatingSystem.getHexoFolder();
+    String baseHexoFolder = OperatingSystem.getGitHubCoderDreamHexoFolder();
 
     List<String> commandList = Arrays.asList(
       "cd " + baseHexoFolder + " && hexo g",
@@ -72,7 +70,7 @@ class DailyUtilTest {
 
   @Test
   void process_deploy() {
-    String baseHexoFolder = OperatingSystem.getHexoFolder();
+    String baseHexoFolder = OperatingSystem.getGitHubCoderDreamHexoFolder();
     List<String> commandList = Arrays.asList(
       "cd " + baseHexoFolder + " && hexo g",
       "cd " + baseHexoFolder + " && hexo d");
@@ -88,7 +86,7 @@ class DailyUtilTest {
       folderName);// "【BBC六分钟英语】泰国50年老汤真的能吃吗？";
     DailyUtil.process(folderName, title);
 
-    String baseHexoFolder = OperatingSystem.getHexoFolder();
+    String baseHexoFolder = OperatingSystem.getGitHubCoderDreamHexoFolder();
 
     List<String> commandList = Arrays.asList(
       "cd " + baseHexoFolder + " && hexo g",
@@ -123,7 +121,19 @@ class DailyUtilTest {
 //      TranslationUtil.genDescription(folderName);
     }
 
-    String baseHexoFolder = OperatingSystem.getHexoFolder();
+    String baseHexoFolder = OperatingSystem.getGitHubCoderDreamHexoFolder();
+    List<String> commandList = Arrays.asList(
+      //  "cd " + baseHexoFolder + " && hexo clean",
+      "cd " + baseHexoFolder + " && hexo g",
+      "cd " + baseHexoFolder + " && hexo d");
+    for (String command : commandList) {
+      CommandUtil.executeCommand(command);
+    }
+  }
+
+  @Test
+  void processPostHalfHourEnglish() {
+    String baseHexoFolder = OperatingSystem.getHalfHourEnglishHexoFolder();
     List<String> commandList = Arrays.asList(
       //  "cd " + baseHexoFolder + " && hexo clean",
       "cd " + baseHexoFolder + " && hexo g",
@@ -137,12 +147,14 @@ class DailyUtilTest {
 
   @Test
   void syncFilesToQuark() {
-    String year = "2017";
+    String year = "2025"; //    String year = "2017";
     DailyUtil.syncFilesToQuark(year);
   }
 
   @Test
   void syncFilesToQuarkBatch() {
+//    List<String> years = Arrays.asList("2017", "2018", "2019", "2020", "2021",
+//      "2022", "2023", "2024", "2025");
     List<String> years = Arrays.asList("2017", "2018", "2019", "2020", "2021",
       "2022", "2023", "2024", "2025");
     for (String year : years) {
@@ -150,12 +162,12 @@ class DailyUtilTest {
     }
   }
 
-
   @Test
   void syncHistoryVideoToQuark_001() {
 //    String year = "2017";
 //    List<String> years = Arrays.asList("2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025");
-    List<String> years = Arrays.asList("2018", "2019", "2020",  "2021", "2022", "2023", "2024");
+    List<String> years = Arrays.asList("2018", "2019", "2020", "2021", "2022",
+      "2023", "2024", "2025");
     for (String year : years) {
       DailyUtil.syncHistoryVideoToQuark(year);
     }
@@ -173,6 +185,12 @@ class DailyUtilTest {
     }
   }
 
+  @Test
+  void moveHistoryVideoToQuark_2017() {
+    String year = "2017";
+    DailyUtil.moveHistoryVideoToQuark(year);
+  }
+
 
   @Test
   void moveHistoryVideoToQuark_001() {
@@ -188,7 +206,8 @@ class DailyUtilTest {
   void moveHistoryVideoToQuark_002() {
 //    String year = "2017";
 //    List<String> years = Arrays.asList("2025");
-    List<String> years = Arrays.asList("2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025");
+    List<String> years = Arrays.asList("2018", "2019", "2020", "2021", "2022",
+      "2023", "2024", "2025");
     for (String year : years) {
       DailyUtil.moveHistoryVideoToQuarkV2(year);
     }

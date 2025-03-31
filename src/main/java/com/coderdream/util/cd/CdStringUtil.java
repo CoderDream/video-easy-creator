@@ -230,7 +230,7 @@ public class CdStringUtil {
       // 计算方法执行耗时
       Duration duration = Duration.between(startTime, endTime);
       // 将耗时格式化为 时分秒 的字符串
-      String elapsedTime = CdDateUtil.formatDuration(duration);
+      String elapsedTime = CdTimeUtil.formatDuration(duration.toMillis());
       log.info("方法 replaceAllPatterns 执行完成, 耗时: {}", elapsedTime);
     }
 
@@ -708,5 +708,18 @@ public class CdStringUtil {
     }
 
     return singleSpacedString;
+  }
+
+  /**
+   * 将驼峰命名法转换为短横线命名法
+   * @param input 驼峰命名法的字符串
+   * @return 短横线命名法的字符串
+   */
+  public static String convertToKebabCase(String input) {
+    // 使用正则表达式匹配大写字母
+    Pattern pattern = Pattern.compile("(?<=[a-z])(?=[A-Z])");
+
+    // 使用正则表达式将大写字母前插入 "-"，然后将字符串转换为小写
+    return pattern.matcher(input).replaceAll("-").toLowerCase();
   }
 }

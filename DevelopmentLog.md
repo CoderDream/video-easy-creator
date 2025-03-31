@@ -19,6 +19,18 @@
 
 
 
+
+
+## 20250331
+
+- [x] 生成quark盘共享文件
+  - QuarkDiskUtil.process(year)
+- [x] 同步历史文件到百度同步盘（夸克同步盘）
+  - DailyUtil.syncHistoryVideoToQuark(year);
+- [x] 同步近期文件到百度同步盘（夸克同步盘）
+  - DailyUtil.syncFilesToQuark(year);
+
+
 ## 20250315
 
 - [x] 根据图片文字生成封面
@@ -29,8 +41,6 @@
 
 - [x] 根据ppt模板批量生成封面
   - GenCoverUtil.process(folderPath, chapterFileName, presentationName
-
-
 
 
 ## 20250302

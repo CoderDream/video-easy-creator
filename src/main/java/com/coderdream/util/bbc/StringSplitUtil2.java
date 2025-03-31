@@ -1,5 +1,6 @@
 package com.coderdream.util.bbc;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -44,24 +45,9 @@ public class StringSplitUtil2 {
     } finally {
       long endTime = System.currentTimeMillis();  // 记录结束时间
       long elapsedTime = endTime - startTime;  // 计算耗时
-      String formattedTime = formatElapsedTime(elapsedTime);
+      String formattedTime = CdTimeUtil.formatDuration(elapsedTime);
 //      log.info("splitStringWithComma 方法耗时：{}", formattedTime);
     }
-  }
-
-  /**
-   * 格式化毫秒级耗时为时分秒毫秒的字符串
-   *
-   * @param elapsedTime 耗时，单位毫秒
-   * @return 格式化后的字符串
-   */
-  private static String formatElapsedTime(long elapsedTime) {
-    long hours = elapsedTime / (60 * 60 * 1000);
-    long minutes = (elapsedTime % (60 * 60 * 1000)) / (60 * 1000);
-    long seconds = (elapsedTime % (60 * 1000)) / 1000;
-    long milliseconds = elapsedTime % 1000;
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-      milliseconds);
   }
 
 

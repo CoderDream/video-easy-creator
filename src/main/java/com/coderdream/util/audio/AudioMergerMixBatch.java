@@ -1,5 +1,6 @@
 package com.coderdream.util.audio;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -107,7 +108,7 @@ public class AudioMergerMixBatch {
       executor.shutdownNow(); // 立即关闭线程池，防止资源泄漏
       long endTime = System.currentTimeMillis();
       long duration = endTime - startTime;
-      String formattedTime = formatDuration(duration);
+      String formattedTime = CdTimeUtil.formatDuration(duration);
       log.info("合并WAV文件任务完成, 总耗时: {}", formattedTime);
     }
     return file;
@@ -163,26 +164,12 @@ public class AudioMergerMixBatch {
 
     long endTime = System.currentTimeMillis();
     long duration = endTime - startTime;
-    String formattedTime = formatDuration(duration);
+    String formattedTime = CdTimeUtil.formatDuration(duration);
     log.info("合并WAV文件任务完成，输出路径为: {}，总耗时: {}", outputFileDir,
       formattedTime);
     return file;
   }
 
-  /**
-   * 格式化耗时为时分秒毫秒
-   *
-   * @param duration 耗时，单位毫秒
-   * @return 格式化的耗时字符串
-   */
-  private static String formatDuration(long duration) {
-    long milliseconds = duration % 1000;
-    long seconds = (duration / 1000) % 60;
-    long minutes = (duration / (1000 * 60)) % 60;
-    long hours = (duration / (1000 * 60 * 60));
-    return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
-      milliseconds);
-  }
 
   /**
    * 列出指定目录下所有 .wav 文件

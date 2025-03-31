@@ -1,5 +1,6 @@
 package com.coderdream.util.markdown;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -121,7 +122,7 @@ public class MarkdownParser1 {
     }
     Instant end = Instant.now(); // 记录方法结束时间
     log.info("Method parseMarkdownFile execute time: {}",
-      formatDuration(Duration.between(start, end)));
+      CdTimeUtil.formatDuration(Duration.between(start, end).toMillis()));
     return markdownBean; // 返回 MarkdownBean 对象
   }
 
@@ -221,23 +222,6 @@ public class MarkdownParser1 {
   }
 
   /**
-   * 格式化时间
-   *
-   * @param duration 时间长度
-   * @return 时分秒字符串
-   */
-  private static String formatDuration(Duration duration) {
-    long seconds = duration.getSeconds();
-    long absSeconds = Math.abs(seconds);
-    String positive = String.format(
-      "%02d:%02d:%02d",
-      absSeconds / 3600,
-      (absSeconds % 3600) / 60,
-      absSeconds % 60);
-    return seconds < 0 ? "-" + positive : positive;
-  }
-
-  /**
    * 生成 Markdown 文件
    *
    * @param markdownBean MarkdownBean 对象
@@ -292,7 +276,7 @@ public class MarkdownParser1 {
     }
     Instant end = Instant.now(); // 记录方法结束时间
     log.info("Method generateMarkdownFile execute time: {}",
-      formatDuration(Duration.between(start, end)));
+      CdTimeUtil.formatDuration(Duration.between(start, end).toMillis()));
 
   }
 

@@ -1,6 +1,7 @@
 package com.coderdream.util.sqlite;
 
 import com.coderdream.util.cd.CdFileUtil;
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -48,7 +49,7 @@ public class SQLiteVocabularyMerger {
 
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
-        return formatDuration(duration);
+        return CdTimeUtil.formatDuration(duration);
     }
 
 

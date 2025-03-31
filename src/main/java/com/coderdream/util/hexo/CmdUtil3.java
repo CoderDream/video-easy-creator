@@ -17,7 +17,7 @@ public class CmdUtil3 {
     public static void main(String[] args) {
 
         // 执行多条命令，先删除index.lock 文件，再进行后续操作
-        String filePath = OperatingSystem.getHexoFolder() + ".deploy_git" + File.separator + ".git" + File.separator + "index.lock";
+        String filePath = OperatingSystem.getGitHubCoderDreamHexoFolder() + ".deploy_git" + File.separator + ".git" + File.separator + "index.lock";
         File fileLock = new File(filePath);
         if (fileLock.exists()) {
             boolean delete = fileLock.delete();

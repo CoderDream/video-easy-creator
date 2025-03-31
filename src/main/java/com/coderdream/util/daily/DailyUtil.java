@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import swiss.ameri.gemini.api.GenAi.GeneratedContent;
@@ -79,98 +80,137 @@ public class DailyUtil {
       yearPath);
     if (CollectionUtil.isEmpty(files)) {
       log.error("图片文件夹为空，退出处理流程；{}", yearPath);
-    }
-
-    for (File file : files) {
-      String folderName = file.getName();
-      String folderPath = file.getAbsolutePath();
-      log.info("文件路径：{}", folderName);
-      // D:\14_LearnEnglish\000_BBC\BaiduSyncdisk\000_BBC
-      // D:\14_LearnEnglish\6MinuteEnglish\quark_share
-      String newFolderPath =
-        "D:\\14_LearnEnglish\\000_BBC\\BaiduSyncdisk\\000_BBC" + File.separator
-          + year + File.separator
-          + folderName;
-      if (!FileUtil.exist(newFolderPath)) {
-        FileUtil.mkdir(newFolderPath);
-        log.info("文件夹创建成功：{}", newFolderPath);
-      }
-      String fileNameC =
-        folderName + "_中英双语对话脚本.txt";
-      String fileNameD =
-        folderName + "_完整词汇表.xlsx";
-      String fileNameE =
-        folderName + "_核心词汇表.xlsx";
-      String fileNameF =
-        folderName + "_高级词汇表.xlsx";
-      if (!CdFileUtil.isFileEmpty(
-        folderPath + File.separator + fileNameC)
-        && CdFileUtil.isFileEmpty(
-        newFolderPath + File.separator + fileNameC)) {
-        FileUtil.copyFile(folderPath + File.separator + fileNameC,
-          newFolderPath + File.separator + fileNameC,
-          StandardCopyOption.REPLACE_EXISTING);
-      }
-
-      if (!CdFileUtil.isFileEmpty(
-        folderPath + File.separator + fileNameD)
-        && CdFileUtil.isFileEmpty(
-        newFolderPath + File.separator + fileNameD)) {
-        FileUtil.copyFile(folderPath + File.separator + fileNameD,
-          newFolderPath + File.separator + fileNameD,
-          StandardCopyOption.REPLACE_EXISTING);
-      }
-
-      if (!CdFileUtil.isFileEmpty(
-        folderPath + File.separator + fileNameE)
-        && CdFileUtil.isFileEmpty(
-        newFolderPath + File.separator + fileNameE)) {
-        FileUtil.copyFile(folderPath + File.separator + fileNameE,
-          newFolderPath + File.separator + fileNameE,
-          StandardCopyOption.REPLACE_EXISTING);
-      }
-
-      if (!CdFileUtil.isFileEmpty(
-        folderPath + File.separator + fileNameF)
-        && CdFileUtil.isFileEmpty(
-        newFolderPath + File.separator + fileNameF)) {
-        FileUtil.copyFile(folderPath + File.separator + fileNameF,
-          newFolderPath + File.separator + fileNameF,
-          StandardCopyOption.REPLACE_EXISTING);
-      }
-
-      // 找pdf和mp3
-      String pdfFileName = PdfFileFinder.findPdfFileName(folderName);
-      if (!CdFileUtil.isFileEmpty(folderPath + File.separator + pdfFileName)) {
-        if (CdFileUtil.isFileEmpty(
-          newFolderPath + File.separator + pdfFileName)) {
-          FileUtil.copyFile(folderPath + File.separator + pdfFileName,
-            newFolderPath + File.separator + pdfFileName,
-            StandardCopyOption.REPLACE_EXISTING);
-        } else {
-          log.error("目标pdf文件已存在，退出处理流程；{}",
-            folderPath + File.separator + pdfFileName);
-          continue;
+    } else {
+      String distFolderPath = OperatingSystem.getBaiduSyncDiskFolder();
+      for (File file : files) {
+        String folderName = file.getName();
+        String folderPath = file.getAbsolutePath();
+        log.info("文件路径：{}", folderName);
+        // D:\14_LearnEnglish\000_BBC\BaiduSyncdisk\000_BBC
+        // D:\14_LearnEnglish\6MinuteEnglish\quark_share
+        String newFolderPath =
+          OperatingSystem.getBaiduSyncDiskFolder() + File.separator
+            + year + File.separator
+            + folderName;
+        if (!FileUtil.exist(newFolderPath)) {
+          FileUtil.mkdir(newFolderPath);
+          log.info("文件夹创建成功：{}", newFolderPath);
         }
-      } else {
-        log.error("找不到源pdf文件，退出处理流程；{}",
-          folderPath + File.separator + pdfFileName);
-        continue;
-      }
-
-      String mp3FileName = CdFileUtil.changeExtension(pdfFileName, "mp3");
-      if (!CdFileUtil.isFileEmpty(mp3FileName)) {
+        String fileNameC =
+          folderName + "_中英双语对话脚本.txt";
+        String fileNameD =
+          folderName + "_完整词汇表.xlsx";
+        String fileNameE =
+          folderName + "_核心词汇表.xlsx";
+        String fileNameF =
+          folderName + "_高级词汇表.xlsx";
         if (!CdFileUtil.isFileEmpty(
-          folderPath + File.separator + mp3FileName)
+          folderPath + File.separator + fileNameC)
           && CdFileUtil.isFileEmpty(
-          newFolderPath + File.separator + mp3FileName)) {
-          FileUtil.copyFile(folderPath + File.separator + mp3FileName,
-            newFolderPath + File.separator + mp3FileName,
+          newFolderPath + File.separator + fileNameC)) {
+          FileUtil.copyFile(folderPath + File.separator + fileNameC,
+            newFolderPath + File.separator + fileNameC,
             StandardCopyOption.REPLACE_EXISTING);
         }
-      } else {
-        log.error("找不到mp3文件，退出处理流程；{}",
-          folderPath + File.separator + mp3FileName);
+
+        if (!CdFileUtil.isFileEmpty(
+          folderPath + File.separator + fileNameD)
+          && CdFileUtil.isFileEmpty(
+          newFolderPath + File.separator + fileNameD)) {
+          FileUtil.copyFile(folderPath + File.separator + fileNameD,
+            newFolderPath + File.separator + fileNameD,
+            StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        if (!CdFileUtil.isFileEmpty(
+          folderPath + File.separator + fileNameE)
+          && CdFileUtil.isFileEmpty(
+          newFolderPath + File.separator + fileNameE)) {
+          FileUtil.copyFile(folderPath + File.separator + fileNameE,
+            newFolderPath + File.separator + fileNameE,
+            StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        if (!CdFileUtil.isFileEmpty(
+          folderPath + File.separator + fileNameF)
+          && CdFileUtil.isFileEmpty(
+          newFolderPath + File.separator + fileNameF)) {
+          FileUtil.copyFile(folderPath + File.separator + fileNameF,
+            newFolderPath + File.separator + fileNameF,
+            StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        // 找pdf和mp3
+        String pdfFileName = PdfFileFinder.findPdfFileName(folderName);
+        String pdfFileNamePath = folderPath + File.separator + pdfFileName;
+        if (!CdFileUtil.isFileEmpty(pdfFileNamePath)) {
+          if (folderName.equals("250327")) {
+            System.out.println("找到了" + folderName);
+          }
+          String targetPdfFileName =
+            newFolderPath + File.separator + pdfFileName;
+          if (CdFileUtil.isFileEmpty(targetPdfFileName)) {
+            FileUtil.copyFile(pdfFileNamePath, targetPdfFileName,
+              StandardCopyOption.REPLACE_EXISTING);
+          } else {
+            log.error("目标pdf文件已存在，退出处理流程；{}", targetPdfFileName);
+//            continue;
+          }
+          // 同步mp3文件
+          String mp3FileNamePath = CdFileUtil.changeExtension(pdfFileNamePath,
+            "mp3");
+          String mp3FileName = new File(mp3FileNamePath).getName();
+          if (!CdFileUtil.isFileEmpty(mp3FileNamePath)) {
+            if (!CdFileUtil.isFileEmpty(mp3FileNamePath)
+              && CdFileUtil.isFileEmpty(
+              newFolderPath + File.separator + mp3FileName)) {
+              FileUtil.copyFile(mp3FileNamePath,
+                newFolderPath + File.separator + mp3FileName,
+                StandardCopyOption.REPLACE_EXISTING);
+            } else {
+              log.error("目标mp3文件已存在，退出处理流程；{}",
+                newFolderPath + File.separator + mp3FileName);
+            }
+          } else {
+            log.error("找不到mp3文件，退出处理流程；{}", mp3FileNamePath);
+          }
+        } else {
+          log.error("找不到源pdf文件，退出处理流程；{}", pdfFileNamePath);
+        }
+
+        // 同步视频
+        List<File> subFolders = CdFileUtil.getFirstLevelDirectories(folderPath);
+        if (CollectionUtil.isNotEmpty(subFolders)) {
+          for (File subFolder : subFolders) {
+            String fileName = subFolder.getName();
+            if (fileName.length() > 6) {
+              String subFolderPath = subFolder.getAbsolutePath();
+              List<File> secondLevelSubFolders = FileUtil.loopFiles(
+                subFolderPath);
+              for (File secondLevelSubFolder : secondLevelSubFolders) {
+                String fileName2 = secondLevelSubFolder.getName();
+                String fileName2Path = secondLevelSubFolder.getAbsolutePath();
+                if (fileName2Path.contains(".mp4")) {
+                  // 视频文件
+                  log.info("视频文件：{}", fileName2Path);
+                  String targetFileName =
+                    distFolderPath + File.separator + year + File.separator
+                      + folderName
+                      + File.separator + fileName2;
+                  log.info("4.源视频路径：{}", fileName2Path);
+                  log.info("4.视频目标路径：{}", targetFileName);
+                  if (FileUtil.exist(fileName2Path) && !FileUtil.exist(
+                    targetFileName)) {
+                    String encodedVideo = VideoEncoder02.encodeVideo(
+                      fileName2Path,
+                      targetFileName);
+                    log.info("4.视频编码完成: {}", encodedVideo);
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -186,6 +226,7 @@ public class DailyUtil {
 
     List<String> titleList = FileUtil.readLines(
       OperatingSystem.getBaseFolder() + File.separator + "input"
+        + File.separator + "title"
         + File.separator + "title_" + year
         + ".txt", CharsetUtil.CHARSET_UTF_8);
     String distFolderPath = OperatingSystem.getBaiduSyncDiskFolder();
@@ -199,11 +240,25 @@ public class DailyUtil {
           String sourcePath = sourceVideoFilePathmap.get(videoTitle);
           String sourceFileName =
             sourcePath + File.separator + videoTitle + ".mp4";
+          String targetFileNameOld =
+            distFolderPath + File.separator + year
+              + File.separator + folderName
+              + "_" + videoTitle + ".mp4";
           String targetFileName =
             distFolderPath + File.separator + year + File.separator + folderName
+              + File.separator + folderName
               + "_" + videoTitle + ".mp4";
-          log.info("源视频路径：{}", sourceFileName);
-          log.info("视频目标路径：{}", targetFileName);
+          log.info("1.源视频路径：{}", sourceFileName);
+          log.info("1.视频目标路径：{}", targetFileName);
+          if (FileUtil.exist(targetFileNameOld) && !FileUtil.exist(
+            targetFileName)) {
+            FileUtil.copyFile(targetFileNameOld,
+              targetFileName,
+              StandardCopyOption.REPLACE_EXISTING);
+            log.info("复制视频完成:源 {} 目标 {}", targetFileNameOld,
+              targetFileName);
+          }
+
           if (FileUtil.exist(sourceFileName) && !FileUtil.exist(
             targetFileName)) {
             String encodedVideo = VideoEncoder02.encodeVideo(sourceFileName,
@@ -224,11 +279,14 @@ public class DailyUtil {
       sourceVideoFilePathmap.put(file.getName(), file.getAbsolutePath());
     }
 
+    String titlePath =
+      OperatingSystem.getBaseFolder() + File.separator + "input"
+        + File.separator + "title";
     List<String> titleList = FileUtil.readLines(
-      "D:\\input\\title_" + year
+      titlePath + File.separator + "title_" + year
         + ".txt", CharsetUtil.CHARSET_UTF_8);
     Map<String, String> map = new HashMap<>();
-    String distFolderPath = "D:\\14_LearnEnglish\\000_BBC\\BaiduSyncdisk\\000_BBC";
+    String distFolderPath = OperatingSystem.getBaiduSyncDiskFolder();
     for (String title : titleList) {
       log.info("标题：{}", title);
       String[] split = title.split("：");
@@ -249,8 +307,8 @@ public class DailyUtil {
               + targetFolderName + File.separator
               + targetFolderName
               + "_" + videoTitle + ".mp4";
-          log.info("源视频路径：{}", sourceFileName);
-          log.info("视频目标路径：{}", targetFileName);
+          log.info("2.源视频路径：{}", sourceFileName);
+          log.info("2.视频目标路径：{}", targetFileName);
           if (FileUtil.exist(sourceFileName) && !FileUtil.exist(
             targetFileName)) {
 //            FileUtil.move(sourceFileName, targetFileName);
@@ -281,7 +339,7 @@ public class DailyUtil {
       "D:\\input\\title_" + year
         + ".txt", CharsetUtil.CHARSET_UTF_8);
     Map<String, String> map = new HashMap<>();
-    String distFolderPath = "D:\\14_LearnEnglish\\000_BBC\\BaiduSyncdisk\\000_BBC";
+    String distFolderPath = OperatingSystem.getBaiduSyncDiskFolder();
     for (String title : titleList) {
       log.info("标题：{}", title);
       String[] split = title.split("：");
@@ -302,8 +360,8 @@ public class DailyUtil {
               + sourceFolderName + File.separator
               + targetFolderName
               + "_" + videoTitle + ".mp4";
-          log.info("源视频路径：{}", sourceFileName);
-          log.info("视频目标路径：{}", targetFileName);
+          log.info("3.源视频路径：{}", sourceFileName);
+          log.info("3.视频目标路径：{}", targetFileName);
           if (FileUtil.exist(sourceFileName) && !FileUtil.exist(
             targetFileName)) {
 //            FileUtil.move(sourceFileName, targetFileName);
@@ -321,8 +379,15 @@ public class DailyUtil {
     }
   }
 
+  /**
+   * 生成标题文件
+   *
+   * @param year 年份
+   */
   public static void genTitleFile(String year) {
-    String folderPath = "D:\\input";
+    String folderPath =
+      OperatingSystem.getBaseFolder() + File.separator + "input"
+        + File.separator + "raw";// "D:\\input"; // D:\0000\input\raw
     String sourceFileName =
       folderPath + File.separator + "title_" + year + "_raw.txt";
     List<String> sourceFileContent = FileUtil.readLines(sourceFileName,

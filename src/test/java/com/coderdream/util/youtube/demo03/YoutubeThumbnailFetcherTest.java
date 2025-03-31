@@ -15,11 +15,14 @@ class YoutubeThumbnailFetcherTest {
 
   @Test
   void getThumbnail() {
-    String videoUrl = "https://www.youtube.com/watch?v=jUxdO-D0OXs";
+    String videoUrl = "https://www.youtube.com/watch?v=RNgOLNy9low";
     String thumbnailPath =
-      OperatingSystem.getBaseFolder() + File.separator + CdConstants.COVER_FOLDER + File.separator;
+      OperatingSystem.getBaseFolder() + File.separator
+        + CdConstants.COVER_FOLDER + File.separator;
     DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-    String thumbnailFileName = dateFormat.format(new Date()) + ".jpg";
+
+    String formatName = "png"; // D:\0000\0007_Trump\20250227
+    String thumbnailFileName = dateFormat.format(new Date()) + "." + formatName;
 
     if (CdFileUtil.isFileEmpty(thumbnailFileName)) {
       YoutubeThumbnailFetcher.getThumbnail(videoUrl, thumbnailPath,

@@ -1,5 +1,6 @@
 package com.coderdream.util.audio;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -114,7 +115,7 @@ public class AudioMergerMixBatchV20230317 {
       executor.shutdownNow(); // 立即关闭线程池，防止资源泄漏
       long endTime = System.currentTimeMillis();
       long duration = endTime - startTime;
-      String formattedTime = formatDuration(duration);
+      String formattedTime = CdTimeUtil.formatDuration(duration);
       log.info("合并WAV文件任务完成, 总耗时: {}", formattedTime);
     }
     return file;

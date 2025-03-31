@@ -1,5 +1,6 @@
 package com.coderdream.util.video;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -78,7 +79,7 @@ public class Mp4Merger2 {
             executeFfmpegCommand(command);
             Instant endTime = Instant.now(); // 记录结束时间
             Duration duration = Duration.between(startTime, endTime);
-            return formatDuration(duration);
+            return CdTimeUtil.formatDuration(duration.toMillis());
         } catch (IOException | InterruptedException e) {
             log.error("合并 MP4 文件失败: {}", e.getMessage(), e);
             return "合并 MP4 文件失败";

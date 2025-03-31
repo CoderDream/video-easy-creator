@@ -1,5 +1,6 @@
 package com.coderdream.util.video.demo03;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +49,7 @@ public class Mp4Splitter03 {
 
         // 计算持续时间（endTime - startTime）
         long durationInMillis = parseTimeToMillis(endTime) - parseTimeToMillis(startTime);
-        String duration = formatDuration(durationInMillis);
+        String duration = CdTimeUtil.formatDuration(durationInMillis);
 
         // FFmpeg 命令，避免前2秒卡顿，使用 -ss 放在输入前，使用 -t 确保切片时长准确
         String command = String.format(
@@ -74,7 +75,7 @@ public class Mp4Splitter03 {
             // 等待进程完成
             if (process.waitFor() == 0) {
                 long durationMillis = System.currentTimeMillis() - startMillis;
-                log.info("视频分割完成: {}，耗时: {}", outputFilePath, formatDuration(durationMillis));
+                log.info("视频分割完成: {}，耗时: {}", outputFilePath, CdTimeUtil.formatDuration(durationMillis));
                 return outputFilePath;
             } else {
                 log.error("视频分割失败，退出码: {}", process.exitValue());
@@ -101,20 +102,6 @@ public class Mp4Splitter03 {
         long seconds = Long.parseLong(parts[2]) * 1000;
         long milliseconds = parts.length > 3 ? Long.parseLong(parts[3]) : 0;
         return hours + minutes + seconds + milliseconds;
-    }
-
-    /**
-     * 将毫秒转换为 时:分:秒.毫秒 格式
-     *
-     * @param millis 时间毫秒数
-     * @return 格式化后的时间字符串
-     */
-    private static String formatDuration(long millis) {
-        long hours = TimeUnit.MILLISECONDS.toHours(millis);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60;
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60;
-        long milliseconds = millis % 1000;
-        return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
     }
 
     /**

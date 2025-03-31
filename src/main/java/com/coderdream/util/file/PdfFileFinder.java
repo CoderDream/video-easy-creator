@@ -1,6 +1,7 @@
 package com.coderdream.util.file;
 
 import com.coderdream.util.CommonUtil;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
@@ -89,7 +90,7 @@ public class PdfFileFinder {
 
     String folderName = "170202";
     String pdfFileName = PdfFileFinder.findPdfFileName(folderName);
-    String fileNameWithPath = CommonUtil.getFullPath(folderName) + pdfFileName;
+    String fileNameWithPath = CommonUtil.getFullPath(folderName)  + File.separator + pdfFileName;
     System.out.println(pdfFileName);
   }
 }

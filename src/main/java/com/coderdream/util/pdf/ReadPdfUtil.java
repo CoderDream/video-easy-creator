@@ -79,7 +79,7 @@ public class ReadPdfUtil {
     }
 
     String srcFileNameCn =
-      CommonUtil.getFullPath(folderName) + fileName.substring(0, 6) + "_script"
+      CommonUtil.getFullPath(folderName) + File.separator + fileName.substring(0, 6) + "_script"
         + ".txt";
     if (CdFileUtil.isFileEmpty(srcFileNameCn)) {
       CdFileUtil.writeToFile(srcFileNameCn, stringList);

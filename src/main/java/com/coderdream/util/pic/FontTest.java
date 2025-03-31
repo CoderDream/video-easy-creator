@@ -16,7 +16,7 @@ public class FontTest {
                 BufferedImage image = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
                 Graphics2D g2d = image.createGraphics();
                 g2d.setFont(font);
-                g2d.drawString("测试文本", 10, 50);
+                g2d.drawString("沉浸式英文聽力訓練", 10, 50);
                 g2d.dispose();
                 // 如果没有抛出异常，说明字体可以正常绘制，添加到有效字体列表
                 validFonts.add(font);

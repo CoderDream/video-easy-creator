@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class MarkdownFileGenerator2 {
 
   private static final String POSTS_FOLDER =
-    OperatingSystem.getHexoFolder() + "source" + File.separator + "_posts";
+    OperatingSystem.getGitHubCoderDreamHexoFolder() + "source" + File.separator + "_posts";
   private static final Pattern IMAGE_NAME_PATTERN = Pattern.compile(
     "幻灯片(\\d+)\\.(png|jpg|jpeg|gif)", Pattern.CASE_INSENSITIVE);
 

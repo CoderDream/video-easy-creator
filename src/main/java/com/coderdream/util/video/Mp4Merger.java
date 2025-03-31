@@ -1,5 +1,6 @@
 package com.coderdream.util.video;
 
+import com.coderdream.util.cd.CdTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -79,7 +80,7 @@ public class Mp4Merger {
       executeFfmpegCommand(command);
       Instant endTime = Instant.now(); // 记录结束时间
       Duration duration = Duration.between(startTime, endTime);
-      return formatDuration(duration);
+      return CdTimeUtil.formatDuration(duration.toMillis());
     } catch (IOException | InterruptedException e) {
       log.error("合并 MP4 文件失败: {}", e.getMessage(), e);
       return "合并 MP4 文件失败";
@@ -173,18 +174,4 @@ public class Mp4Merger {
     log.info("ffmpeg 命令执行成功");
   }
 
-  /**
-   * 将 Duration 格式化为 时:分:秒:毫秒 字符串
-   *
-   * @param duration Duration 对象
-   * @return 格式化后的字符串
-   */
-  private static String formatDuration(Duration duration) {
-    long hours = duration.toHours();
-    long minutes = duration.toMinutesPart();
-    long seconds = duration.toSecondsPart();
-    long milliseconds = duration.toMillisPart();
-    return String.format("%02d:%02d:%02d:%03d", hours, minutes, seconds,
-      milliseconds);
-  }
 }
