@@ -28,7 +28,6 @@ class GenAudioUtilTest {
     assertTrue(true);
   }
 
-
   @Test
   void process0101() {
     String folderPath = "D:\\0000\\EnBook001\\900\\";
@@ -121,6 +120,24 @@ class GenAudioUtilTest {
       GenAudioUtil.processV20250317(folderPath, subFolder);
     }
   }
+
+  @Test
+  void processBatchEnBook_0009() {
+    String bookName = "EnBook009";
+    String folderPath = OperatingSystem.getFolderPath(bookName);
+
+    List<String> subFolders = new ArrayList<>();
+    int end = 4; // 假定总共50章 51
+    for (int i = 3; i < end; i++) {
+      String dayNumberString = String.format("%03d", i); // 格式化天数序号为3位字符串
+      subFolders.add("Chapter" + dayNumberString);
+    }
+
+    for (String subFolder : subFolders) {
+      GenAudioUtil.processV20250317(folderPath, subFolder);
+    }
+  }
+
 
   // GenDualAudioUtil.genHeadAudio();
 

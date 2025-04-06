@@ -138,6 +138,8 @@ public class CdConstants {
 //  public static final String VIDEO_CN_PATH = "src/main/resources/video/cn/";
 //  public static final String VIDEO_EN_PATH = "src/main/resources/video/en/";
 
+  public static final String SAPI =  "sapi";
+
   // 百词斩标准起始时间字符串
   public static final String BAI_CI_ZAN_START_TIME = "2025-01-01 00:00:00";
 
@@ -182,8 +184,8 @@ public class CdConstants {
 
 //  public static final String YOUTUBE_API_KEY = System.getenv("GOOGLE_API_KEY");
 
-  public static final String GEMINI_API_KEY = System.getenv("GEMINI_API_KEY");
-  public static final String GROK_API_KEY = System.getenv("GROK_API_KEY");
+  public static final String GEMINI_API_KEY = "AIzaSyCFPln86K2C8MZUGPksB1V0EW_1QJA-dDU";// System.getenv("GEMINI_API_KEY");
+  public static final String GROK_API_KEY = "xai-5KRGYNaegWzP3x1C4nxlHvV21WCmCufOYXnaz8FIZAi2k599bkwAQFc5Idq7IF0LKQjQ8c5mEyh9SXki";//System.getenv("GROK_API_KEY");
 
   // proxy-host 127.0.0.1
   public static final String PROXY_HOST = "127.0.0.1";

@@ -10,6 +10,8 @@ import com.coderdream.util.gemini.GeminiApiUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.video.demo06.VideoEncoder02;
 import com.coderdream.util.wechat.MarkdownFileGenerator;
+import com.coderdream.util.wechat.MarkdownFileGenerator05;
+import com.coderdream.util.wechat.MarkdownFileGenerator06;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +23,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import swiss.ameri.gemini.api.GenAi.GeneratedContent;
@@ -35,6 +36,15 @@ public class DailyUtil {
 //     String folderName = "123456";
 //     String title = "【BBC六分钟英语】哪些人会购买高端相机？";
     MarkdownFileGenerator.genWechatArticle(folderName, title);
+  }
+
+  public static void processHalfHourEnglish(String folderName, String title) {
+//    TranslationUtil.genDescription(folderName);
+
+//     String folderName = "123456";
+//     String title = "【BBC六分钟英语】哪些人会购买高端相机？";
+    MarkdownFileGenerator05.genWechatArticle(folderName, title);
+//    MarkdownFileGenerator06.genYoutubeArticle(folderName, title);
   }
 
   /**

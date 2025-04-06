@@ -1,0 +1,12 @@
+<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts"
+    xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="zh-CN">
+    <voice name="zh-CN-XiaohanNeural">
+        ”等着，咱们两个一起走，
+            <prosody rate="+5.00%" pitch="+6.00%">瞧瞧</prosody>
+            <prosody contour="(49%, -11%)">他</prosody>
+            <prosody rate="+6.00%">
+                <phoneme alphabet="sapi" ph="qu 5">去</phoneme>
+            </prosody>
+            。”
+    </voice>
+</speak>

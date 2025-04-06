@@ -35,7 +35,7 @@ public class ImageTextOverlayUtil {
   // *** 新增的常量，用于控制字幕垂直位置 ***
   private static final int MAIN_TITLE_Y = 500; // 默认主标题 Y 坐标
   private static final int SUB_TITLE_Y = 120; // 0 用来标记需要自动计算，如果需要固定值，就设置具体的数值
-  private static final int TITLE_Y = 80;  // 顶部Title的Y坐标
+  private static final int TITLE_Y = 100;  // 顶部Title的Y坐标
   private static final int BOTTOM_TITLE_Y_OFFSET = -10; // 底部标题的 Y 轴偏移量（用于精细调整） 0 居中，负值，向下偏移
   private static final int SUB_TITLE_LINE_SPACING = 80; // 副标题行间距
 
@@ -87,6 +87,7 @@ public class ImageTextOverlayUtil {
       // 设置字体
       Font mainFont = new Font("Source Han Sans Heavy", Font.PLAIN, 96);
       Font subFont = new Font("Microsoft YaHei", Font.BOLD, 74);
+      Font subFont2 = new Font("Microsoft YaHei", Font.BOLD, 74);
       Font titleFont = new Font("Microsoft YaHei", Font.BOLD, 80);
       Font bottomFont = new Font("Source Han Sans Heavy", Font.PLAIN, 100);
 

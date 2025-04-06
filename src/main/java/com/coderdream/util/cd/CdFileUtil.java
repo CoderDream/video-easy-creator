@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.coderdream.entity.ArticleTitle;
 import com.coderdream.entity.DialogSingleEntity;
 import com.coderdream.entity.SubtitleEntity;
+import com.coderdream.entity.YoutubeInfoEntity;
 import com.coderdream.util.proxy.OperatingSystem;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -503,6 +504,38 @@ public class CdFileUtil {
 
     return result;
   }
+
+  public static List<YoutubeInfoEntity> getYoutubeVideoInfoEntityList() {
+    String fileName =
+      CdFileUtil.getResourceRealPath() + File.separator + "youtube"
+        + File.separator + "video_ids.txt";
+    List<String> stringList = FileUtil.readLines(fileName,
+      StandardCharsets.UTF_8);
+
+    List<YoutubeInfoEntity> result = new ArrayList<>();
+    YoutubeInfoEntity subtitleBaseEntity;
+    if (CollectionUtils.isNotEmpty(stringList)) {
+      for (String s : stringList) {
+        if (!StrUtil.isEmpty(s)) {
+          subtitleBaseEntity = new YoutubeInfoEntity();
+          String[] split = s.split("\\|");
+          if (split.length == 4) {
+            subtitleBaseEntity.setCategory(split[0]);
+            subtitleBaseEntity.setDateString(split[1]);
+            subtitleBaseEntity.setVideoId(split[2]);
+            subtitleBaseEntity.setTitle(split[3]);
+            result.add(subtitleBaseEntity);
+          } else {
+            log.error("数据格式不对, {}", s);
+          }
+
+        }
+      }
+    }
+
+    return result;
+  }
+
 
   public static @NotNull List<SubtitleEntity> getSubtitleEntityList(
     List<String> stringList) {

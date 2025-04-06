@@ -9,7 +9,9 @@ import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.youtube.YouTubeApiUtil;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class YouTubePlaylistVideoIds {
 
     private static final String API_ENDPOINT = "https://www.googleapis.com/youtube/v3/playlistItems";
@@ -25,17 +27,16 @@ public class YouTubePlaylistVideoIds {
             List<String> videoIds = getAllVideoIdsFromPlaylist(API_KEY, PLAYLIST_ID);
 
             if (videoIds != null) {
-                System.out.println("Playlist video IDs:");
+                log.info("Playlist video IDs:");
                 for (String videoId : videoIds) {
-                    System.out.println(videoId);
+                    log.info(videoId);
                 }
-                System.out.println("Total video count: " + videoIds.size());
+                log.info("Total video count: {}", videoIds.size());
             } else {
-                System.err.println("Failed to retrieve video IDs.");
+                log.error("Failed to retrieve video IDs.");
             }
         } catch (Exception e) {
-            System.err.println("An error occurred: " + e.getMessage());
-            e.printStackTrace();
+            log.error("An error occurred:  {}",  e.getMessage());
         }
     }
 
@@ -54,21 +55,20 @@ public class YouTubePlaylistVideoIds {
                     if (items != null && !items.isEmpty()) {
                         for (int i = 0; i < items.size(); i++) {
                             JSONObject item = items.getJSONObject(i);
+                            log.error("item: {}", item.toString());
                             JSONObject contentDetails = item.getJSONObject("contentDetails");
-
+                            log.error("contentDetails: {}", contentDetails.toString());
                             String videoId = contentDetails.getStr("videoId");
                             videoIds.add(videoId);
                         }
                     }
-
                     nextPageToken = responseJson.getStr("nextPageToken");
                 } else {
-                    System.err.println("Failed to retrieve playlist items.");
+                    log.error("Failed to retrieve playlist items.");
                     return null; // Indicate failure
                 }
             } catch (Exception e) {
-                System.err.println("Error processing API response: " + e.getMessage());
-                e.printStackTrace();
+                log.error("Error processing API response: {}", e.getMessage());
                 return null; // Indicate failure
             }
         } while (nextPageToken != null);
@@ -91,10 +91,10 @@ public class YouTubePlaylistVideoIds {
 
         try {
             String responseBody = HttpRequest.get(url).execute().body();
+            log.error("responseBody: {}", responseBody);
             return JSONUtil.parseObj(responseBody);
         } catch (Exception e) {
-            System.err.println("Error making API request: " + e.getMessage());
-            e.printStackTrace();
+            log.error("Error making API request:  {}",  e.getMessage());
             return null;
         }
     }

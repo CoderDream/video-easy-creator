@@ -1,0 +1,19 @@
+<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts"
+    xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="zh-CN">
+    <voice name="zh-CN-XiaohanNeural">
+        <mstts:express-as style="cheerful">”等着，咱们两个一起走，
+            <prosody rate="+5.00%" pitch="+6.00%">瞧瞧</prosody>
+            <prosody contour="(49%, -11%)">他</prosody>
+            <prosody rate="+6.00%">
+                <phoneme alphabet="sapi" ph="qu 5">去</phoneme>
+            </prosody>
+            。”
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-YunxiNeural">
+        <mstts:express-as style="Calm">“好好的<prosody pitch="+4.00%">又</prosody>生气了！就是我说错了，你到底也还<prosody
+            pitch="+5.00%">坐</prosody>一会，合别人<prosody pitch="+5.00%">说笑</prosody>一会<phoneme alphabet="sapi"
+            ph="zi 5">子</phoneme>呀？”
+        </mstts:express-as>
+    </voice>
+</speak>

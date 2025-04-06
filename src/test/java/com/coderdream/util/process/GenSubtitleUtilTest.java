@@ -136,18 +136,17 @@ class GenSubtitleUtilTest {
   }
 
   @Test
-  void processSrtAndGenDescription_0003_20230311() {
-    //    String filePath = "D:\\0000\\0003_PressBriefings\\250128\\250131.mp4";
-    // 专辑名称
-    String albumName = "0003_PressBriefings";
-    String folderName = "20250326"; // D:\0000\0007_Trump\20250227
-    String mp4FilePath =
-      OperatingSystem.getBaseFolder() + File.separator + albumName
-        + File.separator
-        + folderName + File.separator + folderName
-        + ".mp4";
+  void processSrtAndGenDescription_0003() {
+    String bookFolderName = "0003_PressBriefings";
+    String folderName = "20250402";
+    GenSubtitleUtil.processSrtAndGenDescription(bookFolderName, folderName);
+  }
 
-    GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
+  @Test
+  void processSrtAndGenDescription_0007() {
+    String bookFolderName = "0007_Trump";
+    String folderName = "20250331";
+    GenSubtitleUtil.processSrtAndGenDescription(bookFolderName, folderName);
   }
 
   @Test
@@ -199,6 +198,18 @@ class GenSubtitleUtilTest {
         + folderName + File.separator + folderName
         + ".mp4";
     GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
+  }
+
+  @Test
+  void processSrtAndGenDescription_000901() {
+    String bookFolderName = "0009_TechNews";
+    String folderName = "20250319"; // D:\0000\0007_Trump\20250227
+//    String mp4FilePath =
+//      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+//        + File.separator
+//        + folderName + File.separator + folderName
+//        + ".mp4";
+    GenSubtitleUtil.processSrtAndGenDescription(bookFolderName, folderName);
   }
 
   @Test

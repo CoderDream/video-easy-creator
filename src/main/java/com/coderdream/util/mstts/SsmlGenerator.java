@@ -1,5 +1,6 @@
 package com.coderdream.util.mstts;
 
+import com.coderdream.util.mstts.demo04.SSMLGenerator;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileWriter;
@@ -29,8 +30,14 @@ public class SsmlGenerator {
                 .append("\">\n");
 
         for (String text : textList) {
-            String escapedText = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;");
-            ssmlBuilder.append("      ").append(escapedText).append("\n");
+          String escapedText = text.replace("&", "&amp;")
+            .replace("<", "&lt;")
+            .replace(">", "&gt;")
+            .replace("\"", "&quot;")
+            .replace("'", "&apos;");
+          // 生成 phoneme，处理多音字
+          escapedText = SSMLGenerator.generatePhoneme(escapedText);
+          ssmlBuilder.append(escapedText).append(" ");
         }
 
         ssmlBuilder.append("    </prosody>\n");
@@ -65,7 +72,7 @@ public class SsmlGenerator {
    * @param args
    */
   public static void main(String[] args) {
-        List<String> textList = List.of("你好", "欢迎使用微软的文本转语音服务！");
+        List<String> textList = List.of("你好", "欢迎使用微软的文本转语音服务！", "现在很晚了，要准备睡觉[4]了！");
         String voiceName = "zh-CN-XiaoxiaoNeural";
         String pitch = "medium";
         String volume = "medium";

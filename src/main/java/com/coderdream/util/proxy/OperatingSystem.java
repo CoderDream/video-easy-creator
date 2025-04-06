@@ -151,7 +151,7 @@ public class OperatingSystem {
   /**
    * 获取Hexo项目地址 D:\04_GitHub\hexo\half-hour-english
    *
-   * @return
+   * @return 项目Hexo文件夹
    */
   public static String getHalfHourEnglishHexoFolder() {
     String osType = OperatingSystem.getOS();

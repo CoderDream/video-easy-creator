@@ -8,7 +8,10 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.StrUtil;
 import com.coderdream.entity.SubtitleEntity;
 import com.coderdream.util.audio.FfmpegUtil2;
+import com.coderdream.util.bbc.ProcessScriptUtil;
 import com.coderdream.util.bbc.StringSplitter4;
+import com.coderdream.util.bbc.WordCountForCefrUtil;
+import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.sentence.StanfordSentenceSplitter;
 import com.coderdream.util.translate.TranslateUtil;
 import com.coderdream.util.cd.CdConstants;
@@ -19,6 +22,7 @@ import com.coderdream.util.daily.DailyUtil;
 import com.coderdream.util.sentence.demo03.SentenceMerger;
 import com.coderdream.util.sentence.demo03.StanfordNLPSentenceSplitter;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -178,9 +182,10 @@ public class GenSubtitleUtil {
       "." + CdConstants.SUBTITLE_ZH_TW);
 
     // 使用现成的文本
-    String geminiFilePath = CdFileUtil.addPostfixToFileName(txtFileName,
+    String geminiFilePath = CdFileUtil.addPostfixToFileName(
+      srtTextScriptFileName,
       "_pure_gemini");
-    String grokFilePath = CdFileUtil.addPostfixToFileName(txtFileName,
+    String grokFilePath = CdFileUtil.addPostfixToFileName(srtTextScriptFileName,
       "_pure_grok");
 
     // 翻译不为空，英文字幕不为空，使用gemini翻译
@@ -190,6 +195,50 @@ public class GenSubtitleUtil {
       srcFileNameZhCn))) {
       // TODO 不带空格的纯文本文件，第一行英文，第二行中文
       List<String> chTxtList = CdFileUtil.readFileContent(geminiFilePath);
+      List<SubtitleEntity> subtitleEntityZhCnList = new ArrayList<>();
+      List<SubtitleEntity> subtitleEntityZhTwList = new ArrayList<>();
+      List<SubtitleEntity> subtitleEntityEnList = CdFileUtil.readSrtFileContent(
+        srcFileNameEn);
+      assert chTxtList != null;
+      if (subtitleEntityEnList.size() != chTxtList.size() / 2) {
+        log.error("字幕文件数量不一致，无法合并");
+        return;
+      } else {
+        SubtitleEntity subtitleEntityZhCn;
+        SubtitleEntity subtitleEntityZhTw;
+        for (int i = 0; i < subtitleEntityEnList.size(); i++) {
+          SubtitleEntity subtitleEntity = subtitleEntityEnList.get(i);
+          subtitleEntityZhCn = new SubtitleEntity();
+          BeanUtil.copyProperties(subtitleEntity, subtitleEntityZhCn);
+          subtitleEntityZhCn.setSubtitle(
+            ZhConverterUtil.toSimple(chTxtList.get(i * 2 + 1)));
+          subtitleEntityZhCnList.add(subtitleEntityZhCn);
+
+          subtitleEntityZhTw = new SubtitleEntity();
+          BeanUtil.copyProperties(subtitleEntity, subtitleEntityZhTw);
+          subtitleEntityZhTw.setSubtitle(
+            ZhConverterUtil.toTraditional(chTxtList.get(i * 2 + 1)));
+          subtitleEntityZhTwList.add(subtitleEntityZhTw);
+        }
+      }
+      if (!subtitleEntityZhCnList.isEmpty()
+        && !subtitleEntityZhTwList.isEmpty()) {
+        SubtitleUtil.writeToSubtitleFile(srcFileNameZhCn,
+          subtitleEntityZhCnList);
+        SubtitleUtil.writeToSubtitleFile(srcFileNameZhTw,
+          subtitleEntityZhTwList);
+      }
+    } else {
+      log.info("geminiFilePath 文件已存在: {} {}", geminiFilePath);
+    }
+
+    // 翻译不为空，英文字幕不为空，使用 grok 翻译
+    if (!CdFileUtil.isFileEmpty(grokFilePath) && !CdFileUtil.isFileEmpty(
+      srcFileNameEn) && (CdFileUtil.isFileEmpty(srcFileNameZhCn)
+      || CdFileUtil.isFileEmpty(
+      srcFileNameZhCn))) {
+      // TODO 不带空格的纯文本文件，第一行英文，第二行中文
+      List<String> chTxtList = CdFileUtil.readFileContent(grokFilePath);
       List<SubtitleEntity> subtitleEntityZhCnList = new ArrayList<>();
       List<SubtitleEntity> subtitleEntityZhTwList = new ArrayList<>();
       List<SubtitleEntity> subtitleEntityEnList = CdFileUtil.readSrtFileContent(
@@ -306,6 +355,262 @@ public class GenSubtitleUtil {
     } else {
       log.info("描述文件已存在: {}， {}", chnMdFileName, chtMdFileName);
     }
+  }
+
+  public static void processSrtAndGenDescription(String bookFolderName,
+    String folderName) {
+    //     String bookFolderName = "0009_TechNews";
+    //    String folderName = "20250319"; // D:\0000\0007_Trump\20250227
+    String folderPath =
+      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+        + File.separator
+        + folderName;
+    String mp4FilePath = folderPath + File.separator + folderName + ".mp4";
+    // 生成英文SRT文件
+    final String srcFileName = CdFileUtil.changeExtension(mp4FilePath, "srt");
+    final String srcFileNameEn = CdFileUtil.addPostfixToFileName(srcFileName,
+      "." + CdConstants.SUBTITLE_EN);
+    // _raw.srt
+
+    final String txtFileName = CdFileUtil.changeExtension(mp4FilePath, "txt");
+    String srtTextRawFileName = CdFileUtil.addPostfixToFileName(txtFileName,
+      "_raw");
+    String srtTextScriptFileName = CdFileUtil.addPostfixToFileName(txtFileName,
+      "_script");
+
+    srtTextRawFileName = CdFileUtil.changeExtension(srtTextRawFileName, "txt");
+    String srtTextScriptPureFileName = CdFileUtil.addPostfixToFileName(
+      srtTextScriptFileName,
+      "_pure");
+    // 如果 XXX.en.srt 不存在 或者 _script.txt， 生成英文SRT文件
+    if (CdFileUtil.isFileEmpty(srcFileNameEn) || CdFileUtil.isFileEmpty(
+      srtTextScriptFileName)) {
+      if (!CdFileUtil.isFileEmpty(srcFileName)) {
+        // 生成原始文本文件
+        genRawTextFile(srcFileName, srtTextScriptFileName, srtTextRawFileName);
+        // 生成新的字幕文件
+        // 过滤内容文件
+
+        GenSubtitleUtil.processRawToPureTextFile(srtTextScriptFileName,
+          srtTextScriptPureFileName);
+
+        log.info("生成英文SRT文件: {}", srcFileNameEn);
+//        String rawContent = String.join(" ", srtTxtList);
+        // 检查 mp3 文件是否存在，不存在则先生成
+        String mp3FileName = CdFileUtil.changeExtension(srcFileName, "mp3");
+        if (CdFileUtil.isFileEmpty(mp3FileName)) {
+          String mp4FileName = CdFileUtil.changeExtension(srcFileName, "mp4");
+          FfmpegUtil2.extractAudioFromMp4(mp4FileName, mp3FileName);
+        }
+
+        if (!CdFileUtil.isFileEmpty(mp3FileName)) {
+          // 生成新的字幕文件
+          SubtitleUtil.genSrtByExecuteCommand(mp3FileName,
+            srtTextScriptPureFileName,
+            srcFileNameEn, "eng");
+        } else {
+          log.warn("mp3 文件不存在，无法生成字幕文件: {}", mp3FileName);
+        }
+      } else {
+        log.info("srtFilePath 文件已存在: {} ", srcFileName);
+      }
+    }
+
+    // 过滤内容文件
+    GenSubtitleUtil.filterContentFile(srcFileNameEn, srcFileNameEn);
+
+    //  生成中文SRT文件，通过谷歌服务翻译
+    String srcFileNameZhCn = CdFileUtil.changeExtension(mp4FilePath, "srt");
+    srcFileNameZhCn = CdFileUtil.addPostfixToFileName(srcFileNameZhCn,
+      "." + CdConstants.SUBTITLE_ZH_CN);
+    String srcFileNameZhTw = CdFileUtil.changeExtension(mp4FilePath, "srt");
+    srcFileNameZhTw = CdFileUtil.addPostfixToFileName(srcFileNameZhTw,
+      "." + CdConstants.SUBTITLE_ZH_TW);
+
+    // 使用现成的文本
+    String geminiFilePath = CdFileUtil.addPostfixToFileName(
+      srtTextScriptFileName,
+      "_pure_gemini");
+    String grokFilePath = CdFileUtil.addPostfixToFileName(srtTextScriptFileName,
+      "_pure_grok");
+    if(CdFileUtil.isFileEmpty(geminiFilePath) && !CdFileUtil.isFileEmpty(srtTextScriptPureFileName)) {
+      ProcessScriptUtil.translateByGemini("dialog", srtTextScriptPureFileName,
+        geminiFilePath, 10);
+    }
+
+    if(CdFileUtil.isFileEmpty(grokFilePath) && !CdFileUtil.isFileEmpty(srtTextScriptPureFileName)) {
+      ProcessScriptUtil.translateByGrok("dialog", srtTextScriptPureFileName,
+        grokFilePath, 10);
+    }
+
+    // 翻译不为空，英文字幕不为空，使用gemini翻译
+    if (!CdFileUtil.isFileEmpty(geminiFilePath) && !CdFileUtil.isFileEmpty(
+      srcFileNameEn) && (CdFileUtil.isFileEmpty(srcFileNameZhCn)
+      || CdFileUtil.isFileEmpty(
+      srcFileNameZhCn))) {
+      List<String> chTxtList = CdFileUtil.readFileContent(geminiFilePath);
+      List<SubtitleEntity> subtitleEntityZhCnList = new ArrayList<>();
+      List<SubtitleEntity> subtitleEntityZhTwList = new ArrayList<>();
+      List<SubtitleEntity> subtitleEntityEnList = CdFileUtil.readSrtFileContent(
+        srcFileNameEn);
+      assert chTxtList != null;
+      if (subtitleEntityEnList.size() != chTxtList.size() / 2) {
+        log.error("字幕文件数量不一致，无法合并");
+        return;
+      } else {
+        SubtitleEntity subtitleEntityZhCn;
+        SubtitleEntity subtitleEntityZhTw;
+        for (int i = 0; i < subtitleEntityEnList.size(); i++) {
+          SubtitleEntity subtitleEntity = subtitleEntityEnList.get(i);
+          subtitleEntityZhCn = new SubtitleEntity();
+          BeanUtil.copyProperties(subtitleEntity, subtitleEntityZhCn);
+          subtitleEntityZhCn.setSubtitle(
+            ZhConverterUtil.toSimple(chTxtList.get(i * 2 + 1)));
+          subtitleEntityZhCnList.add(subtitleEntityZhCn);
+
+          subtitleEntityZhTw = new SubtitleEntity();
+          BeanUtil.copyProperties(subtitleEntity, subtitleEntityZhTw);
+          subtitleEntityZhTw.setSubtitle(
+            ZhConverterUtil.toTraditional(chTxtList.get(i * 2 + 1)));
+          subtitleEntityZhTwList.add(subtitleEntityZhTw);
+        }
+      }
+      if (!subtitleEntityZhCnList.isEmpty()
+        && !subtitleEntityZhTwList.isEmpty()) {
+        SubtitleUtil.writeToSubtitleFile(srcFileNameZhCn,
+          subtitleEntityZhCnList);
+        SubtitleUtil.writeToSubtitleFile(srcFileNameZhTw,
+          subtitleEntityZhTwList);
+      }
+    } else {
+      log.info("geminiFilePath 文件已存在: {} {}", geminiFilePath);
+    }
+
+    // 翻译不为空，英文字幕不为空，使用 grok 翻译
+    if (!CdFileUtil.isFileEmpty(grokFilePath) && !CdFileUtil.isFileEmpty(
+      srcFileNameEn) && (CdFileUtil.isFileEmpty(srcFileNameZhCn)
+      || CdFileUtil.isFileEmpty(
+      srcFileNameZhCn))) {
+      // TODO 不带空格的纯文本文件，第一行英文，第二行中文
+      List<String> chTxtList = CdFileUtil.readFileContent(grokFilePath);
+      List<SubtitleEntity> subtitleEntityZhCnList = new ArrayList<>();
+      List<SubtitleEntity> subtitleEntityZhTwList = new ArrayList<>();
+      List<SubtitleEntity> subtitleEntityEnList = CdFileUtil.readSrtFileContent(
+        srcFileNameEn);
+      assert chTxtList != null;
+      if (subtitleEntityEnList.size() != chTxtList.size() / 2) {
+        log.error("字幕文件数量不一致，无法合并");
+        return;
+      } else {
+        SubtitleEntity subtitleEntityZhCn;
+        SubtitleEntity subtitleEntityZhTw;
+        for (int i = 0; i < subtitleEntityEnList.size(); i++) {
+          SubtitleEntity subtitleEntity = subtitleEntityEnList.get(i);
+          subtitleEntityZhCn = new SubtitleEntity();
+          BeanUtil.copyProperties(subtitleEntity, subtitleEntityZhCn);
+          subtitleEntityZhCn.setSubtitle(
+            ZhConverterUtil.toSimple(chTxtList.get(i * 2 + 1)));
+          subtitleEntityZhCnList.add(subtitleEntityZhCn);
+
+          subtitleEntityZhTw = new SubtitleEntity();
+          BeanUtil.copyProperties(subtitleEntity, subtitleEntityZhTw);
+          subtitleEntityZhTw.setSubtitle(
+            ZhConverterUtil.toTraditional(chTxtList.get(i * 2 + 1)));
+          subtitleEntityZhTwList.add(subtitleEntityZhTw);
+        }
+      }
+      if (!subtitleEntityZhCnList.isEmpty()
+        && !subtitleEntityZhTwList.isEmpty()) {
+        SubtitleUtil.writeToSubtitleFile(srcFileNameZhCn,
+          subtitleEntityZhCnList);
+        SubtitleUtil.writeToSubtitleFile(srcFileNameZhTw,
+          subtitleEntityZhTwList);
+      }
+    }
+
+    //  通过微软服务翻译
+    int retryTime = 0;
+    while ((CdFileUtil.isFileEmpty(srcFileNameZhCn) || CdFileUtil.isFileEmpty(
+      srcFileNameZhCn)) && retryTime < 10) {
+      if (retryTime > 0) {
+        log.info(CdConstants.TRANSLATE_PLATFORM_MSTTS + " 重试次数: {}",
+          retryTime);
+      }
+      TranslateUtil.translateSrcWithPlatform(srcFileNameEn, srcFileNameZhCn,
+        srcFileNameZhTw,
+        CdConstants.TRANSLATE_PLATFORM_MSTTS);
+      retryTime++;
+      ThreadUtil.sleep(3000L);
+    }
+
+    if (!CdFileUtil.isFileEmpty(srcFileNameZhCn) && !CdFileUtil.isFileEmpty(
+      srcFileNameZhTw)) {
+      log.info("chnSrcFileName 文件已创建: {} {}", srcFileNameZhCn,
+        srcFileNameZhTw);
+    } else {
+      log.warn("重试 10 次后，文件仍为空: {} {}", srcFileNameZhCn,
+        srcFileNameZhTw);
+      return;
+    }
+
+    retryTime = 0;
+    while ((CdFileUtil.isFileEmpty(srcFileNameZhCn) || CdFileUtil.isFileEmpty(
+      srcFileNameZhCn)) && retryTime < 10) {
+      if (retryTime > 0) {
+        log.info(CdConstants.TRANSLATE_PLATFORM_GEMINI + " 重试次数: {}",
+          retryTime);
+      }
+      TranslateUtil.translateSrcWithPlatform(srcFileNameEn, srcFileNameZhCn,
+        srcFileNameZhTw,
+        CdConstants.TRANSLATE_PLATFORM_GEMINI);
+      retryTime++;
+    }
+    if (!CdFileUtil.isFileEmpty(srcFileNameZhCn)) {
+      log.info("srcFileNameZhCn 文件已创建: {}", srcFileNameZhCn);
+      log.info(CdConstants.TRANSLATE_PLATFORM_GEMINI + " 重试次数: {}",
+        retryTime);
+    } else {
+      log.warn("重试 10 次后，文件仍为空: {}", srcFileNameZhCn);
+    }
+
+    //  生成中文SRT文件
+//    String srtFilePath = CdFileUtil.changeExtension(srcFilePath, "srt");
+    //  生成中文SRT文件  public static final String SUBTITLE_EN_ZH_CN = "en-zh-CN";
+    //  public static final String SUBTITLE_EN_ZH_TW = "en-zh-TW";
+    String srcFileNameEnZhCn = CdFileUtil.changeExtension(mp4FilePath, "srt");
+    srcFileNameEnZhCn = CdFileUtil.addPostfixToFileName(srcFileNameEnZhCn,
+      "." + CdConstants.SUBTITLE_EN_ZH_CN);
+    String srcFileNameEnZhTw = CdFileUtil.changeExtension(mp4FilePath, "srt");
+    srcFileNameEnZhTw = CdFileUtil.addPostfixToFileName(srcFileNameEnZhTw,
+      "." + CdConstants.SUBTITLE_EN_ZH_TW);
+    if (CdFileUtil.isFileEmpty(srcFileNameEnZhCn) || CdFileUtil.isFileEmpty(
+      srcFileNameEnZhTw)) {
+      SubtitleUtil.mergeSubtitleFile(srcFileNameEn, srcFileNameZhCn,
+        srcFileNameEnZhCn);
+      SubtitleUtil.mergeSubtitleFile(srcFileNameEn, srcFileNameZhTw,
+        srcFileNameEnZhTw);
+    } else {
+      log.info("srtFilePath 文件已存在: {} {}", srcFileNameEnZhCn,
+        srcFileNameEnZhTw);
+    }
+
+    // 看看翻译质量 TODO
+
+    // 生成Markdown文件
+    String mdFileName = Objects.requireNonNull(
+      CdFileUtil.changeExtension(mp4FilePath, "md"));
+    String chnMdFileName = CdFileUtil.addPostfixToFileName(mdFileName, "_chn");
+    String chtMdFileName = CdFileUtil.addPostfixToFileName(mdFileName, "_cht");
+
+    if (CdFileUtil.isFileEmpty(chnMdFileName) || CdFileUtil.isFileEmpty(
+      chtMdFileName)) {
+      DailyUtil.generateDescription(srcFileNameEnZhCn, chnMdFileName,
+        chtMdFileName);
+    } else {
+      log.info("描述文件已存在: {}， {}", chnMdFileName, chtMdFileName);
+    }
+
+    WordCountForCefrUtil.genVocTable(folderPath, folderName);
   }
 
   public static void genRawTextFile(String srcFileName,
@@ -465,8 +770,6 @@ public class GenSubtitleUtil {
 
   /**
    * 生成原始的SRT文件
-   *
-   * @param filePath 文件路径
    */
   public static void processRawToPureTextFile(String rawFileName,
     String pureFileName) {
@@ -489,6 +792,10 @@ public class GenSubtitleUtil {
       "[applause]",
       "[Laughter]",
       "[Inaudible]",
+      "[Music]",
+      "(Applause)",
+      "(Music)",
+      "[ Sound Effects ]",
       "[ Applause ]",
       "[ Applause ]",
       "[ Applause ]",
@@ -501,6 +808,8 @@ public class GenSubtitleUtil {
         content = content.replace(" -- ", ", ");
         // ...替换为句号
         content = content.replace("...", ".");
+        // 去掉开头的减号
+        content = content.replaceFirst("^-", "");
 
         // 过滤掉不需要的内容
         for (String filter : filterList) {

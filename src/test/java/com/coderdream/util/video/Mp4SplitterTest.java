@@ -13,15 +13,15 @@ class Mp4SplitterTest {
   @Test
   void splitVideo0003() {
 //D:\0000\0003_PressBriefings\250317
-    String folderName = "20250326";
+    String folderName = "20250401";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings" + File.separator
+      OperatingSystem.getBaseFolder() + File.separator + "0009_TechNews" + File.separator
         + folderName;
     String inputFilePath = folderPath + File.separator + folderName + "_raw.mp4";
 
     // 示例用法
 //    String inputFilePath = "D:\\0000\\0003_PressBriefings\\250128\\250128.mp4";
-    String timeStr = "00:00:04,000 --> 00:24:10,000";// 00:00:45,560 --> 00:00:49,960
+    String timeStr = "00:00:34,000 --> 00:36:47,000";// 00:00:45,560 --> 00:00:49,960
 
 //        00:00:49,960 --> 00:00:53,640
     String[] times = timeStr.split(" --> ");

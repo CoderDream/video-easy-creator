@@ -45,7 +45,8 @@ public class YouTubePlaylistDetailsEnhanced {
       if (playlistItems != null) {
         log.info("播放列表信息:");
         for (PlaylistItemInfo item : playlistItems) {
-          log.info(item.toString()); // 使用 Lombok 自动生成的 toString 方法
+//          log.info(item.toString()); // 使用 Lombok 自动生成的 toString 方法
+          log.info("{} : {}",item.getVideoId(),item.getTitle()); // 使用 Lombok 自动生成的 toString 方法
         }
         log.info("总条目数: {}", playlistItems.size());
       } else {

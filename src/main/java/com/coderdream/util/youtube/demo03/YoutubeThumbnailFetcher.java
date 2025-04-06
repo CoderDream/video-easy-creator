@@ -105,6 +105,36 @@ public class YoutubeThumbnailFetcher {
     }
   }
 
+  public static void downloadThumbnail(String thumbnailUrl,String thumbnailFileName) {
+    if (thumbnailUrl == null) {
+      log.info("封面 URL 为空，无法下载。");
+      return;
+    }
+
+    try {
+
+      // 下载图片
+      URL url = new URL(thumbnailUrl);
+      URLConnection connection = url.openConnection();
+      InputStream inputStream = connection.getInputStream();
+      FileOutputStream outputStream = new FileOutputStream(thumbnailFileName);
+
+      byte[] buffer = new byte[1024];
+      int bytesRead;
+      while ((bytesRead = inputStream.read(buffer)) != -1) {
+        outputStream.write(buffer, 0, bytesRead);
+      }
+
+      outputStream.close();
+      inputStream.close();
+
+      log.info("成功下载封面到: " + thumbnailFileName);
+
+    } catch (IOException e) {
+      log.error("下载图片时发生错误: " + e.getMessage());
+    }
+  }
+
   public static void getThumbnail(String videoUrl, String thumbnailPath,
     String thumbnailFileName) {
     String videoId = "";
@@ -122,6 +152,28 @@ public class YoutubeThumbnailFetcher {
       log.info("视频 {} 的封面 URL: {}", videoId, thumbnailUrl);
       // 下载图片
       downloadThumbnail(thumbnailUrl, thumbnailPath, thumbnailFileName);
+    } else {
+      log.info("无法获取视频 " + videoId + " 的封面 URL");
+    }
+  }
+
+
+  public static void getThumbnail(String videoUrl, String thumbnailFileName) {
+    String videoId = "";
+    String[] split = videoUrl.split("=");
+    if (split.length > 1) {
+      videoId = split[1];
+    } else {
+      log.info("视频链接格式不正确，无法提取视频ID");
+      return;
+    }
+
+    String thumbnailUrl = getYoutubeThumbnailUrl(videoId); // 不再需要传递API_KEY
+    log.info("视频 {},  的封面 URL: {}", videoId, thumbnailUrl);
+    if (thumbnailUrl != null) {
+      log.info("视频 {} 的封面 URL: {}", videoId, thumbnailUrl);
+      // 下载图片
+      downloadThumbnail(thumbnailUrl, thumbnailFileName);
     } else {
       log.info("无法获取视频 " + videoId + " 的封面 URL");
     }

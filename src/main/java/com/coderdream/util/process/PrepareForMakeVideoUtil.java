@@ -67,11 +67,11 @@ public class PrepareForMakeVideoUtil {
     // 4. 封面
   }
 
-  public static void processYoutube(String typeName, String folderName) {
+  public static void processYoutube(String categoryName, String folderName) {
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + typeName
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
         + File.separator + folderName;
-    String distFolderName = "D:\\0000_video" + File.separator + typeName;
+    String distFolderName = "D:\\0000_video" + File.separator + categoryName;
     if (!FileUtil.exist(distFolderName)) {
       File mkdir = FileUtil.mkdir(distFolderName);
       log.info("创建文件夹结果：{}", mkdir);
@@ -136,7 +136,7 @@ public class PrepareForMakeVideoUtil {
   }
 
   public static void main(String[] args) {
-    String folderName = "170622";
+    String folderName = "170706";
     PrepareForMakeVideoUtil.processForSixMinutes(folderName);
   }
 

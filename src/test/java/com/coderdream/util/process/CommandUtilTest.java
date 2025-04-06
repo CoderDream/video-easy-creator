@@ -7,6 +7,8 @@ import com.coderdream.util.video.Mp4Splitter;
 import com.coderdream.util.youtube.demo02.CommandUtil;
 import com.coderdream.util.youtube.demo02.CommandUtil02;
 import com.coderdream.util.youtube.demo03.YoutubeThumbnailFetcher;
+import com.coderdream.util.youtube.demo05.CommandUtil05;
+import com.coderdream.util.youtube.demo06.CommandUtil06;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,10 +26,10 @@ class CommandUtilTest {
 
     // D:\0000\0005_VP\vance_0002
 
-    String bookFolderName = "background";
+    String categoryName = "background";
     String subFolder = "ocean_0001";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
         + File.separator;
 
     String videoLink = "https://www.youtube.com/watch?v=6Jy7_25opFo"; // 替换为实际的视频链接
@@ -37,24 +39,6 @@ class CommandUtilTest {
     CommandUtil02.downloadBest1080p(videoLink, outputFileName);
   }
 
-  //
-  @Test
-  void downloadBest720p_() {
-
-    // D:\0000\0005_VP\vance_0002 D:\0000\0003_PressBriefings\250305
-
-    String bookFolderName = "0003_PressBriefings";
-    String subFolder = "250319";
-    String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
-        + File.separator;
-
-    String videoLink = "https://www.youtube.com/watch?v=ElUUgflrQjE";// "https://www.youtube.com/watch?v=dCY0b1wWX9A"; // 替换为实际的视频链接
-    String outputFileName =
-      folderPath + File.separator + subFolder + File.separator + subFolder
-        + ".mp4"; // 替换为期望的输出路径和文件名
-    CommandUtil02.downloadBest720p(videoLink, outputFileName);
-  }
 
   //  0006_KK
   @Test
@@ -62,10 +46,10 @@ class CommandUtilTest {
 
     // D:\0000\0005_VP\vance_0002 D:\0000\0003_PressBriefings\250305
 
-    String bookFolderName = "0006_KarolineLeavitt";
+    String categoryName = "0006_KarolineLeavitt";
     String subFolder = "20250222";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName;
+      OperatingSystem.getBaseFolder() + File.separator + categoryName;
 
     String videoLink = "https://www.youtube.com/watch?v=8Gd48gDAh5o";// "https://www.youtube.com/watch?v=dCY0b1wWX9A"; // 替换为实际的视频链接
     String outputFileName =
@@ -89,80 +73,19 @@ class CommandUtilTest {
 
 
   @Test
-  void downloadBest720p() {
-
-    // D:\0000\0005_VP\vance_0002
-
-    String bookFolderName = "0005_VP";
-    String subFolder = "20250328";
-    String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
-        + File.separator;
-
-    String videoLink = "https://www.youtube.com/watch?v=edTYfp5XKDs";// "https://www.youtube.com/watch?v=dCY0b1wWX9A"; // 替换为实际的视频链接
-    String outputFileName =
-      folderPath + File.separator + subFolder + File.separator + subFolder
-        + ".mp4"; // 替换为期望的输出路径和文件名
-    CommandUtil02.downloadBest720p(videoLink, outputFileName);
-  }
-
-  // https://www.youtube.com/watch?v=S_YtXWVfkJE
-
-  @Test
-  void downloadBest720p_02() {
-    String bookFolderName = "0007_Trump";
-    String subFolder = "20250302";
-    String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
-        + File.separator;
-    if (!new File(folderPath + File.separator + subFolder).exists()) {
-      boolean mkdir = new File(folderPath + File.separator + subFolder).mkdir();
-      log.info("mkdir: {}", mkdir);
-    }
-
-    String videoLink = "https://www.youtube.com/watch?v=QhHTYWiBC44"; // 替换为实际的视频链接
-    String outputFileName =
-      folderPath + File.separator + subFolder + File.separator + subFolder
-        + ".mp4"; // 替换为期望的输出路径和文件名
-    CommandUtil02.downloadBest720p(videoLink, outputFileName);
-  }
-
-  @Test
-  void downloadBest720p_03() {
-
-    // D:\0000\0007_Trump\20250227
-
-    String bookFolderName = "0007_Trump";
-    String subFolder = "20250307";
-    String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
-        + File.separator;
-    if (!new File(folderPath + File.separator + subFolder).exists()) {
-      boolean mkdir = new File(folderPath + File.separator + subFolder).mkdir();
-      log.info("mkdir: {}", mkdir);
-    }
-
-    String videoLink = "https://www.youtube.com/watch?v=p0lGDWXxHI8"; // 替换为实际的视频链接
-    String outputFileName =
-      folderPath + File.separator + subFolder + File.separator + subFolder
-        + ".mp4"; // 替换为期望的输出路径和文件名
-    CommandUtil02.downloadBest720p(videoLink, outputFileName);
-  }
-
-  @Test
   void downloadBest720p_000801() {
     // D:\0000\0007_Trump\20250227 D:\0000\0008_DailyNews\0008_0001
-    String bookFolderName = "0008_DailyNews";
+    String categoryName = "0008_DailyNews";
     String subFolder = "20250319";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
         + File.separator;
     if (!new File(folderPath + File.separator + subFolder).exists()) {
       boolean mkdir = new File(folderPath + File.separator + subFolder).mkdir();
       log.info("0008_DailyNews mkdir: {}", mkdir);
     }
 
-    String videoLink = "https://www.youtube.com/watch?v=TRUTia9JXe4"; // 替换为实际的视频链接
+    String videoLink = "https://www.youtube.com/watch?v=3R0swDZgjH8"; // 替换为实际的视频链接
     String outputFileName =
       folderPath + File.separator + subFolder + File.separator + subFolder
         + ".mp4"; // 替换为期望的输出路径和文件名
@@ -187,12 +110,114 @@ class CommandUtilTest {
   }
 
   @Test
+  void downloadBest720p_0003_PressBriefings() {
+    String categoryName = "0003_PressBriefings"; // D:\0000\0003_PressBriefings
+    String subFolder = "20250331";
+    String videoLink = "https://www.youtube.com/watch?v=oQE2dgqe_bI"; // // 替换为实际的视频链接
+    processSteps(categoryName, subFolder, videoLink);
+  }
+
+  //
+
+
+  @Test
+  void downloadBest720p_0007_Trump() {
+    String categoryName = "0007_Trump"; // D:\0000\0003_PressBriefings
+    String subFolder = "20250403";
+    String videoLink = "https://www.youtube.com/watch?v=GaWx82C2jd4"; // // 替换为实际的视频链接
+    processSteps(categoryName, subFolder, videoLink);
+  }
+
+  // https://www.youtube.com/watch?v=wui5-4VQjY0
+
+
+  @Test
+  void downloadBest720p_0005_Vance() {
+    String categoryName = "0005_Vance";
+    String subFolder = "20250329";
+    String videoLink = "https://www.youtube.com/watch?v=edTYfp5XKDs"; // // 替换为实际的视频链接
+    processSteps(categoryName, subFolder, videoLink);
+  }
+
+
+  @Test
+  void downloadBest720p_0009_TechNews() {
+    String categoryName = "0009_TechNews"; // D:\0000\0003_PressBriefings
+    String subFolder = "20250401";
+    String videoLink = "https://www.youtube.com/watch?v=wui5-4VQjY0"; // // 替换为实际的视频链接
+    processSteps(categoryName, subFolder, videoLink);
+  }
+
+  private static void processSteps(String categoryName, String subFolder,
+    String videoLink) {
+    String folderPath =
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
+        + File.separator + subFolder;
+    if (!new File(folderPath).exists()) {
+      boolean mkdir = new File(folderPath).mkdir();
+      log.info("mkdir: {}", mkdir);
+    }
+
+    String outputFileName =
+      folderPath + File.separator + subFolder + ".mp4"; // 替换为期望的输出路径和文件名
+    if (CdFileUtil.isFileEmpty(outputFileName)) {
+      CommandUtil06.downloadBest720p(videoLink, outputFileName);
+    }
+
+    String thumbnailPath =
+      CdFileUtil.changeExtension(outputFileName,"png");
+
+//    thumbnailPath = CdFileUtil.addPostfixToFileName(thumbnailPath,
+//      "_thumbnail");
+
+    if (CdFileUtil.isFileEmpty(thumbnailPath)) {
+      YoutubeThumbnailFetcher.getThumbnail(videoLink, thumbnailPath);
+      log.info("封面文件下载成功: {}", thumbnailPath);
+    } else {
+      log.info("封面文件已存在，无需重新获取: {}", thumbnailPath);
+    }
+  }
+
+  @Test
+  void downloadBest720p_000901() {
+    String categoryName = "0009_TechNews";
+    String subFolder = "20250401";
+    String folderPath =
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
+        + File.separator + File.separator + subFolder;
+    if (!new File(folderPath).exists()) {
+      boolean mkdir = new File(folderPath).mkdir();
+      log.info("0009_TechNews mkdir: {}", mkdir);
+    }
+
+    String videoLink = "https://www.youtube.com/watch?v=wui5-4VQjY0"; // // 替换为实际的视频链接
+    String outputFileName =
+      folderPath + File.separator + subFolder + ".mp4"; // 替换为期望的输出路径和文件名
+    if (CdFileUtil.isFileEmpty(outputFileName)) {
+      CommandUtil06.downloadBest720p(videoLink, outputFileName);
+    }
+
+    String thumbnailPath =
+      CdFileUtil.getPureFileNameWithoutExtensionWithPath(outputFileName)
+        + ".jpg";
+
+    thumbnailPath = CdFileUtil.addPostfixToFileName(thumbnailPath,
+      "_thumbnail");
+
+    if (CdFileUtil.isFileEmpty(thumbnailPath)) {
+      YoutubeThumbnailFetcher.getThumbnail(videoLink, thumbnailPath);
+    } else {
+      log.info("封面文件已存在，无需重新获取: {}", thumbnailPath);
+    }
+  }
+
+  @Test
   void downloadBest720p_000802() {
 //    String videoLink = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-    String bookFolderName = "0008_DailyNews";
+    String categoryName = "0008_DailyNews";
     String subFolder = "20250321";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
         + File.separator;
     if (!new File(folderPath + File.separator + subFolder).exists()) {
       boolean mkdir = new File(folderPath + File.separator + subFolder).mkdir();
@@ -235,10 +260,10 @@ class CommandUtilTest {
 
     // D:\0000\0007_Trump\20250227
 
-    String bookFolderName = "0007_Trump";
+    String categoryName = "0007_Trump";
     String subFolder = "20250308";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
         + File.separator;
     if (!new File(folderPath + File.separator + subFolder).exists()) {
       boolean mkdir = new File(folderPath + File.separator + subFolder).mkdir();
@@ -254,10 +279,10 @@ class CommandUtilTest {
 
   @Test
   void splitVideo_000703() {
-    String bookFolderName = "0007_Trump";
+    String categoryName = "0007_Trump";
     String subFolder = "20250303";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
         + File.separator;
     String inputFilePath =
       folderPath + File.separator + subFolder + File.separator + subFolder
@@ -288,10 +313,10 @@ class CommandUtilTest {
   @Test
   void extractLeftChannel_0101() {
     // D:\0000\0007_Trump\20250227
-    String bookFolderName = "0007_Trump";
+    String categoryName = "0007_Trump";
     String subFolder = "20250228";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
         + File.separator;
     String inputMp4 =
       folderPath + File.separator + subFolder + File.separator + subFolder
@@ -308,10 +333,10 @@ class CommandUtilTest {
   @Test
   void extractPureVideo_0101() {
     // D:\0000\0007_Trump\20250227
-    String bookFolderName = "0007_Trump";
+    String categoryName = "0007_Trump";
     String subFolder = "20250228";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
         + File.separator;
     String inputMp4 =
       folderPath + File.separator + subFolder + File.separator + subFolder
@@ -328,10 +353,10 @@ class CommandUtilTest {
   @Test
   void extractPureVideo_0201() {
     // D:\0000\0007_Trump\20250227
-    String bookFolderName = "background";
+    String categoryName = "background";
     String subFolder = "ocean_0001";
     String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + bookFolderName
+      OperatingSystem.getBaseFolder() + File.separator + categoryName
         + File.separator;
     String inputMp4 =
       folderPath + File.separator + subFolder + File.separator + subFolder

@@ -10,7 +10,7 @@ class WordCountForCefrUtilTest {
 
   @Test
   void genVocTable_0003() {
-    String folderName = "20250326"; // DD:\0000\0003_PressBriefings\20250326
+    String folderName = "20250402"; // DD:\0000\0003_PressBriefings\20250326
     String folderPath =
       OperatingSystem.getBaseFolder() + File.separator + "0003_PressBriefings"
         + File.separator

@@ -1,6 +1,7 @@
 package com.coderdream.util.mstts;
 
 import com.coderdream.util.cd.CdConstants;
+import com.coderdream.util.mstts.demo04.SSMLGenerator;
 import com.microsoft.cognitiveservices.speech.*;
 
 import java.io.File;
@@ -59,6 +60,8 @@ public class AzureSpeechService {
                     .replace(">", "&gt;")
                     .replace("\"", "&quot;")
                     .replace("'", "&apos;");
+            // 生成 phoneme，处理多音字
+            escapedText = SSMLGenerator.generatePhoneme(escapedText);
             ssmlBuilder.append(escapedText).append(" ");
         }
 
@@ -78,8 +81,8 @@ public class AzureSpeechService {
     }
 
     public static void main(String[] args) {
-        testEn();
-//        testCn();
+//        testEn();
+        testCn();
     }
 
     public static void testCn() {

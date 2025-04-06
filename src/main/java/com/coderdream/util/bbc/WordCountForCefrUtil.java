@@ -54,18 +54,24 @@ public class WordCountForCefrUtil {
   }
 
   /**
+   * 生成完整词汇表
+   *
    * @param folderPath 文件夹路径
    * @param folderName 文件夹名
    */
   public static void genVocTable(String folderPath, String folderName) {
     long startTime = System.currentTimeMillis();
-    String txtFilePath =
-      folderPath + File.separator + folderName + ".txt";
-    if(CdFileUtil.isFileEmpty(txtFilePath)) {
-      log.error("文件不存在：{}", txtFilePath);
-      txtFilePath = CdFileUtil.addPostfixToFileName(txtFilePath,
-        "_script_pure");
+
+    String mp4FilePath =
+      folderPath + File.separator + folderName + ".mp4";
+    String txtFilePath = "";
+    if (CdFileUtil.isFileEmpty(mp4FilePath)) {
+      log.error("mp4文件不存在：{}", mp4FilePath);
+      return;
     }
+    txtFilePath = CdFileUtil.changeExtension(mp4FilePath, "txt");
+    txtFilePath = CdFileUtil.addPostfixToFileName(txtFilePath,
+      "_script_pure");
     List<WordInfo> wordInfoList = process(txtFilePath);
     String resourcesFolderPath =
       CdFileUtil.getResourceRealPath() + File.separatorChar + "data"
@@ -73,16 +79,19 @@ public class WordCountForCefrUtil {
     String templateFileName =
       resourcesFolderPath + File.separator + "CEFR_VOC.xlsx";
 
-    String excelFilePath = CdFileUtil.changeExtension(txtFilePath, "xlsx");
+    String excelFilePath = CdFileUtil.changeExtension(mp4FilePath, "xlsx");
     excelFilePath = CdFileUtil.addPostfixToFileName(excelFilePath,
       "_完整词汇表");
     log.error("excelFilePath: {}", excelFilePath);
-
-    writeToFile(wordInfoList, templateFileName, excelFilePath);
-    long endTime = System.currentTimeMillis();
-    long duration = endTime - startTime;
-    log.info("分析的文件为：{}，共有{} 单词，统计耗时：{} ", txtFilePath,
-      countWords(txtFilePath), CdTimeUtil.formatDuration(duration));
+    if (CdFileUtil.isFileEmpty(excelFilePath)) {
+      writeToFile(wordInfoList, templateFileName, excelFilePath);
+      long endTime = System.currentTimeMillis();
+      long duration = endTime - startTime;
+      log.info("分析的文件为：{}，共有{} 单词，统计耗时：{} ", txtFilePath,
+        countWords(txtFilePath), CdTimeUtil.formatDuration(duration));
+    } else {
+      log.error("excel文件已存在：{}", excelFilePath);
+    }
   }
 
   public static long countWords(String filePath) {
@@ -252,20 +261,20 @@ public class WordCountForCefrUtil {
     for (List<String> list : parts) {
       // 先从数据库中查询单词原型数据，如果查到就直接用，如果没有查到再去调用CoreNlpUtils.getLemmaList()方法获取单词原型列表，并存入数据库
       Map<String, String> wordLemmaListDB = SQLiteUtil.findWordLemmaList(list);
-      List<String> listOne =null;
+      List<String> listOne = null;
 
-      if(wordLemmaListDB != null && !wordLemmaListDB.isEmpty()) {
+      if (wordLemmaListDB != null && !wordLemmaListDB.isEmpty()) {
         lemmaMap.putAll(wordLemmaListDB);
         listOne = new ArrayList<>(wordLemmaListDB.values());
       }
       // 从list中过滤掉listOne中的单词
       List<String> listTwo = new ArrayList<>(list);
 //      assert listOne != null;
-      if(CollectionUtil.isNotEmpty(listOne)) {
+      if (CollectionUtil.isNotEmpty(listOne)) {
         listTwo.removeAll(listOne);
       }
 
-      if(CollectionUtil.isNotEmpty(listTwo)) {
+      if (CollectionUtil.isNotEmpty(listTwo)) {
         Map<String, String> lemmaListOne = CoreNlpUtils.getLemmaList(listTwo);
         String s = SQLiteUtil.importWordLemmaDataFromMap(lemmaListOne);
         log.info("导入原型数据：{}", s);

@@ -1,6 +1,7 @@
 package com.coderdream.util.mstts;
 
 import com.coderdream.util.cd.CdTimeUtil;
+import com.coderdream.util.proxy.OperatingSystem;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.List;
@@ -107,7 +108,7 @@ class SpeechUtilTest {
     SpeechUtil.genDialog2Audio(folderName, fileName, audioType);
 
     // 确保所有任务执行完毕后关闭线程池
-    SpeechUtil.shutdownExecutor();
+//    SpeechUtil.shutdownExecutor();
     System.out.println("所有任务执行完毕，线程池已关闭！");
     long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
     long durationMillis = endTime - startTime; // 计算耗时（毫秒）
@@ -126,7 +127,7 @@ class SpeechUtilTest {
     SpeechUtil.genDialog2Audio900(folderName, "ch01", fileName, audioType);
 
     // 确保所有任务执行完毕后关闭线程池
-    SpeechUtil.shutdownExecutor();
+//    SpeechUtil.shutdownExecutor();
     System.out.println("所有任务执行完毕，线程池已关闭！");
     long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
     long durationMillis = endTime - startTime; // 计算耗时（毫秒）
@@ -140,10 +141,10 @@ class SpeechUtilTest {
     String folderName = "D:\\0000\\EnBook001\\900\\ch002\\";
     String fileName = "ch002_total_phonetics";
     String audioType = "wav";
-    SpeechUtil.genDialog2Audio900(folderName,"ch002", fileName, audioType);
+    SpeechUtil.genDialog2Audio900(folderName, "ch002", fileName, audioType);
 
     // 确保所有任务执行完毕后关闭线程池
-    SpeechUtil.shutdownExecutor();
+//    SpeechUtil.shutdownExecutor();
     System.out.println("所有任务执行完毕，线程池已关闭！");
     long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
     long durationMillis = endTime - startTime; // 计算耗时（毫秒）
@@ -160,12 +161,31 @@ class SpeechUtilTest {
     SpeechUtil.genDialog2CnAudio(folderName, fileName, audioType);
 
     // 确保所有任务执行完毕后关闭线程池
-    SpeechUtil.shutdownExecutor();
+//    SpeechUtil.shutdownExecutor();
     System.out.println("所有任务执行完毕，线程池已关闭！");
     long endTime = System.currentTimeMillis(); // 记录视频生成结束时间
     long durationMillis = endTime - startTime; // 计算耗时（毫秒）
     log.info("中文音频创建成功，耗时: {}",
       CdTimeUtil.formatDuration(durationMillis));
+  }
+
+  @Test
+  void content2Audio() {
+    // D:\0000\EnBook011\Chapter001
+
+    String bookName = "EnBook011";
+    String bookPath =
+      OperatingSystem.getBaseFolder() + File.separator + bookName;
+//      String folderName = ;
+    String audioType = "wav";
+    String chapterName = "Chapter001";
+    String chapterPathName = bookPath + File.separator + chapterName;
+//    String audioName = "en-US-AndrewMultilingualNeural";
+    String audioName = "en-US-JennyNeural";
+    String lang = "en-us";
+    Integer groupSize = 1;
+    SpeechUtil07.genDialog2Audio(chapterPathName, chapterName, audioName, audioType, lang,
+      groupSize);
   }
 
 //  @Test

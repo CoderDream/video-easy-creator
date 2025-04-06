@@ -33,6 +33,16 @@ public class SixMinutesStepByStep {
     // 生成 script_dialog.txt
 //    String scriptDialogFileName = "script_dialog.txt";
 
+    // Step00: 处理 YYMMDD_script.txt 文件，过滤字符串
+    String fileName = folderName + "_script";
+    String srcFileName = CommonUtil.getFullPathFileName(folderName, fileName,
+      ".txt");
+    File file1 = ProcessScriptUtil.processScriptTxt(srcFileName);
+    if (file1 != null) {
+      log.info("script文件已处理: {}", file1.getAbsolutePath());
+    }
+
+
     // Step01: 生成 script_dialog.txt 和 voc.txt
     String scriptDialogFileName = CommonUtil.getFullPathFileName(folderName,
       "script_dialog", ".txt");
@@ -197,15 +207,12 @@ public class SixMinutesStepByStep {
       log.info("文件已存在: {}", mp3FileNameFullNew);
     }
 
-
-
     // Step08: 生成 script_dialog_new2.txt
     String scriptDialogNew2FileName = CommonUtil.getFullPathFileName(folderName,
       "script_dialog_new2",
       CdConstants.TXT_EXTENSION);
 
     if (CdFileUtil.isFileEmpty(scriptDialogNew2FileName)) {
-
       // 读取原文件内容并删除前四行和最后一行
       List<String> lines = new ArrayList<>();
       List<SubtitleEntity> subtitleEntityList = CdFileUtil.readSrtFileContent(srtEngRawFileName);
@@ -236,8 +243,46 @@ public class SixMinutesStepByStep {
         return;
       }
     } else {
-      log.info("文件已存在: {}", fullVocFileName);
+      log.info("文件已存在: {}", scriptDialogNew2FileName);
     }
+
+    // TODO
+    // 翻译 script_dialog_new2.txt，生成 script_dialog_new2_gemini.txt
+//    String scriptDialogNew2GeminiFileName = CdFileUtil.addPostfixToFileName(scriptDialogNew2FileName,"_gemini");
+//
+//    if (CdFileUtil.isFileEmpty(scriptDialogNew2GeminiFileName) && !CdFileUtil.isFileEmpty(scriptDialogNew2FileName)) {
+//      // 读取原文件内容并删除前四行和最后一行
+//      List<String> lines = new ArrayList<>();
+//      List<SubtitleEntity> subtitleEntityList = CdFileUtil.readSrtFileContent(srtEngRawFileName);
+//      if(CollectionUtil.isNotEmpty(subtitleEntityList)) {
+//        boolean isSubtitle = false;
+//        for (SubtitleEntity subtitleEntity : subtitleEntityList) {
+//          if(subtitleEntity.getTimeStr().startsWith(split[1])){
+//            isSubtitle = true;
+//          }
+//          if(isSubtitle){
+//            lines.add(subtitleEntity.getSubtitle());
+//          }
+//        }
+//      }
+//      // lines移除最后一项
+//      lines.remove(lines.size() - 1);
+//
+//      // 检查文件是否为空
+//      if (!lines.isEmpty()) {
+//        // 将修改后的内容写入新文件
+//        File file = FileUtil.writeLines(lines, scriptDialogNew2FileName,
+//          StandardCharsets.UTF_8);
+//
+//        log.info("文件不存在或为空，已生成新文件: {}", file.getAbsolutePath());
+//      } else {
+//        System.out.println(
+//          scriptDialogNewFileName + " 文件内容少于5行，无需处理。");
+//        return;
+//      }
+//    } else {
+//      log.info("文件已存在: {}", scriptDialogNew2GeminiFileName);
+//    }
 
     // 5. 生成字幕文件 eng.srt
     String srtFileName = CommonUtil.getFullPathFileName(folderName, "eng",

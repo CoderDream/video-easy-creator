@@ -72,6 +72,7 @@ class DailyUtilTest {
   void process_deploy() {
     String baseHexoFolder = OperatingSystem.getGitHubCoderDreamHexoFolder();
     List<String> commandList = Arrays.asList(
+      "cd " + baseHexoFolder + " && hexo clean",
       "cd " + baseHexoFolder + " && hexo g",
       "cd " + baseHexoFolder + " && hexo d");
     for (String command : commandList) {
@@ -123,7 +124,7 @@ class DailyUtilTest {
 
     String baseHexoFolder = OperatingSystem.getGitHubCoderDreamHexoFolder();
     List<String> commandList = Arrays.asList(
-      //  "cd " + baseHexoFolder + " && hexo clean",
+      "cd " + baseHexoFolder + " && hexo clean",
       "cd " + baseHexoFolder + " && hexo g",
       "cd " + baseHexoFolder + " && hexo d");
     for (String command : commandList) {
@@ -132,18 +133,28 @@ class DailyUtilTest {
   }
 
   @Test
+  void processBatch_HalfHourEnglish() {
+    // D:\04_GitHub\video-easy-creator\src\main\resources\data\bbc\todo.txt
+    for (String num : NUMBER_LIST) {
+      String folderName = "" + num;
+      String title = "【BBC六分钟英语】" + CdFileUtil.getArticleTitle(
+        folderName);
+      DailyUtil.processHalfHourEnglish(folderName, title);
+//      TranslationUtil.genDescription(folderName);
+    }
+  }
+
+  @Test
   void processPostHalfHourEnglish() {
     String baseHexoFolder = OperatingSystem.getHalfHourEnglishHexoFolder();
     List<String> commandList = Arrays.asList(
-      //  "cd " + baseHexoFolder + " && hexo clean",
+      "cd " + baseHexoFolder + " && hexo clean",
       "cd " + baseHexoFolder + " && hexo g",
       "cd " + baseHexoFolder + " && hexo d");
     for (String command : commandList) {
       CommandUtil.executeCommand(command);
     }
   }
-
-  //
 
   @Test
   void syncFilesToQuark() {
