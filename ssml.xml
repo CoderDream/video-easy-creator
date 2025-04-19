@@ -1,6 +1,0 @@
-<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
-  <voice name="en-US-JennyNeural">
-    <prosody pitch="medium" volume="medium" rate="medium">
-These experiences solidified my understanding that excellent technical solutions must not only be functionally complete but also possess strong maintainability, scalability, and robustness.     </prosody>
-  </voice>
-</speak>

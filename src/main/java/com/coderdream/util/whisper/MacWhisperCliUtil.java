@@ -365,8 +365,8 @@ public class MacWhisperCliUtil {
         log.info("--- 测试调用外部 Whisper CLI Util (macOS 版本) ---");
 
         // --- 【必须修改】设置您的 Mac 上的音频文件路径 ---
-        String audioFilePath1 = "/Users/your_username/Music/sample_audio_en.mp3"; // <--- 修改这里
-        String audioFilePath2 = "/Users/your_username/Documents/sample_audio_zh.wav"; // <--- 修改这里
+        String audioFilePath1 = "/Volumes/System/0000/bgmusic/eng.wav"; // <--- 修改这里
+        String audioFilePath2 = "//Volumes/System/0000/bgmusic/chn.wav"; // <--- 修改这里
         // --- 路径设置结束 ---
 
         log.info("默认模型路径: {}", DEFAULT_MODEL_PATH);
