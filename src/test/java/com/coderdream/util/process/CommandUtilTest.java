@@ -2,12 +2,12 @@ package com.coderdream.util.process;
 
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
+import com.coderdream.util.daily.DailyUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.video.Mp4Splitter;
 import com.coderdream.util.youtube.demo02.CommandUtil;
 import com.coderdream.util.youtube.demo02.CommandUtil02;
 import com.coderdream.util.youtube.demo03.YoutubeThumbnailFetcher;
-import com.coderdream.util.youtube.demo05.CommandUtil05;
 import com.coderdream.util.youtube.demo06.CommandUtil06;
 import java.io.File;
 import java.text.DateFormat;
@@ -114,7 +114,7 @@ class CommandUtilTest {
     String categoryName = "0003_PressBriefings"; // D:\0000\0003_PressBriefings
     String subFolder = "20250331";
     String videoLink = "https://www.youtube.com/watch?v=oQE2dgqe_bI"; // // 替换为实际的视频链接
-    processSteps(categoryName, subFolder, videoLink);
+    DailyUtil.downloadVideoAndThumbnail(categoryName, subFolder, videoLink);
   }
 
   //
@@ -125,7 +125,7 @@ class CommandUtilTest {
     String categoryName = "0007_Trump"; // D:\0000\0003_PressBriefings
     String subFolder = "20250403";
     String videoLink = "https://www.youtube.com/watch?v=GaWx82C2jd4"; // // 替换为实际的视频链接
-    processSteps(categoryName, subFolder, videoLink);
+    DailyUtil.downloadVideoAndThumbnail(categoryName, subFolder, videoLink);
   }
 
   // https://www.youtube.com/watch?v=wui5-4VQjY0
@@ -136,7 +136,7 @@ class CommandUtilTest {
     String categoryName = "0005_Vance";
     String subFolder = "20250329";
     String videoLink = "https://www.youtube.com/watch?v=edTYfp5XKDs"; // // 替换为实际的视频链接
-    processSteps(categoryName, subFolder, videoLink);
+    DailyUtil.downloadVideoAndThumbnail(categoryName, subFolder, videoLink);
   }
 
 
@@ -145,38 +145,10 @@ class CommandUtilTest {
     String categoryName = "0009_TechNews"; // D:\0000\0003_PressBriefings
     String subFolder = "20250401";
     String videoLink = "https://www.youtube.com/watch?v=wui5-4VQjY0"; // // 替换为实际的视频链接
-    processSteps(categoryName, subFolder, videoLink);
+    DailyUtil.downloadVideoAndThumbnail(categoryName, subFolder, videoLink);
   }
 
-  private static void processSteps(String categoryName, String subFolder,
-    String videoLink) {
-    String folderPath =
-      OperatingSystem.getBaseFolder() + File.separator + categoryName
-        + File.separator + subFolder;
-    if (!new File(folderPath).exists()) {
-      boolean mkdir = new File(folderPath).mkdir();
-      log.info("mkdir: {}", mkdir);
-    }
 
-    String outputFileName =
-      folderPath + File.separator + subFolder + ".mp4"; // 替换为期望的输出路径和文件名
-    if (CdFileUtil.isFileEmpty(outputFileName)) {
-      CommandUtil06.downloadBest720p(videoLink, outputFileName);
-    }
-
-    String thumbnailPath =
-      CdFileUtil.changeExtension(outputFileName,"png");
-
-//    thumbnailPath = CdFileUtil.addPostfixToFileName(thumbnailPath,
-//      "_thumbnail");
-
-    if (CdFileUtil.isFileEmpty(thumbnailPath)) {
-      YoutubeThumbnailFetcher.getThumbnail(videoLink, thumbnailPath);
-      log.info("封面文件下载成功: {}", thumbnailPath);
-    } else {
-      log.info("封面文件已存在，无需重新获取: {}", thumbnailPath);
-    }
-  }
 
   @Test
   void downloadBest720p_000901() {

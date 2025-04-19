@@ -1,5 +1,9 @@
 package com.coderdream.util.youtube;
 
+import static com.coderdream.util.cd.CdConstants.OS_LINUX;
+import static com.coderdream.util.cd.CdConstants.OS_MAC;
+import static com.coderdream.util.cd.CdConstants.OS_WINDOWS;
+
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.google.api.client.http.HttpRequest;
@@ -49,21 +53,25 @@ public class YouTubeApiUtil {
     }
   }
 
-    public static void process(List<String> usernames) {
-        NetHttpTransport transport = new NetHttpTransport();
-        JacksonFactory jsonFactory = new JacksonFactory();
-        try (BufferedWriter writer = new BufferedWriter(
-          new FileWriter("youtube_log.txt", true))) {
-            log.info("日志文件已打开: youtube_log.txt");
-            YouTube youtubeService = createYoutubeService(transport, jsonFactory);
+  public static void process(List<String> usernames) {
+    NetHttpTransport transport = new NetHttpTransport();
+    JacksonFactory jsonFactory = new JacksonFactory();
+    try (BufferedWriter writer = new BufferedWriter(
+      new FileWriter("youtube_log.txt", true))) {
+      log.info("日志文件已打开: youtube_log.txt");
+      YouTube youtubeService = createYoutubeService(transport, jsonFactory);
 
-            for (String username : usernames) {
-                processUsername(youtubeService, username, writer);
-            }
-        } catch (IOException e) {
-            log.error("处理用户名列表时发生异常", e);
-        }
+      for (String username : usernames) {
+        processUsername(youtubeService, username, writer);
+      }
+    } catch (IOException e) {
+      log.error("处理用户名列表时发生异常", e);
     }
+  }
+
+  public static String getProxyArgumentString() {
+    return "--proxy http://127.0.0.1:" + OperatingSystem.getProxyPort();
+  }
 
 
   public static YouTube createYoutubeService(NetHttpTransport transport,

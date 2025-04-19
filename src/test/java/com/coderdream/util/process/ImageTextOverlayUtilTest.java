@@ -4,8 +4,10 @@ import com.coderdream.util.pic.ImageTextOverlayUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+@Slf4j
 class ImageTextOverlayUtilTest {
 
   @Test
@@ -27,9 +29,8 @@ class ImageTextOverlayUtilTest {
     String bottomTitle = "MS-13恐怖份子被驅逐出境";
 
     ImageTextOverlayUtil.addTextOverlay(backgroundImagePath, outputImagePath,
-      title,
-      mainTitle,
-      bottomTitle, formatName);
+      title, mainTitle, bottomTitle, formatName);
+
     System.out.println("Image processing completed!");
   }
 

@@ -1,0 +1,7 @@
+<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+    <voice name="en-US-AvaMultilingualNeural">
+        <prosody contour="(60%,-60%) (100%,+80%)" >
+            Were you the only person in the room?
+        </prosody>
+    </voice>
+</speak>

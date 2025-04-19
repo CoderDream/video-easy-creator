@@ -16,9 +16,13 @@
 - [ ] 生成ass字幕
 
 
+## 20250419
 
+- [x] 提取音频文件，生成mp3文件
+  - FfmpegUtil2.extractAudioFromMp4(inputPathMp4, inputPathMp3);
 
-
+- [x] 全流程处理油管视频，下载mp4、生成mp3、字幕等等
+  - DailyUtil.processYoutube();
 
 
 ## 20250331

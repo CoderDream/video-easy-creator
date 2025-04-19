@@ -221,7 +221,7 @@
         <dependency>
             <groupId>com.microsoft.cognitiveservices.speech</groupId>
             <artifactId>client-sdk</artifactId>
-            <version>1.42.0</version>
+            <version>1.43.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/ws.schild/jave-all-deps -->
@@ -692,6 +692,13 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
             <version>3.5.1</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.github.givimad/whisper-jni -->
+        <dependency>
+            <groupId>io.github.givimad</groupId>
+            <artifactId>whisper-jni</artifactId>
+            <version>1.7.1</version>
         </dependency>
 
 <!--        <dependency>-->

@@ -1,0 +1,6 @@
+<speak version="1.0" xml:lang="en-US" xmlns:mstts="http://www.w3.org/2001/mstts">
+    <mstts:backgroundaudio src="https://half-hour-english.github.io/audio/sea-breeze-seagull-sea-wave.mp3" volume="0.7" fadein="3000" fadeout="4000"/>
+    <voice name="en-US-AvaMultilingualNeural">
+        The text provided in this document will be spoken over the background audio.
+    </voice>
+</speak>

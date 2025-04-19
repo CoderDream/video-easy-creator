@@ -16,6 +16,11 @@ import org.junit.jupiter.api.Test;
 class DailyUtilTest {
 
   @Test
+  void processYoutube() {
+    DailyUtil.processYoutube();
+  }
+
+  @Test
   void process_250102() {
 
     String folderName = "250102";

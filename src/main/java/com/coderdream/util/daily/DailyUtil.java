@@ -3,15 +3,25 @@ package com.coderdream.util.daily;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.StrUtil;
+import com.coderdream.entity.ThumbnailInfoEntity;
+import com.coderdream.entity.YoutubeInfoEntity;
+import com.coderdream.entity.YoutubeVideoSplitEntity;
+import com.coderdream.util.audio.FfmpegUtil2;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
+import com.coderdream.util.file.FileRenameUtil;
 import com.coderdream.util.file.PdfFileFinder;
 import com.coderdream.util.gemini.GeminiApiUtil;
+import com.coderdream.util.pic.ImageTextOverlayUtil;
 import com.coderdream.util.proxy.OperatingSystem;
+import com.coderdream.util.subtitle.GenSubtitleUtil;
+import com.coderdream.util.video.Mp4Splitter;
 import com.coderdream.util.video.demo06.VideoEncoder02;
 import com.coderdream.util.wechat.MarkdownFileGenerator;
 import com.coderdream.util.wechat.MarkdownFileGenerator05;
-import com.coderdream.util.wechat.MarkdownFileGenerator06;
+import com.coderdream.util.youtube.demo03.YoutubeThumbnailFetcher;
+import com.coderdream.util.youtube.demo06.CommandUtil06;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +39,191 @@ import swiss.ameri.gemini.api.GenAi.GeneratedContent;
 
 @Slf4j
 public class DailyUtil {
+
+  public static void processYoutube() {
+    // 下载视频
+    List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();
+    for (YoutubeInfoEntity youtubeInfoEntity : youtubeVideoInfoEntityList) {
+      String category = youtubeInfoEntity.getCategory();// "0003_PressBriefings"; // D:\0000\0003_PressBriefings
+      String dateString = youtubeInfoEntity.getDateString();// "20250331";
+      String videoId = youtubeInfoEntity.getVideoId();// "oQE2dgqe_bI"; // // 替换为实际的视频链接
+      // Step 01: 下载视频和封面
+      downloadVideoAndThumbnail(category, dateString, videoId);
+      // Step 02: 截取视频片段
+      cutVideo(category, dateString);
+      // Step 03: 生成音频文件，生成mp3文件
+      genMp3(category, dateString);
+
+
+
+
+    // Step 03：生成封面  // Step 04：处理字幕
+      processSubtitle(category, dateString);
+
+      // Step 05：生成新的封面
+      generateNewThumbnail(category, dateString);
+
+
+    }
+  }
+
+  private static void genMp3(String category, String dateString) {
+
+    String inputPathMp4 =
+      OperatingSystem.getBaseFolder() + File.separator + category
+        + File.separator
+        + dateString + File.separator + dateString
+        + ".mp4";
+    // 生成mp3
+    String inputPathMp3 = CdFileUtil.changeExtension(inputPathMp4, "mp3");
+    if (CdFileUtil.isFileEmpty(inputPathMp3)) {
+      // 提取音频文件，生成mp3文件
+      FfmpegUtil2.extractAudioFromMp4(inputPathMp4, inputPathMp3);
+    }
+  }
+
+  private static void generateNewThumbnail(String category, String dateString) {
+
+    String folderPath =
+      OperatingSystem.getFolderPath(category) + File.separator + dateString;
+    String formatName = "png";
+    String backgroundImagePath =
+      folderPath + File.separator + dateString + "." + formatName;
+
+    String outputImagePath =
+      folderPath + File.separator + dateString + "_cover." + formatName;
+    ThumbnailInfoEntity thumbnailInfoEntity = getThumbnailInfoEntity(category,
+      dateString);
+    if (thumbnailInfoEntity != null) {
+      ImageTextOverlayUtil.addTextOverlay(backgroundImagePath, outputImagePath,
+        thumbnailInfoEntity.getHeadTitle(), thumbnailInfoEntity.getSubTitle(),
+        thumbnailInfoEntity.getMainTitle(), formatName);
+    } else {
+      log.error("未找到封面字符串");
+    }
+  }
+
+  private static void processSubtitle(String category, String dateString) {
+
+    String mp4FilePath =
+      OperatingSystem.getBaseFolder() + File.separator + category
+        + File.separator
+        + dateString + File.separator + dateString
+        + ".mp4";
+
+    GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
+  }
+
+  private static void cutVideo(String category, String dateString) {
+//    String folderName = "20250401";
+    String timeStr = getTimeStr(category, dateString);
+    if (StrUtil.isEmpty(timeStr)) {
+      log.error("未找到时间字符串");
+      return;
+    }
+
+    String folderPath =
+      OperatingSystem.getBaseFolder() + File.separator + category
+        + File.separator + dateString;
+    String mp4FilePath =
+      folderPath + File.separator + dateString + ".mp4";
+    String rawFilePath = CdFileUtil.addPostfixToFileName(mp4FilePath,
+      "_raw");
+    boolean success = FileRenameUtil.renameFileOverride(mp4FilePath,
+      rawFilePath);
+    if (success) {
+      log.debug("文件原地重命名成功: {} -> {}", mp4FilePath, rawFilePath);
+    } else {
+      log.error("文件原地重命名失败: {}", mp4FilePath);
+      return;
+    }
+    // 示例用法
+//    String inputFilePath = "D:\\0000\\0003_PressBriefings\\250128\\250128.mp4";
+    // "00:00:34,000 --> 00:36:47,000";// 00:00:45,560 --> 00:00:49,960
+//        00:00:49,960 --> 00:00:53,640
+    String[] times = timeStr.split(" --> ");
+    String startTime = times[0];//"00:00:03,400";
+    String endTime = times[1];//"00:00:13,680";
+
+    String splitFile = Mp4Splitter.splitVideo(rawFilePath, startTime,
+      endTime, mp4FilePath);
+
+    if (splitFile != null) {
+      log.info("视频分割成功，文件保存在: {}", splitFile);
+      // 清空文件
+      boolean b = emptyTimeStrFile();
+      if (b) {
+        log.info("清空文件成功");
+      } else {
+        log.error("清空文件失败");
+      }
+    } else {
+      log.error("视频分割失败!");
+    }
+  }
+
+  public static ThumbnailInfoEntity getThumbnailInfoEntity(String category,
+    String dateString) {
+    List<ThumbnailInfoEntity> thumbnailInfoEntityList = CdFileUtil.getThumbnailInfoEntityList();
+    if (CollectionUtil.isNotEmpty(thumbnailInfoEntityList)) {
+      for (ThumbnailInfoEntity thumbnailInfoEntity : thumbnailInfoEntityList) {
+        if (thumbnailInfoEntity.getCategory().equals(category)
+          && thumbnailInfoEntity.getDateString().equals(dateString)) {
+          return thumbnailInfoEntity;
+        }
+      }
+    }
+    return null;
+  }
+
+  public static String getTimeStr(String category, String dateString) {
+    List<YoutubeVideoSplitEntity> youtubeVideoSplitEntityList = CdFileUtil.getYoutubeVideoSplitEntityList();
+    if (CollectionUtil.isNotEmpty(youtubeVideoSplitEntityList)) {
+      for (YoutubeVideoSplitEntity youtubeVideoSplitEntity : youtubeVideoSplitEntityList) {
+        if (youtubeVideoSplitEntity.getCategory().equals(category)
+          && youtubeVideoSplitEntity.getDateString().equals(dateString)) {
+          return youtubeVideoSplitEntity.getTimeStr();
+        }
+      }
+    }
+    return "";
+  }
+
+  public static boolean emptyTimeStrFile() {
+    return CdFileUtil.emptyYoutubeVideoSplitFile();
+  }
+
+  public static void downloadVideoAndThumbnail(String category,
+    String dateString, String videoId) {
+    String videoLink =
+      "https://www.youtube.com/watch?v=" + videoId; // // 替换为实际的视频链接
+    String folderPath =
+      OperatingSystem.getBaseFolder() + File.separator + category
+        + File.separator + dateString;
+    if (!new File(folderPath).exists()) {
+      boolean mkdir = new File(folderPath).mkdir();
+      log.info("mkdir: {}", mkdir);
+    }
+
+    String outputFileName =
+      folderPath + File.separator + dateString + ".mp4"; // 替换为期望的输出路径和文件名
+    if (CdFileUtil.isFileEmpty(outputFileName)) {
+      CommandUtil06.downloadBest720p(videoLink, outputFileName);
+    } else {
+      log.info("视频文件已存在，无需重新下载: {}", outputFileName);
+    }
+
+    String thumbnailPath =
+      CdFileUtil.changeExtension(outputFileName, "png");
+
+    if (CdFileUtil.isFileEmpty(thumbnailPath)) {
+      YoutubeThumbnailFetcher.getThumbnail(videoLink, thumbnailPath);
+      log.info("封面文件下载成功: {}", thumbnailPath);
+    } else {
+      log.info("封面文件已存在，无需重新获取: {}", thumbnailPath);
+    }
+  }
+
 
   public static void process(String folderName, String title) {
 //    TranslationUtil.genDescription(folderName);
@@ -295,7 +490,7 @@ public class DailyUtil {
     List<String> titleList = FileUtil.readLines(
       titlePath + File.separator + "title_" + year
         + ".txt", CharsetUtil.CHARSET_UTF_8);
-    Map<String, String> map = new HashMap<>();
+//    Map<String, String> map = new HashMap<>();
     String distFolderPath = OperatingSystem.getBaiduSyncDiskFolder();
     for (String title : titleList) {
       log.info("标题：{}", title);
@@ -305,7 +500,7 @@ public class DailyUtil {
         String targetFolderName = year.substring(2, 4) + title.substring(0, 4);
         String videoTitle = "【BBC六分钟英语】" + split[1];
         if (sourceVideoFilePathmap.containsKey(videoTitle)) {
-          String sourcePath = sourceVideoFilePathmap.get(videoTitle);
+//          String sourcePath = sourceVideoFilePathmap.get(videoTitle);
 //          String sourceFileName =
 //            sourcePath + File.separator + videoTitle + ".mp4";
           String sourceFileName =
@@ -348,7 +543,7 @@ public class DailyUtil {
     List<String> titleList = FileUtil.readLines(
       "D:\\input\\title_" + year
         + ".txt", CharsetUtil.CHARSET_UTF_8);
-    Map<String, String> map = new HashMap<>();
+//    Map<String, String> map = new HashMap<>();
     String distFolderPath = OperatingSystem.getBaiduSyncDiskFolder();
     for (String title : titleList) {
       log.info("标题：{}", title);
@@ -358,7 +553,7 @@ public class DailyUtil {
         String targetFolderName = year.substring(2, 4) + title.substring(0, 4);
         String videoTitle = "【BBC六分钟英语】" + split[1];
         if (sourceVideoFilePathmap.containsKey(videoTitle)) {
-          String sourcePath = sourceVideoFilePathmap.get(videoTitle);
+//          String sourcePath = sourceVideoFilePathmap.get(videoTitle);
 //          String sourceFileName =
 //            sourcePath + File.separator + videoTitle + ".mp4";
           String sourceFileName =

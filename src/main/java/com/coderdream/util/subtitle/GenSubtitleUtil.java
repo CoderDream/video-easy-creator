@@ -40,7 +40,7 @@ public class GenSubtitleUtil {
     if (CdFileUtil.isFileEmpty(inputPathMp3)) {
       // 获取 mp4 文件路径信息
       String inputPathMp4 = CdFileUtil.changeExtension(filePath, "mp4");
-      // 提取音频文件
+      // 提取音频文件，生成mp3文件
       FfmpegUtil2.extractAudioFromMp4(inputPathMp4, inputPathMp3);
     }
     //

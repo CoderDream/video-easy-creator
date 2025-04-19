@@ -1,25 +1,49 @@
-package com.coderdream.util.mstts;
+package com.coderdream.util.mstts.sdkdemo;
 
-import com.coderdream.util.cd.CdConstants;
-import com.microsoft.cognitiveservices.speech.*;
-import com.microsoft.cognitiveservices.speech.audio.*;
-
-import java.util.Scanner;
+import com.microsoft.cognitiveservices.speech.AudioDataStream;
+import com.microsoft.cognitiveservices.speech.CancellationReason;
+import com.microsoft.cognitiveservices.speech.ResultReason;
+import com.microsoft.cognitiveservices.speech.SpeechConfig;
+import com.microsoft.cognitiveservices.speech.SpeechSynthesisCancellationDetails;
+import com.microsoft.cognitiveservices.speech.SpeechSynthesisResult;
+import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
+import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import java.util.concurrent.ExecutionException;
 
-public class SpeechSynthesis {
+/**
+ * <pre>
+ *   https://learn.microsoft.com/en-us/azure/ai-services/speech-service/how-to-speech-synthesis?tabs=browserjs%2Cterminal&pivots=programming-language-java
+ * Get a result as an in-memory stream
+ * 以内存中流的形式获取结果
+ * </pre>
+ */
+public class SpeechSynthesis05 {
     // This example requires environment variables named "SPEECH_KEY" and "SPEECH_REGION"
     private static String speechKey = "50vWNO4RVL41CEjbkm4aT5c8VPBjO1XNQOMWEYgX3IrrKQn37XTTJQQJ99BCACYeBjFXJ3w3AAAYACOGjmML";//  CdConstants.SPEECH_KEY_EAST_US;// System.getenv("SPEECH_KEY");
     private static String speechRegion =  "eastus" ;// "eastasia";// System.getenv("SPEECH_REGION");
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
         SpeechConfig speechConfig = SpeechConfig.fromSubscription(speechKey, speechRegion);
+//        AudioConfig audioConfig = AudioConfig.fromDefaultSpeakerOutput();
+//        AudioConfig audioConfig = AudioConfig.fromWavFileOutput(
+//          OperatingSystem.getBaseFolder() + File.separator + "mstts" + File.separator + "file001.wav");
 
+           // Set either the `SpeechSynthesisVoiceName` or `SpeechSynthesisLanguage`.
+        speechConfig.setSpeechSynthesisLanguage("en-US");
         speechConfig.setSpeechSynthesisVoiceName("en-US-AvaMultilingualNeural"); // zh-CN-XiaochenNeural
 
 //        speechConfig.setSpeechSynthesisVoiceName("zh-CN-XiaochenNeural"); //
 //        50vWNO4RVL41CEjbkm4aT5c8VPBjO1XNQOMWEYgX3IrrKQn37XTTJQQJ99BCACYeBjFXJ3w3AAAYACOGjmML
-        SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer(speechConfig);
+//        SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer(speechConfig,
+//          audioConfig);
+//        speechSynthesizer.SpeakText("I'm excited to try text to speech");
+
+        SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer(speechConfig, null);
+
+        SpeechSynthesisResult result = speechSynthesizer.SpeakText("I'm excited to try text to speech");
+        AudioDataStream stream = AudioDataStream.fromResult(result);
+        System.out.println("stream: " + stream);
+        System.out.println("stream.getStatus: " + stream.getStatus());
 
         // Get text from the console and synthesize to the default speaker.
         System.out.println("Enter some text that you want to speak >");

@@ -147,7 +147,10 @@ public class CdConstants {
    * 音频文件夹
    */
   public static final String AUDIO_FOLDER = "audio";
-
+  /**
+   * SSML文件夹
+   */
+  public static final String SSML_FOLDER = "ssml";
 
   /**
    * mix音频文件夹
@@ -167,6 +170,11 @@ public class CdConstants {
   public static final String LANG_EN = "en";
   public static final String LANG_EN_FAST = "en_fast";
   public static final String LANG_EN_SLOW = "en_slow";
+
+  // CdConstants.LANG_EN      case CdConstants.LANG_EN -> {
+  //        voiceName = "en-US-JennyNeural";
+  public static final String DEFAULT_VOICE_NAME_EN = "en-US-JennyNeural";
+  public static final String DEFAULT_VOICE_NAME_CN = "zh-CN-XiaochenNeural";
 
   public static final String PIC_TYPE_NO_SUBTITLE = "no_subtitle"; // 无字幕
   public static final String PIC_TYPE_EN = "en";

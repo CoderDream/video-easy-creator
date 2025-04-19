@@ -1,0 +1,5 @@
+<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xml:lang="zh-CN">
+    <voice name="zh-CN-YunxiNeural">
+        <mstts:silence type="comma-exact" value="50ms"/><mstts:silence type="semicolon-exact" value="100ms"/><mstts:silence type="enumerationcomma-exact" value="150ms"/>你好呀，云希、晓晓；你好呀。
+    </voice>
+</speak>

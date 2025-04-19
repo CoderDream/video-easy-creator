@@ -1,0 +1,29 @@
+<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+    <voice name="en-US-AvaNeural">
+        Good afternoon.
+        My name is Henry.
+        Thank you very much for this opportunity for an in-depth discussion.
+        I am a software engineer with over 10 years of experience, and Java backend development has been the central thread throughout my technical career.
+        I've always been passionate about leveraging technology to build robust, efficient systems and solve practical business challenges.
+        For me, writing code is more than just completing tasks; it's about creating value and overcoming complex problems.
+        For instance, in a recent project I was involved in, the 'Object Standardization Platform,' our core challenge was abstracting diverse business objects into a unified, extensible structure while providing high-performance data services.
+        I was deeply involved in designing its core model, implementing the microservices architecture based on Spring Cloud, and utilizing Redis for performance optimization.
+        This platform ultimately provided effective support for multiple product lines within the company.
+        In a previous 'PDM SaaS' project, working as a System Engineer, I had the opportunity to apply Domain-Driven Design to handle complex manufacturing business logic.
+        I also explored the design and implementation of multi-tenant architectures.
+        This experience significantly honed my ability to tackle complex system design and challenges within distributed environments.
+        These experiences solidified my understanding that excellent technical solutions must not only be functionally complete but also possess strong maintainability, scalability, and robustness.
+        My years in the industry have exposed me to various sectors, including banking, manufacturing, and human resources, and I've held diverse roles ranging from development to management.
+        This has allowed me to build a comprehensive tech stack – I'm proficient in the Java ecosystem, familiar with the full Spring suite, MyBatis, databases, testing frameworks, and more.
+        It has also cultivated my ability to analyze problems from multiple perspectives: technical, business, and managerial.
+        I am very familiar with Agile development methodologies, Git-based collaboration workflows, and Docker containerization technology.
+        Regarding the English proficiency requirement for this role, I am comfortable reading technical documentation and requirements without difficulty and can communicate effectively in writing.
+        As for AWS S3 and RDS, I understand their importance in cloud-native architectures.
+        Based on my understanding of general cloud service patterns and my strong ability to learn quickly, I am confident I can rapidly master and apply these technologies.
+        What attracts me to this Senior Java Engineer position is the opportunity it presents to refocus on solving challenging technical problems in a dedicated environment.
+        Your company's advocated engineering culture, remote collaboration model, and emphasis on technical depth align strongly with my expectations.
+        I am confident that my experience, passion for problem-solving, and my work style – which emphasizes proactive communication and taking ownership – will allow me to integrate well into the team and make valuable contributions.
+        I look forward to the possibility of discussing in more detail how my experience can bring value to your team.
+        Thank you!
+    </voice>
+</speak>
