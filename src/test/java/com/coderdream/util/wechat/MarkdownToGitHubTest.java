@@ -9,6 +9,13 @@ class MarkdownToGitHubTest {
   @Test
   void genGitHubArticle_0003() {
     String category = "0003_PressBriefings"; //D:\0000\0003_PressBriefings\20250326
+    String dateString = "20250416";
+    MarkdownToGitHub.genGitHubArticle(category, dateString);
+  }
+
+  @Test
+  void genGitHubArticle_Batch() {
+    String category = "0003_PressBriefings"; //D:\0000\0003_PressBriefings\20250326
     String dateString = "20250402";
     MarkdownToGitHub.genGitHubArticle(category, dateString);
   }

@@ -20,6 +20,7 @@ import com.coderdream.util.video.Mp4Splitter;
 import com.coderdream.util.video.demo06.VideoEncoder02;
 import com.coderdream.util.wechat.MarkdownFileGenerator;
 import com.coderdream.util.wechat.MarkdownFileGenerator05;
+import com.coderdream.util.whisper.WhisperUtil;
 import com.coderdream.util.youtube.demo03.YoutubeThumbnailFetcher;
 import com.coderdream.util.youtube.demo06.CommandUtil06;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
@@ -41,34 +42,60 @@ import swiss.ameri.gemini.api.GenAi.GeneratedContent;
 public class DailyUtil {
 
   public static void processYoutube() {
-    // 下载视频
-    List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();
-    for (YoutubeInfoEntity youtubeInfoEntity : youtubeVideoInfoEntityList) {
-      String category = youtubeInfoEntity.getCategory();// "0003_PressBriefings"; // D:\0000\0003_PressBriefings
-      String dateString = youtubeInfoEntity.getDateString();// "20250331";
-      String videoId = youtubeInfoEntity.getVideoId();// "oQE2dgqe_bI"; // // 替换为实际的视频链接
-      // Step 01: 下载视频和封面
-      downloadVideoAndThumbnail(category, dateString, videoId);
-      // Step 02: 截取视频片段
-      cutVideo(category, dateString);
-      // Step 03: 生成音频文件，生成mp3文件
-      genMp3(category, dateString);
 
+  }
 
+  private static void genRawSubtitle(String category, String dateString) {
+  }
 
+  /**
+   *  生成双语字幕脚本
+   * @param category category
+   * @param dateString dateString
+   */
+  private static void genDualSubtitleContent(String category,
+    String dateString) {
+    String inputPathMp3 =
+      OperatingSystem.getBaseFolder() + File.separator + category
+        + File.separator
+        + dateString + File.separator + dateString
+        + ".mp3";
 
-    // Step 03：生成封面  // Step 04：处理字幕
-      processSubtitle(category, dateString);
+    final String txtFileName = CdFileUtil.changeExtension(inputPathMp3, "txt");
+    String pureFileName = CdFileUtil.changeExtension(txtFileName, "txt");
+    pureFileName = CdFileUtil.addPostfixToFileName(pureFileName,
+      "_script_pure");
+    String pureGeminiFileName = CdFileUtil.addPostfixToFileName(pureFileName,
+      "_gemini");
 
-      // Step 05：生成新的封面
-      generateNewThumbnail(category, dateString);
+    if (!CdFileUtil.isFileEmpty(inputPathMp3) && !CdFileUtil.isFileEmpty(
+      pureFileName) && CdFileUtil.isFileEmpty(pureGeminiFileName)) {
+      // 提取音频文件，生成mp3文件
+      String prompt = FileUtil.readString(
+        CdFileUtil.getResourceRealPath() + File.separator + "youtube"
+          + File.separator + "gemini_prompt.txt",
+        StandardCharsets.UTF_8);
+      prompt += FileUtil.readString(pureFileName, StandardCharsets.UTF_8);
+      // 生成文本内容（阻塞式）
+      GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
 
-
+      try {
+        String text = generatedContent.text();
+        text = text.replace("[", "");
+        text = text.replace("]", "");
+        FileUtils.writeStringToFile(
+          new File(pureGeminiFileName),
+          text, "UTF-8");
+      } catch (IOException e) {
+        log.error("生成文本内容失败", e);
+      }
+      log.info("4. Generated content: {}", generatedContent);
+    } else {
+      log.info("生成双语字幕脚本: {}", pureGeminiFileName);
     }
   }
 
   private static void genMp3(String category, String dateString) {
-
     String inputPathMp4 =
       OperatingSystem.getBaseFolder() + File.separator + category
         + File.separator
@@ -83,7 +110,6 @@ public class DailyUtil {
   }
 
   private static void generateNewThumbnail(String category, String dateString) {
-
     String folderPath =
       OperatingSystem.getFolderPath(category) + File.separator + dateString;
     String formatName = "png";
@@ -151,7 +177,7 @@ public class DailyUtil {
     if (splitFile != null) {
       log.info("视频分割成功，文件保存在: {}", splitFile);
       // 清空文件
-      boolean b = emptyTimeStrFile();
+      boolean b =  CdFileUtil.emptyYoutubeVideoSplitFile();
       if (b) {
         log.info("清空文件成功");
       } else {
@@ -187,10 +213,6 @@ public class DailyUtil {
       }
     }
     return "";
-  }
-
-  public static boolean emptyTimeStrFile() {
-    return CdFileUtil.emptyYoutubeVideoSplitFile();
   }
 
   public static void downloadVideoAndThumbnail(String category,

@@ -1,5 +1,6 @@
 package com.coderdream.util.whisper; // 请确保包名正确
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
@@ -94,6 +95,7 @@ public class ExternalWhisperCliUtil {
   /**
    * 外部转录配置类。
    */
+  @Getter
   public static class ExternalTranscriptionConfig {
 
     private String language = null; // null 表示使用 CLI 默认语言
@@ -129,18 +131,6 @@ public class ExternalWhisperCliUtil {
     public ExternalTranscriptionConfig setThreads(Integer threads) {
       this.threads = (threads != null && threads < 1) ? 1 : threads;
       return this;
-    }
-
-    public String getLanguage() {
-      return language;
-    }
-
-    public Boolean getTranslate() {
-      return translate;
-    }
-
-    public Integer getThreads() {
-      return threads;
     }
 
     // 获取实际使用的线程数（如果为 null 则返回默认值）

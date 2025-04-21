@@ -148,30 +148,30 @@ public class GenSubtitleUtil {
         GenSubtitleUtil.processRawToPureTextFile(srtTextScriptFileName,
           srtTextScriptPureFileName);
 
-        log.info("生成英文SRT文件: {}", srcFileNameEn);
-//        String rawContent = String.join(" ", srtTxtList);
-        // 检查 mp3 文件是否存在，不存在则先生成
-        String mp3FileName = CdFileUtil.changeExtension(srcFileName, "mp3");
-        if (CdFileUtil.isFileEmpty(mp3FileName)) {
-          String mp4FileName = CdFileUtil.changeExtension(srcFileName, "mp4");
-          FfmpegUtil2.extractAudioFromMp4(mp4FileName, mp3FileName);
-        }
-
-        if (!CdFileUtil.isFileEmpty(mp3FileName)) {
-          // 生成新的字幕文件
-          SubtitleUtil.genSrtByExecuteCommand(mp3FileName,
-            srtTextScriptPureFileName,
-            srcFileNameEn, "eng");
-        } else {
-          log.warn("mp3 文件不存在，无法生成字幕文件: {}", mp3FileName);
-        }
+//        log.info("生成英文SRT文件: {}", srcFileNameEn);
+////        String rawContent = String.join(" ", srtTxtList);
+//        // 检查 mp3 文件是否存在，不存在则先生成
+//        String mp3FileName = CdFileUtil.changeExtension(srcFileName, "mp3");
+//        if (CdFileUtil.isFileEmpty(mp3FileName)) {
+//          String mp4FileName = CdFileUtil.changeExtension(srcFileName, "mp4");
+//          FfmpegUtil2.extractAudioFromMp4(mp4FileName, mp3FileName);
+//        }
+//
+//        if (!CdFileUtil.isFileEmpty(mp3FileName)) {
+//          // 生成新的字幕文件
+//          SubtitleUtil.genSrtByExecuteCommand(mp3FileName,
+//            srtTextScriptPureFileName,
+//            srcFileNameEn, "eng");
+//        } else {
+//          log.warn("mp3 文件不存在，无法生成字幕文件: {}", mp3FileName);
+//        }
       } else {
         log.info("srtFilePath 文件已存在: {} ", srcFileName);
       }
     }
 
     // 过滤内容文件
-    GenSubtitleUtil.filterContentFile(srcFileNameEn, srcFileNameEn);
+    //GenSubtitleUtil.filterContentFile(srcFileNameEn, srcFileNameEn);
 
     //  生成中文SRT文件，通过谷歌服务翻译
     String srcFileNameZhCn = CdFileUtil.changeExtension(filePath, "srt");
@@ -187,6 +187,41 @@ public class GenSubtitleUtil {
       "_pure_gemini");
     String grokFilePath = CdFileUtil.addPostfixToFileName(srtTextScriptFileName,
       "_pure_grok");
+
+    if (!CdFileUtil.isFileEmpty(geminiFilePath)) {
+      // TODO 不带空格的纯文本文件，第一行英文，第二行中文
+      List<SubtitleEntity> subtitleEntityList = CdFileUtil.genPureSubtitleEntityList(
+        geminiFilePath); // List<SubtitleEntity> genPureSubtitleEntityList
+      assert subtitleEntityList != null;
+      List<String> enTxtList = subtitleEntityList.stream().map(
+        SubtitleEntity::getSubtitle).toList();
+
+      String srtTextScriptPureFileName = CdFileUtil.addPostfixToFileName(
+        srtTextScriptFileName,
+        "_pure");
+      // 更新_pure文件
+      CdFileUtil.writeToFile(srtTextScriptPureFileName, enTxtList);
+
+      log.info("生成英文SRT文件: {}", srcFileNameEn);
+//        String rawContent = String.join(" ", srtTxtList);
+      // 检查 mp3 文件是否存在，不存在则先生成
+      String mp3FileName = CdFileUtil.changeExtension(srcFileName, "mp3");
+      if (CdFileUtil.isFileEmpty(mp3FileName)) {
+//        String mp4FileName = CdFileUtil.changeExtension(srcFileName, "mp4");
+//        FfmpegUtil2.extractAudioFromMp4(mp4FileName, mp3FileName);
+        log.error("mp3 文件不存在，无法生成字幕文件: {}", mp3FileName);
+        return;
+      } else {
+        if (CdFileUtil.isFileEmpty(srcFileNameEn)) {
+          // 生成新的字幕文件
+          SubtitleUtil.genSrtByExecuteCommand(mp3FileName,
+            srtTextScriptPureFileName,
+            srcFileNameEn, "eng");
+        } else {
+          log.info("srtFilePath 文件已存在: {} ", srcFileNameEn);
+        }
+      }
+    }
 
     // 翻译不为空，英文字幕不为空，使用gemini翻译
     if (!CdFileUtil.isFileEmpty(geminiFilePath) && !CdFileUtil.isFileEmpty(
@@ -229,7 +264,7 @@ public class GenSubtitleUtil {
           subtitleEntityZhTwList);
       }
     } else {
-      log.info("geminiFilePath 文件已存在: {} {}", geminiFilePath);
+      log.info("geminiFilePath 文件已存在2: {} {}", geminiFilePath);
     }
 
     // 翻译不为空，英文字幕不为空，使用 grok 翻译
@@ -390,7 +425,6 @@ public class GenSubtitleUtil {
         genRawTextFile(srcFileName, srtTextScriptFileName, srtTextRawFileName);
         // 生成新的字幕文件
         // 过滤内容文件
-
         GenSubtitleUtil.processRawToPureTextFile(srtTextScriptFileName,
           srtTextScriptPureFileName);
 
@@ -433,15 +467,17 @@ public class GenSubtitleUtil {
       "_pure_gemini");
     String grokFilePath = CdFileUtil.addPostfixToFileName(srtTextScriptFileName,
       "_pure_grok");
-    if(CdFileUtil.isFileEmpty(geminiFilePath) && !CdFileUtil.isFileEmpty(srtTextScriptPureFileName)) {
+    if (CdFileUtil.isFileEmpty(geminiFilePath) && !CdFileUtil.isFileEmpty(
+      srtTextScriptPureFileName)) {
       ProcessScriptUtil.translateByGemini("dialog", srtTextScriptPureFileName,
         geminiFilePath, 10);
     }
 
-    if(CdFileUtil.isFileEmpty(grokFilePath) && !CdFileUtil.isFileEmpty(srtTextScriptPureFileName)) {
-      ProcessScriptUtil.translateByGrok("dialog", srtTextScriptPureFileName,
-        grokFilePath, 10);
-    }
+//    if (CdFileUtil.isFileEmpty(grokFilePath) && !CdFileUtil.isFileEmpty(
+//      srtTextScriptPureFileName)) {
+//      ProcessScriptUtil.translateByGrok("dialog", srtTextScriptPureFileName,
+//        grokFilePath, 10);
+//    }
 
     // 翻译不为空，英文字幕不为空，使用gemini翻译
     if (!CdFileUtil.isFileEmpty(geminiFilePath) && !CdFileUtil.isFileEmpty(
@@ -483,7 +519,7 @@ public class GenSubtitleUtil {
           subtitleEntityZhTwList);
       }
     } else {
-      log.info("geminiFilePath 文件已存在: {} {}", geminiFilePath);
+      log.info("geminiFilePath 文件已存在1: {} ", geminiFilePath);
     }
 
     // 翻译不为空，英文字幕不为空，使用 grok 翻译

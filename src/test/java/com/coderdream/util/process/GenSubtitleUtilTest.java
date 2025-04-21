@@ -138,7 +138,7 @@ class GenSubtitleUtilTest {
   @Test
   void processSrtAndGenDescription_0003() {
     String bookFolderName = "0003_PressBriefings";
-    String folderName = "20250402";
+    String folderName = "20250416";
     GenSubtitleUtil.processSrtAndGenDescription(bookFolderName, folderName);
   }
 

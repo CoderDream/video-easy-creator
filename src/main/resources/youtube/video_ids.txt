@@ -11,4 +11,8 @@
 0003_PressBriefings|20250319|6fuVmEQDaAw|白宮新聞簡報-EP11-20250319
 0003_PressBriefings|20250326|xjxcC8ClWLs|白宮新聞簡報-EP12-20250326
 0003_PressBriefings|20250402|nnzojdfydPs|白宮新聞簡報-EP13-20250402
+0003_PressBriefings|20250408|ksuYKTSsSJA|白宮新聞簡報-EP14-20250408
+0003_PressBriefings|20250411|UBgJzO8DeVs|白宮新聞簡報-EP15-20250411
+0003_PressBriefings|20250415|F-Smx_2zsR8|白宮新聞簡報-EP16-20250415
+0003_PressBriefings|20250416|fZXZuhqfACE|白宮新聞簡報-EP17-20250416
 0009_TechNews|20250319|XSSeizMti1w|英偉達黃仁勳2025GTC大會主題演講

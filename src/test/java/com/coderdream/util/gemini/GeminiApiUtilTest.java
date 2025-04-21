@@ -326,6 +326,27 @@ public class GeminiApiUtilTest {
     log.info("----- 4.测试 generateContent 方法结束");
   }
 
+  @Test
+  @Order(4011)
+  void testGenerateContent_4011() throws Exception {
+    log.info("----- 4.测试 generateContent 方法开始");
+    String prompt = FileUtil.readString(
+      CdFileUtil.getResourceRealPath() + "\\youtube\\gemini_prompt.txt",
+      StandardCharsets.UTF_8);
+    prompt += FileUtil.readString(
+      "D:\\0000\\0003_PressBriefings\\20250416\\20250416_script_pure.txt",
+      StandardCharsets.UTF_8);
+    // 生成文本内容（阻塞式）
+    GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+
+    FileUtils.writeStringToFile(
+      new File("D:\\0000\\0003_PressBriefings\\20250416\\20250416_script_pure_gemini.txt"),
+      generatedContent.text(), "UTF-8");
+    log.info("4. Generated content: {}", generatedContent);
+
+    log.info("----- 4.测试 generateContent 方法结束");
+  }
+
   //
 
   @Test

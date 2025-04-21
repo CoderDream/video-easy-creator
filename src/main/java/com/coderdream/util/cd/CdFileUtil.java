@@ -15,10 +15,12 @@ import com.coderdream.util.proxy.OperatingSystem;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -74,6 +76,43 @@ public class CdFileUtil {
         scriptEntity = new DialogSingleEntity();
         scriptEntity.setHostEn(stringList.get(i));
         scriptEntity.setContentEn(stringList.get(i + 1));
+        result.add(scriptEntity);
+      }
+    }
+
+    return result;
+  }
+
+  //
+
+  /**
+   * 获取对话实体列表
+   *
+   * @param fileName 脚本位置
+   * @return 对话实体列表
+   */
+
+  public static List<SubtitleEntity> genPureSubtitleEntityList(
+    String fileName) {
+    List<String> stringList = FileUtil.readLines(fileName,
+      StandardCharsets.UTF_8);
+
+    List<SubtitleEntity> result = new ArrayList<>();
+
+    SubtitleEntity scriptEntity;
+    if (CollectionUtils.isNotEmpty(stringList)) {
+      int size = stringList.size();
+      if (size % 2 != 0) {
+        System.out.println(
+          "文件格式有问题，行数应该是2的倍数，实际为：" + size + "; fileName: "
+            + fileName);
+        return null;
+      }
+
+      for (int i = 0; i < stringList.size(); i += 2) {
+        scriptEntity = new SubtitleEntity();
+        scriptEntity.setSubtitle(stringList.get(i));
+        scriptEntity.setSecondSubtitle(stringList.get(i + 1));
         result.add(scriptEntity);
       }
     }
@@ -563,7 +602,7 @@ public class CdFileUtil {
       CdFileUtil.getResourceRealPath() + File.separator + "youtube"
         + File.separator + "yt_split.txt";
 
-    return CdFileUtil.isFileEmpty(fileName);
+    return CdFileUtil.clearFileContent(fileName);
   }
 
   public static @NotNull List<YoutubeVideoSplitEntity> getYoutubeVideoSplitEntityList(
@@ -742,6 +781,38 @@ public class CdFileUtil {
     return !file.exists() || file.length() == 0;
   }
 
+
+  /**
+   * 清空指定路径的文本文件内容。 如果文件不存在，此方法通常会创建一个新文件（取决于 PrintWriter 的行为和权限）。
+   * 如果路径指向一个目录或无写入权限，会抛出 IOException。
+   *
+   * @param filePath 要清空内容的文件路径
+   */
+  public static boolean clearFileContent(String filePath) {
+    // 参数校验（可选但推荐）
+    if (filePath == null || filePath.trim().isEmpty()) {
+      System.err.println("错误：文件路径不能为空。");
+      return true;
+    }
+
+    // 使用 try-with-resources 确保 PrintWriter 被正确关闭
+    // PrintWriter 的构造函数 PrintWriter(String fileName) 在默认情况下
+    // 会打开文件用于写入，如果文件已存在，则会先清空（覆盖）文件内容。
+    try (PrintWriter writer = new PrintWriter(filePath)) {
+      // 不需要写入任何内容，打开流的动作已经清空了文件
+      // writer.print(""); // 可以选择性地写一个空字符串，但不是必需的
+      log.info("文件内容已清空: {}", filePath);
+      return true;
+    } catch (FileNotFoundException e) {
+      // PrintWriter 构造函数可能抛出 FileNotFoundException
+      // 这通常发生在路径无效或无法创建/打开文件时（如权限问题或路径是目录）
+//      System.err.println("错误：无法找到或打开文件（可能是权限问题或路径是目录）: " + filePath);
+//      e.printStackTrace();
+      log.error("错误：无法找到或打开文件（可能是权限问题或路径是目录）: {}",
+        filePath);
+      return false;
+    }
+  }
 
   /**
    * 根据文件名生成新的文件名，去掉最后的下划线加temp。

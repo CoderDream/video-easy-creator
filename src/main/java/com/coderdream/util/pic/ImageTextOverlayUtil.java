@@ -37,6 +37,7 @@ public class ImageTextOverlayUtil {
   private static final int TITLE_Y = 100;  // 顶部Title的Y坐标
   private static final int BOTTOM_TITLE_Y_OFFSET = -10; // 底部标题的 Y 轴偏移量（用于精细调整） 0 居中，负值，向下偏移
   private static final int SUB_TITLE_LINE_SPACING = 80; // 副标题行间距
+  private static final int SUB_TITLE_LINE_SPACING2 = 60; // 副标题行间距
 
   /**
    * 在背景图片上添加文字叠加效果
@@ -81,7 +82,7 @@ public class ImageTextOverlayUtil {
       // 设置字体
       Font mainFont = new Font("Source Han Sans Heavy", Font.PLAIN, 96);
       Font subFont = new Font("Microsoft YaHei", Font.BOLD, 74);
-      Font subFont2 = new Font("Microsoft YaHei", Font.BOLD, 74);
+      Font subFont2 = new Font("Microsoft YaHei", Font.BOLD, 48);
       Font titleFont = new Font("Microsoft YaHei", Font.BOLD, 80);
       Font bottomFont = new Font("Source Han Sans Heavy", Font.PLAIN, 100);
 
@@ -92,11 +93,45 @@ public class ImageTextOverlayUtil {
       log.debug("顶部Title绘制完成: {}", headTitle);
       log.debug("顶部Title Y 坐标: {}", TITLE_Y);
 
-      // 绘制副标题（分两行）
-      g2d.setFont(subFont);
+      // 左侧
+      g2d.setFont(subFont2);
       int subTitleY = (SUB_TITLE_Y == 0) ? image.getHeight() - 210
-        : SUB_TITLE_Y; // 自动计算或者设置为静态值
+        : SUB_TITLE_Y; // 自动计算或者设置为静态值 CEFR
 
+      String leftSubTitleLine1 = "附：";
+      String leftSubTitleLine2 = "雙語腳本";
+      String leftSubTitleLine3 = "CEFR詞彙";
+      String leftSubTitleLine4 = "詞頻統計";
+      String leftSubTitleLine5 = "一網打盡";
+
+      int leftSubTitleX1 = 20; // 调整位置，使其靠近右侧边缘
+      int leftSubTitleX2 = 33;  // 调整位置，使其靠近右侧边缘
+      int leftSubTitleX3 = 15;  // 调整位置，使其靠近右侧边缘
+      int leftSubTitleX4 = 33;  // 调整位置，使其靠近右侧边缘
+      int leftSubTitleX5 = 33;  // 调整位置，使其靠近右侧边缘
+
+      draw3DOutlinedText(g2d, leftSubTitleLine1, leftSubTitleX1,
+        subTitleY - SUB_TITLE_LINE_SPACING2,
+        SUB_TITLE_COLOR, Color.BLACK);
+      draw3DOutlinedText(g2d, leftSubTitleLine2, leftSubTitleX2, subTitleY,
+        SUB_TITLE_COLOR, Color.BLACK);
+      draw3DOutlinedText(g2d, leftSubTitleLine3, leftSubTitleX3,
+        subTitleY + SUB_TITLE_LINE_SPACING2,
+        SUB_TITLE_COLOR, Color.BLACK);
+      draw3DOutlinedText(g2d, leftSubTitleLine4, leftSubTitleX4,
+        subTitleY + SUB_TITLE_LINE_SPACING2 + SUB_TITLE_LINE_SPACING2,
+        SUB_TITLE_COLOR, Color.BLACK);
+      draw3DOutlinedText(g2d, leftSubTitleLine5, leftSubTitleX5,
+        subTitleY + SUB_TITLE_LINE_SPACING2 + SUB_TITLE_LINE_SPACING2
+          + SUB_TITLE_LINE_SPACING2,
+        SUB_TITLE_COLOR, Color.BLACK);
+
+      g2d.setFont(subFont);
+      log.debug("副标题绘制完成: 雙語大字幕 (分两行)");
+      log.debug("副标题 Y 坐标: {}, {}", subTitleY,
+        subTitleY + SUB_TITLE_LINE_SPACING);
+
+      // 右侧
       String subTitleLine1 = "雙語";
       String subTitleLine2 = "大字幕";
       int subTitleX1 = image.getWidth() - 230; // 调整位置，使其靠近右侧边缘

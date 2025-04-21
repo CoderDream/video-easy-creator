@@ -18,11 +18,23 @@
 
 ## 20250419
 
+- [x] 处理油管视频：下载视频和封面、截取视频片段、 生成音频文件、生成字幕、处理字幕
+  - DailyUtil.processYoutube();
+
 - [x] 提取音频文件，生成mp3文件
   - FfmpegUtil2.extractAudioFromMp4(inputPathMp4, inputPathMp3);
 
 - [x] 全流程处理油管视频，下载mp4、生成mp3、字幕等等
   - DailyUtil.processYoutube();
+
+- [x] 处理字幕，生成描述、完整词汇表
+  - GenSubtitleUtil.processSrtAndGenDescription(bookFolderName, folderName);
+
+- [x] 生成Markdown文件
+  - MarkdownToGitHub.genGitHubArticle(category, dateString);
+  
+- [x] 发布文章到半小时英语网站
+  - processPostHalfHourEnglish
 
 
 ## 20250331
