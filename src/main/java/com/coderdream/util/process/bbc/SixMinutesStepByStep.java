@@ -22,6 +22,7 @@ import com.coderdream.util.subtitle.SubtitleUtil;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
@@ -383,6 +384,29 @@ public class SixMinutesStepByStep {
         "6",
         srtFileName, chapterName);
 
+    }
+  }
+
+  public static void main(String[] args) {
+    // 160728
+    //160721
+    //160714
+    //160707
+
+    // 160825
+    //160818
+    //160811
+    //160804
+//    List<String> NUMBER_LIST = Arrays.asList("160825", "160818", "160811", "160804");
+//    List<String> NUMBER_LIST = Arrays.asList( "250703");
+    String folderPath =
+      CdFileUtil.getResourceRealPath() + File.separatorChar + "data" + File.separatorChar + "bbc"
+        + File.separatorChar;
+
+    List<String>   NUMBER_LIST = FileUtil.readLines(folderPath + File.separator + "todo.txt", "UTF-8");
+    for (String num : NUMBER_LIST) {
+      String folderName = "" + num;
+      SixMinutesStepByStep.process(folderName);
     }
   }
 

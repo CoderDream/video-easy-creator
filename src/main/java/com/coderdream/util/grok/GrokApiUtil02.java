@@ -16,7 +16,7 @@ public class GrokApiUtil02 {
     private static final int MAX_RETRY = 10;
     private static final long SLEEP_TIME = 3000;
     private static final String PROXY_HOST = "127.0.0.1";
-    private static final int PROXY_PORT = 1080;
+    private static final int PROXY_PORT = 7890;//1080;
     private static final int TIMEOUT = 20000;
 
     /**

@@ -30,4 +30,18 @@ class PrepareForMakeVideoSixMinutesUtilTest {
     }
   }
 
+  public static void main(String[] args) {
+
+
+    String folderPathForSixMinutes =
+      CdFileUtil.getResourceRealPath() + File.separatorChar + "data" + File.separatorChar + "bbc"
+        + File.separatorChar;
+
+    List<String> NUMBER_LIST = FileUtil.readLines(folderPathForSixMinutes + File.separator + "todo.txt", "UTF-8");
+    for (String num : NUMBER_LIST) {
+      String folderName = "" + num;
+      PrepareForMakeVideoUtil.processForSixMinutes(folderName);
+    }
+  }
+
 }

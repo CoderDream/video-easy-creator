@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
-import com.coderdream.entity.ThumbnailInfoEntity;
 import com.coderdream.entity.YoutubeInfoEntity;
 import com.coderdream.entity.YoutubeVideoSplitEntity;
 import com.coderdream.util.audio.FfmpegUtil2;
@@ -12,6 +11,7 @@ import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cd.CdTimeUtil;
 import com.coderdream.util.file.FileRenameUtil;
 import com.coderdream.util.file.PdfFileFinder;
+import com.coderdream.util.gemini.CallGeminiApiUtil;
 import com.coderdream.util.gemini.GeminiApiUtil;
 import com.coderdream.util.pic.ImageTextOverlayUtil;
 import com.coderdream.util.proxy.OperatingSystem;
@@ -41,16 +41,59 @@ import swiss.ameri.gemini.api.GenAi.GeneratedContent;
 @Slf4j
 public class DailyUtil {
 
-  public static void processYoutube() {
+  public static void main(String[] args) {
+    processYoutube();
+  }
 
+  public static void processYoutube() {
+    // 下载视频
+    List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();
+    for (YoutubeInfoEntity youtubeInfoEntity : youtubeVideoInfoEntityList) {
+      String category = youtubeInfoEntity.getCategory();// "0003_PressBriefings"; // D:\0000\0003_PressBriefings
+      String dateString = youtubeInfoEntity.getDateString();// "20250331";
+      String videoId = youtubeInfoEntity.getRawVideoId();// "oQE2dgqe_bI"; // // 替换为实际的视频链接
+      // Step 01: 下载视频和封面
+      downloadVideoAndThumbnail(category, dateString, videoId);
+      // Step 02: 截取视频片段
+      cutVideo(category, dateString);
+      // Step 03: 生成音频文件，生成mp3文件
+      genMp3(category, dateString);
+
+      String rawEnSrtFileName =
+        OperatingSystem.getBaseFolder() + File.separator + category
+          + File.separator
+          + dateString + File.separator + dateString
+          + ".srt";
+
+      // Step 04：生成原始字幕
+      if (CdFileUtil.isFileEmpty(rawEnSrtFileName)) {
+        genRawSubtitle(category, dateString);
+      }
+
+      // Step 04：生成双语字幕脚本
+      genDualSubtitleContent(category, dateString);
+
+      // Step 04：处理字幕
+      processSubtitle(category, dateString);
+
+      // Step 05：生成新的封面
+      generateNewThumbnail(category, dateString);
+    }
   }
 
   private static void genRawSubtitle(String category, String dateString) {
+    String inputPathMp3 =
+      OperatingSystem.getBaseFolder() + File.separator + category
+        + File.separator
+        + dateString + File.separator + dateString
+        + ".mp3";
+    WhisperUtil.transcribeToSrt(inputPathMp3);
   }
 
   /**
-   *  生成双语字幕脚本
-   * @param category category
+   * 生成双语字幕脚本
+   *
+   * @param category   category
    * @param dateString dateString
    */
   private static void genDualSubtitleContent(String category,
@@ -118,7 +161,7 @@ public class DailyUtil {
 
     String outputImagePath =
       folderPath + File.separator + dateString + "_cover." + formatName;
-    ThumbnailInfoEntity thumbnailInfoEntity = getThumbnailInfoEntity(category,
+    YoutubeInfoEntity thumbnailInfoEntity = getYoutubeInfoEntity(category,
       dateString);
     if (thumbnailInfoEntity != null) {
       ImageTextOverlayUtil.addTextOverlay(backgroundImagePath, outputImagePath,
@@ -177,7 +220,7 @@ public class DailyUtil {
     if (splitFile != null) {
       log.info("视频分割成功，文件保存在: {}", splitFile);
       // 清空文件
-      boolean b =  CdFileUtil.emptyYoutubeVideoSplitFile();
+      boolean b = CdFileUtil.emptyYoutubeVideoSplitFile();
       if (b) {
         log.info("清空文件成功");
       } else {
@@ -188,14 +231,14 @@ public class DailyUtil {
     }
   }
 
-  public static ThumbnailInfoEntity getThumbnailInfoEntity(String category,
+  public static YoutubeInfoEntity getYoutubeInfoEntity(String category,
     String dateString) {
-    List<ThumbnailInfoEntity> thumbnailInfoEntityList = CdFileUtil.getThumbnailInfoEntityList();
-    if (CollectionUtil.isNotEmpty(thumbnailInfoEntityList)) {
-      for (ThumbnailInfoEntity thumbnailInfoEntity : thumbnailInfoEntityList) {
-        if (thumbnailInfoEntity.getCategory().equals(category)
-          && thumbnailInfoEntity.getDateString().equals(dateString)) {
-          return thumbnailInfoEntity;
+    List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();
+    if (CollectionUtil.isNotEmpty(youtubeVideoInfoEntityList)) {
+      for (YoutubeInfoEntity youtubeInfoEntity : youtubeVideoInfoEntityList) {
+        if (youtubeInfoEntity.getCategory().equals(category)
+          && youtubeInfoEntity.getDateString().equals(dateString)) {
+          return youtubeInfoEntity;
         }
       }
     }
@@ -286,11 +329,25 @@ public class DailyUtil {
     GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
     File fileChn = new File(srtFileNameChn);
     File fileCht = new File(srtFileNameCht);
+    String text = "";
+
+    if (generatedContent != null) {
+      text = generatedContent.text();
+    } else {
+      String s = CallGeminiApiUtil.callApi(prompt);
+      log.info("生成的文本内容：{}", s);
+      if (StrUtil.isNotEmpty(s)) {
+        text = s;
+      } else {
+        log.error("生成的文本内容为空");
+        return;
+      }
+    }
     try {
       FileUtils.writeStringToFile(fileChn,
-        ZhConverterUtil.toSimple(generatedContent.text()), "UTF-8");
+        ZhConverterUtil.toSimple(text), "UTF-8");
       FileUtils.writeStringToFile(fileCht,
-        ZhConverterUtil.toTraditional(generatedContent.text()), "UTF-8");
+        ZhConverterUtil.toTraditional(text), "UTF-8");
       long elapsedTime = System.currentTimeMillis() - startTime; // 计算耗时
       log.info("写入完成，文件路径: {}， {}，共计耗时：{}", srtFileNameChn,
         srtFileNameCht, CdTimeUtil.formatDuration(elapsedTime));

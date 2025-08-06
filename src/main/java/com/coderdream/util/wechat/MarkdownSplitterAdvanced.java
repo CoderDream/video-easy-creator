@@ -243,7 +243,7 @@ public class MarkdownSplitterAdvanced {
     List<String> tags = List.of("百词斩", "单词", "学习");
     DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd");
     String startDateStr = "2024-11-25";//"2025-01-23";
-    String endDateStr = "2025-03-14";
+    String endDateStr = "2025-05-14";
     int startIndex = 59;
     int totalDay = 0;
     try {

@@ -28,7 +28,7 @@
   - DailyUtil.processYoutube();
 
 - [x] 处理字幕，生成描述、完整词汇表
-  - GenSubtitleUtil.processSrtAndGenDescription(bookFolderName, folderName);
+  - GenSubtitleUtil.processSrtAndGenDescription(category, dateString);
 
 - [x] 生成Markdown文件
   - MarkdownToGitHub.genGitHubArticle(category, dateString);

@@ -65,7 +65,7 @@ public class MultiThreadGenOneScriptTextExecutor {
     List<DownloadInfoEntity> downloadInfoEntityListTemp = new ArrayList<>();
     if (test) {
       DownloadInfoEntity infoEntity = new DownloadInfoEntity();
-      String ep = "250417"; // 250220
+      String ep = "250731"; // 250220
       String year = "20" + ep.substring(0, 2);
       infoEntity.setFileUrl(
         "https://www.bbc.co.uk/learningenglish/english/features/6-minute-english_2025/ep-"
@@ -75,7 +75,7 @@ public class MultiThreadGenOneScriptTextExecutor {
       infoEntity.setFileName(ep + ".html");
       downloadInfoEntityListTemp = List.of(infoEntity);
     } else {
-      downloadInfoEntityListTemp = HtmlUtil.getDownloadHtmlInfo("txt", "2017");
+      downloadInfoEntityListTemp = HtmlUtil.getDownloadHtmlInfo("txt", "2016");
     }
 
     for (DownloadInfoEntity downloadInfoEntity : downloadInfoEntityListTemp) {

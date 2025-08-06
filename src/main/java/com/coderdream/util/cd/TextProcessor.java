@@ -100,9 +100,9 @@ public class TextProcessor {
       String updatedTime = "";
       //nextLine
       String nextLine = lines.get(secondMarkerIndex + 1);
-      int timePeriod = 300;
+      int timePeriod = 1000; // 默认时间间隔为1000毫秒 TODO
       if (nextLine.length() > 4) {
-        timePeriod = 800;
+        timePeriod = 1200;
       }
       updatedTime = addTimePeriod(originalTime, timePeriod);
       if (!nextLine.toLowerCase().startsWith("bye")) { // Bye

@@ -279,7 +279,8 @@ public class GeminiApiUtil {
    */
   private static GenerativeModel createModel(String content) {
     return GenerativeModel.builder()
-      .modelName(ModelVariant.GEMINI_2_0_FLASH_EXP) // 指定模型
+  //    .modelName(ModelVariant.GEMINI_2_0_FLASH_EXP) // 指定模型 gemini-2.5-pro-preview-03-25
+      .modelName("gemini-2.5-pro-preview-03-25")
       .addContent(Content.textContent( // 添加用户内容
         Content.Role.USER,
         content

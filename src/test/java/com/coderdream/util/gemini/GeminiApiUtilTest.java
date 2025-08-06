@@ -30,6 +30,9 @@ public class GeminiApiUtilTest {
     log.info("----- 测试 listModels 方法开始");
     // 列出所有模型
     List<Model> models = GeminiApiUtil.listModels();
+    for (Model model : models) {
+      log.info("1 Model: {}", model);
+    }
     log.info("Models: {}", models);
     log.info("----- 测试 listModels 方法结束");
   }

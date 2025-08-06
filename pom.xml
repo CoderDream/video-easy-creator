@@ -701,6 +701,12 @@
             <version>1.7.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.genai</groupId>
+            <artifactId>google-genai</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
 <!--        <dependency>-->
 <!--            <groupId>com.belerweb</groupId>-->
 <!--            <artifactId>pinyin4j</artifactId>-->

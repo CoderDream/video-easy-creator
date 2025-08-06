@@ -1,10 +1,13 @@
 package com.coderdream.util.daily;
 
 import cn.hutool.core.io.FileUtil;
+import com.coderdream.entity.YoutubeInfoEntity;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cmd.CommandUtil;
 import com.coderdream.util.gemini.TranslationUtil;
 
+import com.coderdream.util.subtitle.GenSubtitleUtil;
+import com.coderdream.util.wechat.MarkdownToGitHub;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +36,16 @@ class DailyUtilTest {
 //      TranslationUtil.genDescription(folderName);
 //    }
     // MarkdownFileGenerator
+  }
+
+
+  @Test
+  void downloadVideoAndThumbnail() {
+// https://www.youtube.com/watch?v=B2t0cB87aDc 老梁四大名著情商课 第一课 完整未删减版
+    String category = "0010_Temp";
+    String dateString = "20250323";
+    String videoId = "B2t0cB87aDc";
+    DailyUtil.downloadVideoAndThumbnail(category, dateString, videoId);
   }
 
   @Test
@@ -151,6 +164,14 @@ class DailyUtilTest {
 
   @Test
   void processPostHalfHourEnglish() {
+    List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();
+    for (YoutubeInfoEntity youtubeInfoEntity : youtubeVideoInfoEntityList) {
+      String category = youtubeInfoEntity.getCategory();
+      String dateString = youtubeInfoEntity.getDateString();
+      GenSubtitleUtil.processSrtAndGenDescription(category, dateString);
+      MarkdownToGitHub.genGitHubArticle(category, dateString);
+    }
+
     String baseHexoFolder = OperatingSystem.getHalfHourEnglishHexoFolder();
     List<String> commandList = Arrays.asList(
       "cd " + baseHexoFolder + " && hexo clean",
@@ -168,10 +189,16 @@ class DailyUtilTest {
   }
 
   @Test
+  void syncFilesToQuark2016() {
+    String year = "2016"; //    String year = "2017";
+    DailyUtil.syncFilesToQuark(year);
+  }
+
+  @Test
   void syncFilesToQuarkBatch() {
 //    List<String> years = Arrays.asList("2017", "2018", "2019", "2020", "2021",
 //      "2022", "2023", "2024", "2025");
-    List<String> years = Arrays.asList("2017", "2018", "2019", "2020", "2021",
+    List<String> years = Arrays.asList("2016", "2017", "2018", "2019", "2020", "2021",
       "2022", "2023", "2024", "2025");
     for (String year : years) {
       DailyUtil.syncFilesToQuark(year);

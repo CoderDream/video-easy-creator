@@ -46,7 +46,6 @@ class PrepareForMakeVideoUtilTest {
 
   @Test
   void processTodoForYoutube() {
-    // D:\04_GitHub\video-easy-creator\src\main\resources\data\bbc\todo.txt
     for (String num : YOUTUBE_LIST) {
       String folderName = "" + num;
       PrepareForMakeVideoUtil.processForSixMinutes(folderName);
@@ -75,7 +74,7 @@ class PrepareForMakeVideoUtilTest {
   }
 
   @Test
-  void processYoutubeFromTodo() {
+  void processYoutubeFromTodo() { // 运行这个
     List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();
     for (YoutubeInfoEntity youtubeInfoEntity : youtubeVideoInfoEntityList) {
       String category = youtubeInfoEntity.getCategory();
@@ -104,6 +103,15 @@ class PrepareForMakeVideoUtilTest {
     String folderName = "20250319"; // D:\0000\0007_Trump\20250227
 
     PrepareForMakeVideoUtil.processYoutube(categoryName, folderName);
+  }
+
+  public static void main(String[] args) {
+    List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();
+    for (YoutubeInfoEntity youtubeInfoEntity : youtubeVideoInfoEntityList) {
+      String category = youtubeInfoEntity.getCategory();
+      String dateString = youtubeInfoEntity.getDateString();
+      PrepareForMakeVideoUtil.processYoutube(category, dateString);
+    }
   }
 
 }

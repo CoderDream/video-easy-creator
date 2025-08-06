@@ -63,7 +63,7 @@ public class MarkdownToGitHub02 {
     try (BufferedWriter writer = new BufferedWriter(
       new FileWriter(markdownFile.toFile()))) {
 
-      List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getYoutubeVideoInfoEntityList();
+      List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();
       Map<String, YoutubeInfoEntity> map = new LinkedHashMap<>();
       for (YoutubeInfoEntity youtubeVideoInfoEntity : youtubeVideoInfoEntityList) {
         map.put(youtubeVideoInfoEntity.getCategory()
@@ -93,7 +93,7 @@ public class MarkdownToGitHub02 {
 
       // {% video youtube:LB8KwiiUGy0 width:100% autoplay:0 %}
       // 插入视频
-      String youtubeVideoId = youtubeVideoInfoEntity.getVideoId();// "XSSeizMti1w";
+      String youtubeVideoId = youtubeVideoInfoEntity.getMyVideoId();// "XSSeizMti1w";
       insertYoutubeVideo(writer, youtubeVideoId);
 
       //

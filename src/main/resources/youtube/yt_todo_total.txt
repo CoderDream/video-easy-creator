@@ -1,18 +1,38 @@
-0003_PressBriefings|20250128|dbFTGib6bYc|白宮新聞簡報-EP01-20250128
-0003_PressBriefings|20250130|kXAEmcDUNDM|白宮新聞簡報-EP02-20250130
-0003_PressBriefings|20250131|HQXpBv54pYo|白宮新聞簡報-EP03-20250131
-0003_PressBriefings|20250205|yjeLV8zHS1Y|白宮新聞簡報-EP04-20250205
-0003_PressBriefings|20250212|Z-3q-g4_yPc|白宮新聞簡報-EP05-20250212
-0003_PressBriefings|20250220|BPKPw2BACkw|白宮新聞簡報-EP06-20250220
-0003_PressBriefings|20250225|O10wROUl6Cs|白宮新聞簡報-EP07-20250225
-0003_PressBriefings|20250305|vutzEv3gsx8|白宮新聞簡報-EP08-20250305
-0003_PressBriefings|20250311|39U3dU8pm1o|白宮新聞簡報-EP09-20250311
-0003_PressBriefings|20250317|TjHzTfyHOIY|白宮新聞簡報-EP10-20250317
-0003_PressBriefings|20250319|6fuVmEQDaAw|白宮新聞簡報-EP11-20250319
-0003_PressBriefings|20250326|xjxcC8ClWLs|白宮新聞簡報-EP12-20250326
-0003_PressBriefings|20250402|nnzojdfydPs|白宮新聞簡報-EP13-20250402
-0003_PressBriefings|20250408|pWppUGRRHl4|白宮新聞簡報-EP14-20250408
-0003_PressBriefings|20250411|yr543ewGDts|白宮新聞簡報-EP15-20250411
-0003_PressBriefings|20250415|1-EpOMoo5EY|白宮新聞簡報-EP16-20250415
-0003_PressBriefings|20250416|Nlmkn3JNOHI|白宮新聞簡報-EP17-20250416
-0009_TechNews|20250319|XSSeizMti1w|英偉達黃仁勳2025GTC大會主題演講
+0003_PressBriefings|20250128|dbFTGib6bYc|dbFTGib6bYc|白宮新聞簡報-EP01-20250128|白宮新聞簡報(01)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250130|kXAEmcDUNDM|kXAEmcDUNDM|白宮新聞簡報-EP02-20250130|白宮新聞簡報(02)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250131|HQXpBv54pYo|HQXpBv54pYo|白宮新聞簡報-EP03-20250131|白宮新聞簡報(03)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250205|yjeLV8zHS1Y|yjeLV8zHS1Y|白宮新聞簡報-EP04-20250205|白宮新聞簡報(04)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250212|Z-3q-g4_yPc|Z-3q-g4_yPc|白宮新聞簡報-EP05-20250212|白宮新聞簡報(05)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250220|BPKPw2BACkw|BPKPw2BACkw|白宮新聞簡報-EP06-20250220|白宮新聞簡報(06)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250225|O10wROUl6Cs|O10wROUl6Cs|白宮新聞簡報-EP07-20250225|白宮新聞簡報(07)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250305|vutzEv3gsx8|vutzEv3gsx8|白宮新聞簡報-EP08-20250305|白宮新聞簡報(08)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250311|39U3dU8pm1o|39U3dU8pm1o|白宮新聞簡報-EP09-20250311|白宮新聞簡報(09)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250317|TjHzTfyHOIY|TjHzTfyHOIY|白宮新聞簡報-EP10-20250317|白宮新聞簡報(10)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250319|6fuVmEQDaAw|6fuVmEQDaAw|白宮新聞簡報-EP11-20250319|白宮新聞簡報(11)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250326|xjxcC8ClWLs|xjxcC8ClWLs|白宮新聞簡報-EP12-20250326|白宮新聞簡報(12)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250402|nnzojdfydPs|nnzojdfydPs|白宮新聞簡報-EP13-20250402|白宮新聞簡報(13)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250408|pWppUGRRHl4|ksuYKTSsSJA|白宮新聞簡報-EP14-20250408|白宮新聞簡報(14)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250411|yr543ewGDts|UBgJzO8DeVs|白宮新聞簡報-EP15-20250411|白宮新聞簡報(15)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250415|1-EpOMoo5EY|F-Smx_2zsR8|白宮新聞簡報-EP16-20250415|白宮新聞簡報(16)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250416|Nlmkn3JNOHI|fZXZuhqfACE|白宮新聞簡報-EP17-20250416|白宮新聞簡報(17)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250422|zK5EoGZ-EKw|KbLRCE0qHl4|白宮新聞簡報-EP18-20250422|白宮新聞簡報(18)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0003_PressBriefings|20250429|siqENvfCkWQ|WRlvLGhNakw|白宮新聞簡報-EP19-20250429|白宮新聞簡報(19)|經濟三板斧 貿易 稅收和放鬆管制|總統執政百日政績斐然
+0003_PressBriefings|20250509|JD1oRWPXxJg|z0hc8gTLZvU|白宮新聞簡報-EP20-20250509|白宮新聞簡報(20)|川普即將歷史性地重返中東|中美貿易 印巴衝突 新教皇
+0003_PressBriefings|20250519|Zh3hOaioCWc|Zh3hOaioCWc|白宮新聞簡報-EP21-20250519|白宮新聞簡報(21)|川普與普京、澤連斯基通話尋求和平|穆迪下調美國信用評級？
+0003_PressBriefings|20250520|omYKBUTtSHY|omYKBUTtSHY|白宮新聞簡報-EP22-20250520|白宮新聞簡報(22)|川普與普京、澤連斯基通話尋求和平|穆迪下調美國信用評級？
+0003_PressBriefings|20250522|PLunV5NKEZA|i1p-HD8TiQQ|白宮新聞簡報-EP23-20250522|白宮新聞簡報(23)|剔除140萬非法移民的福利？|挺軍人、護兒童、保邊境！
+0003_PressBriefings|20250529|-8tKKyrCmSY|-8tKKyrCmSY|白宮新聞簡報-EP24-20250529|白宮新聞簡報(24)|回應宏偉壯麗法案爭議|埃隆·馬斯克離職內幕及影響
+0003_PressBriefings|20250603|E9KW7xNK02E|E9KW7xNK02E|白宮新聞簡報-EP25-20250603|白宮新聞簡報(25)|回應國內法案與媒體偏見|犯罪率 通膨率雙降 蛋價暴跌
+0003_PressBriefings|20250611|z_ZBVqBjqtM|z_ZBVqBjqtM|白宮新聞簡報-EP26-20250611|白宮新聞簡報(26)|洛杉磯騷亂 軍隊強勢鎮壓|怒批州長與市長煽風點火
+0003_PressBriefings|20250619|3MYm2XzvrM4|jE44DnWMrZs|白宮新聞簡報-EP27-20250619|白宮新聞簡報(27)|伊朗核武危機倒數兩週|史上最大規模驅逐行動啟動
+0003_PressBriefings|20250626|NKl2dpLylK0|jE44DnWMrZs|白宮新聞簡報-EP28-20250626|白宮新聞簡報(28)|摧毀伊朗核能力 確保世界和平|美國史上最大規模減稅
+0003_PressBriefings|20250707|Bi4eqS65UX8|jE44DnWMrZs|白宮新聞簡報-EP29-20250707|白宮新聞簡報(29)|摧毀伊朗核能力 確保世界和平|美國史上最大規模減稅
+0007_Trump|20250506|f_ggYP-VO2s|BIFrSP9LA-g|白宮總統會見外賓-EP06-20250506|白宮總統會見外賓(06)|貿易、關稅與驚人內幕大公開|川普與加拿大總理全面對話
+0009_TechNews|20250319|XSSeizMti1w|XSSeizMti1w|英偉達黃仁勳2025GTC大會主題演講|白宮新聞簡報(18)|中東訪問 俄烏局勢與印太戰略|全國持槍互認有望實現
+0009_TechNews|20250507|HT8-KPAjpiA|mBcglgaQ8E8|科技演講與訪談-EP04-20250507|2025全球會議訪談|將出現數十千兆瓦規模AI工廠|黃仁勳預測 未來十年全球
+0005_Vance|20250422|fp7JToHcdvE|q6nBlix6TOE|萬斯演講-EP03-20250422|萬斯演講(03)|中東訪問 俄烏局勢與印太戰略|川普總統親赴羅馬弔唁教宗
+0006_KarolineLeavitt|20250331|-0XcPiinHxU|vr38lie5jUE|卡羅琳訪談-EP04-20250331|卡羅琳訪談(04)|我的家人 我的信仰和美國夢|卡羅琳·萊維特的成功祕訣
+0006_KarolineLeavitt|20250426|Lb6YLK5FsHQ|Lb6YLK5FsHQ|卡羅琳訪談-EP05-20250426|卡羅琳訪談(05)|繞過傳統媒體直接與大眾對話|卡羅琳·萊維特的蛻變之路
+0011_NewMediaBriefs|20250428|YDnd7lGC9F4|VI_iIXjw4XU|新媒體成員簡報-EP01-20250428|新媒體成員簡報(01)|特朗普與澤連斯基梵蒂岡密會|美全國持槍互認有望實現
+0011_NewMediaBriefs|20250429|cmBHi77zM6s|GgdVkgLCFBc|新媒體成員簡報-EP02-20250429|新媒體成員簡報(02)|執政百日成就報告 你買單嗎？|恢復美國夢 從創造就業開始
+0011_NewMediaBriefs|20250430|wYiS2WJLKRk|vk8GkpDIfEo|新媒體成員簡報-EP03-20250430|新媒體成員簡報(03)|整頓大學亂象，維護校園安全|怒斥CBS 紐約時報及假民調

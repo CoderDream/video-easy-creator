@@ -134,16 +134,23 @@ public class ProcessScriptUtil {
 //      stringListWithIndex.put(i, stringList.get(i));
       if (stringList.get(i).contains("word-for-word transcript")) {
         transcriptIndex = i;
+      } else {
+        log.error("找不到word-for-word transcript");
       }
 
       if (stringList.get(i).toLowerCase()
         .contains("VOCABULARY".toLowerCase())) {
         vocIndex = i;
+      } else {
+        log.error("找不到VOCABULARY");
       }
     }
     List<String> scriptDialogContentList = new ArrayList<>();
-    List<String> scriptList; // DialogSingleEntity
-    scriptList = stringList.subList(transcriptIndex + 1, vocIndex);
+    if(CollectionUtil.isEmpty(stringList) || stringList.size() < 2){
+      log.error("stringList 文件内容为空");
+    }
+
+    List<String> scriptList = stringList.subList(transcriptIndex + 1, vocIndex);
     List<DialogSingleEntity> dialogSingleEntityList = DialogParser.parseDialogSingleEntity(
       scriptList);
     for (DialogSingleEntity entity : dialogSingleEntityList) {
@@ -290,7 +297,8 @@ public class ProcessScriptUtil {
         for (attempt = 0; attempt < MAX_RETRIES; attempt++) {
           String modelName = getGeminiModelName(
             RandomUtil.randomInt(1, 5));
-          log.error("尝试次数：{}，模型：{}，prompt：{}", attempt, modelName, prompt);
+          log.error("尝试次数：{}，模型：{}，prompt：{}", attempt, modelName,
+            prompt);
           String text = CallGeminiApiUtil.callApi(prompt, modelName);
           List<String> sList = StrUtil.split(text, "\n");
           if (CollectionUtil.isNotEmpty(sList)
@@ -377,7 +385,8 @@ public class ProcessScriptUtil {
     return geminiModelNameMap.get(index);
   }
 
-  public static void translateByGrok(String type, String fileName, String grokFileName,
+  public static void translateByGrok(String type, String fileName,
+    String grokFileName,
     Integer groupSize) {
     String systemPrompt = "你是一位专业的字幕翻译专家，请严格按照下面的格式进行回答：";
 //    String head = "翻译下面的英文字幕，内容有的是一句话，有的是半句话，但是你直接翻译就行，返回格式为一句英文一句中文，我给你n行就返回2*n行，只需要返回内容，不要其他的：\n";

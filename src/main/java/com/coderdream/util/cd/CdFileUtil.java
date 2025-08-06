@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.coderdream.entity.ArticleTitle;
 import com.coderdream.entity.DialogSingleEntity;
 import com.coderdream.entity.SubtitleEntity;
-import com.coderdream.entity.ThumbnailInfoEntity;
+//import com.coderdream.entity.ThumbnailInfoEntity;
 import com.coderdream.entity.YoutubeInfoEntity;
 import com.coderdream.entity.YoutubeVideoSplitEntity;
 import com.coderdream.util.proxy.OperatingSystem;
@@ -546,13 +546,13 @@ public class CdFileUtil {
     return result;
   }
 
-  public static List<YoutubeInfoEntity> getYoutubeVideoInfoEntityList() {
-    String fileName =
-      CdFileUtil.getResourceRealPath() + File.separator + "youtube"
-        + File.separator + "video_ids.txt";
-
-    return getYoutubeInfoEntityList(fileName);
-  }
+//  public static List<YoutubeInfoEntity> getYoutubeVideoInfoEntityList() {
+//    String fileName =
+//      CdFileUtil.getResourceRealPath() + File.separator + "youtube"
+//        + File.separator + "my_video_ids.txt";
+//
+//    return getYoutubeInfoEntityList(fileName);
+//  }
 
   public static List<YoutubeInfoEntity> getTodoYoutubeVideoInfoEntityList() {
     String fileName =
@@ -574,14 +574,18 @@ public class CdFileUtil {
         if (!StrUtil.isEmpty(s)) {
           subtitleBaseEntity = new YoutubeInfoEntity();
           String[] split = s.split("\\|");
-          if (split.length == 4) {
+          if (split.length == 8) {
             subtitleBaseEntity.setCategory(split[0]);
             subtitleBaseEntity.setDateString(split[1]);
-            subtitleBaseEntity.setVideoId(split[2]);
-            subtitleBaseEntity.setTitle(split[3]);
+            subtitleBaseEntity.setRawVideoId(split[2]);
+            subtitleBaseEntity.setMyVideoId(split[3]);
+            subtitleBaseEntity.setTitle(split[4]);
+            subtitleBaseEntity.setHeadTitle(split[5]);
+            subtitleBaseEntity.setSubTitle(split[6]);
+            subtitleBaseEntity.setMainTitle(split[7]);
             result.add(subtitleBaseEntity);
           } else {
-            log.error("数据格式不对, {}", s);
+            log.error("数据格式不对2, {}", s);
           }
         }
       }
@@ -623,7 +627,7 @@ public class CdFileUtil {
             youtubeVideoSplitEntity.setTimeStr(split[2]);
             result.add(youtubeVideoSplitEntity);
           } else {
-            log.error("数据格式不对, {}", s);
+            log.error("数据格式不对1, {}", s);
           }
         }
       }
@@ -631,42 +635,42 @@ public class CdFileUtil {
     return result;
   }
 
-  public static @NotNull List<ThumbnailInfoEntity> getThumbnailInfoEntityList() {
-    String fileName =
-      CdFileUtil.getResourceRealPath() + File.separator + "youtube"
-        + File.separator + "thumbnail_info.txt";
+//  public static @NotNull List<ThumbnailInfoEntity> getThumbnailInfoEntityList() {
+//    String fileName =
+//      CdFileUtil.getResourceRealPath() + File.separator + "youtube"
+//        + File.separator + "thumbnail_info.txt";
+//
+//    return getThumbnailInfoEntityList(fileName);
+//  }
 
-    return getThumbnailInfoEntityList(fileName);
-  }
 
-
-  public static @NotNull List<ThumbnailInfoEntity> getThumbnailInfoEntityList(
-    String fileName) {
-    List<ThumbnailInfoEntity> result = new ArrayList<>();
-    List<String> stringList = FileUtil.readLines(fileName,
-      StandardCharsets.UTF_8);
-
-    ThumbnailInfoEntity thumbnailInfoEntity;
-    if (CollectionUtils.isNotEmpty(stringList)) {
-      for (String s : stringList) {
-        if (!StrUtil.isEmpty(s)) {
-          thumbnailInfoEntity = new ThumbnailInfoEntity();
-          String[] split = s.split("\\|");
-          if (split.length == 5) {
-            thumbnailInfoEntity.setCategory(split[0]);
-            thumbnailInfoEntity.setDateString(split[1]);
-            thumbnailInfoEntity.setHeadTitle(split[2]);
-            thumbnailInfoEntity.setSubTitle(split[3]);
-            thumbnailInfoEntity.setMainTitle(split[4]);
-            result.add(thumbnailInfoEntity);
-          } else {
-            log.error("数据格式不对, {}", s);
-          }
-        }
-      }
-    }
-    return result;
-  }
+//  public static @NotNull List<ThumbnailInfoEntity> getThumbnailInfoEntityList(
+//    String fileName) {
+//    List<ThumbnailInfoEntity> result = new ArrayList<>();
+//    List<String> stringList = FileUtil.readLines(fileName,
+//      StandardCharsets.UTF_8);
+//
+//    ThumbnailInfoEntity thumbnailInfoEntity;
+//    if (CollectionUtils.isNotEmpty(stringList)) {
+//      for (String s : stringList) {
+//        if (!StrUtil.isEmpty(s)) {
+//          thumbnailInfoEntity = new ThumbnailInfoEntity();
+//          String[] split = s.split("\\|");
+//          if (split.length == 5) {
+//            thumbnailInfoEntity.setCategory(split[0]);
+//            thumbnailInfoEntity.setDateString(split[1]);
+//            thumbnailInfoEntity.setHeadTitle(split[2]);
+//            thumbnailInfoEntity.setSubTitle(split[3]);
+//            thumbnailInfoEntity.setMainTitle(split[4]);
+//            result.add(thumbnailInfoEntity);
+//          } else {
+//            log.error("数据格式不对, {}", s);
+//          }
+//        }
+//      }
+//    }
+//    return result;
+//  }
 
   public static @NotNull List<SubtitleEntity> getSubtitleEntityList(
     List<String> stringList) {

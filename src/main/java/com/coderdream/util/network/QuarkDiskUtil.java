@@ -343,16 +343,16 @@ public class QuarkDiskUtil {
     headers.forEach(request::header); // 添加请求头
     try (HttpResponse response = request.execute()) { // 使用 try-with-resources
       String body = response.body();
-      // log.debug("Response body: {}", body); // 改为debug级别
+      log.debug("Response body: {}", body); // 改为debug级别
 
       if (response.isOk()) {
         return JSONUtil.toBean(body, QuarkDiskResponse.class);
       } else {
-        // log.error("GET File Sort Request failed with status code: {}", response.getStatus());
+        log.error("GET File Sort Request failed with status code: {}", response.getStatus());
         return null; // 或者抛出异常
       }
     } catch (Exception e) {
-      // log.error("GET File Sort Request error:{}", e.getMessage());
+      log.error("GET File Sort Request error:{}", e.getMessage());
       return null;
     }
   }
@@ -563,7 +563,7 @@ public class QuarkDiskUtil {
   public static void main(String[] args) {
 //    String year = "2023";
 //    List<String> years = List.of("2018", "2019", "2020", "2021", "2022", "2023");
-    List<String> years = List.of("2025");
+    List<String> years = List.of("2016");
     for (String year : years) {
       process(year);
     }
@@ -613,12 +613,15 @@ public class QuarkDiskUtil {
         + File.separator + "quark_share_" + year + ".txt";
       List<String> textList = new LinkedList<>();
       Set<String> fileNameSet = new LinkedHashSet<>();
-      List<String> oldTextList = FileUtil.readLines(quarkShareFileName,StandardCharsets.UTF_8);
-      for (String line : oldTextList) {
-        String[] split = line.split(" : ");
-        if (split.length == 2) {
-          fileNameSet.add(split[0].trim());
-          textList.add(line);
+      if(!CdFileUtil.isFileEmpty(quarkShareFileName)) {
+        List<String> oldTextList = FileUtil.readLines(quarkShareFileName,
+          StandardCharsets.UTF_8);
+        for (String line : oldTextList) {
+          String[] split = line.split(" : ");
+          if (split.length == 2) {
+            fileNameSet.add(split[0].trim());
+            textList.add(line);
+          }
         }
       }
 
@@ -627,7 +630,7 @@ public class QuarkDiskUtil {
         .getList();
       for (QuarkDiskResponse.FileList file : fileList) {
         String fileName = file.getFile_name();
-        if(!fileNameSet.contains(fileName)){
+        if(fileNameSet.isEmpty() || !fileNameSet.contains(fileName)){
           textList.add(QuarkDiskUtil.processFileList(file, headerFilePath));
         } else {
           log.info("分享链接已存在，跳过: {}", fileName);

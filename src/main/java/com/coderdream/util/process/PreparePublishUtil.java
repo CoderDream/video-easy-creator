@@ -8,6 +8,7 @@ import com.coderdream.util.CommonUtil;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cmd.CommandUtil;
+import com.coderdream.util.gemini.CallGeminiApiUtil;
 import com.coderdream.util.gemini.GeminiApiUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.resource.ResourcesSourcePathUtil;
@@ -570,7 +571,20 @@ public class PreparePublishUtil {
                     com.coderdream.util.cd.CdFileUtil.isFileEmpty(chnMdFileName)
                             || com.coderdream.util.cd.CdFileUtil.isFileEmpty(
                             chtMdFileName)) {
-                String text = generatedContent.text();
+                String text = "";
+
+                if (generatedContent != null) {
+                    text = generatedContent.text();
+                } else {
+                    String s = CallGeminiApiUtil.callApi(prompt);
+                    log.info("生成的文本内容：{}", s);
+                    if (StrUtil.isNotEmpty(s)) {
+                        text = s;
+                    } else {
+                        log.error("生成的文本内容为空");
+                        return;
+                    }
+                }
                 text = title + "\n\n" + text;
                 FileUtils.writeStringToFile(new File(chtMdFileName),
                         ZhConverterUtil.toTraditional(text), "UTF-8");

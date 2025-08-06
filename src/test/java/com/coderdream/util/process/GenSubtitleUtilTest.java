@@ -1,10 +1,12 @@
 package com.coderdream.util.process;
 
+import com.coderdream.entity.YoutubeInfoEntity;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.subtitle.GenSubtitleUtil;
 import com.coderdream.util.subtitle.SubtitleUtil;
 import java.io.File;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -133,6 +135,18 @@ class GenSubtitleUtilTest {
         + ".mp4";
 
     GenSubtitleUtil.processSrtAndGenDescription(mp4FilePath);
+  }
+
+  @Test
+  void processSrtAndGenDescription_TODO() {
+//    String bookFolderName = "0003_PressBriefings";
+//    String folderName = "20250416";
+    List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();
+    for (YoutubeInfoEntity youtubeInfoEntity : youtubeVideoInfoEntityList) {
+      String category = youtubeInfoEntity.getCategory();// "0003_PressBriefings"; // D:\0000\0003_PressBriefings
+      String dateString = youtubeInfoEntity.getDateString();// "20250331";
+      GenSubtitleUtil.processSrtAndGenDescription(category, dateString);
+    }
   }
 
   @Test

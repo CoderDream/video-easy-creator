@@ -2,10 +2,12 @@ package com.coderdream.util.process;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
+import com.coderdream.entity.YoutubeInfoEntity;
 import com.coderdream.util.CommonUtil;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.gemini.GeminiApiUtil;
+import com.coderdream.util.process.bbc.SixMinutesStepByStep;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.subtitle.SubtitleUtil;
 import com.github.houbb.opencc4j.util.ZhConverterUtil;
@@ -16,6 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +68,11 @@ public class PrepareForMakeVideoUtil {
     FileUtil.copy(subtitleFileNameChn, distFolderName, true);
 
     // 4. 封面
+    String coverFileName = folderPath + File.separator + folderName + File.separator + "snapshot_001.png";
+    String destinationCoverFileName = distFolderName + "cover.png";
+    Path copy = FileUtil.copy(Paths.get(coverFileName),
+      Paths.get(destinationCoverFileName), StandardCopyOption.REPLACE_EXISTING);
+    log.info("封面文件拷贝结果：{}", copy);
   }
 
   public static void processYoutube(String categoryName, String folderName) {
@@ -136,8 +144,27 @@ public class PrepareForMakeVideoUtil {
   }
 
   public static void main(String[] args) {
-    String folderName = "170706";
-    PrepareForMakeVideoUtil.processForSixMinutes(folderName);
+//    String folderName = "250703";
+//    PrepareForMakeVideoUtil.processForSixMinutes(folderName);
+
+
+//    List<String> NUMBER_LIST = Arrays.asList("160825", "160818", "160811", "160804");
+//    List<String> NUMBER_LIST = Arrays.asList( "160825");
+//    for (String num : NUMBER_LIST) {
+//      String folderName = "" + num;
+//      PrepareForMakeVideoUtil.processForSixMinutes(folderName);
+//    }
+
+//    String categoryName = "0003_PressBriefings";
+//    String folderName = "20250626";
+//    PrepareForMakeVideoUtil.processYoutube(categoryName, folderName);
+
+    List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();
+    for (YoutubeInfoEntity youtubeInfoEntity : youtubeVideoInfoEntityList) {
+      String category = youtubeInfoEntity.getCategory();
+      String dateString = youtubeInfoEntity.getDateString();
+      PrepareForMakeVideoUtil.processYoutube(category, dateString);
+    }
   }
 
 }

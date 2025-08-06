@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 class SixMinutesStepByStepTest {
 
-
   private List<String> NUMBER_LIST;
 
   @BeforeEach
@@ -25,6 +24,19 @@ class SixMinutesStepByStepTest {
   @Test
   void process() {
     // D:\04_GitHub\video-easy-creator\src\main\resources\data\bbc\todo.txt
+    for (String num : NUMBER_LIST) {
+      String folderName = "" + num;
+      SixMinutesStepByStep.process(folderName);
+    }
+  }
+
+  public static void main(String[] args) {
+
+    String folderPath =
+      CdFileUtil.getResourceRealPath() + File.separatorChar + "data" + File.separatorChar + "bbc"
+        + File.separatorChar;
+
+    List<String> NUMBER_LIST = FileUtil.readLines(folderPath + File.separator + "todo.txt", "UTF-8");
     for (String num : NUMBER_LIST) {
       String folderName = "" + num;
       SixMinutesStepByStep.process(folderName);

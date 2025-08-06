@@ -18,6 +18,10 @@ class PreparePublishToYoutubeUtilTest {
     processYoutube();
   }
 
+  public static void main(String[] args) {
+    processYoutube();
+  }
+
   public static void processYoutube() {
     // 下载视频
     List<YoutubeInfoEntity> youtubeVideoInfoEntityList = CdFileUtil.getTodoYoutubeVideoInfoEntityList();

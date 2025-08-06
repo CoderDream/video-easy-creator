@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CallGeminiApiUtil {
 
   private static final String API_KEY = CdConstants.GEMINI_API_KEY; // 替换为你的 Gemini API 密钥
-  private static final String MODEL_NAME = "gemini-2.0-flash"; // 选择合适的模型 "gemini-2.5-pro-exp-03-25";
+  private static final String MODEL_NAME = "gemini-2.0-flash"; // 选择合适的模型 "gemini-2.5-pro-exp-03-25"; gemini-2.0-flash gemini-1.5-pro-latest
   private static final int MAX_RETRIES = 10; // 最大重试次数
   private static final int RETRY_DELAY = 3000; // 重试延迟（毫秒）
 
@@ -52,6 +52,8 @@ public class CallGeminiApiUtil {
         final String API_URL =
           "https://generativelanguage.googleapis.com/v1beta/models/" + modelName
             + ":generateContent?key=" + API_KEY;
+        log.info("API_URL: {}", API_URL);
+        log.info("requestBody: {}", JSONUtil.toJsonStr(requestBody));
         // 发送 POST 请求
         String response = HttpUtil.createPost(API_URL)
           .setProxy(proxy)
@@ -165,3 +167,4 @@ public class CallGeminiApiUtil {
   }
 
 }
+
