@@ -1,0 +1,23 @@
+{
+    "contents": [
+        {
+            "parts": [
+                {
+                    "text": "帮我实现如下功能：输入是是6组英文词汇，6行为1组；第1行英文单词或词组，第2行是英文释义，第1行和第2行不要处理，按原始文本返回，第3行是对第1行的中文简明翻译，翻译结果尽量少于20个字符串，第4行是对第2行的中文翻译，第4行很重要，请严格按照柯林斯英汉双解大词典或牛津双语词典的释义进行翻译，第5行是用第1行进行英文造句，我是要考雅思的考生，请优先选用《柯林斯英汉双解大词典》或《牛津双语词典》中的较难的例句，第6行是对第5行进行中文翻译；再次强调，第2行按原文输出，不要修改；请根据规则补齐空行，按文本文件格式返回给我，不要任何标记，移除空行；后面的5组也是按一样方式处理；以下是6组词汇：roll your eyes
+ (idiom) move your eyes upwards as a way of showing you are annoyed or bored by what someone has said
+milestone
+ significant stage or event in the development of something
+(not be) plain sailing
+ (idiom) (not be) easy and without problems
+separated at birth
+ used to describe two people who are unusually similar or connected; or siblings who were separated and adopted by different parents at birth
+eerie
+ strange in a frightening and mysterious way
+crazy
+ strange and fantastic
+"
+                }
+            ]
+        }
+    ]
+}

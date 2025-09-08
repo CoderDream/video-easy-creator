@@ -1,5 +1,7 @@
 package com.coderdream.util.gemini;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.coderdream.util.cd.CdConstants;
@@ -8,8 +10,11 @@ import com.coderdream.util.callapi.HttpUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
 
 /**
  * Gemini API 通用工具类，提供静态方法调用 Gemini API。
@@ -36,6 +41,20 @@ public class GeminiApiClient {
     Instant startTime = Instant.now();
     JSONObject requestBody = buildRequestBody(prompt);
     try {
+      // 【新增逻辑】将请求体写入文件
+      String fileName = DateUtil.format(new Date(), "yyyyMMddHHmmss") + ".txt";
+      // 确保目录存在
+      File logDir = new File("logs/gemini_requests");
+      if (!logDir.exists()) {
+        logDir.mkdirs();
+      }
+      // 将JSON对象美化为字符串，并处理换行符
+      String formattedRequestBody = JSONUtil.toJsonStr(requestBody, 4).replace("\\n", System.lineSeparator());
+      FileUtil.writeString(formattedRequestBody, new File(logDir, fileName), StandardCharsets.UTF_8);
+      log.info("Gemini API 请求体已写入文件: {}", fileName);
+
+
+      log.error("Gemini API 请求体: {}", requestBody);
       String result = HttpUtil.httpHutoolPost(URL, requestBody.toString(),
         CdConstants.PROXY_HOST,
         OperatingSystem.getProxyPort());
@@ -45,15 +64,30 @@ public class GeminiApiClient {
       // 将 JSON 数据转换为 GeminiApiResponse 实体类
       GeminiApiResponse response = resultObject.toBean(GeminiApiResponse.class);
 
-      // 打印结果验证
-      log.info("响应内容: {} ", response.toString());
-      log.info("模型版本号: {} ", response.getModelVersion());
-      log.info("候选结果数量: {} ", response.getCandidates().size());
-      log.info("第一条内容: {} ",
-        response.getCandidates().get(0).getContent().getParts().get(0)
-          .getText());
-      result = response.getCandidates().get(0).getContent().getParts().get(0)
-        .getText();
+      // 【推荐的修改】
+// 1. 首先检查 response 对象本身是否为 null
+// 2. 然后检查 getCandidates() 的返回值是否为 null
+// 3. 最后检查列表是否为空 (isEmpty() 是比 size() > 0 更推荐的判空方式)
+      if (response != null && response.getCandidates() != null && !response.getCandidates().isEmpty()) {
+        // 只有在所有检查都通过后，才安全地处理内容
+        // ... 处理返回的内容
+        // 打印结果验证
+        log.info("响应内容: {} ", response.toString());
+        log.info("模型版本号: {} ", response.getModelVersion());
+        log.info("候选结果数量: {} ", response.getCandidates().size());
+        log.info("第一条内容: {} ",
+          response.getCandidates().get(0).getContent().getParts().get(0)
+            .getText());
+        result = response.getCandidates().get(0).getContent().getParts().get(0)
+          .getText();
+      } else {
+        // 当没有有效内容返回时，进行日志记录或错误处理
+        // 记录完整的响应体对于调试非常有帮助
+        log.error("Gemini API 未返回有效的候选内容。响应体: {}", response);
+        // 你可以选择返回一个空字符串或抛出一个自定义异常
+        return ""; // 或者 throw new RuntimeException("未能从Gemini获取有效翻译内容");
+      }
+
       Instant endTime = Instant.now();
       long duration = Duration.between(startTime, endTime).toMillis();
 //            log.info("Gemini API 调用成功，耗时: {}, 结果: {}",
