@@ -3,11 +3,11 @@ package com.coderdream.util.cd;
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+import cn.hutool.core.io.FileUtil;
+import com.coderdream.entity.SubtitleEntity;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -33,87 +33,61 @@ public class TextProcessor {
    * @param fileName 字幕文件的路径。
    * @return 第一部分和第二部分的时间戳，以制表符分隔。
    */
-  public static String processFile(String fileName) {
-    List<String> lines;
-    try {
-      lines = readLinesFromFile(fileName);
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-    String firstPart = findFirstPart(lines);
-    String secondPart = findSecondPart(lines);
-
-    if (firstPart != null && secondPart != null) {
-      return firstPart + "\t" + secondPart;
-    } else {
-      return null;
-    }
-  }
-
-  private static List<String> readLinesFromFile(String fileName)
-    throws IOException {
-    List<String> lines = new ArrayList<>();
-    try (BufferedReader reader = new BufferedReader(
-      new FileReader(fileName))) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        lines.add(line);
-      }
-    }
-    return lines;
-  }
-
-  private static String findFirstPart(List<String> lines) {
-    String previousLine = null;
-    for (String line : lines) {
-      if (line.contains("I'm") || line.contains("I’m") || line.contains("I ")
-        || line.contains("Er ")) {
-        if (previousLine != null && previousLine.length() >= 12) {
-          return previousLine.substring(0, 12);
+    public static String processFile(String fileName) {
+        List<SubtitleEntity> subtitles = CdFileUtil.readSrtFileContent(fileName);
+        if (subtitles == null || subtitles.isEmpty()) {
+            log.error("SRT文件读取失败或内容为空: {}", fileName);
+            return null;
         }
-      }
-      previousLine = line;
-    }
-    log.error("未找到符合条件的字符串。");
-    return null;
-  }
 
-  private static String findSecondPart(List<String> lines) {
-    int secondMarkerCount = 0;
-    int secondMarkerIndex = -1;
+        Optional<String> startTime = findStartTime(subtitles);
+        Optional<String> endTime = findEndTime(subtitles);
 
-    for (int i = lines.size() - 1; i >= 0; i--) {
-      if (lines.get(i).contains("-->")) {
-        secondMarkerCount++;
-        if (secondMarkerCount == 2) {
-          secondMarkerIndex = i;
-          break;
+        if (startTime.isPresent() && endTime.isPresent()) {
+            String folderName = FileUtil.mainName(FileUtil.getParent(fileName, 1));
+            return folderName + "\t" + startTime.get() + "\t" + endTime.get();
+        } else {
+            if (startTime.isEmpty()) {
+                log.error("在文件 {} 中未找到包含 'I'm' 或 'I am' 的起始字幕。", fileName);
+            }
+            if (endTime.isEmpty()) {
+                log.error("在文件 {} 中未找到包含 'bye' 的结束字幕。", fileName);
+            }
+            return null;
         }
-      }
     }
 
-    if (secondMarkerIndex != -1
-      && lines.get(secondMarkerIndex).length() >= 12) {
-      String originalTime = lines.get(secondMarkerIndex).substring(0, 12);
-      String endTime = lines.get(secondMarkerIndex).substring(17);
-
-      String updatedTime = "";
-      //nextLine
-      String nextLine = lines.get(secondMarkerIndex + 1);
-      int timePeriod = 1000; // 默认时间间隔为1000毫秒 TODO
-      if (nextLine.length() > 4) {
-        timePeriod = 1200;
-      }
-      updatedTime = addTimePeriod(originalTime, timePeriod);
-      if (!nextLine.toLowerCase().startsWith("bye")) { // Bye
-        updatedTime = endTime;
-      }
-
-      return updatedTime; //lines.get(secondMarkerIndex)                .substring(lines.get(secondMarkerIndex).length() - 12);
+    /**
+     * 查找第一个包含 "I'm" 或 "I am" 的字幕的开始时间。
+     * @param subtitles 字幕实体列表
+     * @return 包含开始时间的 Optional，如果找不到则为空
+     */
+    private static Optional<String> findStartTime(List<SubtitleEntity> subtitles) {
+        for (SubtitleEntity subtitle : subtitles) {
+            String text = subtitle.getSubtitle().toLowerCase();
+            if (text.contains("i'm") || text.contains("i am")) {
+                return Optional.of(subtitle.getTimeStr().substring(0, 12));
+            }
+        }
+        return Optional.empty();
     }
 
-    return null;
-  }
+    /**
+     * 从后向前查找最后一个包含 "bye" 的字幕的结束时间。
+     * @param subtitles 字幕实体列表
+     * @return 包含结束时间的 Optional，如果找不到则为空
+     */
+    private static Optional<String> findEndTime(List<SubtitleEntity> subtitles) {
+        ListIterator<SubtitleEntity> iterator = subtitles.listIterator(subtitles.size());
+        while (iterator.hasPrevious()) {
+            SubtitleEntity subtitle = iterator.previous();
+            String text = subtitle.getSubtitle().toLowerCase();
+            if (text.contains("bye")) {
+                return Optional.of(subtitle.getTimeStr().substring(17, 29));
+            }
+        }
+        return Optional.empty();
+    }
 
   /**
    * 给定时间字符串增加时间间隔并返回新的时间字符串

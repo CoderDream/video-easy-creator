@@ -368,9 +368,10 @@ public class TranslationUtil {
    *
    * @param scriptDialogMergeFileName 对话脚本文件名
    * @param descriptionFileName       描述文件名
+   * @return
    */
-  public static void genDescription(String scriptDialogMergeFileName,
-    String descriptionFileName) {
+  public static File genDescription(String scriptDialogMergeFileName,
+                                    String descriptionFileName) {
 //    String folderPath = CommonUtil.getFullPath(folderName);
 //    String fileName = folderPath + File.separator + folderName + "_中英双语对话脚本.txt";
     String text = "解析下面的文本，帮我写文章，用来发哔哩哔哩（B站）、快手、小红书和公众号，要根据不同的平台特性生成不同风格的文章，B站的文章字数在1500~2000之间，包含词汇和例句，快手的文章字数在500~600之间，小红书不超过800字，公众号不超过200字；另外，帮我每个平台取3个疑问句的标题，标题中间不要有任何标点符号、表情符号且不超过20个字，快手加入一些表情符号，生成的内容要直接可用，不要让我填空。文本如下：";
@@ -405,6 +406,7 @@ public class TranslationUtil {
       log.error("写入文件 {} 发生异常：{}", descriptionFileName, e.getMessage(),
         e);
     }
+    return new File(descriptionFileName);
   }
 
 

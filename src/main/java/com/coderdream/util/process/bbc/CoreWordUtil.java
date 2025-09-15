@@ -20,7 +20,7 @@ public class CoreWordUtil {
         CoreWordUtil.genCoreWordTable(folderName);
     }
 
-    public static void genCoreWordTable(String folderName) {
+    public static File genCoreWordTable(String folderName) {
         String fileName = "voc_cn";
         List<CoreWordInfo> wordInfoList = process(folderName, fileName);
         String folderPath =
@@ -32,6 +32,7 @@ public class CoreWordUtil {
         String sheetName = "核心词汇表";
 
         MakeExcel.listFill(templateFileName, excelFileName, sheetName, wordInfoList);
+        return new File(excelFileName);
     }
 
     public static List<CoreWordInfo> process(String folderName, String fileName) {

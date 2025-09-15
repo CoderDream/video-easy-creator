@@ -18,7 +18,7 @@ public class AdvancedWordUtil {
         AdvancedWordUtil.genAdvancedWordTable(folderName, "D");
     }
 
-    public static void genAdvancedWordTable(String folderName, String templateType) {
+    public static File genAdvancedWordTable(String folderName, String templateType) {
         List<WordInfo> wordInfoList = getAdvancedWordList(folderName);
         String folderPath =
             CdFileUtil.getResourceRealPath() + File.separatorChar + "data" + File.separatorChar + "dict";
@@ -50,6 +50,8 @@ public class AdvancedWordUtil {
         String sheetName = "四六级及以上";
 
         MakeExcel.fillWordEntityList(templateFileName, excelFileName, sheetName, wordInfoList);
+
+        return new File(excelFileName);
     }
 
     /**

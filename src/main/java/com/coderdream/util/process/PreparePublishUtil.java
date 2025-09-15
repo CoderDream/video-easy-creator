@@ -8,7 +8,7 @@ import com.coderdream.util.CommonUtil;
 import com.coderdream.util.cd.CdConstants;
 import com.coderdream.util.cd.CdFileUtil;
 import com.coderdream.util.cmd.CommandUtil;
-import com.coderdream.util.gemini.CallGeminiApiUtil;
+import com.coderdream.util.gemini.GeminiApiClient;
 import com.coderdream.util.gemini.GeminiApiUtil;
 import com.coderdream.util.proxy.OperatingSystem;
 import com.coderdream.util.resource.ResourcesSourcePathUtil;
@@ -25,7 +25,7 @@ import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import swiss.ameri.gemini.api.GenAi.GeneratedContent;
+import swiss.ameri.gemini.api.GenAi;
 
 @Slf4j
 public class PreparePublishUtil {
@@ -333,7 +333,7 @@ public class PreparePublishUtil {
                     srtFileName,
                     StandardCharsets.UTF_8);
             // 生成文本内容（阻塞式）
-            GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
+            GenAi.GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
 
             // 商務英語 EP 18 餐館英語|🎧30分鐘英文聽力訓練|中英雙語配音，效果加倍|雙語沉浸式學習|英文聽力大提升，附帶中文翻譯|每日英文聽力|讓你的耳朵更靈敏|生活化英文會話|輕鬆掌握實用口語
             String title = "商務英語 EP " + shortSubFolder + " " + chapterName
@@ -547,14 +547,12 @@ public class PreparePublishUtil {
                 srtFileName,
                 StandardCharsets.UTF_8);
         // 生成文本内容（阻塞式）
-        GeneratedContent generatedContent = GeminiApiUtil.generateContent(prompt);
-        String mdFileName = CommonUtil.getFullPathFileName(subFolder, subFolder,
-                ".md");
-//    String mdFileName = CdFileUtil.changeExtension(srtFileName, "md");
-        String chnMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
-                mdFileName, "_chn");
-        String chtMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(
-                mdFileName, "_cht");
+        String generatedContent = GeminiApiClient.generateContent(prompt);
+        // 【关键修复】使用 subFolder (文件夹名) 而不是 folderPath (完整路径) 来构建文件名
+        String pptxFileName = CommonUtil.getFullPathFileName(subFolder, subFolder, ".pptx");
+        String descriptionFileNameYT = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(com.coderdream.util.cd.CdFileUtil.changeExtension(pptxFileName, "md"), "_description_yt");
+        String chnMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(descriptionFileNameYT, "_chn");
+        String chtMdFileName = com.coderdream.util.cd.CdFileUtil.addPostfixToFileName(descriptionFileNameYT, "_cht");
         String title = "";
         // 商務英語 EP 18 餐館英語|🎧30分鐘英文聽力訓練|中英雙語配音，效果加倍|雙語沉浸式學習|英文聽力大提升，附帶中文翻譯|每日英文聽力|讓你的耳朵更靈敏|生活化英文會話|輕鬆掌握實用口語
         if (StrUtil.isNotBlank(bookName)) {
@@ -570,26 +568,19 @@ public class PreparePublishUtil {
             if (
                     com.coderdream.util.cd.CdFileUtil.isFileEmpty(chnMdFileName)
                             || com.coderdream.util.cd.CdFileUtil.isFileEmpty(
-                            chtMdFileName)) {
-                String text = "";
-
-                if (generatedContent != null) {
-                    text = generatedContent.text();
-                } else {
-                    String s = CallGeminiApiUtil.callApi(prompt);
-                    log.info("生成的文本内容：{}", s);
-                    if (StrUtil.isNotEmpty(s)) {
-                        text = s;
-                    } else {
-                        log.error("生成的文本内容为空");
-                        return;
-                    }
+                            chtMdFileName)
+            ) {
+                // 【关键修改】增加健壮性检查
+                if (StrUtil.isBlank(generatedContent) || generatedContent.contains("API 调用发生异常")) {
+                    log.error("通过 Gemini API 生成YouTube描述失败。返回内容: {}", generatedContent);
+                    return;
                 }
-                text = title + "\n\n" + text;
+
+                String text = title + "\n\n" + generatedContent;
                 FileUtils.writeStringToFile(new File(chtMdFileName),
                         ZhConverterUtil.toTraditional(text), "UTF-8");
                 FileUtils.writeStringToFile(new File(chnMdFileName),
-                        ZhConverterUtil.toSimple(text), "UTF-8");
+                        text, "UTF-8");
             } else {
                 log.info("md文件已存在, {}", chnMdFileName);
             }
@@ -597,7 +588,7 @@ public class PreparePublishUtil {
             throw new RuntimeException(e);
         }
 
-        log.info("4. Generated content: {}", generatedContent);
+        log.info("4. Generated content length: {}", (generatedContent != null) ? generatedContent.length() : 0);
     }
 
     public static void process(String folderPath, String subFolder,

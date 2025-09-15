@@ -141,6 +141,7 @@ public class ProcessScriptUtil {
       if (stringList.get(i).toLowerCase()
         .contains("VOCABULARY".toLowerCase())) {
         vocIndex = i;
+        log.error("找到了 VOCABULARY， 在第 {} 行", i);
       } else {
         log.error("找不到VOCABULARY");
       }

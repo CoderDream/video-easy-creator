@@ -66,7 +66,7 @@ public class BbcStepTest {
             // 生成 script_dialog.txt 和 voc.txt
 //            ProcessScriptUtil.process(folderName);
             // 生成 script_dialog_cn.txt 和 voc_cn.txt
-            TranslateUtil.process(folderName);
+//            TranslateUtil.process(folderName);
             TranslateUtil.mergeScriptContent(folderName);
         }
     }

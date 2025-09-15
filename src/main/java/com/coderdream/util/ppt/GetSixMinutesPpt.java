@@ -77,7 +77,7 @@ public class GetSixMinutesPpt {
    *
    * @param folderName 文件夹名称
    */
-  public static void process(String folderName, String chapterName) {
+  public static File process(String folderName, String chapterName) {
     long start = System.currentTimeMillis(); // 获取当前时间毫秒数
     LicenseUtil.loadLicense(
       MicrosoftConstants.PPTX_TO_OTHER); // 加载 Aspose.Slides 的 License，用于去除水印等限制
@@ -110,7 +110,7 @@ public class GetSixMinutesPpt {
       // 判断是否为空
       if (CollectionUtil.isEmpty(wordInfoListGroups)) { // 检查分割后的词汇信息列表是否为空
         log.info("wordInfoListGroups is empty"); // 如果为空，则记录日志
-        return; // 结束方法
+        return null; // 结束方法
       }
 
       // 6min_page6.pptx 根据词汇多少确定模板文件
@@ -361,7 +361,10 @@ public class GetSixMinutesPpt {
       if (pres != null) { // 如果 Presentation 对象不为空
         pres.dispose(); // 释放资源
       }
-    } // D:\04_GitHub\video-easy-creator\target\classes\bbc
+    }
+
+    return new File(CommonUtil.getFullPathFileName(
+            folderName, folderName, ".pptx")); // D:\04_GitHub\video-easy-creator\target\classes\bbc
   }
 
   /**
@@ -369,12 +372,12 @@ public class GetSixMinutesPpt {
    *
    * @param folderName 文件夹名称
    */
-  public static void process(String folderName) {
+  public static File process(String folderName) {
     // 查询章节名称
     String chapterName = GetSixMinutesPpt.queryChapterNameForSixMinutes(
       folderName);
 
-    process(folderName, chapterName); // 调用 process 方法，传入文件夹名称和标题
+    return process(folderName, chapterName); // 调用 process 方法，传入文件夹名称和标题
   }
 
   public static @Nullable String queryChapterNameForSixMinutes(
